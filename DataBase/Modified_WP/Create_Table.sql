@@ -1,8 +1,5 @@
-DROP DATABASE IF EXISTS newShootingRangeV2;
-CREATE DATABASE newShootingRangeV2;
-USE newShootingRangeV2;
 /* This is the part to create the tables */
-DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS user_list;
 DROP TABLE IF EXISTS user_type;
 DROP TABLE IF EXISTS invoice_type;
 DROP TABLE IF EXISTS location;
@@ -13,27 +10,27 @@ CREATE TABLE user_type
 (
     id                  SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     type                VARCHAR(100) NOT NULL,
-    isDeleted           BOOL NOT NULL,
+    isDeleted           BOOLEAN NOT NULL,
     userId              SMALLINT NOT NULL,
     created             DATETIME(6) NOT NULL DEFAULT NOW(),
     updated             DATETIME(6) NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE user
+CREATE TABLE user_list
 (
     id                  SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     user_type_id        SMALLINT UNSIGNED NOT NULL,
     name                VARCHAR(255) NOT NULL,
     email               VARCHAR(255) NOT NULL,
     phoneNumber         VARCHAR(255) NOT NULL,
-    isDeleted           BOOL NOT NULL DEFAULT FALSE,
+    isDeleted           BOOLEAN NOT NULL DEFAULT FALSE,
     userId              SMALLINT NOT NULL,
     created             DATETIME(6) NOT NULL DEFAULT NOW(),
     updated             DATETIME(6) NOT NULL DEFAULT NOW(),
     CONSTRAINT `fk_user_type`
         FOREIGN KEY (user_type_id) REFERENCES user_type(id)
-        ON DELETE CASCADE
-        ON UPDATE RESTRICT
+            ON DELETE CASCADE
+            ON UPDATE RESTRICT
 );
 
 CREATE TABLE invoice_type
@@ -41,7 +38,7 @@ CREATE TABLE invoice_type
     id                  SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     type                VARCHAR(100) NOT NULL,
     description         VARCHAR(255),
-    isDeleted           BOOL NOT NULL DEFAULT FALSE,
+    isDeleted           BOOLEAN NOT NULL DEFAULT FALSE,
     userId              VARCHAR(100) NOT NULL,
     created             DATETIME(6) NOT NULL DEFAULT NOW(),
     updated             DATETIME(6) NOT NULL DEFAULT NOW()
@@ -52,7 +49,7 @@ CREATE TABLE location
     id                  SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name                VARCHAR(100) NOT NULL,
     capacity            SMALLINT,
-    isDeleted           BOOL NOT NULL DEFAULT FALSE,
+    isDeleted           BOOLEAN NOT NULL DEFAULT FALSE,
     userId              VARCHAR(100) NOT NULL,
     created             DATETIME(6) NOT NULL DEFAULT NOW(),
     updated             DATETIME(6) NOT NULL DEFAULT NOW()
@@ -63,7 +60,7 @@ CREATE TABLE invoice
     id                  SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     user_id             SMALLINT UNSIGNED NOT NULL,
     invoice_type_id     SMALLINT UNSIGNED NOT NULL,
-    is_deleted          BOOL NOT NULL DEFAULT FALSE,
+    is_deleted          BOOLEAN NOT NULL DEFAULT FALSE,
     userId              SMALLINT NOT NULL,
     created             DATETIME(6) NOT NULL DEFAULT NOW(),
     updated             DATETIME(6) NOT NULL DEFAULT NOW(),
@@ -81,7 +78,7 @@ CREATE TABLE invoice_item
     number_of_hours     SMALLINT NOT NULL,
     start_time          DATETIME,
     end_time            DATETIME,
-    isDeleted           BOOL NOT NULL DEFAULT FALSE,
+    isDeleted           BOOLEAN NOT NULL DEFAULT FALSE,
     userId              VARCHAR(100) NOT NULL,
     created             DATETIME(6) NOT NULL DEFAULT NOW(),
     updated             DATETIME(6) NOT NULL DEFAULT NOW(),
