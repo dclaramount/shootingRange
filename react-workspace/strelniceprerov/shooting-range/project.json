@@ -1,0 +1,82 @@
+{
+  "name": "shooting-range",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "./shooting-range/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/shooting-range",
+        "index": "shooting-range/src/index.html",
+        "baseHref": "/",
+        "main": "shooting-range/src/main.tsx",
+        "tsConfig": "shooting-range/tsconfig.app.json",
+        "assets": [
+          "shooting-range/src/favicon.ico",
+          "shooting-range/src/assets"
+        ],
+        "styles": [],
+        "scripts": [],
+        "webpackConfig": "shooting-range/webpack.config.js"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "shooting-range/src/environments/environment.ts",
+              "with": "shooting-range/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/webpack:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "shooting-range:build",
+        "hmr": true
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "shooting-range:build:development"
+        },
+        "production": {
+          "buildTarget": "shooting-range:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "plugin": {
+      "executor": "@betrue/react-elementor:build",
+      "options": {
+        "plugin": "shooting-range",
+        "replaceFilePattern": ".esm.js"
+      }
+    },
+    "pkg": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["nx build shooting-range", "nx plugin shooting-range"],
+        "parallel": false
+      }
+    }
+  },
+  "tags": []
+}
