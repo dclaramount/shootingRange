@@ -4,6 +4,9 @@ import PropTypes, { InferProps } from 'prop-types';
 import { ShootingRangeTitleView } from './shooting-range-title.view';
 import React from 'react';
 import axios from 'axios';
+import Clock from 'react-live-clock';
+import { WrapperBooking } from './components/WrapperBooking';
+
 
 export const ShootingRangeTitlePropsTypes = {
   label: PropTypes.string,
@@ -18,6 +21,8 @@ export type ShootingRangeTitleProps = InferProps<
  */
 export function ShootingRangeTitle(props: ShootingRangeTitleProps) {
   const v = useSelector(falseEntitySelector);
+  const [refreshData, setRefreshData] = React.useState(0);
+  const [timeStamp, setTimeStamp] = React.useState(null);
 
   React.useEffect(() =>{
     axios({
@@ -29,14 +34,26 @@ export function ShootingRangeTitle(props: ShootingRangeTitleProps) {
       },
       // Attaching the form data
   })
-      // Handle the response from backend here
-      .then((res) => { console.log(res.data.timestamp);  })
-  
-      // Catch errors if any
-      .catch((err) => { console.log(err) });
-  },[])
-  
-  return <ShootingRangeTitleView lastValue={v} {...props} />;
+      .then((res) => { 
+        console.log(res.data.timestamp);  
+        setTimeStamp(res.data.timestamp);
+      })
+      .catch((err) => { 
+        console.log(err) 
+      });
+  },[refreshData])
+
+  function callBackClock(e:any){
+    console.log(e);
+    setRefreshData(e);
+  }
+  return (    
+    <div className="wrapper-diego">
+      <h1 className='header-custom'>This is the place holder</h1>
+      <Clock format={'HH:mm:ss'} ticking={true} timezone={'US/Pacific'} onChange={(e) => callBackClock(e)}/>
+      {timeStamp !== null ? <>Response time-stamp:{timeStamp}</> : <>Waiting</>}
+      <WrapperBooking/>
+    </div>)
 }
 
 /**

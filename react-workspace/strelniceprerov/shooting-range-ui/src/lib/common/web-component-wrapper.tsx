@@ -34,9 +34,45 @@ export function WebComponentWrapper(
       const mountPoint = document.createElement('span');
       const emotionRoot = document.createElement('style');
 
+      const linkElem = document.createElement('link');
+      linkElem.setAttribute('rel', 'stylesheet');
+      linkElem.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/bw-bootstrap-strelnice.css');
+
+      const linkElem2 = document.createElement('link');
+      linkElem2.setAttribute('rel', 'stylesheet');
+      linkElem2.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/bw-calendar.css');
+
+      const linkElem3 = document.createElement('link');
+      linkElem3.setAttribute('rel', 'stylesheet');
+      linkElem3.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/bw-front-strelnice.css');
+
+      const linkElem4 = document.createElement('link');
+      linkElem4.setAttribute('rel', 'stylesheet');
+      linkElem4.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/bw-print-strelnice.css');
+
+      const linkElem5 = document.createElement('link');
+      linkElem5.setAttribute('rel', 'stylesheet');
+      linkElem5.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/bw-reboot-strelnice.css');
+
+      const linkElem6 = document.createElement('link');
+      linkElem6.setAttribute('rel', 'stylesheet');
+      linkElem6.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/bw-reservation-strelnice.css');
+
+      const linkElem7 = document.createElement('link');
+      linkElem7.setAttribute('rel', 'stylesheet');
+      linkElem7.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/bw-honest-week-picker.css');
+
       mountPoint.id = NAME;
       shadowRoot.appendChild(mountPoint);
       shadowRoot.appendChild(emotionRoot);
+      shadowRoot.appendChild(linkElem);
+      shadowRoot.appendChild(linkElem2);
+      shadowRoot.appendChild(linkElem3);
+      shadowRoot.appendChild(linkElem4);
+      shadowRoot.appendChild(linkElem5);
+      shadowRoot.appendChild(linkElem6);
+      shadowRoot.appendChild(linkElem7);
+
       const cache = createCache({
         key: 'css',
         prepend: true,
