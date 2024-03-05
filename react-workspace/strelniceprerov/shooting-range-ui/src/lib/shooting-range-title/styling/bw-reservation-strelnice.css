@@ -9,11 +9,13 @@
     align-items: stretch;
     flex-wrap: wrap;
     width: 100%;
-    height: 100%;
+    height: 900px; /* Changed it to 775px to adjust the view styling */
     float: left;
     background: #fff;
     z-index: 101;
     margin: 0 0 40px 0;
+    border: 1px solid transparent; /* Changed it to Look better (radius) */
+    border-radius: 20px;
 }
 @media (max-width: 768px) {
     .reservation {
@@ -22,13 +24,15 @@
     }
 }
 .reservation-order {
-    width: 480px;
-    height: 100%;
+    width: 325px; /* Changed it to 325px to adjust the view styling */
+    height: 710px; /* Changed it to 710px to adjust the view styling */
     background: #f7e9e0;
     padding: 0px 30px 30px 30px;
     position: relative;
     margin: 15px 0 0 10px;
     float: right;
+    border: 1px solid transparent;
+    border-radius: 15px;
 }
 @media (max-width: 1200px) {
     .reservation-order {
@@ -60,6 +64,7 @@
     width: 260px;
     position: relative;
     float: left;
+    margin-top: 5px;
 }
 @media (max-width: 768px) {
     .reservation-order-row {
@@ -119,7 +124,7 @@
     right: 10px;
     width: 20px;
     height: 20px;
-    background: url('./icons/icon-down.png') 0 0 no-repeat;
+    background: url('./icon-down.png') 0 0 no-repeat;
     background-size: 14px auto;
     display: block;
     pointer-events: none;
@@ -198,6 +203,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 15px; /* Added margin-top for better visualization */
 }
 .reservation-date label {
     font-size: 14px;
@@ -290,12 +296,12 @@
 .reservation-cal {
     padding: 0px 30px 0px 30px;
     width: calc(100% - 500px);
-    height: 100%;
+    height: 710px; /*styling change from 100% */
     float: left;
     display: flex;
     justify-content: flex-end;
     flex-wrap: wrap;
-    margin: 0 0 0px 0;
+    margin: 15px 0 0px 0;
 }
 @media (max-width: 1200px) {
     .reservation-cal {
@@ -366,9 +372,21 @@
     z-index: 0;
     position: relative;
     transition: border 500ms ease-out;
+    color: black;
+    font-size: smaller;
+    font-weight: bold;
+    text-align: end;
+    display: grid;
+    align-items: end;
 }
 .reservation-cal-table-day-block.partlyOccupied {
     background: #fbf2ed;
+    color: black;
+    font-size: smaller;
+    font-weight: bold;
+    text-align: end;
+    display: grid;
+    align-items: end;
 }
 .reservation-cal-table-day-block:hover {
     z-index: 1;
@@ -376,6 +394,12 @@
 }
 .reservation-cal-table-day-block.occupied {
     background: #63564e;
+    color: white;
+    font-size: smaller;
+    font-weight: bold;
+    text-align: end;
+    display: grid;
+    align-items: end;
 }
 .reservation-cal-table-day-block.active {
     z-index: 2;
