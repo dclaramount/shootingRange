@@ -7,11 +7,21 @@ import axios from 'axios';
 
 export function WrapperBooking() {
 
-  const [timesToShow, setTimesToShow] = React.useState(["08", "09","10","11","12","13","14","15","16","17","18","19","20","21"]); 
-  const [daysOfWeek, setDaysOfWeek] = React.useState([]); 
-  const [selectedWeek, setSelectedWeek] = React.useState([]); 
-  const [locationList, setLocationList] = React.useState([]);
-
+  const [timesToShow, setTimesToShow]                           = React.useState(["08", "09","10","11","12","13","14","15","16","17","18","19","20","21"]); 
+  const [daysOfWeek, setDaysOfWeek]                             = React.useState([]); 
+  const [selectedWeek, setSelectedWeek]                         = React.useState([]); 
+  const [bookings, setBookings]                                 = React.useState([]); 
+  const [selectedLocation, setSelectedLocation]                 = React.useState(1);
+  const [locationList, setLocationList]                         = React.useState([]);
+  const [selectedSegment, setSelectedSegment]                   = React.useState("");
+  const [selectedBookingDuration, setSelectedBookingDuration]   = React.useState(1);
+  const [selectedOccupancy, setSelectedOccupancy]               = React.useState(1);
+  const [shootingPermit, setShootingPermit]                     = React.useState(false);
+  const [shootingPermitNumber, setShootingPermitNumber]         = React.useState("");
+  const [shootingInstructor, setShootingInstructor]             = React.useState(false);
+  const [name, setName]                                         = React.useState("");
+  const [email, setEmail]                                       = React.useState("");
+  const [phone, setPhone]                                       = React.useState("");
 
 
   React.useEffect(() =>{    
@@ -23,7 +33,21 @@ export function WrapperBooking() {
   },[])
 
   return(
-  <BookingContext.Provider value={{timesToShow, setTimesToShow, daysOfWeek, setDaysOfWeek, selectedWeek, setSelectedWeek, locationList, setLocationList}}>
+  <BookingContext.Provider value={{ timesToShow,              setTimesToShow, 
+                                    daysOfWeek,               setDaysOfWeek, 
+                                    selectedWeek,             setSelectedWeek,
+                                    bookings,                 setBookings,
+                                    selectedLocation,         setSelectedLocation, 
+                                    locationList,             setLocationList, 
+                                    selectedSegment,          setSelectedSegment,
+                                    selectedBookingDuration,  setSelectedBookingDuration,
+                                    selectedOccupancy,        setSelectedOccupancy,
+                                    shootingPermit,           setShootingPermit,
+                                    shootingPermitNumber,     setShootingPermitNumber,
+                                    shootingInstructor,       setShootingInstructor,
+                                    name,                     setName,
+                                    email,                    setEmail,
+                                    phone,                    setPhone}}>
   <div className="container">
     <div className="row">
       <div className="col-md-12">

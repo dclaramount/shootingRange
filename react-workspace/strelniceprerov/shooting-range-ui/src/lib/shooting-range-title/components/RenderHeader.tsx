@@ -2,12 +2,9 @@ import { BookingContext } from "./Context/BookingContext";
 import { LegendText } from "./LegentText";
 import { HonestWeekPicker } from "./WeekPicker";
 import React from 'react';
-
-
-
-
+import axios from 'axios';
 export function RenderHeader(){
-  const {daysOfWeek, setDaysOfWeek, selectedWeek, setSelectedWeek} = React.useContext(BookingContext);
+  const {daysOfWeek, setDaysOfWeek, selectedWeek, setSelectedWeek, selectedLocation, setSelectedLocation, bookings, setBookings} = React.useContext(BookingContext);
 
   const onChange = (week : any) => {
     setSelectedWeek(week);
@@ -20,6 +17,19 @@ export function RenderHeader(){
     console.log(arrayDaysOfWeek);
     setDaysOfWeek(arrayDaysOfWeek);
   };
+  
+  //API Call to Fetch the relevant bookigns for the week.
+  React.useEffect(()=> {
+    if(Object.keys(selectedWeek).length>0){
+      const firstDay= (new Date(selectedWeek.firstDay)).toISOString();
+      const lastDay=  (new Date(selectedWeek.lastDay)).toISOString();
+      axios({
+        url: `https://strelniceprerov.cz/wp-content/plugins/elementor-addon/widgets/getBookingsFiltered.php?firstDayOfWeek=${firstDay}&lastDayOfWeek=${lastDay}&location=${selectedLocation}`,
+        method: "GET",
+    }).then((res) => {setBookings(res.data)})
+      .catch((err) => { console.log(err) });
+    }
+  },[selectedWeek])
   
   return(
     <>
