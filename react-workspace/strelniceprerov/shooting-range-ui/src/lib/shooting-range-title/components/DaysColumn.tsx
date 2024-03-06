@@ -3,7 +3,7 @@ import { BookingContext } from './Context/BookingContext';
 
 export function DaysColumn(){
 
-  const {timesToShow, setTimesToShow, daysOfWeek, setDaysOfWeek, bookings, setBookings} = React.useContext(BookingContext);
+  const {timesToShow, setTimesToShow, daysOfWeek, setDaysOfWeek, bookings, setBookings, selectedSegment, setSelectedSegment, isoDaysOfWeek} = React.useContext(BookingContext);
 
   const daysOftheWeek = ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle'];
   function padWithLeadingZeros(num : any, totalLength: any) {
@@ -57,7 +57,17 @@ export function DaysColumn(){
       return '';
     }
   }
-
+  const handlerClick = (e : any) => {
+    console.log(e);
+    if(!e.target.className.includes('occupied')){
+      setSelectedSegment(e.target.id)
+    }
+  }
+  const selected = (clickedCell : string) => {
+    if(selectedSegment === clickedCell){
+      return 'active first active last'
+    }
+  } 
   return(
     <>
       {daysOfWeek.map((day : string, idx : number) => { 
@@ -74,7 +84,7 @@ export function DaysColumn(){
         </div>
         {timesToShow.map((timeToShow : string) => {
         return(
-        <div className={`reservation-cal-table-day-block ${status(day,timeToShow)}`} id={timeToShow}>
+        <div className={`reservation-cal-table-day-block ${status(day,timeToShow)} ${selected(`${isoDaysOfWeek[idx+1]} ${timeToShow}:00`)}`} id={`${isoDaysOfWeek[idx+1]} ${timeToShow}:00`} onClick={(e) => handlerClick(e)}>
           {getOccupancy(day,timeToShow)}
         </div>)
       })}

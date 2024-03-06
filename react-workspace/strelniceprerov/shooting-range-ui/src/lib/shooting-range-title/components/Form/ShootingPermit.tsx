@@ -29,7 +29,7 @@ export function ShootingPermit(){
     <Tooltip title="Pokud nemáte, napište nemám">
       <div style={{marginTop:'10px'}} className="reservation-order-row" data-tooltip data-original-title="V kalendáři vyberte kliknutím den a čas rezervace.">
         <label htmlFor="reservation-shooting-permit">Čislo Zbrojní průkaz</label>
-          <input onChange={(e)=> handleChangePermit(e)} value={shootingPermitNumber} type='text' name='datetime' size={50} maxLength={50} id='reservation-shooting-permit' readOnly={true} required={true} data-nette-rules="[{&quot;op&quot;:&quot;:filled&quot;,&quot;msg&quot;:&quot;Vyplňte prosím datetime&quot;}]"/>
+          <input onChange={(e)=> handleChangePermit(e)} value={shootingPermitNumber} type='text' name='datetime' size={50} maxLength={50} id='reservation-shooting-permit'  required={true} onInvalid={e => (e.target as HTMLInputElement).setCustomValidity('Pokud nemáte, napište nemám')} onInput={e => (e.target as HTMLInputElement).setCustomValidity('')}/>
       </div> 
     </Tooltip>
     }

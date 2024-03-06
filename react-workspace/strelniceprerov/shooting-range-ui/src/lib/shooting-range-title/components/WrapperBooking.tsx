@@ -4,11 +4,14 @@ import { BookingContext } from "./Context/BookingContext";
 import React from 'react';
 import { BookingFormWrapper } from "./BookingFormWrapper";
 import axios from 'axios';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 export function WrapperBooking() {
 
   const [timesToShow, setTimesToShow]                           = React.useState(["08", "09","10","11","12","13","14","15","16","17","18","19","20","21"]); 
   const [daysOfWeek, setDaysOfWeek]                             = React.useState([]); 
+  const [isoDaysOfWeek,setISODaysOfWeek]                        = React.useState([]);
   const [selectedWeek, setSelectedWeek]                         = React.useState([]); 
   const [bookings, setBookings]                                 = React.useState([]); 
   const [selectedLocation, setSelectedLocation]                 = React.useState(1);
@@ -22,6 +25,7 @@ export function WrapperBooking() {
   const [name, setName]                                         = React.useState("");
   const [email, setEmail]                                       = React.useState("");
   const [phone, setPhone]                                       = React.useState("");
+  const [showCalendar, setShowCalendar]                         = React.useState(false);
 
 
   React.useEffect(() =>{    
@@ -32,9 +36,16 @@ export function WrapperBooking() {
     .catch((err) => { console.log(err) });
   },[])
 
+  const delayInMilliseconds = 5000; //1 second
+
+  setTimeout(function() {
+    setShowCalendar(true)
+  }, delayInMilliseconds);
+
   return(
   <BookingContext.Provider value={{ timesToShow,              setTimesToShow, 
                                     daysOfWeek,               setDaysOfWeek, 
+                                    isoDaysOfWeek,            setISODaysOfWeek,
                                     selectedWeek,             setSelectedWeek,
                                     bookings,                 setBookings,
                                     selectedLocation,         setSelectedLocation, 

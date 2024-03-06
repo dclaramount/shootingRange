@@ -4,17 +4,19 @@ import { HonestWeekPicker } from "./WeekPicker";
 import React from 'react';
 import axios from 'axios';
 export function RenderHeader(){
-  const {daysOfWeek, setDaysOfWeek, selectedWeek, setSelectedWeek, selectedLocation, setSelectedLocation, bookings, setBookings} = React.useContext(BookingContext);
+  const {daysOfWeek, setDaysOfWeek, selectedWeek, setSelectedWeek, selectedLocation, setSelectedLocation, bookings, setBookings, setISODaysOfWeek} = React.useContext(BookingContext);
 
   const onChange = (week : any) => {
     setSelectedWeek(week);
     const arrayDaysOfWeek = []
+    const isoDaysOfWeek = []
     for (let i=0; i<=6; i++){
       const dt = new Date(week.firstDay);
       dt.setDate(dt.getDate() + i);
+      isoDaysOfWeek.push(dt.toISOString().split('T')[0]);
       arrayDaysOfWeek.push(`${dt.getDate()}.${dt.getMonth() + 1}`)
     }
-    console.log(arrayDaysOfWeek);
+    setISODaysOfWeek(isoDaysOfWeek);
     setDaysOfWeek(arrayDaysOfWeek);
   };
   
@@ -29,7 +31,7 @@ export function RenderHeader(){
     }).then((res) => {setBookings(res.data)})
       .catch((err) => { console.log(err) });
     }
-  },[selectedWeek])
+  },[selectedWeek , selectedLocation])
   
   return(
     <>

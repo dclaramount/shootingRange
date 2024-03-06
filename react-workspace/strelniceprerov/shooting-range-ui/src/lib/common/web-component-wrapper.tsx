@@ -62,6 +62,11 @@ export function WebComponentWrapper(
       linkElem7.setAttribute('rel', 'stylesheet');
       linkElem7.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/bw-honest-week-picker.css');
 
+      const linkElem8 = document.createElement('link');
+      linkElem8.setAttribute('rel', 'stylesheet');
+      linkElem8.setAttribute('href', "//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css");
+
+
       mountPoint.id = NAME;
       shadowRoot.appendChild(mountPoint);
       shadowRoot.appendChild(emotionRoot);
@@ -72,6 +77,8 @@ export function WebComponentWrapper(
       shadowRoot.appendChild(linkElem5);
       shadowRoot.appendChild(linkElem6);
       shadowRoot.appendChild(linkElem7);
+      shadowRoot.appendChild(linkElem8);
+
 
       const cache = createCache({
         key: 'css',

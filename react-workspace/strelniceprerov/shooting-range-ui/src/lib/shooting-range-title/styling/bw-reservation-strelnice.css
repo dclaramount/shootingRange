@@ -93,6 +93,7 @@
     border-radius: 5px;
     padding-left:10px;
     padding-bottom:5px;
+    font-weight: bolder;
 }
 .reservation-order-row input[type="text"].input-number,
 .reservation-order-row select.input-number {
