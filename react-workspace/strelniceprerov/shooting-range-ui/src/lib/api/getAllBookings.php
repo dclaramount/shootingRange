@@ -25,14 +25,16 @@ $query = "SELECT  location.name as 'Location',
 //Retrieving the records
 $res = mysqli_query($mysqli, $query, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
 if ($res) {
+  $index = 1;
   while ($row = mysqli_fetch_row($res)) {
-    $responseArray[]=array( 'location'        => $row[0], 
+    $responseArray[]=array( 'ID'              => $index,
+                            'location'        => $row[0], 
                             'invoiceId'       => $row[1],
                             'occupancy'       => $row[2],
                             'length'          => $row[3],
                             'start'           => $row[4],
                             'end'             => $row[5]);
-                          
+    $index++;
   }
   $res->free_result();
 }

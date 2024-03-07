@@ -65,6 +65,19 @@ export function WebComponentWrapper(
       const linkElem8 = document.createElement('link');
       linkElem8.setAttribute('rel', 'stylesheet');
       linkElem8.setAttribute('href', "//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css");
+      
+      //DEV EXTREME
+      const linkElem9 = document.createElement('link');
+      linkElem9.setAttribute('rel', 'stylesheet');
+      linkElem9.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/bw-dx-demo-template.css');
+
+      const linkElem10 = document.createElement('link');
+      linkElem10.setAttribute('rel', 'stylesheet');
+      linkElem10.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/bw-dx-light.css');
+
+      const linkElem11 = document.createElement('link');
+      linkElem11.setAttribute('rel', 'stylesheet');
+      linkElem11.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/bw-dx-material-blue-light.css');
 
 
       mountPoint.id = NAME;
@@ -78,6 +91,10 @@ export function WebComponentWrapper(
       shadowRoot.appendChild(linkElem6);
       shadowRoot.appendChild(linkElem7);
       shadowRoot.appendChild(linkElem8);
+      shadowRoot.appendChild(linkElem9);
+      shadowRoot.appendChild(linkElem10);
+      shadowRoot.appendChild(linkElem11);
+
 
 
       const cache = createCache({

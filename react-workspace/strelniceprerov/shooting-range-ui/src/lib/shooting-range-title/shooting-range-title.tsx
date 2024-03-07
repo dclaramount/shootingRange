@@ -49,9 +49,9 @@ export function ShootingRangeTitle(props: ShootingRangeTitleProps) {
   }
   return (    
     <div className="wrapper-diego">
-      <h1 className='header-custom'>This is the place holder</h1>
-      <Clock format={'HH:mm:ss'} ticking={true} timezone={'US/Pacific'} onChange={(e) => callBackClock(e)}/>
-      {timeStamp !== null ? <>Response time-stamp:{timeStamp}</> : <>Waiting</>}
+      {/*<h1 className='header-custom'>This is the place holder</h1>*/}
+      <Clock style={{visibility:'hidden'}} format={'HH:mm:ss'} ticking={true} timezone={'US/Pacific'} onChange={(e) => callBackClock(e)}/>
+      {/*timeStamp !== null ? <>Response time-stamp:{timeStamp}</> : <>Waiting</>*/}
       <WrapperBooking/>
     </div>)
 }
