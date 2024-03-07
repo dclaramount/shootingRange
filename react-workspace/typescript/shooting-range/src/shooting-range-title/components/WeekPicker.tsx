@@ -5,7 +5,7 @@ import { ArrowRight } from "./ArrorRight";
 import { addMonths, endOfWeek, startOfWeek, subMonths } from "date-fns";
 import { getDaysInMonth } from "date-fns";
 
-export const HonestWeekPicker = ({ onChange }) => {
+export const HonestWeekPicker = ({ onChange } : any ) => {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState(new Date());
   const [week, setWeek] = useState({
@@ -22,13 +22,13 @@ export const HonestWeekPicker = ({ onChange }) => {
     return leapYear.getDate() == 29;
   };
 
-  const convertDate = (date) => {
+  const convertDate = (date : any) => {
     const dt = new Date(date);
 
     return `${dt.getDate()}.${dt.getMonth() + 1}.${dt.getFullYear()}.`;
   };
 
-  const handleClick = (e) => {
+  const handleClick = (e : any) => {
     let localDate;
     if (e.target.id.includes("prev")) {
       localDate = new Date(date.setDate(1));
@@ -73,12 +73,14 @@ export const HonestWeekPicker = ({ onChange }) => {
     "10": 31,
     "11": 30,
     "12": 31
-  };
+  } as const;
 
   const renderDays = () => {
     const month = date.getMonth() + 1;
+    const monthString = month.toString();
+    const daysOfMonth = days[monthString as keyof typeof days];
     const ar = [];
-    for (let i = 1; i <= days[month]; i++) {
+    for (let i = 1; i <= daysOfMonth; i++) {
       const currentDate = new Date(date).setDate(i);
 
       let cName = "single-number ";
@@ -111,7 +113,7 @@ export const HonestWeekPicker = ({ onChange }) => {
         new Date(date).getMonth() - 1
       );
       const currentDate = new Date(previousMonth).setDate(
-        days[prevMonthDays] - i + 2
+        days[prevMonthDays.toString() as keyof typeof days] - i + 2
       );
       let cName = "single-number other-month";
       const currentTime = new Date(currentDate).getTime();
@@ -128,7 +130,7 @@ export const HonestWeekPicker = ({ onChange }) => {
           id={"prev-" + i}
           className={cName}
         >
-          {days[prevMonthDays] - i + 2}
+          {days[prevMonthDays.toString() as keyof typeof days] - i + 2}
         </div>
       );
     }
@@ -167,7 +169,7 @@ export const HonestWeekPicker = ({ onChange }) => {
     return [...prevMonth, ...ar, ...nextMonth];
   };
 
-  const handleDate = (next) => {
+  const handleDate = (next : any) => {
     let localDate = new Date(date);
     if (next) {
       localDate = addMonths(localDate, 1);

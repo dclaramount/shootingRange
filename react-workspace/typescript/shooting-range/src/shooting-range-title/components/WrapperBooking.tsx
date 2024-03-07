@@ -13,7 +13,7 @@ export function WrapperBooking() {
   const [daysOfWeek, setDaysOfWeek]                             = React.useState([]); 
   const [isoDaysOfWeek,setISODaysOfWeek]                        = React.useState([]);
   const [selectedWeek, setSelectedWeek]                         = React.useState([]); 
-  const [bookings, setBookings]                                 = React.useState([]); 
+  const [bookings,setBookings]                                 = React.useState([]); 
   const [selectedLocation, setSelectedLocation]                 = React.useState(1);
   const [locationList, setLocationList]                         = React.useState([]);
   const [selectedSegment, setSelectedSegment]                   = React.useState("");
