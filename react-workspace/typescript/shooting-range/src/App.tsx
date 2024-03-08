@@ -3,8 +3,21 @@ import logo from './logo.svg';
 import './App.css';
 import { WrapperBooking } from './shooting-range-title/components/WrapperBooking';
 import { WrapperReservationManagement } from './shooting-range-input/WrapperReservationManagement';
+import axios from 'axios';
+import DataGridSummaryTable from './shooting-range-input/DataGridSummaryTable';
+import TabManagement from './shooting-range-input/TabMangement';
 
 function App() {
+  const [allBookings, setAllBookings] = React.useState([]);
+
+
+  React.useEffect(() =>{    
+    axios({
+      url: "https://strelniceprerov.cz/wp-content/plugins/elementor-addon/widgets/getAllBookings.php",
+      method: "GET",
+  }).then((res) => {setAllBookings(res.data)})
+    .catch((err) => { console.log(err) });
+  },[])
   return (
     <div className="App">
       <style>
@@ -30,9 +43,10 @@ function App() {
         </a>
       </header>
       <h1>Management System</h1>
-      <WrapperReservationManagement/>
+      {/*<WrapperReservationManagement/>*/}
       <hr></hr>
       {/*<WrapperBooking/>*/}
+      <TabManagement />
     </div>
   );
 }

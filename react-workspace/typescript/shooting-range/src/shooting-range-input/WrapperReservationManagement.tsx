@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import DataGridWrapper from './DataGridWrapper';
+import 'devextreme/dist/css/dx.light.css';
 
 export function WrapperReservationManagement() {
 
