@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import axios from 'axios';
 import DataGridWrapper from './DataGridWrapper';
+import TabManagement from './components/TabManagement';
 export const ShootingRangeInputPropsTypes = {
   placeholder: PropTypes.string,
   label: PropTypes.string,
@@ -28,8 +29,8 @@ export function ShootingRangeInput(props: ShootingRangeInputProps) {
   <div className="container">
     <div className="row">
       <div className="col-md-12">
-        <div className="reservation" style={{padding:'100px'}}>
-          <DataGridWrapper Data={allBookings}/>
+        <div className="reservation">
+          <TabManagement/>
         </div>
       </div>
     </div>
