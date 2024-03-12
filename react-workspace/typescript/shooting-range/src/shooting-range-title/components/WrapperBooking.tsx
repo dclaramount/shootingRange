@@ -6,6 +6,7 @@ import { BookingFormWrapper } from "./BookingFormWrapper";
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import { WrapperBookingSection } from "./WrapperBookingSection";
 
 export function WrapperBooking() {
 
@@ -13,10 +14,10 @@ export function WrapperBooking() {
   const [daysOfWeek, setDaysOfWeek]                             = React.useState([]); 
   const [isoDaysOfWeek,setISODaysOfWeek]                        = React.useState([]);
   const [selectedWeek, setSelectedWeek]                         = React.useState([]); 
-  const [bookings,setBookings]                                 = React.useState([]); 
+  const [bookings,setBookings]                                  = React.useState([]); 
   const [selectedLocation, setSelectedLocation]                 = React.useState(1);
   const [locationList, setLocationList]                         = React.useState([]);
-  const [selectedSegment, setSelectedSegment]                   = React.useState("");
+  const [selectedSegment, setSelectedSegment]                   = React.useState([]);
   const [selectedBookingDuration, setSelectedBookingDuration]   = React.useState(1);
   const [selectedOccupancy, setSelectedOccupancy]               = React.useState(1);
   const [shootingPermit, setShootingPermit]                     = React.useState(false);
@@ -26,15 +27,8 @@ export function WrapperBooking() {
   const [email, setEmail]                                       = React.useState("");
   const [phone, setPhone]                                       = React.useState("");
   const [showCalendar, setShowCalendar]                         = React.useState(false);
-
-
-  React.useEffect(() =>{    
-    axios({
-      url: "https://strelniceprerov.cz/wp-content/plugins/elementor-addon/widgets/getListShootingRange.php",
-      method: "GET",
-  }).then((res) => {setLocationList(res.data)})
-    .catch((err) => { console.log(err) });
-  },[])
+  const [availableSegments, setAvailableSegments]               = React.useState([]);
+  const [notAvailableSegments, setNotAvailableSegments]         = React.useState([]);
 
   const delayInMilliseconds = 5000; //1 second
 
@@ -58,14 +52,15 @@ export function WrapperBooking() {
                                     shootingInstructor,       setShootingInstructor,
                                     name,                     setName,
                                     email,                    setEmail,
-                                    phone,                    setPhone}}>
+                                    phone,                    setPhone,
+                                    availableSegments,        setAvailableSegments,
+                                    notAvailableSegments,     setNotAvailableSegments
+                                    }}>
   <div className="container">
     <div className="row">
       <div className="col-md-12">
         <div className="reservation">
-          <RenderHeader/>
-          <BookingCalendarWrappper/>
-          <BookingFormWrapper />
+          <WrapperBookingSection/>
         </div>
       </div>
     </div>

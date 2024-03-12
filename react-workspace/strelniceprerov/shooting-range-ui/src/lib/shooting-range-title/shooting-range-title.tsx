@@ -23,7 +23,24 @@ export function ShootingRangeTitle(props: ShootingRangeTitleProps) {
   const v = useSelector(falseEntitySelector);
   const [refreshData, setRefreshData] = React.useState(0);
   const [timeStamp, setTimeStamp] = React.useState(null);
-
+  const [globalVariables, setGlobalVariables] = React.useState({});
+  
+  React.useEffect(() =>{    
+    axios({
+      url: "https://strelniceprerov.cz/wp-content/plugins/elementor-addon/widgets/getGlobalVariables.php",
+      method: "GET",
+  }).then((res) => {
+    setGlobalVariables(({
+      startBusinessHours: res.data.find((variable : any) => variable.name==="Start_Business_Hours").value,
+      endBusinessHours:   res.data.find((variable : any) => variable.name==="End_Business_Hours").value,
+      startDayHours:      res.data.find((variable : any) => variable.name==="Start_Day_Hours").value,
+      endDayHours:        res.data.find((variable : any) => variable.name==="End_Day_Hours").value,
+      apiRootURL:         res.data.find((variable : any) => variable.name==="API_URL").value
+    }))
+  })
+    .catch((err) => { console.log(err) });
+  },[])
+  /*
   React.useEffect(() =>{
     axios({
       // Endpoint to send files
@@ -41,7 +58,7 @@ export function ShootingRangeTitle(props: ShootingRangeTitleProps) {
       .catch((err) => { 
         console.log(err) 
       });
-  },[refreshData])
+  },[refreshData])*/
 
   function callBackClock(e:any){
     console.log(e);

@@ -4,19 +4,29 @@ import { BookingContext } from '../Context/BookingContext';
 
 export function DurationOfBooking(){
 
-  const {selectedBookingDuration, setSelectedBookingDuration} = React.useContext(BookingContext);
+  const {selectedBookingDuration, setSelectedBookingDuration , selectedSegment,  setSelectedSegment, availableSegments, notAvailableSegments} = React.useContext(BookingContext);
 
 
   const onReduceSegmentDuration = (e : any) => {
-    if(selectedBookingDuration>1){
+    console.log(selectedSegment);
+    if(selectedBookingDuration>1 && selectedSegment.length>0){
       setSelectedBookingDuration(selectedBookingDuration-1);
     }
     console.log("Reduce Duration");
     console.log(e);
   };
   const onIncreaseSegmentDuration = (e : any) => {
-    if(selectedBookingDuration<3){
-      setSelectedBookingDuration(selectedBookingDuration+1);
+    //TODO MAX HOURS
+    if(selectedBookingDuration<3 && selectedSegment.length>0){
+      const date = new Date(selectedSegment);
+      const baseDate = `${date.toLocaleDateString('en-CA')} ${date.getHours()}:00`;
+      const toCheckDate = `${date.toLocaleDateString('en-CA')} ${date.getHours()+1}:00`;
+      if(notAvailableSegments.includes(toCheckDate)){
+        console.log("ALERT FOR NOT AVAILABILITY")
+      }
+      else{
+        setSelectedBookingDuration(selectedBookingDuration+1);
+      }
     }
     console.log("Increase Duration");
     console.log(e);

@@ -19,19 +19,7 @@ export function RenderHeader(){
     setISODaysOfWeek(isoDaysOfWeek);
     setDaysOfWeek(arrayDaysOfWeek);
   };
-  
-  //API Call to Fetch the relevant bookigns for the week.
-  React.useEffect(()=> {
-    if(Object.keys(selectedWeek).length>0){
-      const firstDay= (new Date(selectedWeek.firstDay)).toISOString();
-      const lastDay=  (new Date(selectedWeek.lastDay)).toISOString();
-      axios({
-        url: `https://strelniceprerov.cz/wp-content/plugins/elementor-addon/widgets/getBookingsFiltered.php?firstDayOfWeek=${firstDay}&lastDayOfWeek=${lastDay}&location=${selectedLocation}`,
-        method: "GET",
-    }).then((res) => {setBookings(res.data)})
-      .catch((err) => { console.log(err) });
-    }
-  },[selectedWeek , selectedLocation])
+
   
   return(
     <>

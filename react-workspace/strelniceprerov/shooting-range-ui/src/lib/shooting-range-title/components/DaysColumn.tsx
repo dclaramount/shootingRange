@@ -3,7 +3,14 @@ import { BookingContext } from './Context/BookingContext';
 
 export function DaysColumn(){
 
-  const {timesToShow, setTimesToShow, daysOfWeek, setDaysOfWeek, bookings, setBookings, selectedSegment, setSelectedSegment, isoDaysOfWeek} = React.useContext(BookingContext);
+  const { timesToShow,          setTimesToShow, 
+          daysOfWeek,           setDaysOfWeek, 
+          bookings,             setBookings, 
+          selectedSegment,      setSelectedSegment, 
+          isoDaysOfWeek,        selectedCalendarSegments,
+          selectedOccupancy,    availableSegments,
+          setAvailableSegments, notAvailableSegments,     
+          setNotAvailableSegments} = React.useContext(BookingContext);
 
   const daysOftheWeek = ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle'];
   function padWithLeadingZeros(num : any, totalLength: any) {
@@ -33,6 +40,30 @@ export function DaysColumn(){
       return (`0/3`);
     }
   }
+
+  function isAvailable(day : any, time : any){
+    const ltime = `${time}:00`
+    const lday = padWithLeadingZeros(parseInt(day.split(".")[0]),2);
+    const lmonth = padWithLeadingZeros(parseInt(day.split(".")[1]),2);
+    const ldate = `${lmonth}-${lday}`;
+    const filtered = bookings.filter((booking : any) => booking.start.includes(ltime) && booking.start.includes(ldate));
+    let   left = 3; //TODO: here we might need to pull up the max occupancy
+    if(filtered.length===1){
+      const sum  = parseInt(filtered[0].occupancy);
+      const max = parseInt(filtered[0].maxOccupancy);
+      left = max-sum;
+    }
+    else if(filtered.length>1){
+      let sum = 0;
+      const max = parseInt(filtered[0].maxOccupancy);
+      // calculate sum using forEach() method
+      filtered.forEach( (booking : any) => {
+      sum += parseInt(booking.occupancy);
+      })
+      left = max-sum;
+    }
+    return (selectedOccupancy <= left)
+  }
   function status(day : any, time : any){
     const ltime = `${time}:00`
     const lday = padWithLeadingZeros(parseInt(day.split(".")[0]),2);
@@ -60,14 +91,38 @@ export function DaysColumn(){
   const handlerClick = (e : any) => {
     console.log(e);
     if(!e.target.className.includes('occupied')){
-      setSelectedSegment(e.target.id)
+      const array = [];
+      array.push(e.target.id)
+      setSelectedSegment(array)
     }
   }
   const selected = (clickedCell : string) => {
-    if(selectedSegment === clickedCell){
-      return 'active first active last'
+
+    if(selectedSegment.includes(clickedCell)){
+      if(selectedSegment.length===1){
+        return 'active first active last'
+      }
     }
   } 
+    //BUILDING CONTROL ARRAY
+
+  React.useEffect(() =>{    
+  const available : any[]    = []
+  const notAvailable : any[] = []
+  daysOfWeek.map((day : any, idx : number)=>{
+    timesToShow.map((time:any) => {
+      if(isAvailable(day, time)){
+        available.push(`${isoDaysOfWeek[idx+1]} ${time}:00`);
+      }
+      else{
+        notAvailable.push(`${isoDaysOfWeek[idx+1]} ${time}:00`);
+      }
+    })
+  })
+  setAvailableSegments(available);
+  setNotAvailableSegments(notAvailable);
+  },[])
+
   return(
     <>
       {daysOfWeek.map((day : string, idx : number) => { 
