@@ -79,7 +79,11 @@ export function WebComponentWrapper(
       linkElem11.setAttribute('rel', 'stylesheet');
       linkElem11.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/bw-dx-material-blue-light.css');
 
+      const linkElem12 = document.createElement('link');
+      linkElem12.setAttribute('rel', 'stylesheet');
+      linkElem12.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/bw-calendar-instructors.css');
 
+  
       mountPoint.id = NAME;
       shadowRoot.appendChild(mountPoint);
       shadowRoot.appendChild(emotionRoot);
@@ -94,6 +98,7 @@ export function WebComponentWrapper(
       shadowRoot.appendChild(linkElem9);
       shadowRoot.appendChild(linkElem10);
       shadowRoot.appendChild(linkElem11);
+      shadowRoot.appendChild(linkElem12);
 
 
 

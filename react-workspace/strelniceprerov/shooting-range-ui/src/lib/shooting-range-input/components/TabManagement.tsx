@@ -40,8 +40,7 @@ function a11yProps(index: number) {
 }
 
 export default function TabManagement() {
-  const [value, setValue] = React.useState(0);
-
+  const [value, setValue]                     = React.useState(0);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -50,19 +49,23 @@ export default function TabManagement() {
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Item One" {...a11yProps(0)} />
-          <Tab label="Item Two" {...a11yProps(1)} />
-          <Tab label="Item Three" {...a11yProps(2)} />
+          <Tab label="Summary Table" {...a11yProps(0)} />
+          <Tab label="Instructors Calendar" {...a11yProps(1)} />
+          <Tab label="Booking Management Table" {...a11yProps(2)} />
+          <Tab label="Events" {...a11yProps(2)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <InstructorsCalendar/>
+        Place Holder for Summary table....
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        Item Two
+        <InstructorsCalendar/> 
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        Item Three
+        Place Holder for Booking Management Table....
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={3}>
+        PlaceHolder for Events.....
       </CustomTabPanel>
     </Box>
   );
