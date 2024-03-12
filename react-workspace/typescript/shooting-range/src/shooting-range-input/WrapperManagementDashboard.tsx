@@ -53,6 +53,7 @@ export function WrapperManagementDashboard({gVariables} : any) {
   const [instructorSegments, setInstructorSegments ]                  = React.useState(anyArray);
   const [controlAPI, setControlAPI]                                   = React.useState(anyArray);
   const [refreshManagementBoard, setRefreshManagementBoard]           = React.useState(0);
+  const [showingPage, setShowingPage]                                 = React.useState("LOADING");
   /*-------------------------------------------------------------------------------------------------------------*/
   /*                                                API CALLS                                                    */
   /*-------------------------------------------------------------------------------------------------------------*/
@@ -67,7 +68,7 @@ export function WrapperManagementDashboard({gVariables} : any) {
     setControlAPI(controlArray);
   })
     .catch((err) => { console.log(err) });
-  },[])
+  },[refreshManagementBoard])
   React.useEffect(() =>{    
     axios({
       url: `${gVariables.apiRootURL}getAllInstructorSegments.php`,
@@ -88,11 +89,14 @@ export function WrapperManagementDashboard({gVariables} : any) {
     setFullInfoInstructors(res.data);
     const controlArray = controlAPI;
     controlArray.push('INFO_INSTRUCTORS');
-    setControlAPI(instructorSegments);
+    setControlAPI(controlArray);
   })
     .catch((err) => { console.log(err) });
-  },[])
-  const isReadyToLoad = controlAPI.includes('ALL_INSTRUCTORS' && 'INSTRUCTOR_SEGMENTS' && 'INFO_INSTRUCTORS');
+  },[refreshManagementBoard])
+  if(controlAPI.includes('ALL_INSTRUCTORS' && 'INSTRUCTOR_SEGMENTS' && 'INFO_INSTRUCTORS')){
+    setShowingPage('DASHBOARD');
+    setControlAPI([]);
+  }
   return(
   <div className="container">
     <div className="row">
@@ -103,9 +107,11 @@ export function WrapperManagementDashboard({gVariables} : any) {
                                                         instructosListFromDB,   setInstructorsListFromDB,
                                                         instructorSegments,     setInstructorSegments,
                                                         fullInfoInstructors,    setFullInfoInstructors,
-                                                        refreshManagementBoard, setRefreshManagementBoard
+                                                        refreshManagementBoard, setRefreshManagementBoard,
+                                                        showingPage,            setShowingPage,
                                                       }}>
-          {isReadyToLoad ? <TabManagement/> : <>LOADING....</>}
+          {(showingPage==="LOADING")    &&  <>LOADING....</>}
+          {(showingPage==="DASHBOARD")  &&  <TabManagement/>}
           </ManagementDashboardContext.Provider>
         </div>
       </div>
