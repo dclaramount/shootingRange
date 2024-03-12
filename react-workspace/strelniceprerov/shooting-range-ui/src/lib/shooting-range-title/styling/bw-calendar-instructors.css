@@ -128,3 +128,8 @@
   color: rgb(51, 51, 51);
   border: 1px solid rgb(153, 153, 153);
 }
+.calendar_default_event_bar_inner {
+  position: absolute;
+  width: 6px;
+  background-color: rgb(16, 102, 168);
+}
