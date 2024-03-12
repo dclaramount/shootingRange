@@ -6,6 +6,8 @@ import Box from '@mui/material/Box';
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import InstructorsCalendar from './InstructorsCalendar';
+import axios from 'axios';
+import { ManagementDashboardContext } from './Context/ManagementDashboardContext';
 
 
 interface TabPanelProps {
@@ -42,8 +44,7 @@ function a11yProps(index: number) {
 }
 
 export default function TabManagement() {
-  const [value, setValue] = React.useState(0);
-
+  const [value, setValue]                     = React.useState(0);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -58,7 +59,7 @@ export default function TabManagement() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <InstructorsCalendar/>
+        <InstructorsCalendar/> 
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         Item Two

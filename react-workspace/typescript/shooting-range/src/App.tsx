@@ -2,20 +2,35 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { WrapperBooking } from './shooting-range-title/components/WrapperBooking';
-import { WrapperReservationManagement } from './shooting-range-input/WrapperReservationManagement';
+import { WrapperManagementDashboard} from './shooting-range-input/WrapperManagementDashboard';
 import axios from 'axios';
 import DataGridSummaryTable from './shooting-range-input/DataGridSummaryTable';
 import TabManagement from './shooting-range-input/TabMangement';
 
 function App() {
   const [allBookings, setAllBookings] = React.useState([]);
-
+  const [globalVariables, setGlobalVariables] = React.useState({});
 
   React.useEffect(() =>{    
     axios({
       url: "https://strelniceprerov.cz/wp-content/plugins/elementor-addon/widgets/getAllBookings.php",
       method: "GET",
   }).then((res) => {setAllBookings(res.data)})
+    .catch((err) => { console.log(err) });
+  },[])
+  React.useEffect(() =>{    
+    axios({
+      url: "https://strelniceprerov.cz/wp-content/plugins/elementor-addon/widgets/getGlobalVariables.php",
+      method: "GET",
+  }).then((res) => {
+    setGlobalVariables(({
+      startBusinessHours: res.data.find((variable : any) => variable.name==="Start_Business_Hours").value,
+      endBusinessHours:   res.data.find((variable : any) => variable.name==="End_Business_Hours").value,
+      startDayHours:      res.data.find((variable : any) => variable.name==="Start_Day_Hours").value,
+      endDayHours:        res.data.find((variable : any) => variable.name==="End_Day_Hours").value,
+      apiRootURL:         res.data.find((variable : any) => variable.name==="API_URL").value
+    }))
+  })
     .catch((err) => { console.log(err) });
   },[])
   return (
@@ -46,7 +61,7 @@ function App() {
       {/*<WrapperReservationManagement/>*/}
       <hr></hr>
       {/*<WrapperBooking/>*/}
-      <TabManagement />
+      {Object.keys(globalVariables).length > 0 ? <WrapperManagementDashboard gVariables={globalVariables}/> : "LOADING..."}
     </div>
   );
 }

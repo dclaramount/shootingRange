@@ -1,4 +1,6 @@
 import React from 'react';
+import axios from 'axios';
+import { ManagementDashboardContext } from './Context/ManagementDashboardContext';
 const dns = require ("@daypilot/daypilot-lite-react");
 const styles = {
   wrap: {
@@ -13,8 +15,10 @@ const styles = {
 };
 
 const InstructorsCalendar = () => {
+  const {instructosListFromDB, globalVariabes, instructorSegments, setRefreshManagementBoard} = React.useContext(ManagementDashboardContext);
   const calendarRef = React.useRef<any>()
-
+  console.log(instructorSegments);
+  console.log(globalVariabes);
   const editEvent = async (e:any) => {
     const dp = calendarRef.current.control;
     const modal = await dns.DayPilot.Modal.prompt("Update event text:", e.text());
@@ -22,22 +26,76 @@ const InstructorsCalendar = () => {
     e.data.text = modal.result;
     dp.events.update(e);
   };
-
   const [calendarConfig, setCalendarConfig] = React.useState({
-    viewType: "Week",
-    durationBarVisible: false,
+    businessBeginsHour:   parseInt(globalVariabes.startBusinessHours),
+    businessEndsHour:     parseInt(globalVariabes.endBusinessHours),
+    dayBeginsHour:        parseInt(globalVariabes.startDayHours),
+    dayEndsHour:          parseInt(globalVariabes.endDayHours),
+    viewType:             "Week",
+    scrollToHour:         8,
+    cellDuration:         60,
+    timeHeaderCellDuration : 60,
+    durationBarVisible:   true,
     timeRangeSelectedHandling: "Enabled",
+    //CREATE NEW SEGMENT
     onTimeRangeSelected: async (args : any) => {
       const dp = calendarRef.current.control;
-      const modal = await dns.DayPilot.Modal.prompt("Create a new event:", "Event 1");
-      dp.clearSelection();
-      if (!modal.result) { return; }
+      const uniqueGUI = dns.DayPilot.guid();
       dp.events.add({
         start: args.start,
         end: args.end,
-        id: dns.DayPilot.guid(),
-        text: modal.result
+        id: uniqueGUI,
+        text: `Segment - ${uniqueGUI.slice(-5)}`
       });
+      //Form for creating event in calendar
+      const form = [
+        {name: "Create Segment:", type: "title" },
+        { 
+          name:   "Instructor: ", 
+          id:     "instructor",
+          options: instructosListFromDB,
+          type: "select"
+        },
+        { name:   "Start of the Segment: ", 
+          id:     "start",
+          dateFormat: "d.M.yyyy",
+          timeFormat: "H:mm",
+          timeInterval: 60,
+          type: "datetime"
+        },
+        { 
+          name:   "End of the Segment: ", 
+          id:     "end",
+          dateFormat: "d.M.yyyy",
+          timeFormat: "H:mm",
+          timeInterval: 60,
+          type: "datetime"
+      },
+      ];
+      const data = { 
+        instructor: 1,
+        start :   args.start,
+        end   :   args.end
+      };
+      const modal = await dns.DayPilot.Modal.form(form, data, {okText: "Create"});
+      dp.clearSelection();
+      if (!modal.result) { 
+        //IF MODAL IS CANCELLED DELETE THE PLACHOLDER EVENT
+        dp.events.remove(args.source);
+        return; 
+      }
+      else{
+        // Simple POST request with a JSON body using axios
+        const instructorId = modal.result.instructor;
+        const startSegment = modal.result.start;
+        const endSegment = modal.result.end;
+        const guid =  uniqueGUI;
+        axios({
+          url: `https://strelniceprerov.cz/wp-content/plugins/elementor-addon/widgets/postCreateInstructorSegment.php?instructorId=${instructorId}&start=${startSegment}&end=${endSegment}&guid=${guid}`,
+          method: "GET",
+      }).then((res) => {console.log('REFRESH'); setRefreshManagementBoard(Math.random())})
+      }
+
     },
     onEventClick: async (args:any) => {
       await editEvent(args.e);
@@ -110,42 +168,31 @@ const InstructorsCalendar = () => {
   });
 
   React.useEffect(() => {
-    const events = [
-      {
-        id: 1,
-        text: "Event 1",
-        start: "2023-10-02T10:30:00",
-        end: "2023-10-02T13:00:00",
-        participants: 2,
-      },
-      {
-        id: 2,
-        text: "Event 2",
-        start: "2023-10-03T09:30:00",
-        end: "2023-10-03T11:30:00",
-        backColor: "#6aa84f",
-        participants: 1,
-      },
-      {
-        id: 3,
-        text: "Event 3",
-        start: "2023-10-03T12:00:00",
-        end: "2023-10-03T15:00:00",
-        backColor: "#f1c232",
-        participants: 3,
-      },
-      {
-        id: 4,
-        text: "Event 4",
-        start: "2023-10-01T11:30:00",
-        end: "2023-10-01T14:30:00",
-        backColor: "#cc4125",
-        participants: 4,
-      },
-    ];
+
+    let events :  ({
+      id: number;
+      text: string;
+      start: any;
+      end: any;
+      backColor?: undefined;
+  } | {
+      id: number;
+      text: string;
+      start: string;
+      end: string;
+      backColor: string;
+  })[] = [];
+    instructorSegments.forEach((segment:any, idx: any) => {
+      events.push({
+        id: idx+1,
+        text: `Event - ${segment.guid.slice(-5)}`,
+        start: segment.startTime,
+        end: segment.endTime,
+        backColor: segment.instructorId==='1' ? "#6aa84f" : "#f1c232"
+      })
+    })
 
     const startDate = "2023-10-02";
-
     calendarRef.current.control.update({startDate, events});
   }, []);
 
@@ -154,10 +201,10 @@ const InstructorsCalendar = () => {
       <div style={styles.left}>
         <dns.DayPilotNavigator
           selectMode={"Week"}
-          showMonths={3}
-          skipMonths={3}
-          startDate={"2023-10-02"}
-          selectionDay={"2023-10-02"}
+          showMonths={2}
+          skipMonths={2}
+          startDate={`${new Date().toISOString()}`}
+          selectionDay={`${new Date().toISOString()}`}
           onTimeRangeSelected={ (args : any) => {
             calendarRef.current.control.update({
               startDate: args.day
