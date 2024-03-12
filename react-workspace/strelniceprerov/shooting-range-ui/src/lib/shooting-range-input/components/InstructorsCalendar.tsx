@@ -15,11 +15,10 @@ const styles = {
 };
 
 const InstructorsCalendar = () => {
-  const {instructosListFromDB, globalVariabes, instructorSegments, setRefreshManagementBoard} = React.useContext(ManagementDashboardContext);
+  const [refresh, setRefresh] = React.useState(false);
+  const {instructosListFromDB, fullInfoInstructors, globalVariabes, instructorSegments, setRefreshManagementBoard, setShowingPage} = React.useContext(ManagementDashboardContext);
   const calendarRef = React.useRef<any>()
-  console.log(instructorSegments);
-  console.log(globalVariabes);
-  const editEvent = async (e:any) => {
+  const clickEventCalendar = async (e:any) => {
     const dp = calendarRef.current.control;
     const modal = await dns.DayPilot.Modal.prompt("Update event text:", e.text());
     if (!modal.result) { return; }
@@ -93,12 +92,15 @@ const InstructorsCalendar = () => {
         axios({
           url: `https://strelniceprerov.cz/wp-content/plugins/elementor-addon/widgets/postCreateInstructorSegment.php?instructorId=${instructorId}&start=${startSegment}&end=${endSegment}&guid=${guid}`,
           method: "GET",
-      }).then((res) => {console.log('REFRESH'); setRefreshManagementBoard(Math.random())})
+      }).then((res) => {
+        setRefreshManagementBoard(Math.random());
+        setShowingPage('LOADING');
+      })
       }
 
     },
     onEventClick: async (args:any) => {
-      await editEvent(args.e);
+      //await editEvent(args.e);
     },
     contextMenu: new dns.DayPilot.Menu({
       items: [
@@ -106,7 +108,24 @@ const InstructorsCalendar = () => {
           text: "Delete",
           onClick: async (args:any) => {
             const dp = calendarRef.current.control;
-            dp.events.remove(args.source);
+            const modal = await dns.DayPilot.Modal.confirm("Are you sure you want to delete this segment?", {okText: "Delete"});
+            if (!modal.result) { 
+              //IF MODAL IS CANCELLED NOTHING HAPPENS
+              return; 
+            }
+            else{
+              const thisGui = args.source.data.text.split('-')[1].trim()
+              if(thisGui){
+                console.log("DELETE")
+                axios({
+                  url: `https://strelniceprerov.cz/wp-content/plugins/elementor-addon/widgets/postDeleteInstructorSegment.php?guid=${thisGui}`,
+                  method: "GET",
+              }).then((res) => {console.log('REFRESH'); setRefreshManagementBoard(Math.random())})
+              }
+
+              console.log(args.source.data.text.split('-')[1].trim());
+              dp.events.remove(args.source);
+            }
           },
         },
         {
@@ -115,7 +134,7 @@ const InstructorsCalendar = () => {
         {
           text: "Edit...",
           onClick: async (args:any) => {
-            await editEvent(args.source);
+            await clickEventCalendar(args.source);
           }
         }
       ]
@@ -188,13 +207,14 @@ const InstructorsCalendar = () => {
         text: `Event - ${segment.guid.slice(-5)}`,
         start: segment.startTime,
         end: segment.endTime,
-        backColor: segment.instructorId==='1' ? "#6aa84f" : "#f1c232"
+        backColor: fullInfoInstructors.find((instructor : any) => instructor.id = segment.instructorId).color
       })
     })
 
-    const startDate = "2023-10-02";
+    const startDate = `${new Date().toISOString()}`;
     calendarRef.current.control.update({startDate, events});
-  }, []);
+    setRefresh(true);
+  }, [refresh]);
 
   return (
     <div style={styles.wrap}>
