@@ -89,7 +89,6 @@ export function DaysColumn(){
     }
   }
   const handlerClick = (e : any) => {
-    console.log(e);
     if(!e.target.className.includes('occupied')){
       const array = [];
       array.push(e.target.id)
@@ -102,7 +101,6 @@ export function DaysColumn(){
       if(selectedSegment.length===1){
         return 'active first active last'
       }
-      console.log(selectedSegment);
       if(selectedSegment.indexOf(clickedCell)===0){
         return 'active first'
       }

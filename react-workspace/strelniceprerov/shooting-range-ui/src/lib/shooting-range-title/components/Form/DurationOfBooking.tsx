@@ -2,24 +2,25 @@ import React from 'react';
 import { BookingContext } from '../Context/BookingContext';
 
 export function DurationOfBooking(){
+  const { selectedBookingDuration,  setSelectedBookingDuration, 
+          selectedSegment,          setShowingPage, setSelectedSegment, 
+          notAvailableSegments}                                           = React.useContext(BookingContext);
 
-  const [showAlertMessage, setShowAlertMessage] = React.useState(false);
-
-  const {selectedBookingDuration, setSelectedBookingDuration , selectedSegment,  setShowingPage, setSelectedSegment, availableSegments, notAvailableSegments} = React.useContext(BookingContext);
-
+  /*--------------Handler for Reduction of Length of Reservation----------------*/
   const onReduceSegmentDuration = (e : any) => {
-    console.log(selectedSegment);
     if(selectedBookingDuration>1 && selectedSegment.length>0){
       setSelectedBookingDuration(selectedBookingDuration-1);
-      const tempArray = selectedSegment;
-      console.log(tempArray);
-      const reduceArray = tempArray.splice(-1)
-      console.log(reduceArray);
-      setSelectedSegment(tempArray.splice(-1));
+      const last = selectedSegment.pop();
+      const tempArray : any[] = [];
+      selectedSegment.map((seg : any, idx: number) => {
+        if(last !== seg){
+          tempArray.push(seg);
+        }
+      })
+      setSelectedSegment(tempArray);
     }
-    console.log("Reduce Duration");
-    console.log(e);
   };
+  /*--------------Handler for Increase of Length of Reservation----------------*/
   const onIncreaseSegmentDuration = (e : any) => {
     //TODO MAX HOURS
     if(selectedBookingDuration<3 && selectedSegment.length>0){
@@ -30,16 +31,7 @@ export function DurationOfBooking(){
       const newBaseDate = `${date.getFullYear()}-${month}-${day} ${date.getHours()}:00`
       const newToCheckDate = `${date.getFullYear()}-${month}-${day} ${date.getHours()+(selectedBookingDuration)}:00`
 
-      const baseDate = `${date.toLocaleDateString('en-CA')} ${date.getHours()}:00`;
-      const toCheckDate = `${date.toLocaleDateString('en-CA')} ${date.getHours()+1}:00`;
-
-      console.log();
-
-      console.log(toCheckDate);
-      console.log(newToCheckDate);
-
       if(notAvailableSegments.includes(newToCheckDate)){
-        console.log("ALERT FOR NOT AVAILABILITY")
         setShowingPage("POPUP_LENGTH");
       }
       else{
@@ -49,8 +41,6 @@ export function DurationOfBooking(){
         setSelectedSegment(selectedSegment);
       }
     }
-    console.log("Increase Duration");
-    console.log(e);
   };
   return(
     <div id={"Lenght_Reservation"} className="reservation-order-row">
