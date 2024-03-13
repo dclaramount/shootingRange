@@ -102,6 +102,16 @@ export function DaysColumn(){
       if(selectedSegment.length===1){
         return 'active first active last'
       }
+      console.log(selectedSegment);
+      if(selectedSegment.indexOf(clickedCell)===0){
+        return 'active first'
+      }
+      else if(selectedSegment.indexOf(clickedCell)===selectedSegment.length-1){
+        return 'active last'
+      }
+      else{
+        return 'active'
+      }
     }
   } 
     //BUILDING CONTROL ARRAY

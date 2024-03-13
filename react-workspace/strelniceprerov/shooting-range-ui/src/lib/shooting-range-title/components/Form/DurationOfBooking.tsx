@@ -11,6 +11,11 @@ export function DurationOfBooking(){
     console.log(selectedSegment);
     if(selectedBookingDuration>1 && selectedSegment.length>0){
       setSelectedBookingDuration(selectedBookingDuration-1);
+      const tempArray = selectedSegment;
+      console.log(tempArray);
+      const reduceArray = tempArray.splice(-1)
+      console.log(reduceArray);
+      setSelectedSegment(tempArray.splice(-1));
     }
     console.log("Reduce Duration");
     console.log(e);
@@ -18,7 +23,7 @@ export function DurationOfBooking(){
   const onIncreaseSegmentDuration = (e : any) => {
     //TODO MAX HOURS
     if(selectedBookingDuration<3 && selectedSegment.length>0){
-      const date = new Date(selectedSegment);
+      const date = new Date(selectedSegment[0]);
       const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
       const month = date.getMonth() < 9 ? `0${date.getMonth()+1}` : date.getMonth()+1;
 
@@ -39,6 +44,9 @@ export function DurationOfBooking(){
       }
       else{
         setSelectedBookingDuration(selectedBookingDuration+1);
+        const tempArray = selectedSegment;
+        selectedSegment.push(newToCheckDate);
+        setSelectedSegment(selectedSegment);
       }
     }
     console.log("Increase Duration");
