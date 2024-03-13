@@ -65,7 +65,7 @@ export function ShootingRangeTitle(props: ShootingRangeTitleProps) {
 
   function callBackClock(e:any){
     console.log(e);
-    setRefreshData(e);
+    //setRefreshData(e);
   }
   return (    
     <div className="wrapper-diego">

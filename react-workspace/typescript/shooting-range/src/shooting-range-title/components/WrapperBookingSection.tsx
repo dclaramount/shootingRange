@@ -6,16 +6,20 @@ import { BookingFormWrapper } from "./BookingFormWrapper";
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import Popover from '@mui/material/Popover';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+
 
 //TO IMPLEMENT CENTRALIZED API CALLS
 export function WrapperBookingSection() {
   const anyArray : any[] = [];
-  const [showingPage, setShowingPage]                                 = React.useState("LOADING");
   const [controlAPI, setControlAPI]                                   = React.useState(anyArray);
   const [refreshBookingEnv, setRefreshBookingEnv]                     = React.useState(0);
   const { setLocationList,  selectedWeek,
           setBookings,      selectedLocation,
-          apiURL}                                                     = React.useContext(BookingContext);
+          apiURL,           showingPage, 
+          setShowingPage}                                                     = React.useContext(BookingContext);
   /*-------------------------------------------------------------------------------------------------------------*/
   /*                                                API CALLS                                                    */
   /*-------------------------------------------------------------------------------------------------------------*/
@@ -56,12 +60,20 @@ export function WrapperBookingSection() {
   }
   return(
     <>
-      <RenderHeader/>
+      {showingPage!=="POPUP_LENGTH" &&  <RenderHeader/>}
       {showingPage==="LOADING"          && <>LOADING BOOKING CALENDAR</>}
       {showingPage==="BOOKING_CALENDAR" && 
       <>
         <BookingCalendarWrappper/>
         <BookingFormWrapper />
       </>}
+      {showingPage==="POPUP_LENGTH" &&  
+      <div style={{margin:'auto'}}>
+        <Typography sx={{ p: 2 }}>THE FOLLOWING SEGMENT IS FULL PLEASE SELECT ANOTHER COMBINATION OF SEGMENTS.</Typography>
+        <Button onClick={()=>setShowingPage("BOOKING_CALENDAR")}>
+          CLOSE
+        </Button>
+      </div>
+       }
     </>
 )}

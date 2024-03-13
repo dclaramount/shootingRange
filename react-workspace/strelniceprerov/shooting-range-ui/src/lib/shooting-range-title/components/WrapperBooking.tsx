@@ -41,6 +41,7 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
   const [maxOccupancy, setMaxOccupancy]                         = React.useState(parseInt(gVariables.maxOccupancy));
   const [maxBookingLength, setMaxBookingLength]                 = React.useState(parseInt(gVariables.maxBookingLength));
   const [apiURL, setApiURL]                                     = React.useState(gVariables.apiRootURL);
+  const [showingPage, setShowingPage]                           = React.useState("LOADING");
   const delayInMilliseconds = 5000; //1 second
 
   setTimeout(function() {
@@ -67,7 +68,8 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
                                     notAvailableSegments,     setNotAvailableSegments,
                                     maxOccupancy,             setMaxOccupancy,
                                     maxBookingLength,         setMaxBookingLength,
-                                    apiURL,                   setApiURL
+                                    apiURL,                   setApiURL,
+                                    showingPage,              setShowingPage
                                     }}>
   <div className="container">
     <div className="row">
