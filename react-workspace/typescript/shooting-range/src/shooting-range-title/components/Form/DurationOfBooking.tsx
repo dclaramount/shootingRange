@@ -29,13 +29,13 @@ export function DurationOfBooking(){
       const month = date.getMonth() < 9 ? `0${date.getMonth()+1}` : date.getMonth()+1;
 
       const newBaseDate = `${date.getFullYear()}-${month}-${day} ${date.getHours()}:00`
-      const newToCheckDate = `${date.getFullYear()}-${month}-${day} ${date.getHours()+(selectedBookingDuration)}:00`
+      const newToCheckDate = `${date.getFullYear()}-${month}-${day} ${date.getHours()+(parseInt(selectedBookingDuration))}:00`
 
       if(notAvailableSegments.includes(newToCheckDate)){
         setShowingPage("POPUP_LENGTH");
       }
       else{
-        setSelectedBookingDuration(selectedBookingDuration+1);
+        setSelectedBookingDuration(parseInt(selectedBookingDuration)+1);
         const tempArray = selectedSegment;
         selectedSegment.push(newToCheckDate);
         setSelectedSegment(selectedSegment);

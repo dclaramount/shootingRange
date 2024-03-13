@@ -41,6 +41,10 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
   const [maxOccupancy, setMaxOccupancy]                         = React.useState(parseInt(gVariables.maxOccupancy));
   const [maxBookingLength, setMaxBookingLength]                 = React.useState(parseInt(gVariables.maxBookingLength));
   const [apiURL, setApiURL]                                     = React.useState(gVariables.apiRootURL);
+  const [defaultDuration, setDefaultDuration]                   = React.useState(gVariables.defaultDuration);
+  const [defaultOccupancy, setDefaultOccupancy]                 = React.useState(gVariables.defaultOccupancy);
+  const [alertMsgSlotFull, setAlertMsgSlotFull]                 = React.useState(gVariables.msgAlertSlotFull);
+  const [alertMsgOccupFull, setAlertMsgOccupFull]               = React.useState(gVariables.msgAlertOccupancy);
   const [showingPage, setShowingPage]                           = React.useState("LOADING");
   const delayInMilliseconds = 5000; //1 second
 
@@ -69,7 +73,11 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
                                     maxOccupancy,             setMaxOccupancy,
                                     maxBookingLength,         setMaxBookingLength,
                                     apiURL,                   setApiURL,
-                                    showingPage,              setShowingPage
+                                    showingPage,              setShowingPage,
+                                    defaultDuration,          setDefaultDuration,
+                                    defaultOccupancy,         setDefaultOccupancy,
+                                    alertMsgSlotFull,         setAlertMsgSlotFull,
+                                    alertMsgOccupFull,        setAlertMsgOccupFull
                                     }}>
   <div className="container">
     <div className="row">

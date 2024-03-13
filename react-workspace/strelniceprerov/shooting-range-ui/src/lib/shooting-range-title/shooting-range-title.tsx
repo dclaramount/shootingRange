@@ -38,7 +38,12 @@ export function ShootingRangeTitle(props: ShootingRangeTitleProps) {
       apiRootURL:         res.data.find((variable : any) => variable.name==="API_URL").value,
       defaultLocation:    res.data.find((variable : any) => variable.name==="Default_Location").value,
       maxOccupancy:       res.data.find((variable : any) => variable.name==="Max_Occupancy").value,
-      maxBookingLength:   res.data.find((variable : any) => variable.name==="Max_Length_Booking").value
+      maxBookingLength:   res.data.find((variable : any) => variable.name==="Max_Length_Booking").value,
+      defaultDuration:    res.data.find((variable : any) => variable.name==="Default_Booking_Length").value,
+      defaultOccupancy:   res.data.find((variable : any) => variable.name==="Default_Booking_Occupancy").value,
+      msgAlertSlotFull:   res.data.find((variable : any) => variable.name==="Alert_Message_Slot_Full").value,
+      msgAlertOccupancy:  res.data.find((variable : any) => variable.name==="Alert_Message_Occupancy").value
+   
     }))
   })
     .catch((err) => { console.log(err) });
