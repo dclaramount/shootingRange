@@ -35,7 +35,10 @@ export function ShootingRangeTitle(props: ShootingRangeTitleProps) {
       endBusinessHours:   res.data.find((variable : any) => variable.name==="End_Business_Hours").value,
       startDayHours:      res.data.find((variable : any) => variable.name==="Start_Day_Hours").value,
       endDayHours:        res.data.find((variable : any) => variable.name==="End_Day_Hours").value,
-      apiRootURL:         res.data.find((variable : any) => variable.name==="API_URL").value
+      apiRootURL:         res.data.find((variable : any) => variable.name==="API_URL").value,
+      defaultLocation:    res.data.find((variable : any) => variable.name==="Default_Location").value,
+      maxOccupancy:       res.data.find((variable : any) => variable.name==="Max_Occupancy").value,
+      maxBookingLength:   res.data.find((variable : any) => variable.name==="Max_Length_Booking").value
     }))
   })
     .catch((err) => { console.log(err) });
@@ -66,10 +69,8 @@ export function ShootingRangeTitle(props: ShootingRangeTitleProps) {
   }
   return (    
     <div className="wrapper-diego">
-      {/*<h1 className='header-custom'>This is the place holder</h1>*/}
       <Clock style={{visibility:'hidden'}} format={'HH:mm:ss'} ticking={true} timezone={'US/Pacific'} onChange={(e) => callBackClock(e)}/>
-      {/*timeStamp !== null ? <>Response time-stamp:{timeStamp}</> : <>Waiting</>*/}
-      <WrapperBooking/>
+      {Object.keys(globalVariables).length > 0 ? <WrapperBooking gVariables={globalVariables}/> : "LOADING..."}
     </div>)
 }
 

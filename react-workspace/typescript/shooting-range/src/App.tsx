@@ -28,11 +28,28 @@ function App() {
       endBusinessHours:   res.data.find((variable : any) => variable.name==="End_Business_Hours").value,
       startDayHours:      res.data.find((variable : any) => variable.name==="Start_Day_Hours").value,
       endDayHours:        res.data.find((variable : any) => variable.name==="End_Day_Hours").value,
-      apiRootURL:         res.data.find((variable : any) => variable.name==="API_URL").value
+      apiRootURL:         res.data.find((variable : any) => variable.name==="API_URL").value,
+      defaultLocation:    res.data.find((variable : any) => variable.name==="Default_Location").value,
+      maxOccupancy:       res.data.find((variable : any) => variable.name==="Max_Occupancy").value,
+      maxBookingLength:   res.data.find((variable : any) => variable.name==="Max_Length_Booking").value
     }))
   })
     .catch((err) => { console.log(err) });
   },[])
+  function buildArrayOfBusinessHours(startHour : any, endHour : any){
+    const Array = []
+    let countStartHour = parseInt(startHour);
+    console.log(endHour);
+    while(countStartHour < parseInt(endHour)){
+      if(countStartHour < 10){
+        Array.push(`0${countStartHour}`);
+      }
+      else{
+        Array.push(`${countStartHour}`);
+      }
+      countStartHour=countStartHour+1;
+    }
+  }
   return (
     <div className="App">
       <style>
@@ -59,7 +76,7 @@ function App() {
       </header>
       {/*<WrapperReservationManagement/>*/}
       <hr></hr>
-      {<WrapperBooking/>}
+      {Object.keys(globalVariables).length > 0 ? <WrapperBooking gVariables={globalVariables}/> : "LOADING..."}
       {/*Object.keys(globalVariables).length > 0 ? <WrapperManagementDashboard gVariables={globalVariables}/> : "LOADING..."*/}
     </div>
   );

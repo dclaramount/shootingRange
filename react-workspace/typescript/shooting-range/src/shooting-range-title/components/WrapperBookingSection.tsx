@@ -14,13 +14,14 @@ export function WrapperBookingSection() {
   const [controlAPI, setControlAPI]                                   = React.useState(anyArray);
   const [refreshBookingEnv, setRefreshBookingEnv]                     = React.useState(0);
   const { setLocationList,  selectedWeek,
-          setBookings,      selectedLocation}                         = React.useContext(BookingContext);
+          setBookings,      selectedLocation,
+          apiURL}                                                     = React.useContext(BookingContext);
   /*-------------------------------------------------------------------------------------------------------------*/
   /*                                                API CALLS                                                    */
   /*-------------------------------------------------------------------------------------------------------------*/
   React.useEffect(() =>{    
     axios({
-      url: "https://strelniceprerov.cz/wp-content/plugins/elementor-addon/widgets/getListShootingRange.php",
+      url: `${apiURL}getListShootingRange.php`,
       method: "GET",
   }).then((res) => {
     setLocationList(res.data)
@@ -37,7 +38,7 @@ export function WrapperBookingSection() {
       const firstDay= (new Date(selectedWeek.firstDay)).toISOString();
       const lastDay=  (new Date(selectedWeek.lastDay)).toISOString();
       axios({
-        url: `https://strelniceprerov.cz/wp-content/plugins/elementor-addon/widgets/getBookingsFiltered.php?firstDayOfWeek=${firstDay}&lastDayOfWeek=${lastDay}&location=${selectedLocation}`,
+        url: `${apiURL}getBookingsFiltered.php?firstDayOfWeek=${firstDay}&lastDayOfWeek=${lastDay}&location=${selectedLocation}`,
         method: "GET",
       }).then((res) => {
           setBookings(res.data)
