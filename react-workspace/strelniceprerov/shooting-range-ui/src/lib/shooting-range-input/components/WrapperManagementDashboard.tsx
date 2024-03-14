@@ -42,7 +42,6 @@ const reArrangeInstructorSegments = (instructorSegments: any) => {
 
 export function WrapperManagementDashboard({gVariables} : any) {
   const anyArray : any[] = [];
-  console.log(`REFRESH MANAGEMENT DASHBOARD`);
   /*-------------------------------------------------------------------------------------------------------------*/
   /*                                     HOOKS IN CONTEXT PROVIDER                                               */
   /*-------------------------------------------------------------------------------------------------------------*/
@@ -50,6 +49,7 @@ export function WrapperManagementDashboard({gVariables} : any) {
   const [instructosListFromDB, setInstructorsListFromDB]              = React.useState([]);
   const [fullInfoInstructors, setFullInfoInstructors]                 = React.useState([]);
   const [instructorSegments, setInstructorSegments ]                  = React.useState(anyArray);
+  const [summaryBookingSegments, setSummaryBookingSegments ]           = React.useState(anyArray);
   const [controlAPI, setControlAPI]                                   = React.useState(anyArray);
   const [refreshManagementBoard, setRefreshManagementBoard]           = React.useState(0);
   const [showingPage, setShowingPage]                                 = React.useState("LOADING");
@@ -92,7 +92,24 @@ export function WrapperManagementDashboard({gVariables} : any) {
   })
     .catch((err) => { console.log(err) });
   },[refreshManagementBoard])
-  if(controlAPI.includes('ALL_INSTRUCTORS' && 'INSTRUCTOR_SEGMENTS' && 'INFO_INSTRUCTORS')){
+  React.useEffect(() =>{    
+    axios({
+      url: `${gVariables.apiRootURL}getSummaryBookings.php`,
+      method: "GET",
+  }).then((res) => {
+    if(res){
+      console.log(res);
+      setSummaryBookingSegments(res.data);
+      const controlArray = controlAPI;
+      controlArray.push('SUMMARY_BOOKINGS');
+      setControlAPI(controlArray);
+    }
+  })
+    .catch((err) => { console.log(err) });
+  },[refreshManagementBoard])
+  console.log(controlAPI);
+  if(controlAPI.includes('ALL_INSTRUCTORS' && 'INSTRUCTOR_SEGMENTS' && 'INFO_INSTRUCTORS' && 'SUMMARY_BOOKINGS')){
+    console.log("WE ARE READY");
     setShowingPage('DASHBOARD');
     setControlAPI([]);
   }
@@ -108,6 +125,8 @@ export function WrapperManagementDashboard({gVariables} : any) {
                                                         fullInfoInstructors,    setFullInfoInstructors,
                                                         refreshManagementBoard, setRefreshManagementBoard,
                                                         showingPage,            setShowingPage,
+                                                        summaryBookingSegments, setSummaryBookingSegments
+
                                                       }}>
           {(showingPage==="LOADING")    &&  <>LOADING....</>}
           {(showingPage==="DASHBOARD")  &&  <TabManagement/>}

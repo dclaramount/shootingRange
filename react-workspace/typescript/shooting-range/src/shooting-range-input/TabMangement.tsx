@@ -3,11 +3,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
-import "react-big-calendar/lib/css/react-big-calendar.css";
 import InstructorsCalendar from './InstructorsCalendar';
-import axios from 'axios';
-import { ManagementDashboardContext } from './Context/ManagementDashboardContext';
+import SummaryBookingTable from './SummaryBookingsTable';
 
 
 interface TabPanelProps {
@@ -53,19 +50,23 @@ export default function TabManagement() {
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Item One" {...a11yProps(0)} />
-          <Tab label="Item Two" {...a11yProps(1)} />
-          <Tab label="Item Three" {...a11yProps(2)} />
+          <Tab label="Summary Table" {...a11yProps(0)} />
+          <Tab label="Instructors Calendar" {...a11yProps(1)} />
+          <Tab label="Booking Management Table" {...a11yProps(2)} />
+          <Tab label="Events" {...a11yProps(2)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <InstructorsCalendar/> 
+        <SummaryBookingTable/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        Item Two
+        <InstructorsCalendar/> 
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        Item Three
+        Place Holder for Booking Management Table....
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={3}>
+        PlaceHolder for Events.....
       </CustomTabPanel>
     </Box>
   );

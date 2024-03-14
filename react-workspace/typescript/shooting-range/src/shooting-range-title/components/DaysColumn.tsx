@@ -11,12 +11,14 @@ export function DaysColumn(){
           selectedOccupancy,            availableSegments,
           setAvailableSegments,         notAvailableSegments,
           setSelectedBookingDuration,   setNotAvailableSegments,
-          defaultDuration,              defaultOccupancy}         = React.useContext(BookingContext);
+          defaultDuration,              defaultOccupancy,
+          instructorSegments}                                     = React.useContext(BookingContext);
 
   const daysOftheWeek = ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle'];
   function padWithLeadingZeros(num : any, totalLength: any) {
     return String(num).padStart(totalLength, '0');
   }
+  console.log(instructorSegments);
   function getOccupancy(day : any, time : any){
     const ltime = `${time}:00`
     const lday = padWithLeadingZeros(parseInt(day.split(".")[0]),2);

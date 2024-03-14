@@ -207,7 +207,7 @@ const InstructorsCalendar = () => {
         text: `Event - ${segment.guid.slice(-5)}`,
         start: segment.startTime,
         end: segment.endTime,
-        backColor: fullInfoInstructors.find((instructor : any) => instructor.id = segment.instructorId).color
+        backColor: fullInfoInstructors.find((instructor : any) => instructor.id === segment.instructorId).color
       })
     })
 

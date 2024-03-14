@@ -4,6 +4,7 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import InstructorsCalendar from './InstructorsCalendar';
+import SummaryBookingTable from './SummaryBookingTable';
 
 
 interface TabPanelProps {
@@ -56,7 +57,7 @@ export default function TabManagement() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        Place Holder for Summary table....
+        <SummaryBookingTable/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <InstructorsCalendar/> 
