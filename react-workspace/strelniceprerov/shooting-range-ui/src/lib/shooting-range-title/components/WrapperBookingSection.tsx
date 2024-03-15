@@ -19,7 +19,7 @@ export function WrapperBookingSection() {
   const { setLocationList,  selectedWeek,
           setBookings,      selectedLocation,
           apiURL,           showingPage, 
-          setShowingPage}                                                     = React.useContext(BookingContext);
+          setShowingPage, setSummaryBookingSegments, setSumInstBookingSegments}                                                     = React.useContext(BookingContext);
   /*-------------------------------------------------------------------------------------------------------------*/
   /*                                                API CALLS                                                    */
   /*-------------------------------------------------------------------------------------------------------------*/
@@ -54,7 +54,33 @@ export function WrapperBookingSection() {
       }
     },[selectedWeek , selectedLocation, refreshBookingEnv])
 
-  if(controlAPI.includes('SHOOTING_RANGE_LIST' && 'BOOKINGS_FILTERED' )){
+    React.useEffect(() =>{    
+      axios({
+        url: `${apiURL}getSummaryBookings.php`,
+        method: "GET",
+    }).then((res) => {
+      setSummaryBookingSegments(res.data);
+      const controlArray = controlAPI;
+      controlArray.push('SUMMARY_BOOKINGS');
+      setControlAPI(controlArray);
+    })
+      .catch((err) => { console.log(err) });
+    },[refreshBookingEnv])
+    React.useEffect(() =>{    
+      axios({
+        url: `${apiURL}getSummaryInstBookings.php`,
+        method: "GET",
+    }).then((res) => {
+      console.log(res);
+      setSumInstBookingSegments(res.data);
+      const controlArray = controlAPI;
+      controlArray.push('SUMMARY_INST_BOOKINGS');
+      setControlAPI(controlArray);
+    })
+      .catch((err) => { console.log(err) });
+    },[refreshBookingEnv])
+
+  if(controlAPI.includes('SHOOTING_RANGE_LIST' && 'BOOKINGS_FILTERED' && 'SUMMARY_INST_BOOKINGS' &&'SUMMARY_BOOKINGS' )){
     setShowingPage('BOOKING_CALENDAR');
     setControlAPI([]);
   }

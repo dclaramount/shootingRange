@@ -45,6 +45,8 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
   const [defaultOccupancy, setDefaultOccupancy]                 = React.useState(gVariables.defaultOccupancy);
   const [alertMsgSlotFull, setAlertMsgSlotFull]                 = React.useState(gVariables.msgAlertSlotFull);
   const [alertMsgOccupFull, setAlertMsgOccupFull]               = React.useState(gVariables.msgAlertOccupancy);
+  const [summaryBookingSegments, setSummaryBookingSegments]     = React.useState([]);
+  const [sumInstBookingSegments, setSumInstBookingSegments]     = React.useState([]);
   const [showingPage, setShowingPage]                           = React.useState("LOADING");
   const delayInMilliseconds = 5000; //1 second
 
@@ -77,7 +79,9 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
                                     defaultDuration,          setDefaultDuration,
                                     defaultOccupancy,         setDefaultOccupancy,
                                     alertMsgSlotFull,         setAlertMsgSlotFull,
-                                    alertMsgOccupFull,        setAlertMsgOccupFull
+                                    alertMsgOccupFull,        setAlertMsgOccupFull,
+                                    summaryBookingSegments,   setSummaryBookingSegments,
+                                    sumInstBookingSegments,   setSumInstBookingSegments
                                     }}>
   <div className="container">
     <div className="row">

@@ -3,44 +3,44 @@ import { BookingContext } from './Context/BookingContext';
 
 export function DaysColumn(){
 
-  const { timesToShow,                  setTimesToShow, 
-          daysOfWeek,                   setDaysOfWeek, 
-          bookings,                     setBookings, 
-          selectedSegment,              setSelectedSegment, 
-          isoDaysOfWeek,                selectedCalendarSegments,
-          selectedOccupancy,            availableSegments,
-          setAvailableSegments,         notAvailableSegments,
-          setSelectedBookingDuration,   setNotAvailableSegments,
-          defaultDuration,              defaultOccupancy,
-          instructorSegments}                                     = React.useContext(BookingContext);
+  const { timesToShow,                   
+          daysOfWeek,                    
+          selectedSegment,              
+          setSelectedSegment, 
+          isoDaysOfWeek,                
+          selectedOccupancy,            
+          setAvailableSegments,         
+          setSelectedBookingDuration,   
+          setNotAvailableSegments,
+          defaultDuration,              
+          summaryBookingSegments, 
+          selectedLocation, 
+          sumInstBookingSegments, 
+          shootingInstructor  } = React.useContext(BookingContext);
 
   const daysOftheWeek = ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle'];
   function padWithLeadingZeros(num : any, totalLength: any) {
     return String(num).padStart(totalLength, '0');
   }
-  console.log(instructorSegments);
   function getOccupancy(day : any, time : any){
     const ltime = `${time}:00`
     const lday = padWithLeadingZeros(parseInt(day.split(".")[0]),2);
     const lmonth = padWithLeadingZeros(parseInt(day.split(".")[1]),2);
     const ldate = `${lmonth}-${lday}`;
-    const filtered = bookings.filter((booking : any) => booking.start.includes(ltime) && booking.start.includes(ldate));
-    if(filtered.length===1){
-      const sum  = parseInt(filtered[0].occupancy);
-      const max = parseInt(filtered[0].maxOccupancy);
-      return(`${sum}/${max}`);
-    }
-    else if(filtered.length>1){
-      let sum = 0;
-      const max = parseInt(filtered[0].maxOccupancy);
-      // calculate sum using forEach() method
-      filtered.forEach( (booking : any) => {
-      sum += parseInt(booking.occupancy);
-      })
-      return(`${sum}/${max}`);
-    }
-    else{
-      return (`0/3`);
+    const partialDate = `${ldate} ${ltime}`;
+    if(!shootingInstructor){
+      const filteredValue = summaryBookingSegments.find((sum:any) => sum.segmentStarts.includes(partialDate) && parseInt(sum.locationId)===parseInt(selectedLocation));
+      if (filteredValue){
+        return `${filteredValue.occupancyBooked}/${filteredValue.maxOccupancy}`
+      }
+      else{
+        return `0/3`
+      }
+    }else{
+      const filteredValue = sumInstBookingSegments.find((sum:any) => sum.segmentStarts.includes(partialDate));
+      if (filteredValue){
+        return `${filteredValue.occupancyBooked}/${filteredValue.maxOccupancy}`
+      }
     }
   }
 
@@ -49,23 +49,26 @@ export function DaysColumn(){
     const lday = padWithLeadingZeros(parseInt(day.split(".")[0]),2);
     const lmonth = padWithLeadingZeros(parseInt(day.split(".")[1]),2);
     const ldate = `${lmonth}-${lday}`;
-    const filtered = bookings.filter((booking : any) => booking.start.includes(ltime) && booking.start.includes(ldate));
-    let   left = 3; //TODO: here we might need to pull up the max occupancy
-    if(filtered.length===1){
-      const sum  = parseInt(filtered[0].occupancy);
-      const max = parseInt(filtered[0].maxOccupancy);
-      left = max-sum;
+    const partialDate = `${ldate} ${ltime}`;
+    if(!shootingInstructor){
+      const filteredValue = summaryBookingSegments.find((sum:any) => sum.segmentStarts.includes(partialDate) && parseInt(sum.locationId)===parseInt(selectedLocation));
+      if (filteredValue){
+        const left = filteredValue.maxOccupancy - filteredValue.occupancyBooked;
+        return (left>=parseInt(selectedOccupancy))
+      }
+      else{
+        return false
+      }
+    }else{ //If Shooting Instructor is Selected
+      const filteredValue = sumInstBookingSegments.find((sum:any) => sum.segmentStarts.includes(partialDate));
+      if (filteredValue){
+        const left = filteredValue.maxOccupancy - filteredValue.occupancyBooked;
+          return (left>=parseInt(selectedOccupancy))
+      }
+      else{
+        return false
+      }
     }
-    else if(filtered.length>1){
-      let sum = 0;
-      const max = parseInt(filtered[0].maxOccupancy);
-      // calculate sum using forEach() method
-      filtered.forEach( (booking : any) => {
-      sum += parseInt(booking.occupancy);
-      })
-      left = max-sum;
-    }
-    return (selectedOccupancy <= left)
   }
   /*--------------- Function to Color the Cells of the booking calendar -------------------------------*/
   function status(day : any, time : any){
@@ -73,25 +76,34 @@ export function DaysColumn(){
     const lday = padWithLeadingZeros(parseInt(day.split(".")[0]),2);
     const lmonth = padWithLeadingZeros(parseInt(day.split(".")[1]),2);
     const ldate = `${lmonth}-${lday}`;
-    const filtered = bookings.filter((booking : any) => booking.start.includes(ltime) && booking.start.includes(ldate));
-    if(filtered.length===1){
-      const sum = parseInt(filtered[0].occupancy);
-      const max = parseInt(filtered[0].maxOccupancy);
-      const available = max-sum;
-      return((selectedOccupancy<=available)?'partlyOccupied' : 'occupied');
-    }
-    else if(filtered.length>1){
-      let sum = 0;
-      const max = parseInt(filtered[0].maxOccupancy);
-      // calculate sum using forEach() method
-      filtered.forEach( (booking : any) => {
-      sum += parseInt(booking.occupancy);
-      })
-      const available = max-sum;
-      return((selectedOccupancy<=available)?'partlyOccupied' : 'occupied');
-    }
-    else{
-      return '';
+    const partialDate = `${ldate} ${ltime}`;
+
+    if(!shootingInstructor){
+      const filteredValue = summaryBookingSegments.find((sum:any) => sum.segmentStarts.includes(partialDate) && parseInt(sum.locationId)===parseInt(selectedLocation));
+      if (filteredValue){
+        const left = filteredValue.maxOccupancy - filteredValue.occupancyBooked;
+        return (left >= parseInt(selectedOccupancy)) ? 'partlyOccupied' : 'occupied'
+      }
+      else{
+        return ``
+      }
+    }else{
+      const filteredValue = sumInstBookingSegments.find((sum:any) => sum.segmentStarts.includes(partialDate));
+      if (filteredValue){
+        if (parseInt(filteredValue.occupancyBooked) === 0){
+          if(parseInt(selectedOccupancy)===1){
+            return ''
+          }else{
+            return (filteredValue.maxOccupancy >= parseInt(selectedOccupancy)) ? 'partlyOccupied' : 'occupied';
+          }
+        }else{
+          const left = filteredValue.maxOccupancy - filteredValue.occupancyBooked;
+          return (left >= parseInt(selectedOccupancy)) ? 'partlyOccupied' : 'occupied';
+        }
+      }
+      else{
+        return 'occupied'
+      }
     }
   }
   const handlerClick = (e : any) => {
@@ -135,7 +147,7 @@ export function DaysColumn(){
   })
   setAvailableSegments(available);
   setNotAvailableSegments(notAvailable);
-  },[])
+  },[selectedOccupancy])
 
   return(
     <>

@@ -7,7 +7,6 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
   const buildArrayOfBusinessHours = (startHour : any, endHour : any) => {
     const Array = []
     let countStartHour = parseInt(startHour);
-    console.log(endHour);
     while(countStartHour < parseInt(endHour)){
       if(countStartHour < 10){
         Array.push(`0${countStartHour}`);
@@ -47,6 +46,8 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
   const [alertMsgOccupFull, setAlertMsgOccupFull]               = React.useState(gVariables.msgAlertOccupancy);
   const [instructorSegments, setInstructorSegments]             = React.useState(gVariables.msgAlertOccupancy);
   const [withInstructors, setWithInstructors]                   = React.useState(false);
+  const [summaryBookingSegments, setSummaryBookingSegments]     = React.useState([]);
+  const [sumInstBookingSegments, setSumInstBookingSegments]     = React.useState([]);
   const [showingPage, setShowingPage]                           = React.useState("LOADING");
   const delayInMilliseconds = 5000; //1 second
 
@@ -81,7 +82,9 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
                                     alertMsgSlotFull,         setAlertMsgSlotFull,
                                     alertMsgOccupFull,        setAlertMsgOccupFull,
                                     instructorSegments,       setInstructorSegments,
-                                    withInstructors,          setWithInstructors
+                                    withInstructors,          setWithInstructors,
+                                    summaryBookingSegments,   setSummaryBookingSegments,
+                                    sumInstBookingSegments,   setSumInstBookingSegments
                                     }}>
   <div className="container">
     <div className="row">

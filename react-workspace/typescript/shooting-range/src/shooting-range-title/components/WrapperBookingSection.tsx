@@ -56,7 +56,7 @@ export function WrapperBookingSection() {
           setBookings,      selectedLocation,
           apiURL,           showingPage, 
           setShowingPage,   setInstructorSegments,
-          withInstructors}                                            = React.useContext(BookingContext);
+          withInstructors,  setSummaryBookingSegments, setSumInstBookingSegments}                                            = React.useContext(BookingContext);
   /*-------------------------------------------------------------------------------------------------------------*/
   /*                                                API CALLS                                                    */
   /*-------------------------------------------------------------------------------------------------------------*/
@@ -100,8 +100,32 @@ export function WrapperBookingSection() {
       controlArray.push('INSTRUCTOR_SEGMENTS');
       setControlAPI(controlArray);
     })},[])
-
-  if(controlAPI.includes('SHOOTING_RANGE_LIST' && 'BOOKINGS_FILTERED' && 'INSTRUCTOR_SEGMENTS' )){
+    React.useEffect(() =>{    
+      axios({
+        url: `${apiURL}getSummaryBookings.php`,
+        method: "GET",
+    }).then((res) => {
+      setSummaryBookingSegments(res.data);
+      const controlArray = controlAPI;
+      controlArray.push('SUMMARY_BOOKINGS');
+      setControlAPI(controlArray);
+    })
+      .catch((err) => { console.log(err) });
+    },[refreshBookingEnv])
+    React.useEffect(() =>{    
+      axios({
+        url: `${apiURL}getSummaryInstBookings.php`,
+        method: "GET",
+    }).then((res) => {
+      console.log(res);
+      setSumInstBookingSegments(res.data);
+      const controlArray = controlAPI;
+      controlArray.push('SUMMARY_INST_BOOKINGS');
+      setControlAPI(controlArray);
+    })
+      .catch((err) => { console.log(err) });
+    },[refreshBookingEnv])
+  if(controlAPI.includes('SHOOTING_RANGE_LIST' && 'BOOKINGS_FILTERED' && 'INSTRUCTOR_SEGMENTS'&& 'SUMMARY_BOOKINGS' && 'SUMMARY_INST_BOOKINGS')){
     setShowingPage('BOOKING_CALENDAR');
     setControlAPI([]);
   }
