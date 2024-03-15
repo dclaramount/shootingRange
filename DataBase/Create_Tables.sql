@@ -8,6 +8,8 @@ DROP TABLE IF EXISTS invoice_type;
 DROP TABLE IF EXISTS location;
 DROP TABLE IF EXISTS invoice_item;
 DROP TABLE IF EXISTS invoice;
+DROP TABLE IF EXISTS global_variables;
+
 
 CREATE TABLE user_type
 (
@@ -87,4 +89,38 @@ CREATE TABLE invoice_item
     updated             DATETIME(6) NOT NULL DEFAULT NOW(),
     CONSTRAINT `fk_invoice` FOREIGN KEY (invoice_id) REFERENCES invoice(id),
     CONSTRAINT `fk_location` FOREIGN KEY (location_id) REFERENCES location(id)
+);
+
+CREATE TABLE instructors
+(
+    id                  SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name                VARCHAR(100) NOT NULL,
+    isDeleted           BOOL NOT NULL DEFAULT FALSE,
+    userId              VARCHAR(100) NOT NULL,
+    created             DATETIME(6) NOT NULL DEFAULT NOW(),
+    updated             DATETIME(6) NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE instructor_segments
+(
+    id                  SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    instructor_id       SMALLINT UNSIGNED NOT NULL,
+    guid                VARCHAR(100) NOT NULL,
+    start_time          DATETIME,
+    end_time            DATETIME,
+    isDeleted           BOOL NOT NULL DEFAULT FALSE,
+    userId              VARCHAR(100) NOT NULL,
+    created             DATETIME(6) NOT NULL DEFAULT NOW(),
+    updated             DATETIME(6) NOT NULL DEFAULT NOW(),
+    CONSTRAINT `fk_instructor` FOREIGN KEY (instructor_id) REFERENCES instructors(id)
+);
+CREATE TABLE global_variables
+(
+    id                  SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name                VARCHAR(100) NOT NULL,
+    value               VARCHAR(100) NOT NULL,
+    comment             VARCHAR(100) NOT NULL,
+    userId              VARCHAR(100) NOT NULL,
+    created             DATETIME(6) NOT NULL DEFAULT NOW(),
+    updated             DATETIME(6) NOT NULL DEFAULT NOW()
 );
