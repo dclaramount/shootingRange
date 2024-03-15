@@ -96,12 +96,12 @@ export function WrapperBookingSection() {
         <BookingFormWrapper />
       </>}
       {showingPage==="POPUP_LENGTH" &&  
-      <div style={{margin:'auto'}}>
-        <Typography sx={{ p: 2 }}>THE FOLLOWING SEGMENT IS FULL PLEASE SELECT ANOTHER COMBINATION OF SEGMENTS.</Typography>
-        <Button onClick={()=>setShowingPage("BOOKING_CALENDAR")}>
-          CLOSE
-        </Button>
-      </div>
+      <div style={{margin:'auto', display: 'flex', flexDirection: 'column', border:'2px solid black', borderRadius:'5px', padding:'15px', maxWidth:'auto'}}>
+      <Typography sx={{ p: 2 }}>Vybral/a jste čas, který přesahuje do rezervace, která je plná. Prosíme o vybránní nového času nebo zkrácení doby rezervace.</Typography>
+      <Button onClick={()=>setShowingPage("BOOKING_CALENDAR")} variant='contained'>
+        CLOSE
+      </Button>
+    </div>
        }
     </>
 )}
