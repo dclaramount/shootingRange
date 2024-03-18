@@ -31,7 +31,7 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
   const [selectedOccupancy, setSelectedOccupancy]               = React.useState(1);
   const [shootingPermit, setShootingPermit]                     = React.useState(false);
   const [shootingPermitNumber, setShootingPermitNumber]         = React.useState("");
-  const [shootingInstructor, setShootingInstructor]             = React.useState(false);
+  const [shootingInstructor, setShootingInstructor]             = React.useState(true);
   const [name, setName]                                         = React.useState("");
   const [email, setEmail]                                       = React.useState("");
   const [phone, setPhone]                                       = React.useState("");
