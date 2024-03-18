@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import InstructorsCalendar from './InstructorsCalendar';
 import SummaryBookingTable from './SummaryBookingsTable';
+import SummaryBookings from './SummaryBookings';
 
 
 interface TabPanelProps {
@@ -63,7 +64,7 @@ export default function TabManagement() {
         <InstructorsCalendar/> 
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        Place Holder for Booking Management Table....
+        <SummaryBookings/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3}>
         PlaceHolder for Events.....

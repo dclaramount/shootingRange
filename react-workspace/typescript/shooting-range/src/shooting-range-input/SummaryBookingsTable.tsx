@@ -3,11 +3,11 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { ManagementDashboardContext } from './Context/ManagementDashboardContext';
 
 const columns: GridColDef[] = [
-  { field: 'location', headerName: 'Location', width: 70 },
-  { field: 'segmentStarts', headerName: 'Start Segment', width: 130 },
-  { field: 'segmentEnd', headerName: 'End Segment', width: 130 },
-  { field: 'occupancyBooked', headerName: 'Occupancy Booked', width: 130 },
-  { field: 'maxOccupancy', headerName: 'Max Occupancy', width: 130 }
+  { field: 'location', headerName: 'Location', width: 260 },
+  { field: 'segmentStarts', headerName: 'Start Segment', width: 260 },
+  { field: 'segmentEnd', headerName: 'End Segment', width: 260 },
+  { field: 'occupancyBooked', headerName: 'Occupancy Booked', width: 160 },
+  { field: 'maxOccupancy', headerName: 'Max Occupancy', width: 160 }
 ];
 
 export default function SummaryBookingTable() {
