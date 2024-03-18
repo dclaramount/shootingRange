@@ -4,7 +4,7 @@ import { BookingContext } from '../Context/BookingContext';
 
 export function Instructor(){
 
-  const {shootingInstructor, setShootingInstructor} = React.useContext(BookingContext);
+  const {shootingPermit, shootingInstructor, setShootingInstructor} = React.useContext(BookingContext);
 
 
   return(
@@ -15,7 +15,7 @@ export function Instructor(){
             <label htmlFor="frm-reservationCalendar-orderForm-instructor-1">
               Ano
             </label>
-            <input checked={!shootingInstructor} onClick={(e) => {setShootingInstructor(false)}} type="radio" name="instructor" id="frm-reservationCalendar-orderForm-instructor-0" value="0" />
+            <input checked={!shootingInstructor} onClick={(e) => {if(shootingPermit){setShootingInstructor(false)}}} type="radio" name="instructor" id="frm-reservationCalendar-orderForm-instructor-0" value="0" />
             <label htmlFor="frm-reservationCalendar-orderForm-instructor-0">
               Ne
             </label>

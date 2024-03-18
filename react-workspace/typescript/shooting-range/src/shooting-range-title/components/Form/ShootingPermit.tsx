@@ -26,10 +26,10 @@ export function ShootingPermit(){
       </div>
     </div>
     {shootingPermit && 
-    <Tooltip title="Pokud nemáte, napište nemám">
+    <Tooltip title="You need format ZP-12345">
       <div style={{marginTop:'10px'}} className="reservation-order-row" data-tooltip data-original-title="V kalendáři vyberte kliknutím den a čas rezervace.">
         <label htmlFor="reservation-shooting-permit">Čislo Zbrojní průkaz</label>
-          <input onChange={(e)=> handleChangePermit(e)} value={shootingPermitNumber} type='text' name='datetime' size={50} maxLength={50} id='reservation-shooting-permit'  required={true} onInvalid={e => (e.target as HTMLInputElement).setCustomValidity('Pokud nemáte, napište nemám')} onInput={e => (e.target as HTMLInputElement).setCustomValidity('')}/>
+          <input onChange={(e)=> handleChangePermit(e)} value={shootingPermitNumber} type='text' name='datetime' size={50} maxLength={50} id='reservation-shooting-permit' pattern='^ZP-[0-9]{5}$' required={true} onInvalid={e => (e.target as HTMLInputElement).setCustomValidity('You need format ZP-12345.')} onInput={e => (e.target as HTMLInputElement).setCustomValidity('')}/>
       </div> 
     </Tooltip>
     }

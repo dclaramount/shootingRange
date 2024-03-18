@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-
+import WarningIcon from '@mui/icons-material/Warning';
 /*-------------------------------------------------------------------------------------------------------------*/
 /*                                            HELPER FUNCTIONS                                                 */
 /*-------------------------------------------------------------------------------------------------------------*/
@@ -140,6 +140,7 @@ export function WrapperBookingSection() {
       </>}
       {showingPage==="POPUP_LENGTH" &&  
       <div style={{margin:'auto', display: 'flex', flexDirection: 'column', border:'2px solid black', borderRadius:'5px', padding:'15px', maxWidth:'auto'}}>
+        <WarningIcon style={{height:'72px', width:'72px', marginLeft:'auto', marginRight:'auto', marginTop:'10px', marginBottom:'10px'}} color='primary' />
         <Typography sx={{ p: 2 }}>Vybral/a jste čas, který přesahuje do rezervace, která je plná. Prosíme o vybránní nového času nebo zkrácení doby rezervace.</Typography>
         <Button onClick={()=>setShowingPage("BOOKING_CALENDAR")} variant='contained'>
           CLOSE
