@@ -52,6 +52,7 @@ export function WrapperManagementDashboard({gVariables} : any) {
   const [summaryBookingSegments, setSummaryBookingSegments ]           = React.useState(anyArray);
   const [controlAPI, setControlAPI]                                   = React.useState(anyArray);
   const [refreshManagementBoard, setRefreshManagementBoard]           = React.useState(0);
+  const [allInvoices, setAllInvoices]                                 = React.useState([]);
   const [showingPage, setShowingPage]                                 = React.useState("LOADING");
   /*-------------------------------------------------------------------------------------------------------------*/
   /*                                                API CALLS                                                    */
@@ -107,8 +108,20 @@ export function WrapperManagementDashboard({gVariables} : any) {
   })
     .catch((err) => { console.log(err) });
   },[refreshManagementBoard])
-  console.log(controlAPI);
-  if(controlAPI.includes('ALL_INSTRUCTORS' && 'INSTRUCTOR_SEGMENTS' && 'INFO_INSTRUCTORS' && 'SUMMARY_BOOKINGS')){
+  React.useEffect(() =>{    
+    axios({
+      url: `${gVariables.apiRootURL}getAllInvoices.php`,
+      method: "GET",
+  }).then((res) => {
+    console.log(res.data);
+    setAllInvoices(res.data);
+    const controlArray = controlAPI;
+    controlArray.push('GET_ALL_INVOICES');
+    setControlAPI(controlArray);
+  })
+    .catch((err) => { console.log(err) });
+  },[refreshManagementBoard])
+  if(controlAPI.includes('ALL_INSTRUCTORS' && 'INSTRUCTOR_SEGMENTS' && 'INFO_INSTRUCTORS' && 'SUMMARY_BOOKINGS' && 'GET_ALL_INVOICES')){
     console.log("WE ARE READY");
     setShowingPage('DASHBOARD');
     setControlAPI([]);
@@ -125,7 +138,8 @@ export function WrapperManagementDashboard({gVariables} : any) {
                                                         fullInfoInstructors,    setFullInfoInstructors,
                                                         refreshManagementBoard, setRefreshManagementBoard,
                                                         showingPage,            setShowingPage,
-                                                        summaryBookingSegments, setSummaryBookingSegments
+                                                        summaryBookingSegments, setSummaryBookingSegments,
+                                                        allInvoices,            setAllInvoices
 
                                                       }}>
           {(showingPage==="LOADING")    &&  <>LOADING....</>}
