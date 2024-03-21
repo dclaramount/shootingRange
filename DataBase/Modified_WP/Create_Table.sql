@@ -62,6 +62,7 @@ CREATE TABLE invoice
     id                  SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     user_id             SMALLINT UNSIGNED NOT NULL,
     invoice_type_id     SMALLINT UNSIGNED NOT NULL,
+    parent_invoice      SMALLINT DEFAULT NULL,
     is_deleted          BOOLEAN NOT NULL DEFAULT FALSE,
     userId              SMALLINT NOT NULL,
     created             DATETIME(6) NOT NULL DEFAULT NOW(),
