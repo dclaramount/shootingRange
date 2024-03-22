@@ -28,6 +28,7 @@
     "react-live-clock": "^6.1.19",
     "react-redux": "^7.2.5",
     "react-to-webcomponent": "^1.7.2",
+    "reactjs-popup": "^2.0.6",
     "redux": "^4.2.0",
     "tslib": "^2.3.0"
   },

@@ -1,3 +1,4 @@
+import { BookingContext } from './Context/BookingContext';
 import { BookingDateTime } from './Form/BookingDateTime';
 import { BookingEmail } from './Form/BookingEmail';
 import { BookingName } from './Form/BookingName';
@@ -7,14 +8,29 @@ import { Instructor } from './Form/Instructor';
 import { NumberOfPeople } from './Form/NumberOfPeople';
 import { SelectedShootingRange } from './Form/SelectedShootingRange';
 import { ShootingPermit } from './Form/ShootingPermit';
+import React from 'react';
 
 export function BookingFormWrapper() {
 
-  const submitHandler = (e:any) => {
-    console.log(`Submit`);
-    console.log(e);
-  }
+  const {
+          selectedLocation,
+          selectedSegment,
+          selectedBookingDuration,
+          selectedOccupancy,
+          shootingPermit,
+          shootingPermitNumber,
+          shootingInstructor,
+          name,
+          email,
+          phone,
+          setShowingPage
+  } = React.useContext(BookingContext);
 
+  const submitHandler = (e:any) => {
+    setShowingPage("CONFIRMATION_PAGE");
+  }
+  console.log("FORM RE-RENDERED");
+  console.log(selectedLocation);
   return(
     <div className="reservation-order">
       <form onSubmit={(e)=>submitHandler(e)}>

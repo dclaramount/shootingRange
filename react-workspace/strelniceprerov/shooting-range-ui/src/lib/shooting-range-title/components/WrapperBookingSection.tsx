@@ -10,6 +10,7 @@ import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import WarningIcon from '@mui/icons-material/Warning';
+import { ConfirmationPage } from "./ConfirmationPage";
 
 //TO IMPLEMENT CENTRALIZED API CALLS
 export function WrapperBookingSection() {
@@ -103,5 +104,6 @@ export function WrapperBookingSection() {
       </Button>
     </div>
        }
+    {showingPage==="CONFIRMATION_PAGE" && <ConfirmationPage/>}
     </>
 )}

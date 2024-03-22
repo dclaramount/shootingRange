@@ -10,6 +10,7 @@ import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import WarningIcon from '@mui/icons-material/Warning';
+import { ConfirmationPage } from "./ConfirmationPage";
 /*-------------------------------------------------------------------------------------------------------------*/
 /*                                            HELPER FUNCTIONS                                                 */
 /*-------------------------------------------------------------------------------------------------------------*/
@@ -147,5 +148,6 @@ export function WrapperBookingSection() {
         </Button>
       </div>
        }
+       {showingPage==="CONFIRMATION_PAGE" && <ConfirmationPage/>}
     </>
 )}
