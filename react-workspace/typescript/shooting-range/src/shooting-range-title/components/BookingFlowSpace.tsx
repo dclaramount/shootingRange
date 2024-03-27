@@ -1,9 +1,10 @@
 import React from 'react';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { ConfirmationPage } from './ConfirmationPage';
-import { BookingConfPlaceHolder } from '../PlaceHolderBookingSection';
+import { BookingConfPlaceHolder, CreatingBookingPlaceholder } from '../PlaceHolderBookingSection';
 import axios from 'axios';
 import { BookingContext } from './Context/BookingContext';
+import { ReservationMade } from './ReservationMade';
 
 //This Renders the PopUp that will navigate the user throughout the booking confirmation process.
 export function BookingFlowSpace({closeModalFunction} : any) {
@@ -23,9 +24,13 @@ export function BookingFlowSpace({closeModalFunction} : any) {
 } = React.useContext(BookingContext);
 
   const [section, setSection]  =   React.useState("LOADING"); 
+  const [response, setResponse]  =   React.useState([]); 
+
   var delayInMilliseconds = 3000; //1 second
   setTimeout(function() {
-    setSection("SUMMARY");
+    if(section==="LOADING"){
+      setSection("SUMMARY");
+    }
   }, delayInMilliseconds);
 
   React.useEffect(() =>{    
@@ -34,7 +39,8 @@ export function BookingFlowSpace({closeModalFunction} : any) {
       url: `https://strelniceprerov.cz/wp-content/plugins/elementor-addon/widgets/postCreateBooking.php?selectedLocationId=${selectedLocation}&selectedSegment=${selectedSegment}&selectedBookingDuration=${selectedBookingDuration}&selectedOccupancy=${selectedOccupancy}&shootingPermit=${shootingPermit}&shootingPermitNumber=${shootingPermitNumber}&shootingInstructor=${shootingInstructor}&name=${name}&email=${email}&phone=${phone}`,
       method: "GET",
   }).then((res) => {
-    console.log(res)
+    setResponse(res.data);
+    setSection("RESERVATION_MADE");
   })
     .catch((err) => { console.log(err) });
   }
@@ -50,5 +56,7 @@ export function BookingFlowSpace({closeModalFunction} : any) {
         </a>
         <ConfirmationPage setPage={setSection}/>
       </div>}
+      {section==="CREATING_RESERVATION" && <CreatingBookingPlaceholder/>}
+      {section==="RESERVATION_MADE" && <ReservationMade closeModal={closeModalFunction}/>}
     </div>
 )}

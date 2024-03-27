@@ -43,9 +43,9 @@ export function ConfirmationPage({setPage} : any) {
           phone
   } = React.useContext(BookingContext);
   return(
-    <div className={"WrapperOfBooking"} style={{display:'flex', marginLeft:'auto', marginRight:'auto'}}>
+    <div className={"WrapperOfBooking"} style={{display:'flex', marginLeft:'auto', marginRight:'auto', marginTop:'15px'}}>
     <div style={{width:'100%', display:'flex', flexDirection:'column'}}>
-      <h1 style={{margin:'10px', color:colorFont}}>Summary Of Booking</h1>
+      <h1 style={{margin:'10px', color:colorFont, alignContent:'center', marginLeft:'auto', marginRight:'auto'}}>Summary Of Booking</h1>
     <div style={{height:'auto', marginLeft:'auto', marginRight:'auto'}}>
       <div style={{display:'flex', marginTop:separation}}>
         <span style={{color:colorIcons}}><i className={`fa fa-location-arrow ${sizeOfIcons}`} aria-hidden="true" ></i></span>

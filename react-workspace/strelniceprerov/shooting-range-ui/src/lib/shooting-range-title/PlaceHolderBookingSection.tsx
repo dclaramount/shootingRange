@@ -35,7 +35,7 @@ export default function PlaceHolderBookingSection() {
 }
 export function BookingConfPlaceHolder() {
   return (
-    <div style={{padding:'50px', backgroundColor:'white', zIndex:999}}>
+    <div style={{padding:'50px', backgroundColor:'white'}}>
       <Skeleton variant="rectangular" width={'398px'} height={40} style={{margin:'10px'}}/>
       <div style={{marginTop:'15px', marginRight:'27px', marginLeft:'27px', display:'flex'}}>      
         <Skeleton variant="rectangular" width={'32px'} height={32}/>
@@ -82,4 +82,11 @@ export function BookingConfPlaceHolder() {
       </div>
     </div>
   );
+}
+export function CreatingBookingPlaceholder() {
+  return(
+    <div style={{background:'white', paddingLeft:'250px', paddingRight:'250px', paddingTop:'250px', paddingBottom:'250px'}}>
+      <i className="fa fa-spinner fa-spin" style={{fontSize:'84px'}}></i>
+    </div>
+  )
 }
