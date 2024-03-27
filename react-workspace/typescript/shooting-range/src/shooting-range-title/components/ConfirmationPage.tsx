@@ -18,7 +18,7 @@ import Checkbox from '@mui/material/Checkbox';
 export function ConfirmationPage() {
   const [open, setOpen] = React.useState(false);
   const [checked, setChecked] = React.useState(false);
-
+  const marginLeftText = '50px';
   const size = '48px'
   const {
           locationList,
@@ -36,43 +36,43 @@ export function ConfirmationPage() {
   return(
     <div className={"WrapperOfBooking"} style={{display:'flex', marginLeft:'auto', marginRight:'auto'}}>
     <div style={{width:'100%', display:'flex', flexDirection:'column'}}>
-    <Typography variant="h3" style={{ marginBottom:'45px', marginLeft:'10px'}} color='primary'>Summary Of Booking</Typography>
+    <Typography variant="h4" style={{ marginBottom:'45px', marginLeft:'10px'}} color='primary'>Summary Of Booking</Typography>
     <div style={{height:'auto', marginLeft:'auto', marginRight:'auto'}}>
       <div style={{display:'flex'}}>
         <LocationOnIcon style={{height:size, width:size, marginTop:'auto', marginBottom:'auto'}} color='primary' />
-        <Typography variant="h5" style={{ marginTop:'auto', marginBottom:'auto', marginLeft:'10px'}} color='primary'>{locationList.find((location:any) => parseInt(location.id)===selectedLocation).name}</Typography>
+        <Typography variant="h6" style={{ marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}} color='primary'>{locationList.find((location:any) => parseInt(location.id)===selectedLocation).name}</Typography>
       </div>
       <div style={{display:'flex'}}>
         <DateRangeIcon style={{height:size, width:size, marginTop:'10px', marginBottom:'10px'}} color='primary' />
-        <Typography variant="h5" style={{ marginTop:'auto', marginBottom:'auto', marginLeft:'10px'}} color='primary'>{selectedSegment}</Typography>
+        <Typography variant="h6" style={{ marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}} color='primary'>{selectedSegment}</Typography>
       </div>
       <div style={{display:'flex'}}>
         <AccessTimeIcon style={{height:size, width:size, marginTop:'10px', marginBottom:'10px'}} color='primary' />
-        <Typography variant="h5" style={{ marginTop:'auto', marginBottom:'auto', marginLeft:'10px'}} color='primary'>{selectedBookingDuration} h</Typography>
+        <Typography variant="h6" style={{ marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}} color='primary'>{selectedBookingDuration} h</Typography>
       </div>
       <div style={{display:'flex'}}>
         <PeopleIcon style={{height:size, width:size, marginTop:'10px', marginBottom:'10px'}} color='primary' />
-        <Typography variant="h5" style={{ marginTop:'auto', marginBottom:'auto', marginLeft:'10px'}} color='primary'>{selectedOccupancy} people</Typography>
+        <Typography variant="h6" style={{ marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}} color='primary'>{selectedOccupancy} people</Typography>
       </div>
       <div style={{display:'flex'}}>
         <AssignmentIndIcon style={{height:size, width:size, marginTop:'10px', marginBottom:'10px'}} color='primary' />
-        <Typography variant="h5" style={{ marginTop:'auto', marginBottom:'auto', marginLeft:'10px'}} color='primary'>{shootingPermitNumber}</Typography>
+        <Typography variant="h6" style={{ marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}} color='primary'>{shootingPermitNumber}</Typography>
       </div>
       <div style={{display:'flex'}}>
         <SchoolIcon style={{height:size, width:size, marginTop:'10px', marginBottom:'10px'}} color='primary' />
-        <Typography variant="h5" style={{ marginTop:'auto', marginBottom:'auto', marginLeft:'10px'}} color='primary'>{shootingInstructor ? "With Instructor" : "Without Instructor"}</Typography>
+        <Typography variant="h6" style={{ marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}} color='primary'>{shootingInstructor ? "With Instructor" : "Without Instructor"}</Typography>
       </div>
       <div style={{display:'flex'}}>
         <BadgeIcon style={{height:size, width:size, marginTop:'10px', marginBottom:'10px'}} color='primary' />
-        <Typography variant="h5" style={{ marginTop:'auto', marginBottom:'auto', marginLeft:'10px'}} color='primary'>{name}</Typography>
+        <Typography variant="h6" style={{ marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}} color='primary'>{name}</Typography>
       </div>
       <div style={{display:'flex'}}>
         <EmailIcon style={{height:size, width:size, marginTop:'10px', marginBottom:'10px'}} color='primary' />
-        <Typography variant="h5" style={{ marginTop:'auto', marginBottom:'auto', marginLeft:'10px'}} color='primary'>{email}</Typography>
+        <Typography variant="h6" style={{ marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}} color='primary'>{email}</Typography>
       </div>
       <div style={{display:'flex'}}>
         <ContactPhoneIcon style={{height:size, width:size, marginTop:'10px', marginBottom:'10px'}} color='primary' />
-        <Typography variant="h5" style={{ marginTop:'auto', marginBottom:'auto', marginLeft:'10px'}} color='primary'>{phone}</Typography>
+        <Typography variant="h6" style={{ marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}} color='primary'>{phone}</Typography>
       </div>
     </div>
     <div style={{display:'flex'}}>

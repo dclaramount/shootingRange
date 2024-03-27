@@ -13,6 +13,7 @@ import WarningIcon from '@mui/icons-material/Warning';
 import { ConfirmationPage } from "./ConfirmationPage";
 import CancelIcon from '@mui/icons-material/Cancel';
 import Popup from "reactjs-popup";
+import { BookingFlowSpace } from "./BookingFlowSpace";
 /*-------------------------------------------------------------------------------------------------------------*/
 /*                                            HELPER FUNCTIONS                                                 */
 /*-------------------------------------------------------------------------------------------------------------*/
@@ -153,16 +154,8 @@ export function WrapperBookingSection() {
       </div>
        }
       </div>
-       <Popup open={showPopUpBookingProcess} closeOnDocumentClick={false} onClose={closeModal}>
-        <a className="close" onClick={closeModal} style={{marginRight:'10px', marginTop:'10px'}}>
-            <CancelIcon color='primary' />
-        </a>
-        <div style={{backgroundColor:'white', maxWidth:'500px', padding:'50px', border:'5px solid black', borderRadius:'15px'}}>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae magni
-          omnis delectus nemo, maxime molestiae dolorem numquam mollitia, voluptate
-          ea, accusamus excepturi deleniti ratione sapiente! Laudantium, aperiam
-          doloribus. Odit, aut.
-        </div>
+       <Popup open={showPopUpBookingProcess} closeOnDocumentClick={false} onClose={closeModal} >
+        <BookingFlowSpace closeModalFunction={closeModal}/>
        </Popup>
        {/*showingPage==="CONFIRMATION_PAGE" && <ConfirmationPage/>*/}
     </>

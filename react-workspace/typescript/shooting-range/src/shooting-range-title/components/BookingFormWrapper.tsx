@@ -28,8 +28,8 @@ export function BookingFormWrapper() {
   } = React.useContext(BookingContext);
 
   const submitHandler = (e:any) => {
+    e.preventDefault();
     setShowPopUpBookingProcess(true);
-    setShowingPage("CONFIRMATION_PAGE");
   }
   console.log("FORM RE-RENDERED");
   console.log(selectedLocation);
@@ -48,7 +48,7 @@ export function BookingFormWrapper() {
           <BookingEmail/>
           <BookingPhoneNumber/>
           <div className="reservation-order-row">
-            <input type="submit" name="_submit" className="btn btn-primary" value="Odeslat rezervaci" onClick={(e)=> setShowPopUpBookingProcess(true)}/>
+            <input type="submit" name="_submit" className="btn btn-primary" value="Odeslat rezervaci"/>
           </div>
       </form>
     </div>

@@ -29,7 +29,8 @@ export function BookingFormWrapper() {
 
 
   const submitHandler = (e:any) => {
-    console.log(`Click Submit`);
+    e.preventDefault();
+    setShowPopUpBookingProcess(true);
   }
 
   return(
@@ -47,7 +48,7 @@ export function BookingFormWrapper() {
           <BookingEmail/>
           <BookingPhoneNumber/>
           <div className="reservation-order-row">
-            <input type="submit" name="_submit" className="btn btn-primary" value="Odeslat rezervaci" onSubmit={() => {return false}} onClick={(e) => setShowPopUpBookingProcess(true)}/>
+            <input type="submit" name="_submit" className="btn btn-primary" value="Odeslat rezervaci" onSubmit={() => {return false}} />
           </div>
       </form>
     </div>
