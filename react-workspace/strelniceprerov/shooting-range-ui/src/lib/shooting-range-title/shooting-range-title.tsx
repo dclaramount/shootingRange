@@ -83,6 +83,7 @@ export function ShootingRangeTitle(props: ShootingRangeTitleProps) {
     <div className="wrapper-diego">
       <Clock style={{visibility:'hidden'}} format={'HH:mm:ss'} ticking={true} timezone={'US/Pacific'} onChange={(e) => callBackClock(e)}/>
       {(Object.keys(globalVariables).length > 0 && waitDone) ? <WrapperBooking gVariables={globalVariables}/> : <PlaceHolderBookingSection/>}
+      <div id="popup-root" />
     </div>)
 }
 

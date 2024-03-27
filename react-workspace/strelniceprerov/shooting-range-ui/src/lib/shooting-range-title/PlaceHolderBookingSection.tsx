@@ -28,14 +28,6 @@ export default function PlaceHolderBookingSection() {
           <div className="reservation-order" style={{backgroundColor:'transparent'}}>
             <Skeleton variant="rectangular" width={'100%'} height={'709px'}  />
           </div>
-          <Stack spacing={1}>
-            {/* For variant="text", adjust the height via font-size */}
-
-            {/* For other variants, adjust the size with `width` and `height` */}
-            <Skeleton variant="circular" width={40} height={40} />
-            <Skeleton variant="rectangular" width={210} height={60} />
-            <Skeleton variant="rounded" width={210} height={60} />
-          </Stack>
           </div>
       </div>
     </div>

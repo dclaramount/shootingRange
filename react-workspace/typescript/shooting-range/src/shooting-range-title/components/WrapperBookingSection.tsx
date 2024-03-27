@@ -136,7 +136,7 @@ export function WrapperBookingSection() {
   }
   return(
     <>
-    <div style={{opacity:`${showPopUpBookingProcess ? '0.5' : '1'}`, pointerEvents:`${showPopUpBookingProcess ? 'none' : 'auto'}`}}>
+    <div className="wrapperPopUp" style={{opacity:`${showPopUpBookingProcess ? '0.5' : '1'}`, pointerEvents:`${showPopUpBookingProcess ? 'none' : 'auto'}`}}>
       {(showingPage!=="POPUP_LENGTH" && showingPage!=="CONFIRMATION_PAGE") &&  <RenderHeader/>}
       {showingPage==="LOADING"          && <>LOADING BOOKING CALENDAR</>}
       {showingPage==="BOOKING_CALENDAR" && 
@@ -154,7 +154,7 @@ export function WrapperBookingSection() {
       </div>
        }
       </div>
-       <Popup open={showPopUpBookingProcess} closeOnDocumentClick={false} onClose={closeModal} >
+       <Popup open={showPopUpBookingProcess} onClose={closeModal} >
         <BookingFlowSpace closeModalFunction={closeModal}/>
        </Popup>
        {/*showingPage==="CONFIRMATION_PAGE" && <ConfirmationPage/>*/}

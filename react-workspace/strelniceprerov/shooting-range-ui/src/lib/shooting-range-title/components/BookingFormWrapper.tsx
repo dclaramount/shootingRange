@@ -31,6 +31,7 @@ export function BookingFormWrapper() {
   const submitHandler = (e:any) => {
     e.preventDefault();
     setShowPopUpBookingProcess(true);
+    //setShowingPage('CONFIRMATION_PAGE')
   }
 
   return(

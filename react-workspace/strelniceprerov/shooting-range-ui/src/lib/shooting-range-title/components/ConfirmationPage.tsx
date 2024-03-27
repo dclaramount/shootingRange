@@ -39,6 +39,7 @@ export function ConfirmationPage() {
     <Typography variant="h4" style={{ marginBottom:'45px', marginLeft:'10px'}} color='primary'>Summary Of Booking</Typography>
     <div style={{height:'auto', marginLeft:'auto', marginRight:'auto'}}>
       <div style={{display:'flex'}}>
+      <i className="fa fa-cloud" style={{color:'red'}}></i>
         <LocationOnIcon style={{height:size, width:size, marginTop:'auto', marginBottom:'auto'}} color='primary' />
         <Typography variant="h6" style={{ marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}} color='primary'>{locationList.find((location:any) => parseInt(location.id)===selectedLocation).name}</Typography>
       </div>
@@ -67,7 +68,7 @@ export function ConfirmationPage() {
         <Typography variant="h6" style={{ marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}} color='primary'>{name}</Typography>
       </div>
       <div style={{display:'flex'}}>
-        <EmailIcon style={{height:size, width:size, marginTop:'10px', marginBottom:'10px', color:'red !important'}} />
+        <EmailIcon style={{height:size, width:size, marginTop:'10px', marginBottom:'10px'}} color='primary' />
         <Typography variant="h6" style={{ marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}} color='primary'>{email}</Typography>
       </div>
       <div style={{display:'flex'}}>
