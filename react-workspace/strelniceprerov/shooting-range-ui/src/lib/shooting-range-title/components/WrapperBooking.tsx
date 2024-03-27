@@ -1,7 +1,7 @@
 import React from 'react';
 import { BookingContext } from "./Context/BookingContext";
 import { WrapperBookingSection } from "./WrapperBookingSection";
-
+import * as CryptoJS from "crypto-js"; 
 export function WrapperBooking({gVariables, arrayOfHours} : any) {
 
   const buildArrayOfBusinessHours = (startHour : any, endHour : any) => {
@@ -19,6 +19,8 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
     }
     return Array;
   }
+  const sendGridKey  = CryptoJS.AES.decrypt(gVariables.sendGridEncryptedKey, gVariables.decryptionKey).toString(CryptoJS.enc.Utf8);
+  console.log(`original Send Grid Key is: ${sendGridKey}`);
   const [timesToShow, setTimesToShow]                           = React.useState(buildArrayOfBusinessHours(gVariables.startBusinessHours, gVariables.endBusinessHours)); 
   const [daysOfWeek, setDaysOfWeek]                             = React.useState([]); 
   const [isoDaysOfWeek,setISODaysOfWeek]                        = React.useState([]);

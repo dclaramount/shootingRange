@@ -36,7 +36,9 @@ function App() {
       defaultDuration:    res.data.find((variable : any) => variable.name==="Default_Booking_Length").value,
       defaultOccupancy:   res.data.find((variable : any) => variable.name==="Default_Booking_Occupancy").value,
       msgAlertSlotFull:   res.data.find((variable : any) => variable.name==="Alert_Message_Slot_Full").value,
-      msgAlertOccupancy:  res.data.find((variable : any) => variable.name==="Alert_Message_Occupancy").value
+      msgAlertOccupancy:  res.data.find((variable : any) => variable.name==="Alert_Message_Occupancy").value,
+      sendGridEncryptedKey: res.data.find((variable : any) => variable.name==="SendGrid_Key_Encrypted").value,
+      decryptionKey:        res.data.find((variable : any) => variable.name==="Decryption_Key").value
     }))
   })
     .catch((err) => { console.log(err) });
