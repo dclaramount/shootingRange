@@ -11,6 +11,8 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import WarningIcon from '@mui/icons-material/Warning';
 import { ConfirmationPage } from "./ConfirmationPage";
+import CancelIcon from '@mui/icons-material/Cancel';
+import Popup from "reactjs-popup";
 /*-------------------------------------------------------------------------------------------------------------*/
 /*                                            HELPER FUNCTIONS                                                 */
 /*-------------------------------------------------------------------------------------------------------------*/
@@ -53,11 +55,12 @@ export function WrapperBookingSection() {
   const anyArray : any[] = [];
   const [controlAPI, setControlAPI]                                   = React.useState(anyArray);
   const [refreshBookingEnv, setRefreshBookingEnv]                     = React.useState(0);
+  const closeModal = () => setShowPopUpBookingProcess(false);
   const { setLocationList,  selectedWeek,
           setBookings,      selectedLocation,
           apiURL,           showingPage, 
           setShowingPage,   setInstructorSegments,
-          withInstructors,  setSummaryBookingSegments, setSumInstBookingSegments}                                            = React.useContext(BookingContext);
+          withInstructors,  setSummaryBookingSegments, setSumInstBookingSegments, showPopUpBookingProcess, setShowPopUpBookingProcess}                                            = React.useContext(BookingContext);
   /*-------------------------------------------------------------------------------------------------------------*/
   /*                                                API CALLS                                                    */
   /*-------------------------------------------------------------------------------------------------------------*/
@@ -132,6 +135,7 @@ export function WrapperBookingSection() {
   }
   return(
     <>
+    <div style={{opacity:`${showPopUpBookingProcess ? '0.5' : '1'}`, pointerEvents:`${showPopUpBookingProcess ? 'none' : 'auto'}`}}>
       {(showingPage!=="POPUP_LENGTH" && showingPage!=="CONFIRMATION_PAGE") &&  <RenderHeader/>}
       {showingPage==="LOADING"          && <>LOADING BOOKING CALENDAR</>}
       {showingPage==="BOOKING_CALENDAR" && 
@@ -148,6 +152,18 @@ export function WrapperBookingSection() {
         </Button>
       </div>
        }
-       {showingPage==="CONFIRMATION_PAGE" && <ConfirmationPage/>}
+      </div>
+       <Popup open={showPopUpBookingProcess} closeOnDocumentClick={false} onClose={closeModal}>
+        <a className="close" onClick={closeModal} style={{marginRight:'10px', marginTop:'10px'}}>
+            <CancelIcon color='primary' />
+        </a>
+        <div style={{backgroundColor:'white', maxWidth:'500px', padding:'50px', border:'5px solid black', borderRadius:'15px'}}>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae magni
+          omnis delectus nemo, maxime molestiae dolorem numquam mollitia, voluptate
+          ea, accusamus excepturi deleniti ratione sapiente! Laudantium, aperiam
+          doloribus. Odit, aut.
+        </div>
+       </Popup>
+       {/*showingPage==="CONFIRMATION_PAGE" && <ConfirmationPage/>*/}
     </>
 )}

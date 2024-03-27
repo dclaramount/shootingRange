@@ -23,14 +23,13 @@ export function BookingFormWrapper() {
     name,
     email,
     phone,
-    setShowingPage
+    setShowingPage,
+    setShowPopUpBookingProcess
 } = React.useContext(BookingContext);
 
 
   const submitHandler = (e:any) => {
-    setShowingPage("CONFIRMATION_PAGE");
-    console.log(`Submit`);
-    console.log(e);
+    console.log(`Click Submit`);
   }
 
   return(
@@ -48,7 +47,7 @@ export function BookingFormWrapper() {
           <BookingEmail/>
           <BookingPhoneNumber/>
           <div className="reservation-order-row">
-            <input type="submit" name="_submit" className="btn btn-primary" value="Odeslat rezervaci"/>
+            <input type="submit" name="_submit" className="btn btn-primary" value="Odeslat rezervaci" onSubmit={() => {return false}} onClick={(e) => setShowPopUpBookingProcess(true)}/>
           </div>
       </form>
     </div>

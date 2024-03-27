@@ -50,6 +50,7 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
   const [summaryBookingSegments, setSummaryBookingSegments]     = React.useState([]);
   const [sumInstBookingSegments, setSumInstBookingSegments]     = React.useState([]);
   const [showingPage, setShowingPage]                           = React.useState("LOADING");
+  const [showPopUpBookingProcess, setShowPopUpBookingProcess]   = React.useState(false);
   const delayInMilliseconds = 5000; //1 second
 
   setTimeout(function() {
@@ -83,7 +84,8 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
                                     alertMsgSlotFull,         setAlertMsgSlotFull,
                                     alertMsgOccupFull,        setAlertMsgOccupFull,
                                     summaryBookingSegments,   setSummaryBookingSegments,
-                                    sumInstBookingSegments,   setSumInstBookingSegments
+                                    sumInstBookingSegments,   setSumInstBookingSegments,
+                                    showPopUpBookingProcess, setShowPopUpBookingProcess
                                     }}>
   <div className="container">
     <div className="row">
