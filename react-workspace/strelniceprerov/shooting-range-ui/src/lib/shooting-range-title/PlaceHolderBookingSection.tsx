@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Skeleton from '@mui/material/Skeleton';
-import Stack from '@mui/material/Stack';
 
 export default function PlaceHolderBookingSection() {
   return (
@@ -32,5 +31,55 @@ export default function PlaceHolderBookingSection() {
       </div>
     </div>
   </div>
+  );
+}
+export function BookingConfPlaceHolder() {
+  return (
+    <div style={{padding:'50px', backgroundColor:'white', zIndex:999}}>
+      <Skeleton variant="rectangular" width={'398px'} height={40} style={{margin:'10px'}}/>
+      <div style={{marginTop:'15px', marginRight:'27px', marginLeft:'27px', display:'flex'}}>      
+        <Skeleton variant="rectangular" width={'32px'} height={32}/>
+        <Skeleton variant="rectangular" width={'310px'} height={32} style={{marginLeft:'10px'}}/>
+      </div>
+      <div style={{marginTop:'15px', marginRight:'27px', marginLeft:'27px', display:'flex'}}>      
+        <Skeleton variant="rectangular" width={'32px'} height={32}/>
+        <Skeleton variant="rectangular" width={'310px'} height={32} style={{marginLeft:'10px'}}/>
+      </div>
+      <div style={{marginTop:'15px', marginRight:'27px', marginLeft:'27px', display:'flex'}}>      
+        <Skeleton variant="rectangular" width={'32px'} height={32}/>
+        <Skeleton variant="rectangular" width={'310px'} height={32} style={{marginLeft:'10px'}}/>
+      </div>
+      <div style={{marginTop:'15px', marginRight:'27px', marginLeft:'27px', display:'flex'}}>      
+        <Skeleton variant="rectangular" width={'32px'} height={32}/>
+        <Skeleton variant="rectangular" width={'310px'} height={32} style={{marginLeft:'10px'}}/>
+      </div>
+      <div style={{marginTop:'15px', marginRight:'27px', marginLeft:'27px', display:'flex'}}>      
+        <Skeleton variant="rectangular" width={'32px'} height={32}/>
+        <Skeleton variant="rectangular" width={'310px'} height={32} style={{marginLeft:'10px'}}/>
+      </div>
+      <div style={{marginTop:'15px', marginRight:'27px', marginLeft:'27px', display:'flex'}}>      
+        <Skeleton variant="rectangular" width={'32px'} height={32}/>
+        <Skeleton variant="rectangular" width={'310px'} height={32} style={{marginLeft:'10px'}}/>
+      </div>
+      <div style={{marginTop:'15px', marginRight:'27px', marginLeft:'27px', display:'flex'}}>      
+        <Skeleton variant="rectangular" width={'32px'} height={32}/>
+        <Skeleton variant="rectangular" width={'310px'} height={32} style={{marginLeft:'10px'}}/>
+      </div>
+      <div style={{marginTop:'15px', marginRight:'27px', marginLeft:'27px', display:'flex'}}>      
+        <Skeleton variant="rectangular" width={'32px'} height={32}/>
+        <Skeleton variant="rectangular" width={'310px'} height={32} style={{marginLeft:'10px'}}/>
+      </div>
+      <div style={{marginTop:'15px', marginRight:'27px', marginLeft:'27px', display:'flex'}}>      
+        <Skeleton variant="rectangular" width={'32px'} height={32}/>
+        <Skeleton variant="rectangular" width={'310px'} height={32} style={{marginLeft:'10px'}}/>
+      </div>
+      <div style={{marginTop:'22px', display:'flex'}}>      
+        <Skeleton variant="rectangular" width={'12px'} height={12}/>
+        <Skeleton variant="rectangular" width={'280px'} height={14} style={{marginLeft:'10px'}}/>
+      </div>
+      <div style={{marginTop:'15px', display:'flex'}}>      
+        <Skeleton variant="rectangular" width={'150px'} height={35} style={{marginLeft:'auto', marginRight:'auto'}}/>
+      </div>
+    </div>
   );
 }

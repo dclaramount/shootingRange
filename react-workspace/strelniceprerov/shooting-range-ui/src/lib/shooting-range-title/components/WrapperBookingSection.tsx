@@ -155,7 +155,7 @@ export function WrapperBookingSection() {
       </div>
        }
     </div>
-       {<Popup open={showPopUpBookingProcess} closeOnDocumentClick={false} onClose={closeModal} >
+       {<Popup open={showPopUpBookingProcess} onClose={closeModal} closeOnDocumentClick={false} >
         <BookingFlowSpace closeModalFunction={closeModal}/>
       </Popup>}
        {/*showingPage==="CONFIRMATION_PAGE" && <ConfirmationPage/>*/}

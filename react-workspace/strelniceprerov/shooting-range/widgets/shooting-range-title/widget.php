@@ -168,18 +168,6 @@ class SHOOTING_RANGE_TITLE extends Widget_Base
         );
         ?>
         <div id="popup-root">
-            <link rel="stylesheet" href="https://strelniceprerov.cz/wp-admin/css/bw-bootstrap-strelnice.css">
-            <link rel="stylesheet" href="https://strelniceprerov.cz/wp-admin/css/bw-calendar.css">
-            <link rel="stylesheet" href="https://strelniceprerov.cz/wp-admin/css/bw-front-strelnice.css">
-            <link rel="stylesheet" href="https://strelniceprerov.cz/wp-admin/css/bw-print-strelnice.css">
-            <link rel="stylesheet" href="https://strelniceprerov.cz/wp-admin/css/bw-reboot-strelnice.css">
-            <link rel="stylesheet" href="https://strelniceprerov.cz/wp-admin/css/bw-reservation-strelnice.css">
-            <link rel="stylesheet" href="https://strelniceprerov.cz/wp-admin/css/bw-honest-week-picker.css">
-            <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
-            <link rel="stylesheet" href="https://strelniceprerov.cz/wp-admin/css/bw-dx-demo-template.css">
-            <link rel="stylesheet" href="https://strelniceprerov.cz/wp-admin/css/bw-dx-light.css">
-            <link rel="stylesheet" href="https://strelniceprerov.cz/wp-admin/css/bw-dx-material-blue-light.css">
-            <link rel="stylesheet" href="https://strelniceprerov.cz/wp-admin/css/bw-calendar-instructors.css">
         </div>
         <shooting-range-title <?php echo $this->get_render_attribute_string( 'shooting-range-title-wrapper' ); ?>></shooting-range-title>
         <?php
