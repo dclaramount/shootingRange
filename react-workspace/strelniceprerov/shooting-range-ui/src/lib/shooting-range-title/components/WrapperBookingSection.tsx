@@ -11,6 +11,42 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import WarningIcon from '@mui/icons-material/Warning';
 import { ConfirmationPage } from "./ConfirmationPage";
+/*-------------------------------------------------------------------------------------------------------------*/
+/*                                            HELPER FUNCTIONS                                                 */
+/*-------------------------------------------------------------------------------------------------------------*/
+const reArrangeInstructorSegments = (instructorSegments: any) => {
+  const respArray : any[] = [];
+  instructorSegments.forEach((entry : any) => {
+    const index = respArray.findIndex((item) => item.guid === entry.guid);
+    if((instructorSegments.filter((entrySegment : any) => entrySegment.guid===entry.guid).length===1)&&index===-1){
+      respArray.push(entry);
+    }
+    else if((instructorSegments.filter((entrySegment : any) => entrySegment.guid===entry.guid).length>1)&&index===-1){
+      const filterItems = instructorSegments.filter((entrySegment : any) => entrySegment.guid===entry.guid);
+      const firstItem = filterItems.shift(0);
+      const id              = firstItem.id;
+      let   startSegment    = firstItem.startTime;
+      let   endSegment      = firstItem.endTime;
+      const instructorId    = firstItem.instructorId; 
+      const instructorName  = firstItem.instructorName;
+      const guid            = firstItem.guid;
+
+      filterItems.forEach((filterEntry : any) =>{
+        if((filterEntry.startTime < startSegment)){startSegment=filterEntry.startTime}
+        if((filterEntry.endTime > endSegment)){endSegment=filterEntry.endTime}
+      })
+      respArray.push({
+        id: id,
+        instructorId : instructorId,
+        instructorName: instructorName, 
+        guid: guid, 
+        startTime: startSegment,
+        endTime: endSegment
+      })
+    }
+  });
+  return(respArray);
+}
 
 //TO IMPLEMENT CENTRALIZED API CALLS
 export function WrapperBookingSection() {
@@ -20,7 +56,8 @@ export function WrapperBookingSection() {
   const { setLocationList,  selectedWeek,
           setBookings,      selectedLocation,
           apiURL,           showingPage, 
-          setShowingPage, setSummaryBookingSegments, setSumInstBookingSegments}                                                     = React.useContext(BookingContext);
+          setShowingPage,   setInstructorSegments,
+          withInstructors,  setSummaryBookingSegments, setSumInstBookingSegments}                                            = React.useContext(BookingContext);
   /*-------------------------------------------------------------------------------------------------------------*/
   /*                                                API CALLS                                                    */
   /*-------------------------------------------------------------------------------------------------------------*/
@@ -54,7 +91,16 @@ export function WrapperBookingSection() {
         .catch((err) => { console.log(err) });
       }
     },[selectedWeek , selectedLocation, refreshBookingEnv])
-
+    React.useEffect( () => {    
+      axios({
+        url: `${apiURL}getAllInstructorSegments.php`,
+        method: "GET",
+    }).then((res) => {
+      setInstructorSegments(reArrangeInstructorSegments(res.data));
+      const controlArray = controlAPI;
+      controlArray.push('INSTRUCTOR_SEGMENTS');
+      setControlAPI(controlArray);
+    })},[])
     React.useEffect(() =>{    
       axios({
         url: `${apiURL}getSummaryBookings.php`,
@@ -80,15 +126,13 @@ export function WrapperBookingSection() {
     })
       .catch((err) => { console.log(err) });
     },[refreshBookingEnv])
-
-  if(controlAPI.includes('SHOOTING_RANGE_LIST' && 'BOOKINGS_FILTERED' && 'SUMMARY_INST_BOOKINGS' &&'SUMMARY_BOOKINGS' )){
+  if(controlAPI.includes('SHOOTING_RANGE_LIST' && 'BOOKINGS_FILTERED' && 'INSTRUCTOR_SEGMENTS'&& 'SUMMARY_BOOKINGS' && 'SUMMARY_INST_BOOKINGS')){
     setShowingPage('BOOKING_CALENDAR');
     setControlAPI([]);
   }
-
   return(
     <>
-      {showingPage!=="POPUP_LENGTH" &&  <RenderHeader/>}
+      {(showingPage!=="POPUP_LENGTH" && showingPage!=="CONFIRMATION_PAGE") &&  <RenderHeader/>}
       {showingPage==="LOADING"          && <>LOADING BOOKING CALENDAR</>}
       {showingPage==="BOOKING_CALENDAR" && 
       <>
@@ -97,13 +141,13 @@ export function WrapperBookingSection() {
       </>}
       {showingPage==="POPUP_LENGTH" &&  
       <div style={{margin:'auto', display: 'flex', flexDirection: 'column', border:'2px solid black', borderRadius:'5px', padding:'15px', maxWidth:'auto'}}>
-      <WarningIcon style={{height:'72px', width:'72px', marginLeft:'auto', marginRight:'auto', marginTop:'10px', marginBottom:'10px'}} color='primary' />
-      <Typography sx={{ p: 2 }}>Vybral/a jste čas, který přesahuje do rezervace, která je plná. Prosíme o vybránní nového času nebo zkrácení doby rezervace.</Typography>
-      <Button onClick={()=>setShowingPage("BOOKING_CALENDAR")} variant='contained'>
-        CLOSE
-      </Button>
-    </div>
+        <WarningIcon style={{height:'72px', width:'72px', marginLeft:'auto', marginRight:'auto', marginTop:'10px', marginBottom:'10px'}} color='primary' />
+        <Typography sx={{ p: 2 }}>Vybral/a jste čas, který přesahuje do rezervace, která je plná. Prosíme o vybránní nového času nebo zkrácení doby rezervace.</Typography>
+        <Button onClick={()=>setShowingPage("BOOKING_CALENDAR")} variant='contained'>
+          CLOSE
+        </Button>
+      </div>
        }
-    {showingPage==="CONFIRMATION_PAGE" && <ConfirmationPage/>}
+       {showingPage==="CONFIRMATION_PAGE" && <ConfirmationPage/>}
     </>
 )}

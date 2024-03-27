@@ -132,7 +132,7 @@ export function WrapperBookingSection() {
   }
   return(
     <>
-      {showingPage!=="POPUP_LENGTH" &&  <RenderHeader/>}
+      {(showingPage!=="POPUP_LENGTH" && showingPage!=="CONFIRMATION_PAGE") &&  <RenderHeader/>}
       {showingPage==="LOADING"          && <>LOADING BOOKING CALENDAR</>}
       {showingPage==="BOOKING_CALENDAR" && 
       <>
