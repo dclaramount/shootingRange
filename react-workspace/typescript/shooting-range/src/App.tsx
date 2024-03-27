@@ -6,11 +6,12 @@ import { WrapperManagementDashboard} from './shooting-range-input/WrapperManagem
 import axios from 'axios';
 import DataGridSummaryTable from './shooting-range-input/DataGridSummaryTable';
 import TabManagement from './shooting-range-input/TabMangement';
+import PlaceHolderBookingSection from './shooting-range-title/PlaceHolderBookingSection';
 
 function App() {
   const [allBookings, setAllBookings] = React.useState([]);
   const [globalVariables, setGlobalVariables] = React.useState({});
-
+  const [waitDone, setWaitDone] = React.useState(false);
   React.useEffect(() =>{    
     axios({
       url: "https://strelniceprerov.cz/wp-content/plugins/elementor-addon/widgets/getAllBookings.php",
@@ -57,6 +58,10 @@ function App() {
       countStartHour=countStartHour+1;
     }
   }
+var delayInMilliseconds = 5000; //1 second
+setTimeout(function() {
+  setWaitDone(true);
+}, delayInMilliseconds);
   return (
     <div className="App">
       <style>
@@ -83,7 +88,7 @@ function App() {
       </header>
       {/*<WrapperReservationManagement/>*/}
       <hr></hr>
-      {Object.keys(globalVariables).length > 0 ? <WrapperBooking gVariables={globalVariables}/> : "LOADING..."}
+      {(Object.keys(globalVariables).length > 0 && waitDone) ? <WrapperBooking gVariables={globalVariables}/> : <PlaceHolderBookingSection/>}
       {/*Object.keys(globalVariables).length > 0 ? <WrapperManagementDashboard gVariables={globalVariables}/> : "LOADING..."*/}
     </div>
   );

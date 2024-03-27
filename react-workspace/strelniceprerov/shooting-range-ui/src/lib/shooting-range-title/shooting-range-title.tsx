@@ -6,6 +6,7 @@ import React from 'react';
 import axios from 'axios';
 import Clock from 'react-live-clock';
 import { WrapperBooking } from './components/WrapperBooking';
+import PlaceHolderBookingSection from './PlaceHolderBookingSection';
 
 
 export const ShootingRangeTitlePropsTypes = {
@@ -24,6 +25,7 @@ export function ShootingRangeTitle(props: ShootingRangeTitleProps) {
   const [refreshData, setRefreshData] = React.useState(0);
   const [timeStamp, setTimeStamp] = React.useState(null);
   const [globalVariables, setGlobalVariables] = React.useState({});
+  const [waitDone, setWaitDone] = React.useState(false);
   
   React.useEffect(() =>{    
     axios({
@@ -73,10 +75,14 @@ export function ShootingRangeTitle(props: ShootingRangeTitleProps) {
     console.log(e);
     //setRefreshData(e);
   }
+  const delayInMilliseconds = 5000; //1 second
+  setTimeout(function() {
+    setWaitDone(true);
+  }, delayInMilliseconds);
   return (    
     <div className="wrapper-diego">
       <Clock style={{visibility:'hidden'}} format={'HH:mm:ss'} ticking={true} timezone={'US/Pacific'} onChange={(e) => callBackClock(e)}/>
-      {Object.keys(globalVariables).length > 0 ? <WrapperBooking gVariables={globalVariables}/> : "LOADING..."}
+      {(Object.keys(globalVariables).length > 0 && waitDone) ? <WrapperBooking gVariables={globalVariables}/> : <PlaceHolderBookingSection/>}
     </div>)
 }
 
