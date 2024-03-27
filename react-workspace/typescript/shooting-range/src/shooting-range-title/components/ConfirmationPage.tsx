@@ -17,7 +17,7 @@ import { TermsAndConditions } from './TermsAndConditions';
 
 
 
-export function ConfirmationPage() {
+export function ConfirmationPage( {setPage} : any) {
   const [open, setOpen] = React.useState(false);
   const [checked, setChecked] = React.useState(false);
   const fontText = 'Arial, Helvetica, sans-serif;'
@@ -94,7 +94,7 @@ export function ConfirmationPage() {
         <TermsAndConditions closeModalFunction={setOpen}/>
       </Popup>
     </div>
-    <Button style={{ width:'150px', marginRight:'auto', marginLeft: 'auto', marginTop:'15px' }} variant="contained" color="success" disabled={!checked}>Create Booking</Button>
+    <Button style={{ width:'150px', marginRight:'auto', marginLeft: 'auto', marginTop:'15px' }} variant="contained" color="success" disabled={!checked} onClick={()=>setPage("CREATING_RESERVATION")}>Create Booking</Button>
     </div>
     </div>
 )}
