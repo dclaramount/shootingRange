@@ -1,7 +1,6 @@
 import React from 'react';
 import { BookingContext } from "./Context/BookingContext";
 import { WrapperBookingSection } from "./WrapperBookingSection";
-
 export function WrapperBooking({gVariables, arrayOfHours} : any) {
 
   const buildArrayOfBusinessHours = (startHour : any, endHour : any) => {
@@ -25,6 +24,7 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
   console.log(testEncryptKey.toString());*/
   var sendGridKey  = CryptoJS.AES.decrypt(gVariables.sendGridEncryptedKey, gVariables.decryptionKey).toString(CryptoJS.enc.Utf8);
   console.log(`original Send Grid Key is: ${sendGridKey}`);
+  const [globalVariables, setGlobalVariables]                   = React.useState(gVariables);
   const [timesToShow, setTimesToShow]                           = React.useState(buildArrayOfBusinessHours(gVariables.startBusinessHours, gVariables.endBusinessHours)); 
   const [daysOfWeek, setDaysOfWeek]                             = React.useState([]); 
   const [isoDaysOfWeek,setISODaysOfWeek]                        = React.useState([]);
@@ -63,7 +63,9 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
     setShowCalendar(true)
   }, delayInMilliseconds);
   return(
-  <BookingContext.Provider value={{ timesToShow,              setTimesToShow, 
+  <BookingContext.Provider value={{ 
+                                    globalVariables,          setGlobalVariables,
+                                    timesToShow,              setTimesToShow, 
                                     daysOfWeek,               setDaysOfWeek, 
                                     isoDaysOfWeek,            setISODaysOfWeek,
                                     selectedWeek,             setSelectedWeek,

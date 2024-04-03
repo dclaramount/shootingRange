@@ -1,20 +1,8 @@
 import React from 'react';
 import { BookingContext } from './Context/BookingContext';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import DateRangeIcon from '@mui/icons-material/DateRange';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import PeopleIcon from '@mui/icons-material/People';
-import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-import SchoolIcon from '@mui/icons-material/School';
-import BadgeIcon from '@mui/icons-material/Badge';
-import EmailIcon from '@mui/icons-material/Email';
-import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
-import { Button, Typography } from '@mui/material';
+import { Button } from '@mui/material';
 import Popup from 'reactjs-popup';
-import Checkbox from '@mui/material/Checkbox';
-import CancelIcon from '@mui/icons-material/Cancel';
 import { TermsAndConditions } from './TermsAndConditions';
-
 
 
 export function ConfirmationPage( {setPage} : any) {
@@ -59,10 +47,11 @@ export function ConfirmationPage( {setPage} : any) {
         <span style={{color:colorIcons}}><i className={`fa fa-clock ${sizeOfIcons}`} aria-hidden="true" ></i></span>
         <div style={{fontFamily:fontText, fontSize:fontSize, color:colorFont, fontWeight:fontWeight, marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}}>{selectedBookingDuration} h</div>
       </div>
+      {/*
       <div style={{display:'flex' , marginTop:separation}}>
         <span style={{color:colorIcons}}><i className={`fa fa-users ${sizeOfIcons}`} aria-hidden="true" ></i></span>
         <div style={{fontFamily:fontText, fontSize:fontSize, color:colorFont, fontWeight:fontWeight, marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}}>{selectedOccupancy} people</div>
-      </div>
+      </div>*/}
       <div style={{display:'flex',  marginTop:separation}}>
         <span style={{color:colorIcons}}><i className={`fa fa-id-card ${sizeOfIcons}`} aria-hidden="true" ></i></span>
         <div style={{fontFamily:fontText, fontSize:fontSize, color:colorFont, fontWeight:fontWeight, marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}}>{shootingPermitNumber}</div>
@@ -94,7 +83,8 @@ export function ConfirmationPage( {setPage} : any) {
         <TermsAndConditions closeModalFunction={setOpen}/>
       </Popup>
     </div>
-    <Button style={{ width:'150px', marginRight:'auto', marginLeft: 'auto', marginTop:'15px' }} variant="contained" color="success" disabled={!checked} onClick={()=>setPage("CREATING_RESERVATION")}>Create Booking</Button>
+    {!checked && <button type="button" style={{ height:'35px', backgroundColor:'rgba(0, 0, 0, 0.12)', boxShadow:'none', color:'rgba(0, 0, 0, 0.26)', textAlign:'center' }} disabled={!checked}  onClick={()=>setPage("GETTING_USER_BY_EMAIL")}>CREATE BOOKING</button> }
+    {checked && <Button  variant="contained" color="success" disabled={!checked} onClick={()=>setPage("GETTING_USER_BY_EMAIL")}>Create Booking</Button> }
     </div>
     </div>
 )}

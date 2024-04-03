@@ -7,7 +7,6 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
   const buildArrayOfBusinessHours = (startHour : any, endHour : any) => {
     const Array = []
     let countStartHour = parseInt(startHour);
-    console.log(endHour);
     while(countStartHour < parseInt(endHour)){
       if(countStartHour < 10){
         Array.push(`0${countStartHour}`);
@@ -21,6 +20,7 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
   }
   const sendGridKey  = CryptoJS.AES.decrypt(gVariables.sendGridEncryptedKey, gVariables.decryptionKey).toString(CryptoJS.enc.Utf8);
   console.log(`original Send Grid Key is: ${sendGridKey}`);
+  const [globalVariables, setGlobalVariables]                   = React.useState(gVariables);
   const [timesToShow, setTimesToShow]                           = React.useState(buildArrayOfBusinessHours(gVariables.startBusinessHours, gVariables.endBusinessHours)); 
   const [daysOfWeek, setDaysOfWeek]                             = React.useState([]); 
   const [isoDaysOfWeek,setISODaysOfWeek]                        = React.useState([]);
@@ -47,6 +47,8 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
   const [defaultOccupancy, setDefaultOccupancy]                 = React.useState(gVariables.defaultOccupancy);
   const [alertMsgSlotFull, setAlertMsgSlotFull]                 = React.useState(gVariables.msgAlertSlotFull);
   const [alertMsgOccupFull, setAlertMsgOccupFull]               = React.useState(gVariables.msgAlertOccupancy);
+  const [instructorSegments, setInstructorSegments]             = React.useState(gVariables.msgAlertOccupancy);
+  const [withInstructors, setWithInstructors]                   = React.useState(false);
   const [summaryBookingSegments, setSummaryBookingSegments]     = React.useState([]);
   const [sumInstBookingSegments, setSumInstBookingSegments]     = React.useState([]);
   const [showingPage, setShowingPage]                           = React.useState("LOADING");
@@ -57,7 +59,9 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
     setShowCalendar(true)
   }, delayInMilliseconds);
   return(
-  <BookingContext.Provider value={{ timesToShow,              setTimesToShow, 
+  <BookingContext.Provider value={{ 
+                                    globalVariables,          setGlobalVariables,
+                                    timesToShow,              setTimesToShow, 
                                     daysOfWeek,               setDaysOfWeek, 
                                     isoDaysOfWeek,            setISODaysOfWeek,
                                     selectedWeek,             setSelectedWeek,
@@ -83,6 +87,8 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
                                     defaultOccupancy,         setDefaultOccupancy,
                                     alertMsgSlotFull,         setAlertMsgSlotFull,
                                     alertMsgOccupFull,        setAlertMsgOccupFull,
+                                    instructorSegments,       setInstructorSegments,
+                                    withInstructors,          setWithInstructors,
                                     summaryBookingSegments,   setSummaryBookingSegments,
                                     sumInstBookingSegments,   setSumInstBookingSegments,
                                     showPopUpBookingProcess, setShowPopUpBookingProcess
