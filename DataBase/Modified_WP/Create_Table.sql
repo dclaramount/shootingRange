@@ -1,11 +1,12 @@
 /* This is the part to create the tables */
-DROP TABLE IF EXISTS user_list;
 DROP TABLE IF EXISTS user_type;
 DROP TABLE IF EXISTS invoice_type;
 DROP TABLE IF EXISTS location;
 DROP TABLE IF EXISTS invoice_item;
 DROP TABLE IF EXISTS invoice;
 DROP TABLE IF EXISTS instructors;
+DROP TABLE IF EXISTS user_list;
+DROP TABLE IF EXISTS update_users_logs;
 DROP TABLE IF EXISTS global_variables;
 
 CREATE TABLE user_type
@@ -25,6 +26,7 @@ CREATE TABLE user_list
     name                VARCHAR(255) NOT NULL,
     email               VARCHAR(255) NOT NULL,
     phoneNumber         VARCHAR(255) NOT NULL,
+    shootingPermit      VARCHAR(100),
     isDeleted           BOOLEAN NOT NULL DEFAULT FALSE,
     userId              SMALLINT NOT NULL,
     created             DATETIME(6) NOT NULL DEFAULT NOW(),
@@ -124,3 +126,13 @@ CREATE TABLE global_variables
     created             DATETIME(6) NOT NULL DEFAULT NOW(),
     updated             DATETIME(6) NOT NULL DEFAULT NOW()
 );
+CREATE TABLE update_users_logs
+(
+    id                  MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+    user_id             MEDIUMINT NOT NULL,
+    transaction_type    VARCHAR(100),
+    name_field_changed  VARCHAR(255),
+    old_value           VARCHAR(255),
+    new_value           VARCHAR(255),
+    entry_update_on     DATETIME(6) NOT NULL DEFAULT NOW()
+)

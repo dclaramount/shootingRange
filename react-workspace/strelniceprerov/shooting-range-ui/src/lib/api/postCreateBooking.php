@@ -29,58 +29,19 @@ if (isset($_GET['selectedOccupancy']) && $_GET['selectedOccupancy']!="") {
 } else {
   $selectedOccupancy = "";
 }
-if (isset($_GET['shootingPermit']) && $_GET['shootingPermit']!="") {
-  $shootingPermit = $_GET['shootingPermit'];
-} else {
-  $shootingPermit = "";
-}
-if (isset($_GET['shootingPermitNumber']) && $_GET['shootingPermitNumber']!="") {
-  $shootingPermitNumber = $_GET['shootingPermitNumber'];
-} else {
-  $shootingPermitNumber = "";
-}
 if (isset($_GET['shootingInstructor']) && $_GET['shootingInstructor']!="") {
   $shootingInstructor = $_GET['shootingInstructor'];
 } else {
   $shootingInstructor = "";
 }
-if (isset($_GET['name']) && $_GET['name']!="") {
-  $name = $_GET['name'];
+if (isset($_GET['userId']) && $_GET['userId']!="") {
+  $userId = $_GET['userId'];
 } else {
-  $name = "";
+  $userId = "";
 }
-if (isset($_GET['email']) && $_GET['email']!="") {
-  $email = $_GET['email'];
-} else {
-  $email = "";
-}
-if (isset($_GET['phone']) && $_GET['phone']!="") {
-  $phone = $_GET['phone'];
-} else {
-  $phone = "";
-}
-$queryCreateUser = "INSERT INTO user_list (name, user_type_id, email, phoneNumber, isDeleted, userId) VALUES ('$name', 1 , '$email', '$phone',false , 1);";
-$queryNewUser = "SELECT *  FROM user_list WHERE email='${email}' ORDER BY id DESC LIMIT 1;";
-$resCreateUser = mysqli_query($mysqli, $queryCreateUser, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
-if($resCreateUser){
-  $res = mysqli_query($mysqli, $queryNewUser, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
-  if ($res) {
-    $index = 1;
-    while ($row = mysqli_fetch_row($res)) {
-      $responseUserArray[]=array( 
-                              'id'                              => $row[0],
-                              'userTypeId'                      => $row[1],
-                              'name'                            => $row[2],
-                              'email'                           => $row[3],
-                              'phoneNumber'                     => $row[4]
-                            );
-      $index++;
-    }
-    $res->free_result();
-  }
-}
+
 $newUserObject = $responseUserArray[0];
-$newUserId = $newUserObject['id'];
+$newUserId = $userId;
 $queryCreateInvoice = "INSERT INTO invoice (user_id, invoice_type_id, is_deleted, userId) VALUES ('$newUserId', 1 , false, 1);";
 $queryNewInvoice = "SELECT *  FROM invoice WHERE user_id='$newUserId' ORDER BY id DESC LIMIT 1;";
 $resCreateInvoice = mysqli_query($mysqli, $queryCreateInvoice, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
@@ -103,10 +64,9 @@ if($resCreateInvoice){
 $newInvoiceObject = $responseNewInvoice[0];
 $newInvoiceId = $newInvoiceObject['id'];
 $start = strtotime($selectedSegment);
-$startTime = date("Y-m-d h:i:s",$start);
+$startTime = date("Y-m-d H:i:s",$start);
 $end = strtotime($selectedSegment) + 60*60;
-$endTime = date("Y-m-d h:i:s",$end);
-
+$endTime = date("Y-m-d H:i:s",$end);
 $queryCreateInvoiceItem = "INSERT INTO invoice_item (invoice_id, location_id, number_of_people, number_of_hours, with_instructor, start_time, end_time, userId) VALUES ('$newInvoiceId', '$selectedLocationId' , '$selectedOccupancy', '$selectedBookingDuration',$shootingInstructor, '$startTime' , '$endTime', 1);";
 $queryNewInvoiceItem = "SELECT *  FROM invoice_item WHERE invoice_id='$newInvoiceId' ORDER BY id DESC LIMIT 1;";
 $resCreateInvoiceItem = mysqli_query($mysqli, $queryCreateInvoiceItem, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
@@ -131,8 +91,7 @@ if($queryCreateInvoiceItem){
   }
 }
 
-$totalResponse = array(
-  "user"                => $newUserObject,
+$totalResponse = array(  
   "invoice"             => $newInvoiceObject,
   "invoiceItems"        => $responseNewInvoiceItem
 );
