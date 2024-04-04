@@ -41,7 +41,7 @@ export function BookingFormWrapper() {
           <SelectedShootingRange/>
           <BookingDateTime/>
           <DurationOfBooking/>
-          <NumberOfPeople/>        
+          {/*<NumberOfPeople/>*/}        
           <ShootingPermit/>
           <Instructor/>
           <h3>Osobní údaje</h3>

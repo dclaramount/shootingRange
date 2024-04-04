@@ -158,7 +158,7 @@ export function BookingFlowSpace({closeModalFunction} : any) {
     <div>
       {section==="LOADING" && <BookingConfPlaceHolder/>}
       {section==="SUMMARY" && 
-      <div style={{backgroundColor:'white', maxWidth:'500px', padding:'50px', border:'1px solid #e7e7e9', borderRadius:'15px', outline:'20px solid #fafafa'}}>
+      <div style={{backgroundColor:'white', maxWidth:'500px', paddingTop:'5px', paddingRight:'50px', paddingBottom:'50px', paddingLeft:'50px', border:'1px solid #e7e7e9', borderRadius:'15px', outline:'20px solid #fafafa'}}>
         <a className="close" onClick={closeModalFunction} style={{marginRight:'10px', marginTop:'10px', width:'24px', height:'24px', cursor:'pointer'}}>
             <i className="fa fa-times"></i>
         </a>

@@ -1,3 +1,4 @@
+import { SendEmail } from '../../shooting-range-input/sendEmailConfirmation';
 import { BookingContext } from './Context/BookingContext';
 import { BookingDateTime } from './Form/BookingDateTime';
 import { BookingEmail } from './Form/BookingEmail';
@@ -28,6 +29,7 @@ export function BookingFormWrapper() {
   } = React.useContext(BookingContext);
 
   const submitHandler = (e:any) => {
+    SendEmail(email);
     e.preventDefault();
     setShowPopUpBookingProcess(true);
   }
@@ -40,7 +42,7 @@ export function BookingFormWrapper() {
           <SelectedShootingRange/>
           <BookingDateTime/>
           <DurationOfBooking/>
-          <NumberOfPeople/>        
+          {/*<NumberOfPeople/>*/}        
           <ShootingPermit/>
           <Instructor/>
           <h3>Osobní údaje</h3>

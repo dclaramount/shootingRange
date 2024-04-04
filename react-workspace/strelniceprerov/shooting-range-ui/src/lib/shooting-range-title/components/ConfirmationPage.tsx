@@ -33,7 +33,7 @@ export function ConfirmationPage( {setPage} : any) {
   return(
     <div className={"WrapperOfBooking"} style={{display:'flex', marginLeft:'auto', marginRight:'auto', marginTop:'15px'}}>
     <div style={{width:'100%', display:'flex', flexDirection:'column'}}>
-      <h1 style={{margin:'10px', color:colorFont, alignContent:'center'}}>Summary Of Booking</h1>
+      <h1 style={{margin:'10px', color:colorFont, alignContent:'center', textAlign:'center', fontSize:'30px'}}>Summary Of Booking</h1>
     <div style={{height:'auto', marginLeft:'auto', marginRight:'auto'}}>
       <div style={{display:'flex', marginTop:separation}}>
         <span style={{color:colorIcons}}><i className={`fa fa-location-arrow ${sizeOfIcons}`} aria-hidden="true" ></i></span>
@@ -75,8 +75,8 @@ export function ConfirmationPage( {setPage} : any) {
     </div>
     <div style={{display:'flex'}}>
     <div style={{marginTop:'2vh', marginBottom:'2vh'}}>
-      <input type="checkbox" id="terms_conditions" name="scales" checked={checked} onClick={()=>setChecked(!checked)}/>
-      <label htmlFor="terms_conditions">I agree with the</label>
+      <input style={{marginRight:'15px'}} type="checkbox" id="terms_conditions" name="scales" checked={checked} onClick={()=>setChecked(!checked)}/>
+      <label style={{marginTop:'auto', marginBottom:'auto'}} htmlFor="terms_conditions">I agree with the</label>
       <span style={{fontWeight:'bold', textDecoration:'underline', color:'blue', marginLeft:'10px'}} onClick={()=>setOpen(true)}> Terms & Conditions</span>
     </div>
       <Popup open={open} modal closeOnDocumentClick={false} >
