@@ -57,7 +57,7 @@ export function DaysColumn(){
         return (left>=parseInt(selectedOccupancy))
       }
       else{
-        return false
+        return true //If not in summary bookings is available (No bookings)
       }
     }else{ //If Shooting Instructor is Selected
       const filteredValue = sumInstBookingSegments.find((sum:any) => sum.segmentStarts.includes(partialDate));
@@ -66,7 +66,7 @@ export function DaysColumn(){
           return (left>=parseInt(selectedOccupancy))
       }
       else{
-        return false
+        return true //If not in summary bookings is available (No bookings)
       }
     }
   }

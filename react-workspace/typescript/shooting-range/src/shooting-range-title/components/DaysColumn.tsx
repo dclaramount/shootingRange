@@ -57,7 +57,7 @@ export function DaysColumn(){
         return (left>=parseInt(selectedOccupancy))
       }
       else{
-        return false
+        return true //If is not in the summary bookings table means that there are no booking for it. (Hence available).
       }
     }else{ //If Shooting Instructor is Selected
       const filteredValue = sumInstBookingSegments.find((sum:any) => sum.segmentStarts.includes(partialDate));
@@ -66,7 +66,7 @@ export function DaysColumn(){
           return (left>=parseInt(selectedOccupancy))
       }
       else{
-        return false
+        return true //If is not in the summary bookings table means that there are no booking for it. (Hence available).
       }
     }
   }
@@ -145,6 +145,7 @@ export function DaysColumn(){
       }
     })
   })
+  console.log(available);
   setAvailableSegments(available);
   setNotAvailableSegments(notAvailable);
   },[selectedOccupancy])
