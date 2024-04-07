@@ -10,11 +10,13 @@ export function RenderHeader(){
     setSelectedWeek(week);
     const arrayDaysOfWeek = []
     const isoDaysOfWeek = []
-    for (let i=0; i<=6; i++){
+    for (let i=0; i<=7; i++){
       const dt = new Date(week.firstDay);
       dt.setDate(dt.getDate() + i);
       isoDaysOfWeek.push(dt.toISOString().split('T')[0]);
-      arrayDaysOfWeek.push(`${dt.getDate()}.${dt.getMonth() + 1}`)
+      if(i<7){
+        arrayDaysOfWeek.push(`${dt.getDate()}.${dt.getMonth() + 1}`);
+      }
     }
     setISODaysOfWeek(isoDaysOfWeek);
     setDaysOfWeek(arrayDaysOfWeek);
