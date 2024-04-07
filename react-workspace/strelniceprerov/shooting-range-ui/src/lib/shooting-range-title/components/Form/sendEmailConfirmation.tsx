@@ -7,8 +7,7 @@ export function SendEmail(sendGridKey : any, emailTo : any, emailFrom: any, temp
                             {
                               headers: {
                                 'Authorization': `Bearer ${sendGridKey}`,
-                                'Content-Type': 'application/json',
-                                'Access-Control-Allow-Origin': '*'
+                                'Content-Type': 'application/json'
                                 }
                             }
                             ).then((res) => {

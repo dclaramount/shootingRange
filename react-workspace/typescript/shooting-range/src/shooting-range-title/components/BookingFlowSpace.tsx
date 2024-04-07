@@ -29,7 +29,10 @@ export function BookingFlowSpace({closeModalFunction} : any) {
     name,
     email,
     phone,
-    apiURL
+    apiURL,
+    sendGridKeyAPI,
+    sendGridFromEmail,
+    sendGridTemplateConfirmationId
 } = React.useContext(BookingContext);
 
   const [section, setSection]  =   React.useState("LOADING"); 
@@ -144,6 +147,19 @@ export function BookingFlowSpace({closeModalFunction} : any) {
       console.log(`The user Account Id is ${userAccount.id}`);
       axios({
         url: `${apiURL}postCreateBooking.php?selectedLocationId=${selectedLocation}&selectedSegment=${selectedSegment}&selectedBookingDuration=${selectedBookingDuration}&selectedOccupancy=${selectedOccupancy}&shootingInstructor=${shootingInstructor}&userId=${userAccount.id}`,
+        method: "GET",
+      }).then((res) => {
+        setResponse(res.data);
+        setSection("SEND_EMAIL");
+      })
+    .catch((err) => { console.log(err) });
+    }
+    //4 Send Email Confirmation Reservation.
+    else if(section==="SEND_EMAIL"){
+      const selectedLocationName = locationList.find((location : any) => parseInt(location.id) === parseInt(selectedLocation)).name;
+      //SendEmail(sendGridKeyAPI, email, sendGridFromEmail, sendGridTemplateConfirmationId);
+      axios({
+        url: `${apiURL}postSendEmail.php?sendGridKey=${sendGridKeyAPI}&emailTo=${email}&emailFrom=${sendGridFromEmail}&templateId=${sendGridTemplateConfirmationId}&segmentBooked=${selectedSegment}&nameOnReservation=${name}&shootingRangeName=${selectedLocationName}&phoneNumber=+${phone}`,
         method: "GET",
       }).then((res) => {
         setResponse(res.data);

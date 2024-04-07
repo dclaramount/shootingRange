@@ -1,4 +1,3 @@
-import { SendEmail } from '../../shooting-range-input/sendEmailConfirmation';
 import { BookingContext } from './Context/BookingContext';
 import { BookingDateTime } from './Form/BookingDateTime';
 import { BookingEmail } from './Form/BookingEmail';
@@ -6,7 +5,6 @@ import { BookingName } from './Form/BookingName';
 import { BookingPhoneNumber } from './Form/BookingPhoneNumber';
 import { DurationOfBooking } from './Form/DurationOfBooking';
 import { Instructor } from './Form/Instructor';
-import { NumberOfPeople } from './Form/NumberOfPeople';
 import { SelectedShootingRange } from './Form/SelectedShootingRange';
 import { ShootingPermit } from './Form/ShootingPermit';
 import React from 'react';
@@ -14,27 +12,13 @@ import React from 'react';
 export function BookingFormWrapper() {
 
   const {
-          selectedLocation,
-          selectedSegment,
-          selectedBookingDuration,
-          selectedOccupancy,
-          shootingPermit,
-          shootingPermitNumber,
-          shootingInstructor,
-          name,
-          email,
-          phone,
-          setShowingPage,
-          setShowPopUpBookingProcess
+          setShowPopUpBookingProcess,
   } = React.useContext(BookingContext);
 
   const submitHandler = (e:any) => {
-    SendEmail(email);
     e.preventDefault();
     setShowPopUpBookingProcess(true);
   }
-  console.log("FORM RE-RENDERED");
-  console.log(selectedLocation);
   return(
     <div className="reservation-order">
       <form onSubmit={(e)=>submitHandler(e)}>
