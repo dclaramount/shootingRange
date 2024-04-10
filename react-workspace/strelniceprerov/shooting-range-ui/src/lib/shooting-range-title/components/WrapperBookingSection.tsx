@@ -56,13 +56,33 @@ export function WrapperBookingSection() {
   const anyArray : any[] = [];
   const [controlAPI, setControlAPI]                                   = React.useState(anyArray);
   const [refreshBookingEnv, setRefreshBookingEnv]                     = React.useState(0);
-  const closeModal                                                    = () => setShowPopUpBookingProcess(false);
+
   const { setLocationList,  selectedWeek,
           setBookings,      selectedLocation,
           apiURL,           showingPage, 
           setShowingPage,   setInstructorSegments,
+          setSelectedSegment, setName,
+          setEmail, setPhone,
+          setShootingPermitNumber, setSelectedBookingDuration,
+          setRefreshEntirePlugin, refreshEntirePlugin,
           withInstructors,  setSummaryBookingSegments, setSumInstBookingSegments,
           showPopUpBookingProcess, setShowPopUpBookingProcess}                                            = React.useContext(BookingContext);
+  const closeModal  = (e : any) => {
+    if(e==="BOOKING_COMPLETE"){
+      setShowPopUpBookingProcess(false);
+      setShowingPage("LOADING");
+      setSelectedSegment([]);
+      setName("");
+      setEmail("");
+      setPhone("");
+      setShootingPermitNumber("");
+      setSelectedBookingDuration(1);
+      setRefreshBookingEnv(refreshBookingEnv + 1);
+      setRefreshEntirePlugin(!refreshEntirePlugin);
+    }
+    else{
+    setShowPopUpBookingProcess(false);}
+  }
   /*-------------------------------------------------------------------------------------------------------------*/
   /*                                                API CALLS                                                    */
   /*-------------------------------------------------------------------------------------------------------------*/

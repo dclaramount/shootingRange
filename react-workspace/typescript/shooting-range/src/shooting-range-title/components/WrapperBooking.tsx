@@ -59,8 +59,9 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
   const [sendGridKeyAPI, setSendGridKeyAPI]                     = React.useState(sendGridKey);
   const [sendGridFromEmail, setSendGridFromEmail]                                               = React.useState(gVariables.emailFrom);
   const [sendGridTemplateConfirmationId, setSendGridTemplateConfirmationId]                     = React.useState(gVariables.confirmationTemplateId);
+  const [refreshEntirePlugin, setRefreshEntirePlugin]                                           = React.useState(false);
   const delayInMilliseconds = 5000; //1 second
-
+  console.log(`REFRESH ENTIRE PLUGIN => status ${showingPage}`)
   setTimeout(function() {
     setShowCalendar(true)
   }, delayInMilliseconds);
@@ -100,7 +101,8 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
                                     showPopUpBookingProcess,  setShowPopUpBookingProcess,
                                     sendGridKeyAPI,           setSendGridKeyAPI,
                                     sendGridFromEmail,        setSendGridFromEmail,
-                                    sendGridTemplateConfirmationId, setSendGridTemplateConfirmationId
+                                    sendGridTemplateConfirmationId, setSendGridTemplateConfirmationId,
+                                    refreshEntirePlugin,      setRefreshEntirePlugin
                                     }}>
   <div className="container">
     <div className="row">
