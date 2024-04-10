@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS instructors;
 DROP TABLE IF EXISTS user_list;
 DROP TABLE IF EXISTS update_users_logs;
 DROP TABLE IF EXISTS global_variables;
+DROP TABLE IF EXISTS services;
 
 CREATE TABLE user_type
 (
@@ -52,12 +53,14 @@ CREATE TABLE location
 (
     id                  SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name                VARCHAR(100) NOT NULL,
-    capacity            SMALLINT,
+    comment             VARCHAR(255),
     isDeleted           BOOLEAN NOT NULL DEFAULT FALSE,
     userId              VARCHAR(100) NOT NULL,
     created             DATETIME(6) NOT NULL DEFAULT NOW(),
     updated             DATETIME(6) NOT NULL DEFAULT NOW()
-);
+)
+    CHARACTER SET 'utf8'
+    COLLATE 'utf8_general_ci';
 
 CREATE TABLE invoice
 (
@@ -135,4 +138,20 @@ CREATE TABLE update_users_logs
     old_value           VARCHAR(255),
     new_value           VARCHAR(255),
     entry_update_on     DATETIME(6) NOT NULL DEFAULT NOW()
+);
+CREATE TABLE services
+(
+    id                  MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+    location_id         SMALLINT UNSIGNED NOT NULL,
+    name                VARCHAR(100),
+    min_capacity        SMALLINT NOT NULL,
+    max_capacity        SMALLINT NOT NULL,
+    comment             VARCHAR(255),
+    isDeleted           BOOLEAN NOT NULL DEFAULT FALSE,
+    userId              VARCHAR(100) NOT NULL,
+    created             DATETIME(6) NOT NULL DEFAULT NOW(),
+    updated             DATETIME(6) NOT NULL DEFAULT NOW(),
+    CONSTRAINT `fk_location` FOREIGN KEY (location_id) REFERENCES location(id)
 )
+    CHARACTER SET 'utf8'
+    COLLATE 'utf8_general_ci';
