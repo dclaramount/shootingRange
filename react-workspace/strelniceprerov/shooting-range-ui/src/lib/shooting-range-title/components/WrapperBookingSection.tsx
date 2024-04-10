@@ -4,14 +4,9 @@ import { BookingContext } from "./Context/BookingContext";
 import React from 'react';
 import { BookingFormWrapper } from "./BookingFormWrapper";
 import axios from 'axios';
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
-import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import WarningIcon from '@mui/icons-material/Warning';
-import { ConfirmationPage } from "./ConfirmationPage";
-import CancelIcon from '@mui/icons-material/Cancel';
 import Popup from "reactjs-popup";
 import { BookingFlowSpace } from "./BookingFlowSpace";
 /*-------------------------------------------------------------------------------------------------------------*/
@@ -57,16 +52,14 @@ export function WrapperBookingSection() {
   const [controlAPI, setControlAPI]                                   = React.useState(anyArray);
   const [refreshBookingEnv, setRefreshBookingEnv]                     = React.useState(0);
 
-  const { setLocationList,  selectedWeek,
-          setBookings,      selectedLocation,
-          apiURL,           showingPage, 
-          setShowingPage,   setInstructorSegments,
-          setSelectedSegment, setName,
-          setEmail, setPhone,
-          setShootingPermitNumber, setSelectedBookingDuration,
-          setRefreshEntirePlugin, refreshEntirePlugin,
-          withInstructors,  setSummaryBookingSegments, setSumInstBookingSegments,
-          showPopUpBookingProcess, setShowPopUpBookingProcess}                                            = React.useContext(BookingContext);
+  const { setLocationList,          selectedWeek,                 setBookings,
+          selectedLocation,         apiURL,                       showingPage, 
+          setShowingPage,           setInstructorSegments,        setSelectedSegment,
+          setName,                  setEmail,                     setPhone,                 
+          setShootingPermitNumber,  setSelectedBookingDuration,   setRefreshEntirePlugin,   
+          refreshEntirePlugin,      setSummaryBookingSegments,    setSumInstBookingSegments,
+          showPopUpBookingProcess,  setShowPopUpBookingProcess
+        } = React.useContext(BookingContext);
   const closeModal  = (e : any) => {
     if(e==="BOOKING_COMPLETE"){
       setShowPopUpBookingProcess(false);

@@ -4,7 +4,7 @@ import { BookingContext } from '../Context/BookingContext';
 
 export function SelectedShootingRange(){
 
-  const {locationList, setLocationList, selectedLocation, setSelectedLocation} = React.useContext(BookingContext);
+  const {locationList,setSelectedLocation} = React.useContext(BookingContext);
 
   return(
     <div className="reservation-order-row">
@@ -13,7 +13,7 @@ export function SelectedShootingRange(){
         <select onChange={(e) => setSelectedLocation(e.target.value)} name="service" id="select-location-dropdown-menu" defaultValue={1}>
           {locationList.map((location : any) => {
             return(
-              <option value={location.id}>{location.name}</option>
+              <option value={location.id}>{location.serviceName}</option>
             )
           })}
         </select>
