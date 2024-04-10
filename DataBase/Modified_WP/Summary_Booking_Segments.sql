@@ -14,7 +14,7 @@ FROM  `invoice_item` as iBookingSegment
           INNER JOIN `services`
                      ON iBookingSegment.location_id = services.id
             INNER JOIN `location`
-                    ON location.id = services.id
+                    ON location.id = services.location_id
 WHERE iBookingSegment.isDeleted = 0
 GROUP BY iBookingSegment.start_time, iBookingSegment.location_id
 ORDER BY iBookingSegment.start_time ASC;
