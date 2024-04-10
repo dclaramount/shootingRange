@@ -17,19 +17,10 @@ export function ConfirmationPage( {setPage} : any) {
   const sizeOfIcons = 'fa-2x'
   const colorIcons = 'dodgerblue'
   const marginLeftText = '50px';
-  const {
-          locationList,
-          selectedLocation,
-          selectedSegment,
-          selectedBookingDuration,
-          selectedOccupancy,
-          shootingPermit,
-          shootingPermitNumber,
-          shootingInstructor,
-          name,
-          email,
-          phone
-  } = React.useContext(BookingContext);
+  const { locationList,             selectedLocation,       selectedSegment,
+          selectedBookingDuration,  shootingPermitNumber,   shootingInstructor,
+          name,                     email,                  phone
+        }   =   React.useContext(BookingContext);
   return(
     <div className={"WrapperOfBooking"} style={{display:'flex', marginLeft:'auto', marginRight:'auto', marginTop:'15px'}}>
     <div style={{width:'100%', display:'flex', flexDirection:'column'}}>
@@ -37,7 +28,7 @@ export function ConfirmationPage( {setPage} : any) {
     <div style={{height:'auto', marginLeft:'auto', marginRight:'auto'}}>
       <div style={{display:'flex', marginTop:separation}}>
         <span style={{color:colorIcons}}><i className={`fa fa-location-arrow ${sizeOfIcons}`} aria-hidden="true" ></i></span>
-        <div style={{fontFamily:fontText, fontSize:fontSize, color:colorFont, fontWeight:fontWeight, marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}}>{locationList.find((location:any) => parseInt(location.id)===selectedLocation).name}</div>
+        <div style={{fontFamily:fontText, fontSize:fontSize, color:colorFont, fontWeight:fontWeight, marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}}>{locationList.find((location:any) => parseInt(location.id)===parseInt(selectedLocation)).serviceName}</div>
       </div>
       <div style={{display:'flex', marginTop:separation}}>
         <span style={{color:colorIcons}}><i className={`fa fa-calendar ${sizeOfIcons}`} aria-hidden="true" ></i></span>
