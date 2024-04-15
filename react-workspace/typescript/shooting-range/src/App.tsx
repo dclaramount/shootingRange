@@ -24,7 +24,6 @@ function App() {
       url: "https://strelniceprerov.cz/wp-content/plugins/elementor-addon/widgets/getGlobalVariables.php",
       method: "GET",
   }).then((res) => {
-    console.log(res.data);
     setGlobalVariables(({
       startBusinessHours: res.data.find((variable : any) => variable.name==="Start_Business_Hours").value,
       endBusinessHours:   res.data.find((variable : any) => variable.name==="End_Business_Hours").value,
@@ -65,7 +64,7 @@ setTimeout(function() {
   setWaitDone(true);
 }, delayInMilliseconds);
   return (
-    <div className="App">
+    <div className="App" style={{overflowY:'scroll', maxHeight:'100vh'}}>
       <style>
         <link rel="stylesheet" href="https://strelniceprerov.cz/wp-admin/css/bw-bootstrap-strelnice.css"/>
         <link rel="stylesheet" href="https://strelniceprerov.cz/wp-admin/css/bw-calendar.css"/>
@@ -91,7 +90,8 @@ setTimeout(function() {
       {/*<WrapperReservationManagement/>*/}
       <hr></hr>
       {(Object.keys(globalVariables).length > 0 && waitDone) ? <WrapperBooking gVariables={globalVariables}/> : <PlaceHolderBookingSection/>}
-      {/*Object.keys(globalVariables).length > 0 ? <WrapperManagementDashboard gVariables={globalVariables}/> : "LOADING..."*/}
+      <hr/>
+      {Object.keys(globalVariables).length > 0 ? <WrapperManagementDashboard gVariables={globalVariables}/> : "LOADING..."}
     </div>
   );
 }
