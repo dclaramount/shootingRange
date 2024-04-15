@@ -8,13 +8,13 @@ $databaseUsername = 'www-strelnic';
 $databasePassword = 'bQASvDoM9K4g';
 $databaseName = 'www-strelnic';
 $mysqli = mysqli_connect($databaseHost, $databaseUsername, $databasePassword, $databaseName);
-
+$mysqli->set_charset("utf8mb4");
 
 //Variable that will hold the response
 $responseArray = array();
 
 //Executing the multi query
-$query = "SELECT  * FROM  Summary_View_Bookings;";
+$query = "SELECT  * FROM  Summary_View_Bookings WHERE invoiceItemDeleted = false;";
  
 //Retrieving the records
 $res = mysqli_query($mysqli, $query, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
@@ -23,20 +23,20 @@ if ($res) {
     $responseArray[]=array( 'id'                      => intval($row[0]),
                             'invoiceId'               => intval($row[1]),
                             'invoiceType'             => $row[2],
-                            'locationName'            => $row[3],
-                            'occupancy'               => intval($row[4]),
-                            'locationMaxOccupancy'    => intval($row[5]),
-                            'lenght'                  => intval($row[6]),
-                            'instructor'              => boolval($row[7]),
-                            'startTime'               => strtotime($row[8]),
-                            'endTime'                 => strtotime($row[9]),
-                            'isDeleted'               => boolval($row[10]),
-                            'customerName'            => $row[11], 
-                            'customerEmail'           => $row[12],
-                            'phoneNumber'             => $row[13],
-                            'createdOn'               => strtotime($row[14]),
-                            'updatedOn'               => strtotime($row[15]),
-                            'parentInvoice'           => intval($row[16])
+                            'locationId'              => $row[3],
+                            'locationName'            => $row[4],
+                            'serviceId'               => $row[5],
+                            'serviceName'             => $row[6],
+                            'occupancy'               => intval($row[7]),
+                            'locationMaxOccupancy'    => intval($row[8]),
+                            'lenght'                  => intval($row[9]),
+                            'instructor'              => boolval($row[10]),
+                            'startTime'               => strtotime($row[11]),
+                            'endTime'                 => strtotime($row[12]),
+                            'isDeleted'               => boolval($row[13]),
+                            'customerName'            => $row[14], 
+                            'customerEmail'           => $row[15],
+                            'phoneNumber'             => $row[16]
                           );
   }
   $res->free_result();

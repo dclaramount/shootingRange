@@ -14,6 +14,7 @@ SELECT
     iItem.with_instructor  as 'instructor',
     iItem.start_time        as 'startTime',
     iItem.end_time          as  'endTime',
+    iItem.isDeleted         as  'invoiceItemDeleted',
     uInfo.name              as  'customerName',
     uInfo.email             as  'customerEmail',
     uInfo.phoneNumber       as  'customerPhoneNumber'
