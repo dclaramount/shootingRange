@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import InstructorsCalendar from './InstructorsCalendar';
 import SummaryBookingTable from './SummaryBookingsTable';
 import SummaryBookings from './SummaryBookings';
+import { BookingManagementSpace } from './BookingManagement/BookingManagementSpace';
 
 
 interface TabPanelProps {
@@ -41,7 +42,7 @@ function a11yProps(index: number) {
   };
 }
 
-export default function TabManagement() {
+export default function TabManagement({globalVariables} : any) {
   const [value, setValue]                     = React.useState(0);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -55,6 +56,7 @@ export default function TabManagement() {
           <Tab label="Instructors Calendar" {...a11yProps(1)} />
           <Tab label="Booking Management Table" {...a11yProps(2)} />
           <Tab label="Events" {...a11yProps(2)} />
+          <Tab label="New Management Dashboard" {...a11yProps(2)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
@@ -68,6 +70,9 @@ export default function TabManagement() {
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3}>
         PlaceHolder for Events.....
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={4}>
+        <BookingManagementSpace/>
       </CustomTabPanel>
     </Box>
   );

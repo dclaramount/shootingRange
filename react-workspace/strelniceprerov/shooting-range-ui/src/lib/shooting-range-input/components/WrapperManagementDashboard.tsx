@@ -54,6 +54,12 @@ export function WrapperManagementDashboard({gVariables} : any) {
   const [refreshManagementBoard, setRefreshManagementBoard]           = React.useState(0);
   const [allInvoices, setAllInvoices]                                 = React.useState([]);
   const [showingPage, setShowingPage]                                 = React.useState("LOADING");
+  //For the Management Dashboard
+  const [daysOfWeek, setDaysOfWeek]                                   = React.useState([]);
+  const [selectedWeek, setSelectedWeek]                               = React.useState([]); 
+  const [selectedService, setSelectedService]                         = React.useState(parseInt(gVariables.defaultLocation)); 
+  const [bookings,setBookings]                                        = React.useState([]); 
+  const [isoDaysOfWeek,setISODaysOfWeek]                              = React.useState([]);
   /*-------------------------------------------------------------------------------------------------------------*/
   /*                                                API CALLS                                                    */
   /*-------------------------------------------------------------------------------------------------------------*/
@@ -139,8 +145,13 @@ export function WrapperManagementDashboard({gVariables} : any) {
                                                         refreshManagementBoard, setRefreshManagementBoard,
                                                         showingPage,            setShowingPage,
                                                         summaryBookingSegments, setSummaryBookingSegments,
-                                                        allInvoices,            setAllInvoices
-
+                                                        allInvoices,            setAllInvoices,
+                                                        //For the management Dashboard
+                                                        daysOfWeek,             setDaysOfWeek,
+                                                        selectedWeek,           setSelectedWeek,
+                                                        selectedService,        setSelectedService,
+                                                        bookings,               setBookings,
+                                                        isoDaysOfWeek,          setISODaysOfWeek
                                                       }}>
           {(showingPage==="LOADING")    &&  <>LOADING....</>}
           {(showingPage==="DASHBOARD")  &&  <TabManagement/>}
