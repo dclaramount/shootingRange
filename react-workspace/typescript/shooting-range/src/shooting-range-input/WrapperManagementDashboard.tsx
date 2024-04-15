@@ -41,6 +41,21 @@ const reArrangeInstructorSegments = (instructorSegments: any) => {
   return(respArray);
 }
 
+const buildArrayOfBusinessHours = (startHour : any, endHour : any) => {
+  const Array = []
+  let countStartHour = parseInt(startHour);
+  while(countStartHour < parseInt(endHour)){
+    if(countStartHour < 10){
+      Array.push(`0${countStartHour}`);
+    }
+    else{
+      Array.push(`${countStartHour}`);
+    }
+    countStartHour=countStartHour+1;
+  }
+  return Array;
+}
+
 export function WrapperManagementDashboard({gVariables} : any) {
   const anyArray : any[] = [];
   /*-------------------------------------------------------------------------------------------------------------*/
@@ -61,6 +76,10 @@ export function WrapperManagementDashboard({gVariables} : any) {
   const [selectedService, setSelectedService]                         = React.useState(parseInt(gVariables.defaultLocation)); 
   const [bookings,setBookings]                                        = React.useState([]); 
   const [isoDaysOfWeek,setISODaysOfWeek]                              = React.useState([]);
+  const [timesToShow, setTimesToShow]                                 = React.useState(buildArrayOfBusinessHours(gVariables.startBusinessHours, gVariables.endBusinessHours)); 
+  const [selectedSegment, setSelectedSegment]                         = React.useState([]);
+
+
   /*-------------------------------------------------------------------------------------------------------------*/
   /*                                                API CALLS                                                    */
   /*-------------------------------------------------------------------------------------------------------------*/
@@ -148,7 +167,9 @@ export function WrapperManagementDashboard({gVariables} : any) {
                                                         selectedWeek,           setSelectedWeek,
                                                         selectedService,        setSelectedService,
                                                         bookings,               setBookings,
-                                                        isoDaysOfWeek,          setISODaysOfWeek
+                                                        isoDaysOfWeek,          setISODaysOfWeek,
+                                                        timesToShow,            setTimesToShow,
+                                                        selectedSegment,        setSelectedSegment
                                                       }}>
           {(showingPage==="LOADING")    &&  <>LOADING....</>}
           {(showingPage==="DASHBOARD")  &&  <TabManagement />}

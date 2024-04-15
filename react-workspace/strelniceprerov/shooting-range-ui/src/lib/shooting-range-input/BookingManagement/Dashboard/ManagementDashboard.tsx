@@ -1,6 +1,7 @@
 import React from 'react';
 import Popup from "reactjs-popup";
 import { WeekSelector } from './Components/WeekSelector';
+import { BookingsViewerWrapper } from './Components/BookingsViewer/BookingsViewerWrapper';
 /*-------------------------------------------------------------------------------------------------------------*/
 /*                                            HELPER FUNCTIONS                                                 */
 /*-------------------------------------------------------------------------------------------------------------*/
@@ -51,6 +52,7 @@ export function ManagementDashboard() {
   return(
     <div className="wrapperPopUp" style={{opacity:`${showPopUp ? '0.5' : '1'}`, pointerEvents:`${showPopUp ? 'none' : 'auto'}`}}>
       <WeekSelector/>
+      <BookingsViewerWrapper />
        <Popup open={showPopUp} onClose={closeModal} closeOnDocumentClick={false} >
         <div>PLACEHOLDER FOR POPUP</div>
        </Popup>
