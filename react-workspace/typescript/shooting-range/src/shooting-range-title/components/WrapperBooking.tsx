@@ -61,7 +61,6 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
   const [sendGridTemplateConfirmationId, setSendGridTemplateConfirmationId]                     = React.useState(gVariables.confirmationTemplateId);
   const [refreshEntirePlugin, setRefreshEntirePlugin]                                           = React.useState(false);
   const delayInMilliseconds = 5000; //1 second
-  console.log(`REFRESH ENTIRE PLUGIN => status ${showingPage}`)
   setTimeout(function() {
     setShowCalendar(true)
   }, delayInMilliseconds);
