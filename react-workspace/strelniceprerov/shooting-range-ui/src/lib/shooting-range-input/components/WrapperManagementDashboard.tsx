@@ -77,6 +77,9 @@ export function WrapperManagementDashboard({gVariables} : any) {
   const [isoDaysOfWeek,setISODaysOfWeek]                              = React.useState([]);
   const [timesToShow, setTimesToShow]                                 = React.useState(buildArrayOfBusinessHours(gVariables.startBusinessHours, gVariables.endBusinessHours)); 
   const [selectedSegment, setSelectedSegment]                         = React.useState([]);
+  const [locationList, setLocationList]                               = React.useState([]);
+  const [selectedLocation, setSelectedLocation]                       = React.useState(parseInt(gVariables.defaultLocation));
+  const [showUpPopUp, setShowUpPopUp]                                 = React.useState(false);
 
   /*-------------------------------------------------------------------------------------------------------------*/
   /*                                                API CALLS                                                    */
@@ -145,7 +148,20 @@ export function WrapperManagementDashboard({gVariables} : any) {
   })
     .catch((err) => { console.log(err) });
   },[refreshManagementBoard])
-  if(controlAPI.includes('ALL_INSTRUCTORS' && 'INSTRUCTOR_SEGMENTS' && 'INFO_INSTRUCTORS' && 'SUMMARY_BOOKINGS' && 'GET_ALL_INVOICES')){
+  React.useEffect(() =>{    
+    axios({
+      url: `${gVariables.apiRootURL}getListShootingRange.php`,
+      method: "GET",
+  }).then((res) => {
+    setLocationList(res.data)
+    const controlArray = controlAPI;
+    controlArray.push('SHOOTING_RANGE_LIST');
+    setControlAPI(controlArray);
+  }).catch((err) => { 
+    console.log(err) 
+  });
+  },[refreshManagementBoard])
+  if(controlAPI.includes('ALL_INSTRUCTORS' && 'INSTRUCTOR_SEGMENTS' && 'INFO_INSTRUCTORS' && 'SUMMARY_BOOKINGS' && 'GET_ALL_INVOICES'&& 'SHOOTING_RANGE_LIST')){
     setShowingPage('DASHBOARD');
     setControlAPI([]);
   }
@@ -170,7 +186,10 @@ export function WrapperManagementDashboard({gVariables} : any) {
                                                         bookings,               setBookings,
                                                         isoDaysOfWeek,          setISODaysOfWeek,
                                                         timesToShow,            setTimesToShow,
-                                                        selectedSegment,        setSelectedSegment
+                                                        selectedSegment,        setSelectedSegment,
+                                                        locationList,           setLocationList,
+                                                        selectedLocation,       setSelectedLocation,
+                                                        showUpPopUp,            setShowUpPopUp
                                                       }}>
           {(showingPage==="LOADING")    &&  <>LOADING....</>}
           {(showingPage==="DASHBOARD")  &&  <TabManagement/>}

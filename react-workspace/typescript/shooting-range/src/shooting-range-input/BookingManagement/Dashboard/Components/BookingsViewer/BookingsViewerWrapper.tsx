@@ -1,13 +1,15 @@
 import {BookCalendarTable} from './BookCalendarTable';
 import React from 'react';
-import { ManagementDashboardContext } from '../../../../Context/ManagementDashboardContext';
 import { DaysColumn } from './DaysColumn';
+import { FormWrapper } from './FormWrapper';
 
 export function BookingsViewerWrapper(){
-const {daysOfWeek, setDaysOfWeek} = React.useContext(ManagementDashboardContext);
  return (
-  <div className="reservation-cal">
-    <div className="reservation-cal-table">
+  <div className="reservation-cal" style={{marginLeft:'15%'}}>
+    <div style={{width:'100%', marginLeft:'auto', marginRight:'auto'}}>
+      <FormWrapper />
+    </div>
+    <div className="reservation-cal-table" style={{}}>
       <BookCalendarTable />
       <DaysColumn />
     </div>
