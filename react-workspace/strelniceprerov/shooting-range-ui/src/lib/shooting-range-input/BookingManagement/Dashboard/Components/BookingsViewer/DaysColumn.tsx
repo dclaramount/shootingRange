@@ -22,16 +22,8 @@ export function DaysColumn(){
           setSelectedSegment, 
           isoDaysOfWeek,           
           allInvoices,   
-          locationList,         
-          //selectedOccupancy,            
-          //setAvailableSegments,         
-          //setSelectedBookingDuration,   
-          //setNotAvailableSegments,
-          //defaultDuration,              
-          summaryBookingSegments, 
-          //selectedLocation, 
-          //sumInstBookingSegments, 
-          //shootingInstructor  
+          locationList,                   
+          selectedLocation 
         } 
           = React.useContext(ManagementDashboardContext);
 
@@ -92,7 +84,7 @@ const handlerClick = (e : any) => {
         {timesToShow.map((timeToShow : string) => {
         return(
         <div className={`reservation-cal-table-day-block ${selected(`${isoDaysOfWeek[idx+1]} ${timeToShow}:00`)}`} id={`${isoDaysOfWeek[idx+1]} ${timeToShow}:00`} onClick={(e) => handlerClick(e)}>
-          {bookedOccupancy(allInvoices, day, daysOfWeek, isoDaysOfWeek, `${timeToShow}:00`, 1, locationList)}
+          {bookedOccupancy(allInvoices, day, daysOfWeek, isoDaysOfWeek, `${timeToShow}:00`, parseInt(selectedLocation), locationList)}
         </div>)
       })}
     </div>)})}

@@ -2,6 +2,8 @@ import React from 'react';
 import Popup from "reactjs-popup";
 import { WeekSelector } from './Components/WeekSelector';
 import { BookingsViewerWrapper } from './Components/BookingsViewer/BookingsViewerWrapper';
+import { ManagementDashboardContext } from '../../Context/ManagementDashboardContext';
+import { ManagementPopUp } from './Components/BookingsViewer/ManagementPopUp';
 /*-------------------------------------------------------------------------------------------------------------*/
 /*                                            HELPER FUNCTIONS                                                 */
 /*-------------------------------------------------------------------------------------------------------------*/
@@ -39,22 +41,17 @@ const reArrangeInstructorSegments = (instructorSegments: any) => {
   return(respArray);
 }
 
-//TO IMPLEMENT CENTRALIZED API CALLS
 export function ManagementDashboard() {
-  const [showPopUp,   setShowPopUp]                                     = React.useState(false);
-
+  const {showUpPopUp, setShowUpPopUp} = React.useContext(ManagementDashboardContext);
   const closeModal = (e : any) => {
-    setShowPopUp(false);
+    setShowUpPopUp(false);
   }
-  /*-------------------------------------------------------------------------------------------------------------*/
-  /*                                                API CALLS                                                    */
-  /*-------------------------------------------------------------------------------------------------------------*/
   return(
-    <div className="wrapperPopUp" style={{opacity:`${showPopUp ? '0.5' : '1'}`, pointerEvents:`${showPopUp ? 'none' : 'auto'}`}}>
+    <div className="wrapperPopUp" style={{opacity:`${showUpPopUp ? '0.5' : '1'}`, pointerEvents:`${showUpPopUp ? 'none' : 'auto'}`}}>
       <WeekSelector/>
       <BookingsViewerWrapper/>
-       <Popup open={showPopUp} onClose={closeModal} closeOnDocumentClick={false} >
-        <div>PLACEHOLDER FOR POPUP</div>
+       <Popup open={showUpPopUp} onClose={closeModal} closeOnDocumentClick={false} >
+        <ManagementPopUp closeModalFunction={closeModal}/>
        </Popup>
     </div>
 )}

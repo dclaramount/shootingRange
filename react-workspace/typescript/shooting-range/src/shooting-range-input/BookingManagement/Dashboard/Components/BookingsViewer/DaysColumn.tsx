@@ -6,6 +6,7 @@ function bookedOccupancy(summaryBookings : any, day : any, daysOfWeek:any, isoDa
   const idx = daysOfWeek.indexOf(day) + 1; 
   const currentDayToAnalyze = new Date(`${isoDaysOfWeek[idx]} ${time}`);
   const formatedCurrentSegmentToAnalyze = format(currentDayToAnalyze, 'yyyy-MM-d HH:mm:ss');
+  console.log(summaryBookings);
   const bookingsForTheSegment = summaryBookings.filter((sb : any) => (format(new Date(sb.startTime * 1000), 'yyyy-MM-d HH:mm:ss')===formatedCurrentSegmentToAnalyze) && (parseInt(sb.serviceId)===parseInt(selectedServiceId)));
   var sum = 0;
   for (var i = 0; i < bookingsForTheSegment.length; i++) {
@@ -15,7 +16,7 @@ function bookedOccupancy(summaryBookings : any, day : any, daysOfWeek:any, isoDa
 }
 export function DaysColumn(){
 
-  const { //locationList, 
+  const { 
           timesToShow,                   
           daysOfWeek,                    
           selectedSegment,              
@@ -23,15 +24,7 @@ export function DaysColumn(){
           isoDaysOfWeek,
           allInvoices,   
           locationList,             
-          //selectedOccupancy,            
-          //setAvailableSegments,         
-          //setSelectedBookingDuration,   
-          //setNotAvailableSegments,
-          //defaultDuration,              
-          summaryBookingSegments, 
-          //selectedLocation, 
-          //sumInstBookingSegments, 
-          //shootingInstructor  
+          selectedLocation, 
         } 
           = React.useContext(ManagementDashboardContext);
 
@@ -65,15 +58,6 @@ export function DaysColumn(){
       }
     }
   } 
-/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-/*                                                  Function Display the Occupancy Accordingly                                                                                 */
-/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-
-/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-/*                                   Function that helps catalog a segment as available or unavailable (based on bookings done)                                                */
-/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-
-
   return(
     <>
       {daysOfWeek.map((day : string, idx : number) => { 
@@ -91,7 +75,7 @@ export function DaysColumn(){
         {timesToShow.map((timeToShow : string) => {
         return(
         <div className={`reservation-cal-table-day-block ${selected(`${isoDaysOfWeek[idx+1]} ${timeToShow}:00`)}`} id={`${isoDaysOfWeek[idx+1]} ${timeToShow}:00`} onClick={(e) => handlerClick(e)}>
-          {bookedOccupancy(allInvoices, day, daysOfWeek, isoDaysOfWeek, `${timeToShow}:00`, 1, locationList)}
+          {bookedOccupancy(allInvoices, day, daysOfWeek, isoDaysOfWeek, `${timeToShow}:00`, parseInt(selectedLocation), locationList)}
         </div>)
       })}
     </div>)})}
