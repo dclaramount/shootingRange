@@ -69,12 +69,13 @@ CREATE TABLE invoice
     invoice_type_id     SMALLINT UNSIGNED NOT NULL,
     parent_invoice      SMALLINT DEFAULT NULL,
     is_deleted          BOOLEAN NOT NULL DEFAULT FALSE,
+    comment             VARCHAR(150) DEFAULT NULL,
+    uuidInvoice         VARCHAR(250),
     userId              SMALLINT NOT NULL,
     created             DATETIME(6) NOT NULL DEFAULT NOW(),
     updated             DATETIME(6) NOT NULL DEFAULT NOW(),
     CONSTRAINT `fk_user` FOREIGN KEY (user_id) REFERENCES user(id),
     CONSTRAINT `fk_invoice_type` FOREIGN KEY (invoice_type_id) REFERENCES invoice_type(id)
-
 );
 
 CREATE TABLE invoice_item
