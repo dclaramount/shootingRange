@@ -172,7 +172,7 @@ export function WrapperManagementDashboard({gVariables} : any) {
   <div className="container">
     <div className="row">
       <div className="col-md-12">
-        <div className="reservation" style={{padding:'100px'}}>
+        <div className="reservation">
           <ManagementDashboardContext.Provider value={{
                                                         globalVariabes,         setGlobalVariables,
                                                         instructosListFromDB,   setInstructorsListFromDB,
