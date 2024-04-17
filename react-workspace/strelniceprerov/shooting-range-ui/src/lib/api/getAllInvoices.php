@@ -36,7 +36,9 @@ if ($res) {
                             'isDeleted'               => boolval($row[13]),
                             'customerName'            => $row[14], 
                             'customerEmail'           => $row[15],
-                            'phoneNumber'             => $row[16]
+                            'phoneNumber'             => $row[16],
+                            'uuid'                    => $row[17],
+                            'comment'                 => $row[18]
                           );
   }
   $res->free_result();

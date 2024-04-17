@@ -17,7 +17,9 @@ SELECT
     iItem.isDeleted         as  'invoiceItemDeleted',
     uInfo.name              as  'customerName',
     uInfo.email             as  'customerEmail',
-    uInfo.phoneNumber       as  'customerPhoneNumber'
+    uInfo.phoneNumber       as  'customerPhoneNumber',
+    inv.uuidInvoice         as  'uuidInvoice',
+    inv.comment             as  'comment'
 FROM invoice_item as iItem
     INNER JOIN `services` serv
                     ON iItem.location_id = serv.id
