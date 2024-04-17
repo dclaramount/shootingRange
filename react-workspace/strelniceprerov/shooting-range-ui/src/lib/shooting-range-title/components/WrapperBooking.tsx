@@ -36,6 +36,7 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
   const [name, setName]                                         = React.useState("");
   const [email, setEmail]                                       = React.useState("");
   const [phone, setPhone]                                       = React.useState("");
+  const [comment, setComment]                                   = React.useState("");
   const [showCalendar, setShowCalendar]                         = React.useState(false);
   const [availableSegments, setAvailableSegments]               = React.useState([]);
   const [notAvailableSegments, setNotAvailableSegments]         = React.useState([]);
@@ -100,7 +101,8 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
                                     sendGridKeyAPI,           setSendGridKeyAPI,
                                     sendGridFromEmail,        setSendGridFromEmail,
                                     sendGridTemplateConfirmationId, setSendGridTemplateConfirmationId,
-                                    refreshEntirePlugin, setRefreshEntirePlugin
+                                    refreshEntirePlugin,      setRefreshEntirePlugin,
+                                    comment,                  setComment
                                     }}>
   <div className="container">
     <div className="row">

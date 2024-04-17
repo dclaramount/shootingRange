@@ -3,6 +3,7 @@ import { BookingDateTime } from './Form/BookingDateTime';
 import { BookingEmail } from './Form/BookingEmail';
 import { BookingName } from './Form/BookingName';
 import { BookingPhoneNumber } from './Form/BookingPhoneNumber';
+import { CommentsField } from './Form/CommentsField';
 import { DurationOfBooking } from './Form/DurationOfBooking';
 import { Instructor } from './Form/Instructor';
 import { SelectedShootingRange } from './Form/SelectedShootingRange';
@@ -33,6 +34,7 @@ export function BookingFormWrapper() {
           <BookingName/>
           <BookingEmail/>
           <BookingPhoneNumber/>
+          <CommentsField/>
           <div className="reservation-order-row">
             <input type="submit" name="_submit" className="btn btn-primary" value="Odeslat rezervaci"/>
           </div>

@@ -58,7 +58,7 @@ export function WrapperBookingSection() {
           setName,                  setEmail,                     setPhone,                 
           setShootingPermitNumber,  setSelectedBookingDuration,   setRefreshEntirePlugin,   
           refreshEntirePlugin,      setSummaryBookingSegments,    setSumInstBookingSegments,
-          showPopUpBookingProcess,  setShowPopUpBookingProcess
+          showPopUpBookingProcess,  setShowPopUpBookingProcess,   setComment
         } = React.useContext(BookingContext);
   const closeModal  = (e : any) => {
     if(e==="BOOKING_COMPLETE"){
@@ -70,6 +70,7 @@ export function WrapperBookingSection() {
       setPhone("");
       setShootingPermitNumber("");
       setSelectedBookingDuration(1);
+      setComment("");
       setRefreshBookingEnv(refreshBookingEnv + 1);
       setRefreshEntirePlugin(!refreshEntirePlugin);
     }

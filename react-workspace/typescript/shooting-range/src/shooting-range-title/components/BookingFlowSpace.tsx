@@ -4,6 +4,7 @@ import { BookingConfPlaceHolder, CreatingBookingPlaceholder } from '../PlaceHold
 import axios from 'axios';
 import { BookingContext } from './Context/BookingContext';
 import { ReservationMade } from './ReservationMade';
+import { v4 } from "uuid";
 
 //This Renders the PopUp that will navigate the user throughout the booking confirmation process.
 export function BookingFlowSpace({closeModalFunction} : any) {
@@ -32,18 +33,16 @@ export function BookingFlowSpace({closeModalFunction} : any) {
     apiURL,
     sendGridKeyAPI,
     sendGridFromEmail,
-    sendGridTemplateConfirmationId
+    sendGridTemplateConfirmationId,
+    comment
 } = React.useContext(BookingContext);
 
   const [section, setSection]  =   React.useState("LOADING"); 
   const [response, setResponse]  =   React.useState([]); 
   const [userAccount, setUserAccount] = React.useState<UserEntry>({ID:0, id: "", name:"", email:"", phoneNumber:"", shootingPermit:"", updatedOn:new Date(), userId:""});
-
+  const [uniqueIdentifier, setUniqueIdentifier] = React.useState(v4())
   // Function to verify if the user data has changed and therefore if it needs to be updated on the DB.
   function hasUserDataChanged(entryUser: UserEntry){
-    console.log(`Is Name equal ${entryUser.name===name}`);
-    console.log(`Is Email equal ${entryUser.phoneNumber===phone}`);
-    console.log(`Is ShootingPermit equal ${(!shootingPermit || (entryUser.shootingPermit === shootingPermitNumber))}`);
     if(userAccount.ID===0 ){
       return false;
     }
@@ -113,7 +112,6 @@ export function BookingFlowSpace({closeModalFunction} : any) {
     else if(section==="VERIFY_DATA_USER"){
       console.log("Verifing User Data")
       if(hasUserDataChanged(userAccount)){
-        console.log("User entry must be updated")
         axios({
           url: `${apiURL}postUpdateUserEntry.php?id=${userAccount.id}&shootingPermit=${shootingPermit}&shootingPermitNumber=${shootingPermitNumber}&name=${name}&email=${email}&phone=${phone}`,
           method: "GET",
@@ -128,7 +126,6 @@ export function BookingFlowSpace({closeModalFunction} : any) {
           url: `${apiURL}postCreateNewUser.php?id=${userAccount.id}&shootingPermit=${shootingPermit}&shootingPermitNumber=${shootingPermitNumber}&name=${name}&email=${email}&phone=${phone}`,
           method: "GET",
         }).then((res) => {
-          console.log(res);
           if(res.data.length>0){
             setUserAccount(res.data[0]);
             setSection("PROCEED_TO_CREATE_RESERVATION");
@@ -143,10 +140,8 @@ export function BookingFlowSpace({closeModalFunction} : any) {
     }
     //4 Create Reservation.
     else if(section==="PROCEED_TO_CREATE_RESERVATION"){
-      console.log("ABOUT TO GO INTO CREATING THE BOOKING");
-      console.log(`The user Account Id is ${userAccount.id}`);
       axios({
-        url: `${apiURL}postCreateBooking.php?selectedLocationId=${selectedLocation}&selectedSegment=${selectedSegment}&selectedBookingDuration=${selectedBookingDuration}&selectedOccupancy=${selectedOccupancy}&shootingInstructor=${shootingInstructor}&userId=${userAccount.id}`,
+        url: `${apiURL}postCreateBooking.php?selectedLocationId=${selectedLocation}&selectedSegment=${selectedSegment}&selectedBookingDuration=${selectedBookingDuration}&selectedOccupancy=${selectedOccupancy}&shootingInstructor=${shootingInstructor}&userId=${userAccount.id}&comment=${comment}&uuidInvoice=${uniqueIdentifier}`,
         method: "GET",
       }).then((res) => {
         setResponse(res.data);
@@ -156,10 +151,11 @@ export function BookingFlowSpace({closeModalFunction} : any) {
     }
     //4 Send Email Confirmation Reservation.
     else if(section==="SEND_EMAIL"){
-      const selectedLocationName = locationList.find((location : any) => parseInt(location.id) === parseInt(selectedLocation)).name;
+      console.log(locationList);
+      const selectedLocationName = locationList.find((location : any) => parseInt(location.id) === parseInt(selectedLocation)).serviceName;
       //SendEmail(sendGridKeyAPI, email, sendGridFromEmail, sendGridTemplateConfirmationId);
       axios({
-        url: `${apiURL}postSendEmail.php?sendGridKey=${sendGridKeyAPI}&emailTo=${email}&emailFrom=${sendGridFromEmail}&templateId=${sendGridTemplateConfirmationId}&segmentBooked=${selectedSegment}&nameOnReservation=${name}&shootingRangeName=${selectedLocationName}&phoneNumber=+${phone}`,
+        url: `${apiURL}postSendEmail.php?sendGridKey=${sendGridKeyAPI}&emailTo=${email}&emailFrom=${sendGridFromEmail}&templateId=${sendGridTemplateConfirmationId}&segmentBooked=${selectedSegment}&nameOnReservation=${name}&shootingRangeName=${selectedLocationName}&phoneNumber=+${phone}&comment=${comment}&uuidInvoice=${uniqueIdentifier}`,
         method: "GET",
       }).then((res) => {
         setResponse(res.data);
