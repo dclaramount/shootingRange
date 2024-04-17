@@ -48,6 +48,16 @@ if (isset($_GET['phoneNumber']) && $_GET['phoneNumber']!="") {
 } else {
   $phoneNumber = "";
 }
+if (isset($_GET['uuidInvoice']) && $_GET['uuidInvoice']!="") {
+  $uuidInvoice = $_GET['uuidInvoice'];
+} else {
+  $uuidInvoice = "";
+}
+if (isset($_GET['comment']) && $_GET['comment']!="") {
+  $comment = $_GET['comment'];
+} else {
+  $comment = "";
+}
 /*------------------------------------------------------------------------------*/
 /*                   CURL REQUEST TO SEND EMAIL                                 */
 /*------------------------------------------------------------------------------*/
@@ -64,7 +74,7 @@ curl_setopt_array($curl, array(
                               \"personalizations\":   [\n         {\n      
                                   \"to\":             [\n         {\n           \"email\":      \"$emailTo\"\n        }\n       ],\n
                                   \"dynamic_template_data\":             {\n           
-                                        \"invoiceId\":                  \"$invoiceId\",\n
+                                        \"invoiceId\":                  \"$uuidInvoice\",\n
                                         \"name\":                       \"$nameOnReservation\",\n
                                         \"shootingRange\":              \"$shootingRangeName\",\n
                                         \"segmentBooked\":              \"$segmentBooked\",\n

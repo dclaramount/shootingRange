@@ -39,9 +39,19 @@ if (isset($_GET['userId']) && $_GET['userId']!="") {
 } else {
   $userId = "";
 }
+if (isset($_GET['uuidInvoice']) && $_GET['uuidInvoice']!="") {
+  $uuidInvoice = $_GET['uuidInvoice'];
+} else {
+  $uuidInvoice = "";
+}
+if (isset($_GET['comment']) && $_GET['comment']!="") {
+  $comment = $_GET['comment'];
+} else {
+  $comment = "";
+}
 
 $newUserId = $userId;
-$queryCreateInvoice = "INSERT INTO invoice (user_id, invoice_type_id, is_deleted, userId) VALUES ('$newUserId', 1 , false, 1);";
+$queryCreateInvoice = "INSERT INTO invoice (user_id, invoice_type_id, is_deleted, comment, uuidInvoice, userId) VALUES ('$newUserId', 1 , false, '$comment;', '$uuidInvoice',1);";
 $queryNewInvoice = "SELECT *  FROM invoice WHERE user_id='$newUserId' ORDER BY id DESC LIMIT 1;";
 $resCreateInvoice = mysqli_query($mysqli, $queryCreateInvoice, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
 if($resCreateInvoice){
