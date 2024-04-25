@@ -52,28 +52,28 @@ export default function TabManagement({globalVariables} : any) {
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Summary Table" {...a11yProps(0)} />
+          <Tab label="New Management Dashboard" {...a11yProps(0)} />
           <Tab label="Instructors Calendar" {...a11yProps(1)} />
-          <Tab label="Booking Management Table" {...a11yProps(2)} />
           <Tab label="Events" {...a11yProps(2)} />
-          <Tab label="New Management Dashboard" {...a11yProps(2)} />
+          {/*
+          <Tab label="Summary Table" {...a11yProps(0)} />
+          <Tab label="Booking Management Table" {...a11yProps(2)} /> */}
         </Tabs>
       </Box>
+      {/*<CustomTabPanel value={value} index={0}>
+        {/*<SummaryBookingTable/>
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={2}>
+        <SummaryBookings/>      
+      </CustomTabPanel>*/}
       <CustomTabPanel value={value} index={0}>
-        {/*<SummaryBookingTable/>*/}
-        PlaceHolder Summary Booking Table
+        <BookingManagementSpace/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <InstructorsCalendar/> 
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        <SummaryBookings/>
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={3}>
         PlaceHolder for Events.....
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={4}>
-        <BookingManagementSpace/>
       </CustomTabPanel>
     </Box>
   );

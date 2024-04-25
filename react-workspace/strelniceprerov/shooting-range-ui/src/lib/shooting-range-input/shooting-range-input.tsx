@@ -41,7 +41,6 @@ export function ShootingRangeInput(props: ShootingRangeInputProps) {
       <div className="col-md-12">
         <div className="reservation">
           {Object.keys(globalVariables).length > 0 ? <WrapperManagementDashboard gVariables={globalVariables}/> : "LOADING Management Dasboard..."}
-          <TabManagement/>
         </div>
       </div>
     </div>

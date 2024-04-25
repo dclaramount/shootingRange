@@ -14,15 +14,7 @@ const headerCellStyle: React.CSSProperties  = {
   fontSize:'13px', 
   fontStyle:'italic', 
   padding:'5px',
-  textAlign:'center' 
-}
-const tableCell: React.CSSProperties  = { 
-  border: "1px solid black", 
-  borderCollapse: "collapse", 
-  fontFamily:'sans-serif', 
-  fontSize:'12px',
-  padding:'5px', 
-  textAlign:'center'
+  textAlign:'center' ,
 }
 //This Renders the PopUp that will navigate the user throughout the booking confirmation process.
 export function ManagementPopUp({closeModalFunction} : any) {
@@ -53,8 +45,8 @@ export function ManagementPopUp({closeModalFunction} : any) {
         <table id="outputTable" style={tableStyle}> 
         <caption style={{captionSide:'top', marginBottom:'15px', marginLeft:'50%', fontSize:'20px', fontWeight:'bolder'}}>Summary</caption>
         <tr> 
-            <th style={headerCellStyle} >Invoice Id</th> 
-            <th style={headerCellStyle}>Invoice Type</th> 
+            {/*<th style={headerCellStyle} >Invoice Id</th> */}
+            {/*<th style={headerCellStyle}>Invoice Type</th> */}
             <th style={headerCellStyle}>Střelnice</th> 
             <th style={headerCellStyle}>Datum a čas</th> 
             <th style={headerCellStyle}>(h)</th>
