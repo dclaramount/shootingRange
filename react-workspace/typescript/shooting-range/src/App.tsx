@@ -48,7 +48,6 @@ function App() {
   function buildArrayOfBusinessHours(startHour : any, endHour : any){
     const Array = []
     let countStartHour = parseInt(startHour);
-    console.log(endHour);
     while(countStartHour < parseInt(endHour)){
       if(countStartHour < 10){
         Array.push(`0${countStartHour}`);
