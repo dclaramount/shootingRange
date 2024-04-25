@@ -76,6 +76,10 @@ export function EditRowTable({inv} : any) {
           fieldsOnError,              setFieldsOnError,
           allInvoices,                instructorSegments
         } = React.useContext(ManagementDashboardContext);
+  let arrayOfLenghts = [];
+  for(let i=1; i<parseInt(globalVariabes.maxOccupancy)+1;i++){
+    arrayOfLenghts.push(i);
+  }
   /*-------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
   /*                                                                      Editable DropDown                                                                                  */
   /*-------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -264,7 +268,7 @@ export function EditRowTable({inv} : any) {
             {/*<td style={tableCell}>{inv.invoiceType}</td> */}
             <td style={tableCell}><DropDownEditableCell name={`list_of_services`} value={newService} listOfValues={locationList} updateFunction={setNewService}/></td>
             <td style={tableCell}><TimeStampEditableCell value={newStartTime} originalValue={oldStartTime} updateFunction={setNewStartTime}/></td>
-            <td style={tableCell}><DropDownEditableCell name={`list_of_lengths`} updateFunction={setNewLength} value={newLength} listOfValues={Array.from(Array(parseInt(globalVariabes.maxOccupancy)+1).keys()).slice(1)}/></td>
+            <td style={tableCell}><DropDownEditableCell name={`list_of_lengths`} updateFunction={setNewLength} value={newLength} listOfValues={arrayOfLenghts}/></td>
             <td style={tableCell}>PlaceHolder</td>
             <td style={tableCell}><CheckBoxEditable id={'instructor_checkbox'} value={newWithInstructor} updateFunction={setNewWithInstructor}/></td>
             <td style={tableCell}><TextEditableCell id={'customer_name'} value={newName} updateFunction={setNewName}/></td>

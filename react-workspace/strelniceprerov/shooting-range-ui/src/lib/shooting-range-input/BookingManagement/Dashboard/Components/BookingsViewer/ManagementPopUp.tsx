@@ -56,6 +56,7 @@ export function ManagementPopUp({closeModalFunction} : any) {
             <th style={headerCellStyle}>E-mail</th> 
             <th style={headerCellStyle}>Telefon</th>
             <th style={headerCellStyle}>Comment</th>
+            <th style={headerCellStyle}>.</th>
             <th></th> 
         </tr>
         {filtered.map((invoiceInfo : any)=>{
