@@ -7,6 +7,7 @@ import 'devextreme/dist/css/dx.light.css';
 
 
 const DataGridWrapper = ({Data}: any) => {
+/*
   const emptyArray : string[] =[];
   const [events, setEvents] = useState(emptyArray);
   const logEvent = useCallback((eventName: string) => {
@@ -99,7 +100,8 @@ const DataGridWrapper = ({Data}: any) => {
         </ul>
       </div>
     </React.Fragment>
-  );
+  );*/
+  return(<>Diego PlaceHolder</>)
 };
 
 export default DataGridWrapper;

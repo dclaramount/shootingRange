@@ -9,6 +9,7 @@ import 'devextreme/dist/css/dx.light.css';
 const DataGridSummaryTable = ({Data}: any) => {
 
   return (
+    {/*}
     <DataGrid
       dataSource={dataSourceOptions}
       allowColumnReordering={true}
@@ -47,7 +48,8 @@ const DataGridSummaryTable = ({Data}: any) => {
 
       <Pager allowedPageSizes={pageSizes} showPageSizeSelector={true} />
       <Paging defaultPageSize={10} />
-    </DataGrid>  );
+  </DataGrid>  )*/}
+  )
 };
 
 export default DataGridSummaryTable;

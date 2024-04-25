@@ -60,7 +60,8 @@ export default function TabManagement({globalVariables} : any) {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <SummaryBookingTable/>
+        {/*<SummaryBookingTable/>*/}
+        PlaceHolder Summary Booking Table
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <InstructorsCalendar/> 

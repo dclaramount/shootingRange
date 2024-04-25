@@ -16,6 +16,7 @@ const DataGridSummaryTable = ({Data}: any) => {
   const pageSizes = [10, 25, 50, 100];
 
   return (
+    {/*
     <DataGrid
       dataSource={Data}
       allowColumnReordering={true}
@@ -37,7 +38,8 @@ const DataGridSummaryTable = ({Data}: any) => {
 
       <Pager allowedPageSizes={pageSizes} showPageSizeSelector={true} />
       <Paging defaultPageSize={10} />
-    </DataGrid>  );
+  </DataGrid>  )*/}
+  )
 };
 
 export default DataGridSummaryTable;
