@@ -155,10 +155,10 @@ export function WrapperBookingSection() {
       {(showingPage!=="POPUP_LENGTH" && showingPage!=="CONFIRMATION_PAGE") &&  <RenderHeader/>}
       {showingPage==="LOADING"          && <>LOADING BOOKING CALENDAR</>}
       {showingPage==="BOOKING_CALENDAR" && 
-      <>
+      <div className="Wrapper_Booking_Area" style={{width:'100%', marginLeft:'-125px'}}>
         <BookingCalendarWrappper/>
         <BookingFormWrapper />
-      </>}
+      </div>}
       {showingPage==="POPUP_LENGTH" &&  
       <div style={{margin:'auto', display: 'flex', flexDirection: 'column', border:'2px solid black', borderRadius:'5px', padding:'15px', maxWidth:'auto'}}>
         <WarningIcon style={{height:'72px', width:'72px', marginLeft:'auto', marginRight:'auto', marginTop:'10px', marginBottom:'10px'}} color='primary' />
