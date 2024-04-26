@@ -84,6 +84,8 @@ export function WrapperManagementDashboard({gVariables} : any) {
   const [showUpPopUpModification, setShowUpPopUpModification]         = React.useState(false);
   const [selectedBooking, setSelectedBooking]                         = React.useState([]);
   const [fieldsOnError, setFieldsOnError]                              = React.useState<string[]>([]);
+  const [modificationInfo, setModificationInfo]                        = React.useState({});
+
 
   /*-------------------------------------------------------------------------------------------------------------*/
   /*                                                API CALLS                                                    */
@@ -197,7 +199,8 @@ export function WrapperManagementDashboard({gVariables} : any) {
                                                         showUpPopUpCancelation, setShowUpPopUpCancelation,
                                                         showUpPopUpModification, setShowUpPopUpModification,
                                                         selectedBooking,          setSelectedBooking,
-                                                        fieldsOnError,             setFieldsOnError
+                                                        fieldsOnError,             setFieldsOnError,
+                                                        modificationInfo,       setModificationInfo
                                                       }}>
           {(showingPage==="LOADING")    &&  <>LOADING....</>}
           {(showingPage==="DASHBOARD")  &&  <TabManagement/>}

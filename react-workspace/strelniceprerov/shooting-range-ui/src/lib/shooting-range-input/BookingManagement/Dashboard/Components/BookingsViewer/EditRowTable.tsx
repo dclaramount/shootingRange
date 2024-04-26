@@ -55,6 +55,7 @@ export function EditRowTable({inv} : any) {
   const [oldWithInstructor, setOldWithInstructor] =   React.useState(inv.instructor)
   const [oldName, setOldName]                     =   React.useState(inv.customerName);
   const [oldEmail, setOldEmail]                   =   React.useState(inv.customerEmail);
+  const [oldPhoneNumber, setOldPhoneNumber]       =   React.useState(inv.phoneNumber);
   const [oldComments, setOldComments]             =   React.useState(inv.comment);
    //New Values
    const [newLocation, setNewLocation]             =   React.useState(inv.locationId);
@@ -74,7 +75,8 @@ export function EditRowTable({inv} : any) {
           setShowUpPopUpModification, selectedBooking, 
           setSelectedBooking,         globalVariabes,
           fieldsOnError,              setFieldsOnError,
-          allInvoices,                instructorSegments
+          allInvoices,                instructorSegments,
+          setModificationInfo
         } = React.useContext(ManagementDashboardContext);
   const arrayOfLenghts = [];
   for(let i=1; i<parseInt(globalVariabes.maxOccupancy)+1;i++){
@@ -187,7 +189,6 @@ export function EditRowTable({inv} : any) {
     }
     }
     React.useEffect(() =>{    
-      console.log('ONE CHECK');
       VerifyDate(tempValue);
     },[])
     return(
@@ -262,6 +263,38 @@ export function EditRowTable({inv} : any) {
       </>
     )
   }
+  const modifyReservationModal = () => {
+    const oldObject = {
+      uuid: inv.uuid,
+      location: oldLocation,
+      service: oldService,
+      startTime: oldStartTime,
+      length: oldLength, 
+      shootingPermit: oldShootingPermit,
+      withInstructor: oldWithInstructor,
+      name: oldName,
+      email: oldEmail,
+      phone: oldPhoneNumber
+    }
+    const newObject = {
+      uuid: inv.uuid,
+      location: newLocation,
+      service: newService,
+      startTime: newStartTime,
+      length: newLength, 
+      shootingPermit: newShootingPermit,
+      withInstructor: newWithInstructor,
+      name: newName,
+      email: newEmail,
+      phone: newPhoneNumber
+    }
+    const information = {
+      oldInfo: oldObject,
+      newInfo: newObject
+    }
+    setModificationInfo(information);
+    setShowUpPopUpModification(true);
+  }
   return(
           <tr id={inv.invoiceId}>
             {/*<td style={tableCell}><div style={edit ? tableCellEditable : EmptyStyle }>{inv.invoiceId}</div></td>*/}
@@ -278,7 +311,7 @@ export function EditRowTable({inv} : any) {
             <td style={iconsCell}>
               {!edit && <i style={iconStyle} className="fas fa-edit" onClick={() => setEdit(true)}></i>}
               {!edit && <i style={iconStyle} className="fa fa-trash" aria-hidden="true" onClick={()=>{setSelectedBooking(inv);setShowUpPopUpCancelation(true)}}></i>}
-              {edit && <i  style={iconStyle} className="fas fa-save"></i>}
+              {edit && <i  style={iconStyle} className="fas fa-save" onClick={()=>modifyReservationModal()}></i>}
               {edit && <i  style={iconStyle} className="fa fa-times" onClick={() => setEdit(false)} aria-hidden="true"></i>}
             </td>
           </tr>

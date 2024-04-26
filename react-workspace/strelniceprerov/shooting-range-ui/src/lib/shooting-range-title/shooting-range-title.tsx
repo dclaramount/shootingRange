@@ -74,7 +74,6 @@ export function ShootingRangeTitle(props: ShootingRangeTitleProps) {
   },[refreshData])*/
 
   function callBackClock(e:any){
-    console.log(e);
     //setRefreshData(e);
   }
   const delayInMilliseconds = 5000; //1 second
