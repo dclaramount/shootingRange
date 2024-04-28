@@ -6,6 +6,11 @@ import { TermsAndConditions } from './TermsAndConditions';
 
 
 export function ConfirmationPage( {setPage} : any) {
+  const { locationList,               selectedLocation,     selectedSegment,
+    selectedBookingDuration,    shootingPermitNumber, shootingInstructor,
+    name,                       email,                phone,
+    shootingPermit
+  }   =   React.useContext(BookingContext);
   const [open, setOpen] = React.useState(false);
   const [checked, setChecked] = React.useState(false);
   const fontText = 'Arial, Helvetica, sans-serif;'
@@ -13,14 +18,11 @@ export function ConfirmationPage( {setPage} : any) {
   const colorFont = 'dodgerblue'
   const fontWeight = 'bold'
 
-  const separation = '15px'
+  const separation = shootingPermit ? '15px' : '20px'
   const sizeOfIcons = 'fa-2x'
   const colorIcons = 'dodgerblue'
   const marginLeftText = '50px';
-  const { locationList,               selectedLocation,     selectedSegment,
-          selectedBookingDuration,    shootingPermitNumber, shootingInstructor,
-          name,                       email,                phone
-        }   =   React.useContext(BookingContext);
+
   const formatedDate = `${(new Date(selectedSegment[0])).toLocaleDateString('de-DE')} ${selectedSegment[0].split(' ')[1]}`;
   const formatedSelectedSegment = selectedSegment.length > 1 ? `${formatedDate}-${selectedSegment[selectedSegment.length-1].split(' ')[1]}` : formatedDate;
   return(
@@ -45,14 +47,14 @@ export function ConfirmationPage( {setPage} : any) {
         <span style={{color:colorIcons}}><i className={`fa fa-users ${sizeOfIcons}`} aria-hidden="true" ></i></span>
         <div style={{fontFamily:fontText, fontSize:fontSize, color:colorFont, fontWeight:fontWeight, marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}}>{selectedOccupancy} people</div>
       </div>*/}
-      <div style={{display:'flex',  marginTop:separation}}>
+      { shootingPermit && <div style={{display:'flex',  marginTop:separation}}>
         <span style={{color:colorIcons}}><i className={`fa fa-id-card ${sizeOfIcons}`} aria-hidden="true" ></i></span>
         <div style={{fontFamily:fontText, fontSize:fontSize, color:colorFont, fontWeight:fontWeight, marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}}>{shootingPermitNumber}</div>
-      </div>
-      <div style={{display:'flex', marginTop:separation}}>
+      </div>}
+      {(!shootingPermit || (shootingPermit && shootingInstructor)) && <div style={{display:'flex', marginTop:separation}}>
         <span style={{color:colorIcons}}><i className={`fa fa-graduation-cap ${sizeOfIcons}`} aria-hidden="true" ></i></span>
         <div style={{fontFamily:fontText, fontSize:fontSize, color:colorFont, fontWeight:fontWeight, marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}}>{shootingInstructor ? "With Instructor" : "Without Instructor"}</div>
-      </div>
+      </div>}
       <div style={{display:'flex', marginTop:separation}}>
         <span style={{color:colorIcons}}><i className={`fa fa-id-badge ${sizeOfIcons}`} aria-hidden="true" ></i></span>
         <div style={{fontFamily:fontText, fontSize:fontSize, color:colorFont, fontWeight:fontWeight, marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}}>{name}</div>

@@ -103,6 +103,7 @@ export function DaysColumn(){
           selectedLocation, 
           sumInstBookingSegments, 
           shootingInstructor,
+          refreshEntirePlugin,
           selectedWeek  } = React.useContext(BookingContext);
 
   const daysOftheWeek = ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle'];
@@ -207,7 +208,7 @@ export function DaysColumn(){
   })
   setAvailableSegments(available);
   setNotAvailableSegments(notAvailable);
-  },[selectedLocation, selectedWeek, shootingInstructor])
+  },[selectedLocation, selectedWeek, shootingInstructor, refreshEntirePlugin])
 
   return(
     <>
