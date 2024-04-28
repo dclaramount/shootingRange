@@ -6,7 +6,7 @@ function bookedOccupancy(summaryBookings : any, day : any, daysOfWeek:any, isoDa
   const idx = daysOfWeek.indexOf(day) + 1; 
   const currentDayToAnalyze = new Date(`${isoDaysOfWeek[idx]} ${time}`);
   const formatedCurrentSegmentToAnalyze = format(currentDayToAnalyze, 'yyyy-MM-d HH:mm:ss');
-  const bookingsForTheSegment = summaryBookings.filter((sb : any) => (format(new Date(sb.startTime * 1000), 'yyyy-MM-d HH:mm:ss')===formatedCurrentSegmentToAnalyze) && (parseInt(sb.serviceId)===parseInt(selectedServiceId)));
+  const bookingsForTheSegment = summaryBookings.length>0 ?  summaryBookings.filter((sb : any) => (format(new Date(sb.startTime * 1000), 'yyyy-MM-d HH:mm:ss')===formatedCurrentSegmentToAnalyze) && (parseInt(sb.serviceId)===parseInt(selectedServiceId))) : [];
   let sum = 0;
   for (let i = 0; i < bookingsForTheSegment.length; i++) {
     sum = sum + parseInt(bookingsForTheSegment[i].occupancy);
