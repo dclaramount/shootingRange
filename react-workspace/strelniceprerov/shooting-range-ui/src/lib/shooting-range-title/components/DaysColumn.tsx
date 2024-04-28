@@ -47,7 +47,7 @@ function isLocationBookedInDifferentService(summaryBookings : any, day : any, da
 function calculateOccupancy(summaryBookings : any, summaryBookingInstructor: any, shootingInstructorSelected : boolean, day : any, daysOfWeek:any, isoDaysOfWeek : any, time : any, selectedServiceId: any, selectedOccupancy:any, locationList:any){
   const idx = daysOfWeek.indexOf(day) + 1; 
   const currentDayToAnalyze = new Date(`${isoDaysOfWeek[idx]} ${time}`);
-  const formatedCurrentSegmentToAnalyze = format(currentDayToAnalyze, 'yyyy-MM-d HH:mm:ss');
+  const formatedCurrentSegmentToAnalyze = format(currentDayToAnalyze, 'yyyy-MM-dd HH:mm:ss');
   const filteredValue = shootingInstructorSelected ? summaryBookingInstructor.find((sum:any) => sum.segmentStarts.includes(formatedCurrentSegmentToAnalyze)) : 
     summaryBookings.find((sum:any) => sum.segmentStarts.includes(formatedCurrentSegmentToAnalyze) && parseInt(sum.serviceId)===parseInt(selectedServiceId));
   if (filteredValue){
@@ -71,7 +71,7 @@ function calculateOccupancy(summaryBookings : any, summaryBookingInstructor: any
 function getOccupancyStatus(summaryBookings : any, summaryBookingInstructor: any, shootingInstructorSelected : boolean, day : any, daysOfWeek:any, isoDaysOfWeek : any, time : any, selectedServiceId: any, selectedOccupancy:any){
   const idx = daysOfWeek.indexOf(day) + 1; 
   const currentDayToAnalyze = new Date(`${isoDaysOfWeek[idx]} ${time}`);
-  const formatedCurrentSegmentToAnalyze = format(currentDayToAnalyze, 'yyyy-MM-d HH:mm:ss');
+  const formatedCurrentSegmentToAnalyze = format(currentDayToAnalyze, 'yyyy-MM-dd HH:mm:ss');
   const filteredValue = shootingInstructorSelected ? summaryBookingInstructor.find((sum:any) => sum.segmentStarts.includes(formatedCurrentSegmentToAnalyze)) : 
     summaryBookings.find((sum:any) => sum.segmentStarts.includes(formatedCurrentSegmentToAnalyze) && parseInt(sum.serviceId)===parseInt(selectedServiceId));
   if (filteredValue){
@@ -102,7 +102,8 @@ export function DaysColumn(){
           summaryBookingSegments, 
           selectedLocation, 
           sumInstBookingSegments, 
-          shootingInstructor  } = React.useContext(BookingContext);
+          shootingInstructor,
+          selectedWeek  } = React.useContext(BookingContext);
 
   const daysOftheWeek = ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle'];
   function padWithLeadingZeros(num : any, totalLength: any) {
@@ -137,6 +138,9 @@ export function DaysColumn(){
       summaryBookingSegments.find((sum:any) => sum.segmentStarts.includes(timeSegment) && parseInt(sum.serviceId)===parseInt(selectedLocation));
     if(filteredValue){
       return (parseInt(filteredValue.occupancyBooked) < parseInt(filteredValue.maxOccupancy))
+    }
+    else if(typeof filteredValue === 'undefined' && shootingInstructor){
+      return false
     }
     else{
       return true;
@@ -193,7 +197,7 @@ export function DaysColumn(){
   daysOfWeek.map((day : any, idx : number)=>{
     timesToShow.map((time:any) => {
       const segmentToAnalyze = new Date(`${isoDaysOfWeek[idx+1]} ${time}:00`);
-      if(isTimeSegmentAvailable(format(segmentToAnalyze, 'yyyy-MM-d HH:mm:ss'))){
+      if(isTimeSegmentAvailable(format(segmentToAnalyze, 'yyyy-MM-dd HH:mm:ss'))){
         available.push(`${isoDaysOfWeek[idx+1]} ${time}:00`);
       }
       else{
@@ -201,10 +205,7 @@ export function DaysColumn(){
       }
     })
   })
-  console.log(notAvailable)
-  setAvailableSegments(available);
-  setNotAvailableSegments(notAvailable);
-  },[selectedOccupancy])
+  },[selectedLocation, selectedWeek, shootingInstructor])
 
   return(
     <>

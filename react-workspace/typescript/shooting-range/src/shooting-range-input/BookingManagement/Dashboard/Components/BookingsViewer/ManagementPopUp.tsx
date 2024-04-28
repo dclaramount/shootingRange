@@ -26,11 +26,36 @@ const tableCellSummary: React.CSSProperties  = {
 }
 //This Renders the PopUp that will navigate the user throughout the booking confirmation process.
 export function ManagementPopUp({closeModalFunction} : any) {
+  interface UserEntry {
+    ID: number;
+    id: string;
+    name: string;
+    email: string;
+    phoneNumber: string;
+    shootingPermit?: string;
+    updatedOn: Date;
+    userId: string;
+  }
 
-  const {selectedSegment, selectedLocation, allInvoices, showUpPopUpCancelation, setShowUpPopUpCancelation, showUpPopUpModification, setShowUpPopUpModification, selectedBooking, setSelectedBooking, globalVariabes, setRefreshManagementBoard, modificationInfo} = React.useContext(ManagementDashboardContext);
+  const {locationList, selectedSegment, selectedLocation, allInvoices, showUpPopUpCancelation, setShowUpPopUpCancelation, showUpPopUpModification, setShowUpPopUpModification, selectedBooking, setSelectedBooking, globalVariabes, setRefreshManagementBoard, modificationInfo} = React.useContext(ManagementDashboardContext);
   const filtered = allInvoices.filter((sb : any) => (format(new Date(sb.startTime * 1000), 'yyyy-MM-d HH:mm')===selectedSegment[0]) && (parseInt(sb.serviceId)===parseInt(selectedLocation)));
   const [deleteBooking, setDeleteBooking] = React.useState(0);
   const [newComment, setNewComment] = React.useState("");
+  const [section, setSection]  =   React.useState("LOADING"); 
+  const [userAccount, setUserAccount] = React.useState<UserEntry>({ID:0, id: "", name:"", email:"", phoneNumber:"", shootingPermit:"", updatedOn:new Date(), userId:""});
+  const [response, setResponse]  =   React.useState([]); 
+
+  function hasUserDataChanged(entryUser: UserEntry){
+    if(userAccount.ID===0 ){
+      return false;
+    }
+    else if(entryUser.name === modificationInfo.newInfo.name && entryUser.email === modificationInfo.newInfo.email && entryUser.phoneNumber === modificationInfo.newInfo.phone ){
+      return false;
+    }
+    else{
+      return true;
+    }
+  }
 
   /*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
   /*                                                                      Editable Text Field                                                                          */
@@ -39,12 +64,108 @@ export function ManagementPopUp({closeModalFunction} : any) {
     console.log("TO MODIFY");
     console.log(information);
     console.log(newComment);
+    setSection("GETTING_USER_BY_EMAIL");
   }
+  /*----------------------------------------------------------------------*/
+  /*          USE EFFECT FOR THE PROCESS OF MODIFY A BOOKING            */
+  /*----------------------------------------------------------------------*/
+  React.useEffect(() =>{  
+    //1 Step get the User Account by Email
+    if(section==="GETTING_USER_BY_EMAIL"){
+      console.log("Starting");
+      axios({
+        url: `${globalVariabes.apiRootURL}getUserRecordByEmail.php?userEmail=${modificationInfo.newInfo.email}`,
+        method: "GET",
+      }).then((res) => {
+        if(res.status===200){
+          const userData : UserEntry[] = res.data;
+          if(userData.length>0){
+            setUserAccount(userData[0]);
+            setSection("VERIFY_DATA_USER")
+          }
+          else{
+            setSection("GETTING_USER_BY_PHONE_NUMBER");
+          }
+        }
+        else{
+          setSection("ERROR_ON_API_CALL");
+        }
+      })
+    .catch((err) => { console.log(err); setSection("CREATING_RESERVATION_VERIFYING_USER") });
+    }
+    //1.1 Step get the User Account by PhoneNumber
+    else if(section==="GETTING_USER_BY_PHONE_NUMBER"){
+      axios({
+        url: `${globalVariabes.apiRootURL}getUserRecordByPhoneNumber.php?phoneNumber=${modificationInfo.newInfo.phone}`,
+        method: "GET",
+      }).then((res) => {
+        if(res.status===200){
+          const userData : UserEntry[] = res.data;
+          if(userData.length>0){
+            setUserAccount(userData[0]);
+            setSection("VERIFY_DATA_USER")
+          }
+          else{
+            setSection("VERIFY_DATA_USER");
+          }
+        }
+        else{
+          setSection("ERROR_ON_API_CALL");
+        }
+      })
+    .catch((err) => { console.log(err); setSection("CREATING_RESERVATION_VERIFYING_USER") });
+    }
+    //3 Verify User Entry.
+    else if(section==="VERIFY_DATA_USER"){
+      console.log("Verifing User Data")
+      if(hasUserDataChanged(userAccount)){
+        axios({
+          url: `${globalVariabes.apiRootURL}postUpdateUserEntry.php?id=${userAccount.id}&shootingPermit=${false}&shootingPermitNumber=${modificationInfo.newInfo.shootingPermit}&name=${modificationInfo.newInfo.name}&email=${modificationInfo.newInfo.email}&phone=${modificationInfo.newInfo.phone}`,
+          method: "GET",
+        }).then((res) => {
+          setSection("PROCEED_TO_CREATE_RESERVATION");
+        })
+      .catch((err) => { console.log(err) });
+      }
+      else{
+        setSection("PROCEED_TO_CREATE_RESERVATION");
+      }
+    }
+    //4 Create Reservation.
+    else if(section==="PROCEED_TO_CREATE_RESERVATION"){
+      const selectedServiceId = locationList.find((location : any) => location.serviceName === modificationInfo.newInfo.service).id;
+      console.log(`Selected Service Id ${selectedServiceId}`)
+      axios({
+        url: `${globalVariabes.apiRootURL}postCreateBooking.php?selectedLocationId=${selectedServiceId}&selectedSegment=${format(new Date(modificationInfo.newInfo.startTime * 1000), "yyyy-MM-d' 'HH:mm")}&selectedBookingDuration=${modificationInfo.newInfo.length}&selectedOccupancy=${1}&shootingInstructor=${modificationInfo.newInfo.withInstructor}&userId=${userAccount.id}&comment=${newComment}&uuidInvoice=${modificationInfo.newInfo.uuid}`,
+        method: "GET",
+      }).then((res) => {
+        setResponse(res.data);
+        setSection("SEND_EMAIL");
+      })
+    .catch((err) => { console.log(err) });
+    }
+    /*
+    //4 Send Email Confirmation Reservation.
+    else if(section==="SEND_EMAIL"){
+      console.log(locationList);
+      const selectedLocationName = locationList.find((location : any) => parseInt(location.id) === parseInt(selectedLocation)).serviceName;
+      //SendEmail(sendGridKeyAPI, email, sendGridFromEmail, sendGridTemplateConfirmationId);
+      axios({
+        url: `${globalVariabes.apiRootURL}postSendEmail.php?sendGridKey=${sendGridKeyAPI}&emailTo=${email}&emailFrom=${sendGridFromEmail}&templateId=${sendGridTemplateConfirmationId}&segmentBooked=${selectedSegment}&nameOnReservation=${name}&shootingRangeName=${selectedLocationName}&phoneNumber=+${phone}&comment=${comment}&uuidInvoice=${uniqueIdentifier}`,
+        method: "GET",
+      }).then((res) => {
+        setResponse(res.data);
+        setSection("RESERVATION_MADE");
+      })
+    .catch((err) => { console.log(err) });
+    }
+*/
+  },[section])
 
   const AreThereChanges = () => {
     const oldInfo = modificationInfo?.oldInfo;
     const newInfo = modificationInfo?.newInfo;
-    return (oldInfo === newInfo);
+    return (true);
   }
 
   const closeModal = (e : any) => {
@@ -101,6 +222,7 @@ export function ManagementPopUp({closeModalFunction} : any) {
               </div>    
       </Popup>
       <Popup open={showUpPopUpModification} onClose={closeModal} closeOnDocumentClick={false} >
+      {Object.keys(modificationInfo).length>0 ? 
               <div style={{backgroundColor:'white', padding:'25px', border:'2px solid black', borderRadius:'10px', width:'535px', height:'635'}}>
               <table id="outputTable" style={tableStyle}> 
                 <caption style={{captionSide:'top', marginBottom:'25px', marginLeft:'42%', fontSize:'20px', fontWeight:'bolder'}}>Summary</caption>
@@ -175,7 +297,8 @@ export function ManagementPopUp({closeModalFunction} : any) {
                 <button className="btn" onClick={()=>setShowUpPopUpModification(false)}>Cancel</button> 
               </div>
               </div>
-              </div>    
+              </div>    :
+              <>Diego</>}
       </Popup>
     </div>
 )}
