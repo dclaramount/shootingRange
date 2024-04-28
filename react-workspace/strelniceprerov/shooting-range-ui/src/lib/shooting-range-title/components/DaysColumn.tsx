@@ -28,7 +28,7 @@ function isLocationBookedInDifferentService(summaryBookings : any, day : any, da
   const idx = daysOfWeek.indexOf(day) + 1; 
   const instructor = shootingInstructorSelected ? 1 : 0;
   const currentDayToAnalyze = new Date(`${isoDaysOfWeek[idx]} ${time}`);
-  const formatedCurrentSegmentToAnalyze = format(currentDayToAnalyze, 'yyyy-MM-d HH:mm:ss');
+  const formatedCurrentSegmentToAnalyze = format(currentDayToAnalyze, 'yyyy-MM-dd HH:mm:ss');
   const locationOfSelectedService = locationList.find((ll:any) => parseInt(ll.id)===parseInt(selectedServiceId));
   const bookingsForTheSegment = summaryBookings.filter((sb : any) => sb.segmentStarts===formatedCurrentSegmentToAnalyze && parseInt(sb.locationId)===parseInt(locationOfSelectedService.locationId) && (parseInt(sb.instructoresBooked) >= instructor));
   if(bookingsForTheSegment.length===0){
