@@ -157,8 +157,10 @@ export function BookingFlowSpace({closeModalFunction} : any) {
     else if(section==="SEND_EMAIL"){
       const selectedLocationName = locationList.find((location : any) => parseInt(location.id) === parseInt(selectedLocation)).serviceName;
       //SendEmail(sendGridKeyAPI, email, sendGridFromEmail, sendGridTemplateConfirmationId);
+      const formatedDate = `${(new Date(selectedSegment[0])).toLocaleDateString('de-DE')} ${selectedSegment[0].split(' ')[1]}`;
+      const formatedSelectedSegment = selectedSegment.length > 1 ? `${formatedDate}-${selectedSegment[selectedSegment.length-1].split(' ')[1]}` : formatedDate;    
       axios({
-        url: `${apiURL}postSendEmail.php?sendGridKey=${sendGridKeyAPI}&emailTo=${email}&emailFrom=${sendGridFromEmail}&templateId=${sendGridTemplateConfirmationId}&segmentBooked=${selectedSegment}&nameOnReservation=${name}&shootingRangeName=${selectedLocationName}&phoneNumber=+${phone}&comment=${comment}&uuidInvoice=${uniqueIdentifier}`,
+        url: `${apiURL}postSendEmail.php?sendGridKey=${sendGridKeyAPI}&emailTo=${email}&emailFrom=${sendGridFromEmail}&templateId=${sendGridTemplateConfirmationId}&segmentBooked=${formatedSelectedSegment}&nameOnReservation=${name}&shootingRangeName=${selectedLocationName}&phoneNumber=+${phone}&comment=${comment}&uuidInvoice=${uniqueIdentifier}`,
         method: "GET",
       }).then((res) => {
         setResponse(res.data);
@@ -169,16 +171,21 @@ export function BookingFlowSpace({closeModalFunction} : any) {
   },[section])
 
   return(
-    <div>
-      {section==="LOADING" && <BookingConfPlaceHolder/>}
+    <div style={{width:'500px', height: '625px'}}>
+      {(  section==="LOADING" || 
+          section==="GETTING_USER_BY_EMAIL" || 
+          section==="GETTING_USER_BY_PHONE_NUMBER" || 
+          section==="VERIFY_DATA_USER" || 
+          section==="PROCEED_TO_CREATE_RESERVATION" || 
+          section === "SEND_EMAIL" 
+        ) &&<CreatingBookingPlaceholder/>}
       {section==="SUMMARY" && 
-      <div style={{backgroundColor:'white', maxWidth:'500px', paddingTop:'5px', paddingRight:'50px', paddingBottom:'50px', paddingLeft:'50px', border:'1px solid #e7e7e9', borderRadius:'15px', outline:'20px solid #fafafa'}}>
-        <a className="close" onClick={closeModalFunction} style={{marginRight:'10px', marginTop:'10px', width:'24px', height:'24px', cursor:'pointer'}}>
-            <i className="fa fa-times"></i>
-        </a>
+      <div style={{backgroundColor:'white', width:'100%', height:'100%', paddingTop:'5px', paddingRight:'15px', paddingLeft:'15px', paddingBottom:'15px', border:'2px solid black', borderRadius:'10px', outline:'10px solid transparent', display:'flex', flexDirection:'column'}}>
+        <div className="close" style={{marginLeft:'95%', marginRight:'auto', width:'24px', height:'24px', cursor:'pointer'}} onClick={closeModalFunction}>
+          <i className="fa fa-times"></i>
+        </div>
         <ConfirmationPage setPage={setSection}/>
       </div>}
-      {section==="GETTING_USER_BY_EMAIL" && <CreatingBookingPlaceholder/>}
       {section==="RESERVATION_MADE" && <ReservationMade closeModal={closeModalFunction}/>}
       {section==="ERROR_ON_API_CALL" && <>PLACEHOLDER FOR ERROR</>}
     </div>

@@ -21,6 +21,8 @@ export function ConfirmationPage( {setPage} : any) {
           selectedBookingDuration,  shootingPermitNumber,   shootingInstructor,
           name,                     email,                  phone
         }   =   React.useContext(BookingContext);
+  const formatedDate = `${(new Date(selectedSegment[0])).toLocaleDateString('de-DE')} ${selectedSegment[0].split(' ')[1]}`;
+  const formatedSelectedSegment = selectedSegment.length > 1 ? `${formatedDate}-${selectedSegment[selectedSegment.length-1].split(' ')[1]}` : formatedDate;
   return(
     <div className={"WrapperOfBooking"} style={{display:'flex', marginLeft:'auto', marginRight:'auto', marginTop:'15px'}}>
     <div style={{width:'100%', display:'flex', flexDirection:'column'}}>
@@ -32,7 +34,7 @@ export function ConfirmationPage( {setPage} : any) {
       </div>
       <div style={{display:'flex', marginTop:separation}}>
         <span style={{color:colorIcons}}><i className={`fa fa-calendar ${sizeOfIcons}`} aria-hidden="true" ></i></span>
-        <div style={{fontFamily:fontText, fontSize:fontSize, color:colorFont, fontWeight:fontWeight, marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}}>{selectedSegment}</div>
+        <div style={{fontFamily:fontText, fontSize:fontSize, color:colorFont, fontWeight:fontWeight, marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}}>{formatedSelectedSegment}</div>
       </div>
       <div style={{display:'flex' , marginTop:separation}}>
         <span style={{color:colorIcons}}><i className={`fa fa-clock ${sizeOfIcons}`} aria-hidden="true" ></i></span>
@@ -74,8 +76,8 @@ export function ConfirmationPage( {setPage} : any) {
         <TermsAndConditions closeModalFunction={setOpen}/>
       </Popup>
     </div>
-    {!checked && <button type="button" style={{ height:'35px', backgroundColor:'rgba(0, 0, 0, 0.12)', boxShadow:'none', color:'rgba(0, 0, 0, 0.26)', textAlign:'center' }} disabled={!checked}  onClick={()=>setPage("GETTING_USER_BY_EMAIL")}>CREATE BOOKING</button> }
-    {checked && <Button  variant="contained" color="success" disabled={!checked} onClick={()=>setPage("GETTING_USER_BY_EMAIL")}>Create Booking</Button> }
+    {!checked && <button type="button" style={{ height:'35px', backgroundColor:'rgba(0, 0, 0, 0.12)', border:'1px solid rgba(0, 0, 0, 0.26)', boxShadow:'none', color:'rgba(0, 0, 0, 0.26)', textAlign:'center' }} disabled={!checked}  onClick={()=>setPage("GETTING_USER_BY_EMAIL")}>Create Booking</button> }
+    {checked && <Button  variant="contained" color="success" style={{backgroundColor:'forestgreen', fontWeight:'bolder', color:'white', border:'1px solid forestgreen'}} disabled={!checked} onClick={()=>setPage("GETTING_USER_BY_EMAIL")}>Create Booking</Button> }
     </div>
     </div>
 )}
