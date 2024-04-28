@@ -3,9 +3,9 @@ import { BookingContext } from '../Context/BookingContext';
 
 export function DurationOfBooking(){
   const { selectedBookingDuration,  setSelectedBookingDuration, 
-          selectedSegment,          setShowingPage, setSelectedSegment, 
-          notAvailableSegments}                                           = React.useContext(BookingContext);
-
+          selectedSegment,          setSelectedSegment, 
+          notAvailableSegments, setShowWarningChooseAnotherSegment
+        } = React.useContext(BookingContext);
   /*--------------Handler for Reduction of Length of Reservation----------------*/
   const onReduceSegmentDuration = (e : any) => {
     if(selectedBookingDuration>1 && selectedSegment.length>0){
@@ -30,9 +30,10 @@ export function DurationOfBooking(){
 
       const newBaseDate = `${date.getFullYear()}-${month}-${day} ${date.getHours()}:00`
       const newToCheckDate = `${date.getFullYear()}-${month}-${day} ${date.getHours()+(parseInt(selectedBookingDuration))}:00`
-
+      console.log(`NOT AVAILABLE SEGMENTS ARE`);
+      console.log(notAvailableSegments);
       if(notAvailableSegments.includes(newToCheckDate)){
-        setShowingPage("POPUP_LENGTH");
+        setShowWarningChooseAnotherSegment(true);
       }
       else{
         setSelectedBookingDuration(parseInt(selectedBookingDuration)+1);

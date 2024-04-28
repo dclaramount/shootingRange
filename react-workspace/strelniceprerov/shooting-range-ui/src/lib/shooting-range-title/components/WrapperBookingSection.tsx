@@ -58,7 +58,8 @@ export function WrapperBookingSection() {
           setName,                  setEmail,                     setPhone,                 
           setShootingPermitNumber,  setSelectedBookingDuration,   setRefreshEntirePlugin,   
           refreshEntirePlugin,      setSummaryBookingSegments,    setSumInstBookingSegments,
-          showPopUpBookingProcess,  setShowPopUpBookingProcess,   setComment
+          showPopUpBookingProcess,  setShowPopUpBookingProcess,   setComment,
+          showWarningChooseAnotherSegment, setShowWarningChooseAnotherSegment
         } = React.useContext(BookingContext);
   const closeModal  = (e : any) => {
     if(e==="BOOKING_COMPLETE"){
@@ -76,6 +77,9 @@ export function WrapperBookingSection() {
     }
     else{
     setShowPopUpBookingProcess(false);}
+  }
+  const closeModalWarning = () => {
+    setShowWarningChooseAnotherSegment(false);
   }
   /*-------------------------------------------------------------------------------------------------------------*/
   /*                                                API CALLS                                                    */
@@ -151,7 +155,7 @@ export function WrapperBookingSection() {
   }
   return(
     <>
-    <div className="Wrapup-bookingflow-wrapper" style={{opacity:`${showPopUpBookingProcess ? '0.5' : '1'}`, pointerEvents:`${showPopUpBookingProcess ? 'none' : 'auto'}`}}>
+    <div className="wrapperPopUp" style={{opacity:`${(showPopUpBookingProcess || showWarningChooseAnotherSegment) ? '0.5' : '1'}`, pointerEvents:`${showPopUpBookingProcess ? 'none' : 'auto'}`}}>
       {(showingPage!=="POPUP_LENGTH" && showingPage!=="CONFIRMATION_PAGE") &&  <RenderHeader/>}
       {showingPage==="LOADING"          && <>LOADING BOOKING CALENDAR</>}
       {showingPage==="BOOKING_CALENDAR" && 
@@ -159,19 +163,18 @@ export function WrapperBookingSection() {
         <BookingCalendarWrappper/>
         <BookingFormWrapper />
       </div>}
-      {showingPage==="POPUP_LENGTH" &&  
-      <div style={{margin:'auto', display: 'flex', flexDirection: 'column', border:'2px solid black', borderRadius:'5px', padding:'15px', maxWidth:'auto'}}>
-        <WarningIcon style={{height:'72px', width:'72px', marginLeft:'auto', marginRight:'auto', marginTop:'10px', marginBottom:'10px'}} color='primary' />
-        <Typography sx={{ p: 2 }}>Vybral/a jste čas, který přesahuje do rezervace, která je plná. Prosíme o vybránní nového času nebo zkrácení doby rezervace.</Typography>
-        <Button onClick={()=>setShowingPage("BOOKING_CALENDAR")} variant='contained'>
-          CLOSE
-        </Button>
-      </div>
-       }
     </div>
-       {<Popup open={showPopUpBookingProcess} onClose={closeModal} closeOnDocumentClick={false} >
+      <Popup open={showPopUpBookingProcess} onClose={closeModal} closeOnDocumentClick={false} >
         <BookingFlowSpace closeModalFunction={closeModal}/>
-      </Popup>}
-       {/*showingPage==="CONFIRMATION_PAGE" && <ConfirmationPage/>*/}
+      </Popup>
+      <Popup open={showWarningChooseAnotherSegment} onClose={closeModalWarning} closeOnDocumentClick={false} >
+        <div style={{backgroundColor:'white', width:'500px', height:'250px', paddingTop:'5px', paddingRight:'15px', paddingLeft:'15px', paddingBottom:'15px', border:'2px solid black', borderRadius:'10px', outline:'10px solid transparent', display:'flex', flexDirection:'column'}}>
+          <WarningIcon style={{height:'72px', width:'72px', marginLeft:'auto', marginRight:'auto', marginTop:'10px', marginBottom:'10px', color:'orange'}}/>
+            <Typography sx={{ p: 2 }} style={{ fontWeight:'bold', color:'black', textAlign:'center'}}>Vybral/a jste čas, který přesahuje do rezervace, která je plná. Prosíme o vybránní nového času nebo zkrácení doby rezervace.</Typography>
+            <Button onClick={()=>setShowWarningChooseAnotherSegment(false)} variant='contained' style={{backgroundColor:'orange', fontWeight:'bolder', color:'white', width:'auto'}}>
+              Close
+            </Button>
+        </div>
+      </Popup>
     </>
 )}

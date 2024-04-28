@@ -205,6 +205,8 @@ export function DaysColumn(){
       }
     })
   })
+  setAvailableSegments(available);
+  setNotAvailableSegments(notAvailable);
   },[selectedLocation, selectedWeek, shootingInstructor])
 
   return(
