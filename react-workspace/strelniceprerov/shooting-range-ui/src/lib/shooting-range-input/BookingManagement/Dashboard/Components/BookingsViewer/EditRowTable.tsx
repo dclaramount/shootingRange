@@ -125,8 +125,8 @@ export function EditRowTable({inv} : any) {
   const TimeStampEditableCell = ({id, value, originalValue, updateFunction} : any) => {
     const errorMessageGeneral = "You must select a rounded hour.";
     const errorSegmentNotAvailable = "Segment Conditions not met."
-    const oldStartTimeValue = format(new Date(originalValue * 1000), "yyyy-MM-d'T'HH:mm");
-    const [tempValue, setTempValue] = React.useState(format(new Date(value * 1000), "yyyy-MM-d'T'HH:mm"));
+    const oldStartTimeValue = format(new Date(originalValue * 1000), "yyyy-MM-dd'T'HH:mm");
+    const [tempValue, setTempValue] = React.useState(format(new Date(value * 1000), "yyyy-MM-dd'T'HH:mm"));
     const [showErrorGeneral, setShowErrorGeneral] = React.useState(false);
     const [showError, setShowError] = React.useState(false);
 
@@ -142,25 +142,24 @@ export function EditRowTable({inv} : any) {
       //Loop with every start hour
         for (let i = 0; i < parseInt(newLength); i++) {
           const relevantLocation = locationList.find((li:any) => li.serviceName===newService);
-          const basedStartTime = format(new Date(Date.parse(date)).getTime(), "yyyy-MM-d'T'HH:mm")
-          const selectedStartTime = format(new Date(Date.parse(date)).getTime() + (i*60*60*1000), 'd.MM.yyyy HH:mm:ss');
-          const selectedStartTimeInstructorFormat = format(new Date(Date.parse(date)).getTime() + (i*60*60*1000), 'yyyy-MM-d HH:mm:ss');
+          const basedStartTime = format(new Date(Date.parse(date)).getTime(), "yyyy-MM-dd'T'HH:mm")
+          const selectedStartTime = format(new Date(Date.parse(date)).getTime() + (i*60*60*1000), 'dd.MM.yyyy HH:mm:ss');
+          const selectedStartTimeInstructorFormat = format(new Date(Date.parse(date)).getTime() + (i*60*60*1000), 'yyyy-MM-dd HH:mm:ss');
           const fInvoicesByLocationId = allInvoices.filter((ai:any) => 
                 parseInt(ai.locationId)===parseInt(relevantLocation.locationId) && 
                 (newWithInstructor === ai.instructor) &&
-                (selectedStartTime===format(new Date(ai.startTime * 1000), 'd.MM.yyyy HH:mm:ss'))
+                (selectedStartTime===format(new Date(ai.startTime * 1000), 'dd.MM.yyyy HH:mm:ss'))
               );
           const fInvoicesByLocationIdDiffService = allInvoices.filter((ai:any) => 
           parseInt(ai.locationId)===parseInt(relevantLocation.locationId) && 
           (newWithInstructor === ai.instructor) &&
-          (selectedStartTime===format(new Date(ai.startTime * 1000), 'd.MM.yyyy HH:mm:ss')) &&
+          (selectedStartTime===format(new Date(ai.startTime * 1000), 'dd.MM.yyyy HH:mm:ss')) &&
           (ai.serviceName !== newService)
               );
           const fSegmentsInstructors = instructorSegments.filter((is : any) => 
             is.startTime === selectedStartTimeInstructorFormat
           );
           const sumOfCapacityInstructors = fSegmentsInstructors.length;
-          console.log(instructorSegments);
           //Get Capacity for the given start time segment
           let summOfBookedCapacity = 0;
           fInvoicesByLocationId.forEach((inv : any) => summOfBookedCapacity=summOfBookedCapacity+ parseInt(inv.occupancy))
@@ -206,7 +205,7 @@ export function EditRowTable({inv} : any) {
           {showError && <div style={ErrorMessageStyle}>{errorSegmentNotAvailable}</div>}
       </div> :
       <div>
-        {format(new Date(value * 1000), 'd.MM.yyyy HH:mm:ss')}
+        {format(new Date(value * 1000), 'dd.MM.yyyy HH:mm:ss')}
       </div>
       }
       </>
@@ -259,7 +258,7 @@ export function EditRowTable({inv} : any) {
     }
     return(
       <>
-        {edit ? <div><input type="text" id={id} name={id} style={editableCell} value={`${tempValue}`} onBlur={()=> verifyTextFieldConditions()} onChange={(e)=> setTempValue(e.target.value)}/>{showError && <div style={ErrorMessageStyle}>{errorMessage}</div>}</div>:<div>+{value}</div>}
+        {edit ? <div><input type="text" id={id} name={id} style={editableCell} value={`${tempValue}`} onBlur={()=> verifyTextFieldConditions()} onChange={(e)=> setTempValue(e.target.value)}/>{showError && <div style={ErrorMessageStyle}>{errorMessage}</div>}</div>:<div>{value}</div>}
       </>
     )
   }

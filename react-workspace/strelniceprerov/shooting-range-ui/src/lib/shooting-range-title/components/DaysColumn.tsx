@@ -13,7 +13,7 @@ const EMPTY_OCCUPANCY = '';
 /*                                         Function to check if the current day being examined is in the past                                                                  */
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 function isDayInThePast(day : any, daysOfWeek: any, isoDaysOfWeek: any){
-  const idx = daysOfWeek.indexOf(day) + 1; 
+  const idx = daysOfWeek.indexOf(day); 
   if(idx > 0){
     const currentDayToAnalyze = new Date(isoDaysOfWeek[idx]);
     const today = new Date();
@@ -25,7 +25,7 @@ function isDayInThePast(day : any, daysOfWeek: any, isoDaysOfWeek: any){
 /*      Function to check if the location of the service selected (for the given segment) is already occupied for the segment in question (E.g. Streliste B and C)             */
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 function isLocationBookedInDifferentService(summaryBookings : any, day : any, daysOfWeek:any, isoDaysOfWeek : any, time : any, selectedServiceId: any, locationList:any, shootingInstructorSelected : boolean){
-  const idx = daysOfWeek.indexOf(day) + 1; 
+  const idx = daysOfWeek.indexOf(day); 
   const instructor = shootingInstructorSelected ? 1 : 0;
   const currentDayToAnalyze = new Date(`${isoDaysOfWeek[idx]} ${time}`);
   const formatedCurrentSegmentToAnalyze = format(currentDayToAnalyze, 'yyyy-MM-dd HH:mm:ss');
@@ -45,7 +45,7 @@ function isLocationBookedInDifferentService(summaryBookings : any, day : any, da
 /*                              Based on Occupancy (for the given service) determine if is Occupied, Partly Occupied or Available                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 function calculateOccupancy(summaryBookings : any, summaryBookingInstructor: any, shootingInstructorSelected : boolean, day : any, daysOfWeek:any, isoDaysOfWeek : any, time : any, selectedServiceId: any, selectedOccupancy:any, locationList:any){
-  const idx = daysOfWeek.indexOf(day) + 1; 
+  const idx = daysOfWeek.indexOf(day); 
   const currentDayToAnalyze = new Date(`${isoDaysOfWeek[idx]} ${time}`);
   const formatedCurrentSegmentToAnalyze = format(currentDayToAnalyze, 'yyyy-MM-dd HH:mm:ss');
   const filteredValue = shootingInstructorSelected ? summaryBookingInstructor.find((sum:any) => sum.segmentStarts.includes(formatedCurrentSegmentToAnalyze)) : 
@@ -69,7 +69,7 @@ function calculateOccupancy(summaryBookings : any, summaryBookingInstructor: any
 /*                              Based on Occupancy (for the given service) determine if is Occupied, Partly Occupied or Available                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 function getOccupancyStatus(summaryBookings : any, summaryBookingInstructor: any, shootingInstructorSelected : boolean, day : any, daysOfWeek:any, isoDaysOfWeek : any, time : any, selectedServiceId: any, selectedOccupancy:any){
-  const idx = daysOfWeek.indexOf(day) + 1; 
+  const idx = daysOfWeek.indexOf(day); 
   const currentDayToAnalyze = new Date(`${isoDaysOfWeek[idx]} ${time}`);
   const formatedCurrentSegmentToAnalyze = format(currentDayToAnalyze, 'yyyy-MM-dd HH:mm:ss');
   const filteredValue = shootingInstructorSelected ? summaryBookingInstructor.find((sum:any) => sum.segmentStarts.includes(formatedCurrentSegmentToAnalyze)) : 
@@ -197,12 +197,12 @@ export function DaysColumn(){
   const notAvailable : any[] = []
   daysOfWeek.map((day : any, idx : number)=>{
     timesToShow.map((time:any) => {
-      const segmentToAnalyze = new Date(`${isoDaysOfWeek[idx+1]} ${time}:00`);
+      const segmentToAnalyze = new Date(`${isoDaysOfWeek[idx]} ${time}:00`);
       if(isTimeSegmentAvailable(format(segmentToAnalyze, 'yyyy-MM-dd HH:mm:ss'))){
-        available.push(`${isoDaysOfWeek[idx+1]} ${time}:00`);
+        available.push(`${isoDaysOfWeek[idx]} ${time}:00`);
       }
       else{
-        notAvailable.push(`${isoDaysOfWeek[idx+1]} ${time}:00`);
+        notAvailable.push(`${isoDaysOfWeek[idx]} ${time}:00`);
       }
     })
   })
@@ -226,7 +226,7 @@ export function DaysColumn(){
         </div>
         {timesToShow.map((timeToShow : string) => {
         return(
-        <div className={`reservation-cal-table-day-block ${status(day,timeToShow)} ${selected(`${isoDaysOfWeek[idx+1]} ${timeToShow}:00`)}`} id={`${isoDaysOfWeek[idx+1]} ${timeToShow}:00`} onClick={(e) => handlerClick(e)}>
+        <div className={`reservation-cal-table-day-block ${status(day,timeToShow)} ${selected(`${isoDaysOfWeek[idx]} ${timeToShow}:00`)}`} id={`${isoDaysOfWeek[idx]} ${timeToShow}:00`} onClick={(e) => handlerClick(e)}>
           {getOccupancy(day,timeToShow)}
         </div>)
       })}

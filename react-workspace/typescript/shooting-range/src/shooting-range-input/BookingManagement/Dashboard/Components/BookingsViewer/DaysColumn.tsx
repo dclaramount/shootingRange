@@ -3,10 +3,10 @@ import {format } from 'date-fns';
 import { ManagementDashboardContext } from '../../../../Context/ManagementDashboardContext';
 
 function bookedOccupancy(summaryBookings : any, day : any, daysOfWeek:any, isoDaysOfWeek : any, time : any, selectedServiceId: any, locationList:any){
-  const idx = daysOfWeek.indexOf(day) + 1; 
+  const idx = daysOfWeek.indexOf(day); 
   const currentDayToAnalyze = new Date(`${isoDaysOfWeek[idx]} ${time}`);
-  const formatedCurrentSegmentToAnalyze = format(currentDayToAnalyze, 'yyyy-MM-d HH:mm:ss');
-  const bookingsForTheSegment = summaryBookings.length>0 ? summaryBookings.filter((sb : any) => (format(new Date(sb.startTime * 1000), 'yyyy-MM-d HH:mm:ss')===formatedCurrentSegmentToAnalyze) && (parseInt(sb.serviceId)===parseInt(selectedServiceId))) : [];
+  const formatedCurrentSegmentToAnalyze = format(currentDayToAnalyze, 'yyyy-MM-dd HH:mm:ss');
+  const bookingsForTheSegment = summaryBookings.length>0 ? summaryBookings.filter((sb : any) => (format(new Date(sb.startTime * 1000), 'yyyy-MM-dd HH:mm:ss')===formatedCurrentSegmentToAnalyze) && (parseInt(sb.serviceId)===parseInt(selectedServiceId))) : [];
   var sum = 0;
   for (var i = 0; i < bookingsForTheSegment.length; i++) {
     sum = sum + parseInt(bookingsForTheSegment[i].occupancy);
@@ -73,7 +73,7 @@ export function DaysColumn(){
         </div>
         {timesToShow.map((timeToShow : string) => {
         return(
-        <div className={`reservation-cal-table-day-block ${selected(`${isoDaysOfWeek[idx+1]} ${timeToShow}:00`)}`} id={`${isoDaysOfWeek[idx+1]} ${timeToShow}:00`} onClick={(e) => handlerClick(e)}>
+        <div className={`reservation-cal-table-day-block ${selected(`${isoDaysOfWeek[idx]} ${timeToShow}:00`)}`} id={`${isoDaysOfWeek[idx]} ${timeToShow}:00`} onClick={(e) => handlerClick(e)}>
           {bookedOccupancy(allInvoices, day, daysOfWeek, isoDaysOfWeek, `${timeToShow}:00`, parseInt(selectedLocation), locationList)}
         </div>)
       })}
