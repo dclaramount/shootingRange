@@ -103,7 +103,7 @@ export function WrapperManagementDashboard({gVariables} : any) {
     setControlAPI(controlArray);
   })
     .catch((err) => { console.log(err) });
-  },[refreshManagementBoard])
+  },[refreshManagementBoard,selectedLocation])
   React.useEffect(() =>{    
     axios({
       url: `${gVariables.apiRootURL}getAllInstructorSegments.php`,
@@ -115,7 +115,7 @@ export function WrapperManagementDashboard({gVariables} : any) {
     setControlAPI(controlArray);
   })
     .catch((err) => { console.log(err) });
-  },[refreshManagementBoard])
+  },[refreshManagementBoard, selectedLocation])
   React.useEffect(() =>{    
     axios({
       url: `${gVariables.apiRootURL}getInfoInstructors.php`,
@@ -127,7 +127,7 @@ export function WrapperManagementDashboard({gVariables} : any) {
     setControlAPI(controlArray);
   })
     .catch((err) => { console.log(err) });
-  },[refreshManagementBoard])
+  },[refreshManagementBoard, selectedLocation])
   React.useEffect(() =>{    
     axios({
       url: `${gVariables.apiRootURL}getSummaryBookings.php`,
@@ -139,8 +139,9 @@ export function WrapperManagementDashboard({gVariables} : any) {
     setControlAPI(controlArray);
   })
     .catch((err) => { console.log(err) });
-  },[refreshManagementBoard])
+  },[refreshManagementBoard, selectedLocation])
   React.useEffect(() =>{    
+    console.log("REQUEST AGAIN ALL INVOICES....")
     axios({
       url: `${gVariables.apiRootURL}getAllInvoices.php`,
       method: "GET",
@@ -151,7 +152,7 @@ export function WrapperManagementDashboard({gVariables} : any) {
     setControlAPI(controlArray);
   })
     .catch((err) => { console.log(err) });
-  },[refreshManagementBoard])
+  },[refreshManagementBoard, selectedLocation])
   React.useEffect(() =>{    
     axios({
       url: `${gVariables.apiRootURL}getListShootingRange.php`,
@@ -164,7 +165,7 @@ export function WrapperManagementDashboard({gVariables} : any) {
   }).catch((err) => { 
     console.log(err) 
   });
-  },[refreshManagementBoard])
+  },[refreshManagementBoard, selectedLocation])
   if(controlAPI.includes('ALL_INSTRUCTORS' && 'INSTRUCTOR_SEGMENTS' && 'INFO_INSTRUCTORS' && 'SUMMARY_BOOKINGS' && 'GET_ALL_INVOICES' && 'SHOOTING_RANGE_LIST')){
     setShowingPage('DASHBOARD');
     setControlAPI([]);

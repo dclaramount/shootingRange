@@ -6,10 +6,10 @@ function bookedOccupancy(summaryBookings : any, day : any, daysOfWeek:any, isoDa
   const idx = daysOfWeek.indexOf(day); 
   const currentDayToAnalyze = new Date(`${isoDaysOfWeek[idx]} ${time}`);
   const formatedCurrentSegmentToAnalyze = format(currentDayToAnalyze, 'yyyy-MM-dd HH:mm:ss');
-  const bookingsForTheSegment = summaryBookings.length>0 ? summaryBookings.filter((sb : any) => (format(new Date(sb.startTime * 1000), 'yyyy-MM-dd HH:mm:ss')===formatedCurrentSegmentToAnalyze) && (parseInt(sb.serviceId)===parseInt(selectedServiceId))) : [];
+  const bookingsForTheSegment = summaryBookings.length>0 ? summaryBookings.filter((sb : any) => (sb.segmentStarts===formatedCurrentSegmentToAnalyze) && (parseInt(sb.serviceId)===parseInt(selectedServiceId))) : [];
   var sum = 0;
   for (var i = 0; i < bookingsForTheSegment.length; i++) {
-    sum = sum + parseInt(bookingsForTheSegment[i].occupancy);
+    sum = sum + parseInt(bookingsForTheSegment[i].occupancyBooked);
   }
   return bookingsForTheSegment.length>0 ? sum : ''
 }
@@ -21,7 +21,8 @@ export function DaysColumn(){
           selectedSegment,              
           setSelectedSegment, 
           isoDaysOfWeek,
-          allInvoices,   
+          allInvoices,  
+          summaryBookingSegments, 
           locationList,             
           selectedLocation, 
         } 
@@ -74,7 +75,7 @@ export function DaysColumn(){
         {timesToShow.map((timeToShow : string) => {
         return(
         <div className={`reservation-cal-table-day-block ${selected(`${isoDaysOfWeek[idx]} ${timeToShow}:00`)}`} id={`${isoDaysOfWeek[idx]} ${timeToShow}:00`} onClick={(e) => handlerClick(e)}>
-          {bookedOccupancy(allInvoices, day, daysOfWeek, isoDaysOfWeek, `${timeToShow}:00`, parseInt(selectedLocation), locationList)}
+          {bookedOccupancy(summaryBookingSegments, day, daysOfWeek, isoDaysOfWeek, `${timeToShow}:00`, parseInt(selectedLocation), locationList)}
         </div>)
       })}
     </div>)})}
