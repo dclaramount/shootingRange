@@ -50,7 +50,6 @@ function calculateOccupancy(summaryBookings : any, summaryBookingInstructor: any
   const formatedCurrentSegmentToAnalyze = format(currentDayToAnalyze, 'yyyy-MM-dd HH:mm:ss');
   const filteredValue = shootingInstructorSelected ? summaryBookingInstructor.find((sum:any) => sum.segmentStarts.includes(formatedCurrentSegmentToAnalyze)) : 
     summaryBookings.find((sum:any) => sum.segmentStarts.includes(formatedCurrentSegmentToAnalyze) && parseInt(sum.serviceId)===parseInt(selectedServiceId));
-  console.log(filteredValue);
   if (filteredValue){
     return `${filteredValue.occupancyBooked}/${filteredValue.maxOccupancy}`;
   }
@@ -208,7 +207,6 @@ export function DaysColumn(){
   setAvailableSegments(available);
   setNotAvailableSegments(notAvailable);
   },[selectedLocation, selectedWeek, shootingInstructor,refreshEntirePlugin])
-  console.log(daysOfWeek);
   return(
     <>
       {daysOfWeek.map((day : string, idx : number) => { 
@@ -224,7 +222,6 @@ export function DaysColumn(){
           </strong>
         </div>
         {timesToShow.map((timeToShow : string) => {
-          console.log(`${isoDaysOfWeek[idx]} ${timeToShow}:00`);
         return(
         <div className={`reservation-cal-table-day-block ${status(day,timeToShow)} ${selected(`${isoDaysOfWeek[idx]} ${timeToShow}:00`)}`} id={`${isoDaysOfWeek[idx]} ${timeToShow}:00`} onClick={(e) => handlerClick(e)}>
           {getOccupancy(day,timeToShow)}
