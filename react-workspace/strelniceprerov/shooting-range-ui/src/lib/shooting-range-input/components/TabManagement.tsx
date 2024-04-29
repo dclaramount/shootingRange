@@ -4,8 +4,6 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import InstructorsCalendar from './InstructorsCalendar';
-import SummaryBookingTable from './SummaryBookingTable';
-import SummaryBookings from './SummaryBookings';
 import { BookingManagementSpace } from '../BookingManagement/BookingManagementSpace';
 
 
