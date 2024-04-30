@@ -4,6 +4,8 @@ import {format } from 'date-fns';
 import { EditRowTable } from './EditRowTable';
 import Popup from "reactjs-popup";
 import axios from 'axios';
+import { de } from 'date-fns/locale';
+
 
 const tableStyle : React.CSSProperties = { border: "1px solid black", borderCollapse: "collapse", borderRadius:'10px', marginTop:'15px', marginBottom:'15px'};
 const headerCellStyle: React.CSSProperties  = { 
@@ -38,8 +40,7 @@ export function ManagementPopUp({closeModalFunction} : any) {
   }
 
   const {locationList, selectedSegment, selectedLocation, allInvoices, showUpPopUpCancelation, setShowUpPopUpCancelation, showUpPopUpModification, setShowUpPopUpModification, selectedBooking, setSelectedBooking, globalVariabes, setRefreshManagementBoard, modificationInfo} = React.useContext(ManagementDashboardContext);
-  const filtered = allInvoices.filter((sb : any) => (format(new Date(sb.startTime * 1000), 'yyyy-MM-dd HH:mm')===selectedSegment[0]) && (parseInt(sb.serviceId)===parseInt(selectedLocation)));
-
+  const filtered = allInvoices.filter((sb : any) => ((new Date(sb.startTime * 1000)).toLocaleString('sv-SE', { timeZone: 'CET'}).includes(selectedSegment[0]) && (parseInt(sb.serviceId)===parseInt(selectedLocation))));
   const [deleteBooking, setDeleteBooking] = React.useState(0);
   const [newComment, setNewComment] = React.useState("");
   const [section, setSection]  =   React.useState("LOADING"); 
