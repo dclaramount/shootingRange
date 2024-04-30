@@ -40,7 +40,9 @@ function App() {
       sendGridEncryptedKey: res.data.find((variable : any) => variable.name==="SendGrid_Key_Encrypted").value,
       decryptionKey:        res.data.find((variable : any) => variable.name==="Decryption_Key").value,
       emailFrom:        res.data.find((variable : any) => variable.name==="Email_From").value,
-      confirmationTemplateId:        res.data.find((variable : any) => variable.name==="Confirmation_email_template").value
+      confirmationTemplateId:        res.data.find((variable : any) => variable.name==="Confirmation_email_template").value,
+      changeEmailTemplateId:         res.data.find((variable : any) => variable.name==="Change_email_template").value,
+      deleteEmailTemplate:           res.data.find((variable : any) => variable.name==="Cancelation_email_template").value
     }))
   })
     .catch((err) => { console.log(err) });

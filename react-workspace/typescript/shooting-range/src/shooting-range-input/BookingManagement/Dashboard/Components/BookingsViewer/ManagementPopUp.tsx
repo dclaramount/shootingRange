@@ -39,7 +39,7 @@ export function ManagementPopUp({closeModalFunction} : any) {
     userId: string;
   }
 
-  const {locationList, selectedSegment, selectedLocation, allInvoices, showUpPopUpCancelation, setShowUpPopUpCancelation, showUpPopUpModification, setShowUpPopUpModification, selectedBooking, setSelectedBooking, globalVariabes, setRefreshManagementBoard, modificationInfo} = React.useContext(ManagementDashboardContext);
+  const {locationList, selectedSegment, selectedLocation, allInvoices, showUpPopUpCancelation, setShowUpPopUpCancelation, showUpPopUpModification, setShowUpPopUpModification, selectedBooking, setSelectedBooking, globalVariabes, setRefreshManagementBoard, modificationInfo, sendGridKeyAPI, sendGridFromEmail} = React.useContext(ManagementDashboardContext);
   const filtered = allInvoices.filter((sb : any) => ((new Date(sb.startTime * 1000)).toLocaleString('sv-SE', { timeZone: 'CET'}).includes(selectedSegment[0]) && (parseInt(sb.serviceId)===parseInt(selectedLocation))));
   const [deleteBooking, setDeleteBooking] = React.useState(0);
   const [newComment, setNewComment] = React.useState("");
@@ -66,13 +66,28 @@ export function ManagementPopUp({closeModalFunction} : any) {
     console.log("TO MODIFY");
     console.log(information);
     console.log(newComment);
-    setSection("GETTING_USER_BY_EMAIL");
+    setSection("DELETE_OLD_RESERVATION");
   }
   /*----------------------------------------------------------------------*/
   /*          USE EFFECT FOR THE PROCESS OF MODIFY A BOOKING            */
   /*----------------------------------------------------------------------*/
   React.useEffect(() =>{  
-    //1 Step get the User Account by Email
+    //1 Step delete the previous reservation
+    if(section==="DELETE_OLD_RESERVATION"){
+      axios({
+        url: `${globalVariabes.apiRootURL}postDeleteBooking.php?uuidInvoice=${modificationInfo.newInfo.uuid}`,
+        method: "GET",
+    }).then((res) => {
+      console.log("DELETED");
+      console.log(res);
+      setSelectedBooking([]);
+      setRefreshManagementBoard(Math.random());
+      setSection("GETTING_USER_BY_EMAIL")
+
+    })
+      .catch((err) => { console.log(err); setSection("GETTING_USER_BY_EMAIL") });
+    }
+    //2nd Step get the User Account by Email
     if(section==="GETTING_USER_BY_EMAIL"){
       console.log("Starting");
       axios({
@@ -146,22 +161,21 @@ export function ManagementPopUp({closeModalFunction} : any) {
       })
     .catch((err) => { console.log(err) });
     }
-    /*
     //4 Send Email Confirmation Reservation.
     else if(section==="SEND_EMAIL"){
-      console.log(locationList);
-      const selectedLocationName = locationList.find((location : any) => parseInt(location.id) === parseInt(selectedLocation)).serviceName;
-      //SendEmail(sendGridKeyAPI, email, sendGridFromEmail, sendGridTemplateConfirmationId);
+      const formatedDate = `${(new Date(selectedSegment[0])).toLocaleDateString('de-DE')} ${selectedSegment[0].split(' ')[1]}`;
+      const formatedSelectedSegment = selectedSegment.length > 1 ? `${formatedDate}-${selectedSegment[selectedSegment.length-1].split(' ')[1]}` : formatedDate;    
       axios({
-        url: `${globalVariabes.apiRootURL}postSendEmail.php?sendGridKey=${sendGridKeyAPI}&emailTo=${email}&emailFrom=${sendGridFromEmail}&templateId=${sendGridTemplateConfirmationId}&segmentBooked=${selectedSegment}&nameOnReservation=${name}&shootingRangeName=${selectedLocationName}&phoneNumber=+${phone}&comment=${comment}&uuidInvoice=${uniqueIdentifier}`,
+        url: `${globalVariabes.apiRootURL}postSendChangeEmail.php?sendGridKey=${sendGridKeyAPI}&emailTo=${modificationInfo.newInfo.email}&emailFrom=${globalVariabes.emailFrom}&templateId=${globalVariabes.changeEmailTemplateId}&segmentBooked=${formatedSelectedSegment}&nameOnReservation=${modificationInfo.newInfo.name}&shootingRangeName=${modificationInfo.newInfo.service}&phoneNumber=+${modificationInfo.newInfo.phone}&comment=${newComment}&uuidInvoice=${modificationInfo.newInfo.uuid}`,
         method: "GET",
       }).then((res) => {
         setResponse(res.data);
         setSection("RESERVATION_MADE");
       })
     .catch((err) => { console.log(err) });
+    setShowUpPopUpModification(false);    
+    closeModalFunction();
     }
-*/
   },[section])
 
   const AreThereChanges = () => {
@@ -224,7 +238,7 @@ export function ManagementPopUp({closeModalFunction} : any) {
               </div>    
       </Popup>
       <Popup open={showUpPopUpModification} onClose={closeModal} closeOnDocumentClick={false} >
-      {Object.keys(modificationInfo).length>0 ? 
+      {(Object.keys(modificationInfo).length>0) ? 
               <div style={{backgroundColor:'white', padding:'25px', border:'2px solid black', borderRadius:'10px', width:'535px', height:'635'}}>
               <table id="outputTable" style={tableStyle}> 
                 <caption style={{captionSide:'top', marginBottom:'25px', marginLeft:'42%', fontSize:'20px', fontWeight:'bolder'}}>Summary</caption>

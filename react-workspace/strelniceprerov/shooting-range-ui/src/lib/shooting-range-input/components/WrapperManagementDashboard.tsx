@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { ManagementDashboardContext } from './Context/ManagementDashboardContext';
 import TabManagement from './TabManagement';
+import * as CryptoJS from "crypto-js"; 
 
 /*-------------------------------------------------------------------------------------------------------------*/
 /*                                            HELPER FUNCTIONS                                                 */
@@ -57,6 +58,10 @@ const buildArrayOfBusinessHours = (startHour : any, endHour : any) => {
 
 export function WrapperManagementDashboard({gVariables} : any) {
   const anyArray : any[] = [];
+  console.log("CHECK POINT");
+  console.log(gVariables);
+  const sendGridKey  = CryptoJS.AES.decrypt(gVariables.sendGridEncryptedKey, gVariables.decryptionKey).toString(CryptoJS.enc.Utf8);
+  console.log(sendGridKey);
   /*-------------------------------------------------------------------------------------------------------------*/
   /*                                     HOOKS IN CONTEXT PROVIDER                                               */
   /*-------------------------------------------------------------------------------------------------------------*/
@@ -85,6 +90,8 @@ export function WrapperManagementDashboard({gVariables} : any) {
   const [selectedBooking, setSelectedBooking]                         = React.useState([]);
   const [fieldsOnError, setFieldsOnError]                              = React.useState<string[]>([]);
   const [modificationInfo, setModificationInfo]                        = React.useState({});
+  const [sendGridKeyAPI, setSendGridKeyAPI]                           = React.useState(sendGridKey);
+
 
 
   /*-------------------------------------------------------------------------------------------------------------*/
@@ -200,7 +207,8 @@ export function WrapperManagementDashboard({gVariables} : any) {
                                                         showUpPopUpModification, setShowUpPopUpModification,
                                                         selectedBooking,          setSelectedBooking,
                                                         fieldsOnError,             setFieldsOnError,
-                                                        modificationInfo,       setModificationInfo
+                                                        modificationInfo,       setModificationInfo,
+                                                        sendGridKeyAPI, setSendGridKeyAPI
                                                       }}>
           {(showingPage==="LOADING")    &&  <>LOADING....</>}
           {(showingPage==="DASHBOARD")  &&  <TabManagement/>}

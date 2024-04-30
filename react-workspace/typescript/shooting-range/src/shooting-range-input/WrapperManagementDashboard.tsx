@@ -59,6 +59,13 @@ const buildArrayOfBusinessHours = (startHour : any, endHour : any) => {
 
 export function WrapperManagementDashboard({gVariables} : any) {
   const anyArray : any[] = [];
+  var CryptoJS = require("crypto-js"); 
+  /*
+  const testEncryptKey = CryptoJS.AES.encrypt(`PLACEHOLDER`, `test-key`);
+  console.log(`encrypted value`);
+  console.log(testEncryptKey.toString());*/
+  var sendGridKey  = CryptoJS.AES.decrypt(gVariables.sendGridEncryptedKey, gVariables.decryptionKey).toString(CryptoJS.enc.Utf8);
+
   /*-------------------------------------------------------------------------------------------------------------*/
   /*                                     HOOKS IN CONTEXT PROVIDER                                               */
   /*-------------------------------------------------------------------------------------------------------------*/
@@ -87,6 +94,7 @@ export function WrapperManagementDashboard({gVariables} : any) {
   const [selectedBooking, setSelectedBooking]                         = React.useState([]);
   const [fieldsOnError, setFieldsOnError]                              = React.useState<string[]>([]);
   const [modificationInfo, setModificationInfo]                        = React.useState({});
+  const [sendGridKeyAPI, setSendGridKeyAPI]                           = React.useState(sendGridKey);
 
 
   /*-------------------------------------------------------------------------------------------------------------*/
@@ -199,7 +207,8 @@ export function WrapperManagementDashboard({gVariables} : any) {
                                                         showUpPopUpModification, setShowUpPopUpModification,
                                                         selectedBooking,          setSelectedBooking,
                                                         fieldsOnError,             setFieldsOnError,
-                                                        modificationInfo,       setModificationInfo
+                                                        modificationInfo,       setModificationInfo,
+                                                        sendGridKeyAPI,         setSendGridKeyAPI
                                                       }}>
           {(showingPage==="LOADING")    &&  <>LOADING....</>}
           {(showingPage==="DASHBOARD")  &&  <TabManagement />}
