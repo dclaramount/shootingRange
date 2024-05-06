@@ -9,7 +9,8 @@ export function SelectedShootingRange(){
     <div className="reservation-order-row" style={{marginTop:'20px'}}>
       <div className="select-box">
         <label htmlFor="select-location-dropdown-menu">Střelnice</label>
-        <select onChange={(e) => setSelectedLocation(e.target.value)} name="service" id="select-location-dropdown-menu" defaultValue={1}>
+        <select onChange={(e) => setSelectedLocation(e.target.value)} name="service" id="select-location-dropdown-menu" defaultValue={""}>
+          <option value="" selected disabled hidden>Vyberte Střelnice</option>
           {locationList.map((location : any) => {
             return(
               <option value={location.id}>{location.serviceName}</option>

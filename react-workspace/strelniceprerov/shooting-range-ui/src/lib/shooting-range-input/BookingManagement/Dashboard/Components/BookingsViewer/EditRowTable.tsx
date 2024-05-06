@@ -3,6 +3,7 @@ import {format } from 'date-fns';
 import { ManagementDashboardContext } from '../../../../components/Context/ManagementDashboardContext';
 
 const wrapperDropDown : React.CSSProperties = {
+  marginTop:'5px',
   display:'flex'
 }
 const editableCell : React.CSSProperties = {
@@ -10,7 +11,19 @@ const editableCell : React.CSSProperties = {
   borderRadius:'5px',
   height: '20px',
   width: '-webkit-fill-available',
-  padding: '2px'
+  padding: '2px',
+  fontSize: '11px',
+  appearance: 'none',
+  background: 'url(data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0Ljk1IDEwIj48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6I2ZmZjt9LmNscy0ye2ZpbGw6IzQ0NDt9PC9zdHlsZT48L2RlZnM+PHRpdGxlPmFycm93czwvdGl0bGU+PHJlY3QgY2xhc3M9ImNscy0xIiB3aWR0aD0iNC45NSIgaGVpZ2h0PSIxMCIvPjxwb2x5Z29uIGNsYXNzPSJjbHMtMiIgcG9pbnRzPSIxLjQxIDQuNjcgMi40OCAzLjE4IDMuNTQgNC42NyAxLjQxIDQuNjciLz48cG9seWdvbiBjbGFzcz0iY2xzLTIiIHBvaW50cz0iMy41NCA1LjMzIDIuNDggNi44MiAxLjQxIDUuMzMgMy41NCA1LjMzIi8+PC9zdmc+) no-repeat 95% 50%'
+}
+const editableCellText : React.CSSProperties = {
+  border:'1px solid black',
+  borderRadius:'5px',
+  height: '20px',
+  width: '-webkit-fill-available',
+  padding: '2px',
+  fontSize: '11px',
+  appearance: 'none',
 }
 
 const tableCell: React.CSSProperties  = { 
@@ -79,7 +92,7 @@ export function EditRowTable({inv} : any) {
           setModificationInfo
         } = React.useContext(ManagementDashboardContext);
   const arrayOfLenghts = [];
-  for(let i=1; i<parseInt(globalVariabes.maxOccupancy)+1;i++){
+  for(let i=1; i<parseInt(globalVariabes.maxLengthBooking)+1;i++){
       arrayOfLenghts.push(i);
   }
   /*-------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -112,7 +125,7 @@ export function EditRowTable({inv} : any) {
             {list.map((ll : any) => {return(<option selected={tempValue.id===ll.id} id={ll.id} value={ll.id}>{ll.serviceName}</option>)})}
           </select>
       </div> :
-      <div>
+      <div style={{marginTop:'5px'}}>
         {value}
       </div>
       }
@@ -193,7 +206,7 @@ export function EditRowTable({inv} : any) {
     return(
       <>
       {edit ? 
-      <div >
+      <div style={{marginTop:'5px'}}>
         <input id={id}  value={tempValue}
           min="2018-06-07T00:00"
           style={editableCell} 
@@ -204,7 +217,7 @@ export function EditRowTable({inv} : any) {
           {showErrorGeneral && <div style={ErrorMessageStyle}>{errorMessageGeneral}</div>}
           {showError && <div style={ErrorMessageStyle}>{errorSegmentNotAvailable}</div>}
       </div> :
-      <div>
+      <div style={{marginTop:'5px'}}> 
         {format(new Date(value * 1000), 'dd.MM.yyyy HH:mm:ss')}
       </div>
       }
@@ -221,10 +234,10 @@ export function EditRowTable({inv} : any) {
     return(
       <>
       {edit ? 
-      <div >
+      <div style={{marginTop:'5px'}} >
         <input type="checkbox" id={id} name="scales" checked={value} onChange={()=>updateFunction(!value)} onBlur={()=> verifyCheckBoxCondition()}/>
       </div> :
-      <div>
+      <div style={{marginTop:'5px'}}>
         {<input disabled={true} type="checkbox" id="scales" name="scales" checked={value}/>}
       </div>
       }
@@ -258,7 +271,7 @@ export function EditRowTable({inv} : any) {
     }
     return(
       <>
-        {edit ? <div><input type="text" id={id} name={id} style={editableCell} value={`${tempValue}`} onBlur={()=> verifyTextFieldConditions()} onChange={(e)=> setTempValue(e.target.value)}/>{showError && <div style={ErrorMessageStyle}>{errorMessage}</div>}</div>:<div>{value}</div>}
+        {edit ? <div style={{marginTop:'5px'}}><input type="text" id={id} name={id} style={editableCellText} value={`${tempValue}`} onBlur={()=> verifyTextFieldConditions()} onChange={(e)=> setTempValue(e.target.value)}/>{showError && <div style={ErrorMessageStyle}>{errorMessage}</div>}</div>:<div style={{marginTop:'5px'}}>{value}</div>}
       </>
     )
   }
@@ -301,12 +314,12 @@ export function EditRowTable({inv} : any) {
             <td style={tableCell}><DropDownEditableCell name={`list_of_services`} value={newService} listOfValues={locationList} updateFunction={setNewService}/></td>
             <td style={tableCell}><TimeStampEditableCell value={newStartTime} originalValue={oldStartTime} updateFunction={setNewStartTime}/></td>
             <td style={tableCell}><DropDownEditableCell name={`list_of_lengths`} updateFunction={setNewLength} value={newLength} listOfValues={arrayOfLenghts}/></td>
-            <td style={tableCell}>PlaceHolder</td>
+            <td style={tableCell}><div style={{marginTop:'5px'}}>PlaceHolder</div></td>
             <td style={tableCell}><CheckBoxEditable id={'instructor_checkbox'} value={newWithInstructor} updateFunction={setNewWithInstructor}/></td>
             <td style={tableCell}><TextEditableCell id={'customer_name'} value={newName} updateFunction={setNewName}/></td>
             <td style={tableCell}><TextEditableCell id={'email'} value={newEmail} updateFunction={setNewEmail}/></td>
             <td style={tableCell}><TextEditableCell id={'phone_number'} value={newPhoneNumber} updateFunction={setNewPhoneNumber}/></td>
-            <td style={tableCell}>{comment.map((c : any) => {if(c!==''){return (<>-{c}<br/></>)}else{return(<></>)}})}</td>
+            <td style={tableCell}>{comment.map((c : any) => {if(c!==''){return (<div style={{marginTop:'5px'}}>-{c}<br/></div>)}else{return(<></>)}})}</td>
             <td style={iconsCell}>
               {!edit && <i style={iconStyle} className="fas fa-edit" onClick={() => setEdit(true)}></i>}
               {!edit && <i style={iconStyle} className="fa fa-trash" aria-hidden="true" onClick={()=>{setSelectedBooking(inv);setShowUpPopUpCancelation(true)}}></i>}

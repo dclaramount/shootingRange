@@ -200,6 +200,17 @@ export function ManagementPopUp({closeModalFunction} : any) {
     setShowUpPopUpCancelation(false);
   })
     .catch((err) => { console.log(err) });
+
+    const formatedDate = `${(new Date(selectedBooking.startTime)).toLocaleDateString('de-DE')} ${selectedSegment[0].split(' ')[1]}`;
+    const formatedSelectedSegment = selectedSegment.length > 1 ? `${formatedDate}-${selectedSegment[selectedSegment.length-1].split(' ')[1]}` : formatedDate;    
+    axios({
+      url: `${globalVariabes.apiRootURL}postSendDeleteEmail.php?sendGridKey=${sendGridKeyAPI}&emailTo=${selectedBooking.customerEmail}&emailFrom=${globalVariabes.emailFrom}&templateId=${globalVariabes.deleteEmailTemplate}&segmentBooked=${formatedSelectedSegment}&nameOnReservation=${selectedBooking.customerName}&shootingRangeName=${selectedBooking.serviceName}&phoneNumber=+${selectedBooking.phoneNumber}&comment=${'PLACEHOLDER'}&uuidInvoice=${selectedBooking.uuid}`,
+      method: "GET",
+    }).then((res) => {
+      setResponse(res.data);
+      setShowUpPopUpCancelation(false);
+    })
+  .catch((err) => { console.log(err) });
   },[deleteBooking])
   return(
     <div>

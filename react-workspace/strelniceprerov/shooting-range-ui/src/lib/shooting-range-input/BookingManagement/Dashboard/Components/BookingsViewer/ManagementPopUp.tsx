@@ -195,15 +195,25 @@ export function ManagementPopUp({closeModalFunction} : any) {
     setShowUpPopUpCancelation(false);
   })
     .catch((err) => { console.log(err) });
+    const formatedDate = `${(new Date(selectedBooking.startTime)).toLocaleDateString('de-DE')} ${selectedSegment[0].split(' ')[1]}`;
+    const formatedSelectedSegment = selectedSegment.length > 1 ? `${formatedDate}-${selectedSegment[selectedSegment.length-1].split(' ')[1]}` : formatedDate;    
+    axios({
+      url: `${globalVariabes.apiRootURL}postSendDeleteEmail.php?sendGridKey=${sendGridKeyAPI}&emailTo=${selectedBooking.customerEmail}&emailFrom=${globalVariabes.emailFrom}&templateId=${globalVariabes.changeEmailTemplateId}&segmentBooked=${formatedSelectedSegment}&nameOnReservation=${selectedBooking.customerName}&shootingRangeName=${selectedBooking.serviceName}&phoneNumber=+${selectedBooking.phoneNumber}&comment=${'PLACEHOLDER'}&uuidInvoice=${selectedBooking.uuid}`,
+      method: "GET",
+    }).then((res) => {
+      setResponse(res.data);
+      setShowUpPopUpCancelation(false);
+    })
+  .catch((err) => { console.log(err) });
   },[deleteBooking])
   return(
     <div>
-      <div style={{backgroundColor:'white', width:'1250px', padding:'5px', border:'1px solid #e7e7e9', borderRadius:'15px', outline:'20px solid #fafafa', display:'flex', flexDirection:'column'}}>
+      <div style={{backgroundColor:'white', width:'1250px', padding:'5px', border:'2px solid black', borderRadius:'15px', display:'flex', flexDirection:'column'}}>
         <div className="close" style={{marginLeft:'98%', marginRight:'auto', width:'24px', height:'24px', cursor:'pointer'}} onClick={closeModalFunction}>
           <i className="fa fa-times"></i>
         </div>
         <table id="outputTable" style={tableStyle}> 
-        <caption style={{captionSide:'top', marginBottom:'15px', marginLeft:'50%', fontSize:'20px', fontWeight:'bolder'}}>Summary</caption>
+        <caption style={{captionSide:'top', marginBottom:'15px', fontSize:'20px', fontWeight:'bolder'}}>Summary</caption>
         <tr> 
             {/*<th style={headerCellStyle} >Invoice Id</th> */}
             {/*<th style={headerCellStyle}>Invoice Type</th> */}
@@ -216,7 +226,7 @@ export function ManagementPopUp({closeModalFunction} : any) {
             <th style={headerCellStyle}>E-mail</th> 
             <th style={headerCellStyle}>Telefon</th>
             <th style={headerCellStyle}>Comment</th>
-            <th></th> 
+            <th style={headerCellStyle}></th> 
         </tr>
         {filtered.map((invoiceInfo : any)=>{
           return (<EditRowTable inv={invoiceInfo}/>)
@@ -234,7 +244,7 @@ export function ManagementPopUp({closeModalFunction} : any) {
       </Popup>
       <Popup open={showUpPopUpModification} onClose={closeModal} closeOnDocumentClick={false} >
       {Object.keys(modificationInfo).length>0 ? 
-              <div style={{backgroundColor:'white', padding:'25px', border:'2px solid black', borderRadius:'10px', width:'535px', height:'635'}}>
+              <div style={{backgroundColor:'white', padding:'25px', border:'2px solid black', borderRadius:'10px'}}>
               <table id="outputTable" style={tableStyle}> 
                 <caption style={{captionSide:'top', marginBottom:'25px', marginLeft:'42%', fontSize:'20px', fontWeight:'bolder'}}>Summary</caption>
                 <tr> 
