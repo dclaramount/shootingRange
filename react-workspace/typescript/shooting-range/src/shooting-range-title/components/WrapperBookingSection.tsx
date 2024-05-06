@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 import WarningIcon from '@mui/icons-material/Warning';
 import Popup from "reactjs-popup";
 import { BookingFlowSpace } from "./BookingFlowSpace";
+import PlaceHolderBookingSection from "../PlaceHolderBookingSection";
 /*-------------------------------------------------------------------------------------------------------------*/
 /*                                            HELPER FUNCTIONS                                                 */
 /*-------------------------------------------------------------------------------------------------------------*/
@@ -157,7 +158,7 @@ export function WrapperBookingSection() {
     <>
     <div className="wrapperPopUp" style={{opacity:`${(showPopUpBookingProcess || showWarningChooseAnotherSegment) ? '0.5' : '1'}`, pointerEvents:`${showPopUpBookingProcess ? 'none' : 'auto'}`}}>
       {(showingPage!=="POPUP_LENGTH" && showingPage!=="CONFIRMATION_PAGE") &&  <RenderHeader/>}
-      {showingPage==="LOADING"          && <>LOADING BOOKING CALENDAR</>}
+      {showingPage==="LOADING"          && <PlaceHolderBookingSection/>}
       {showingPage==="BOOKING_CALENDAR" && 
       <>
         <BookingCalendarWrappper/>

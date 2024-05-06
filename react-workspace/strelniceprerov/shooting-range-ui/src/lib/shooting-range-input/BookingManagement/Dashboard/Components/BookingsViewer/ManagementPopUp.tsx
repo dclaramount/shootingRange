@@ -246,7 +246,7 @@ export function ManagementPopUp({closeModalFunction} : any) {
       {Object.keys(modificationInfo).length>0 ? 
               <div style={{backgroundColor:'white', padding:'25px', border:'2px solid black', borderRadius:'10px'}}>
               <table id="outputTable" style={tableStyle}> 
-                <caption style={{captionSide:'top', marginBottom:'25px', marginLeft:'42%', fontSize:'20px', fontWeight:'bolder'}}>Summary</caption>
+                <caption style={{captionSide:'top', marginBottom:'25px', fontSize:'20px', fontWeight:'bolder'}}>Summary</caption>
                 <tr> 
                     <th style={headerCellStyle}>Field</th> 
                     <th style={headerCellStyle}>Before</th> 
