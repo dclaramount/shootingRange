@@ -88,7 +88,7 @@ export function EditRowTable({inv} : any) {
           setSelectedBooking,         globalVariabes,
           fieldsOnError,              setFieldsOnError,
           allInvoices,                instructorSegments,
-          setModificationInfo
+          allInstructSegments,        setModificationInfo
         } = React.useContext(ManagementDashboardContext);
   let arrayOfLenghts = [];
   for(let i=1; i<parseInt(globalVariabes.maxBookingLength)+1;i++){
@@ -136,13 +136,35 @@ export function EditRowTable({inv} : any) {
   /*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
   const TimeStampEditableCell = ({id, value, originalValue, updateFunction} : any) => {
     let errorMessageGeneral = "You must select a rounded hour.";
-    let errorSegmentNotAvailable = "Segment Conditions not met."
-    const oldStartTimeValue = format(new Date(originalValue * 1000), "yyyy-MM-dd'T'HH:mm");
-    const [tempValue, setTempValue] = React.useState(format(new Date(value * 1000), "yyyy-MM-dd'T'HH:mm"));
+    let errorSegmentNotAvailable = "Segment Conditions not met.";
+    const timeStampCET = new Date(new Date().toLocaleString('sv-SE', { timeZone: 'CET'}));
+    const timeStampLocal = new Date(new Date().toLocaleString());
+    let offHours = timeStampCET.getHours() - timeStampLocal.getHours();
+    console.log(`Off Hours (Between Prague and Local Browser Time) : ${offHours}`);
+    const offsetHours = (new Date(value*1000).getTimezoneOffset()/60) > 0 ? (new Date(value*1000).getTimezoneOffset()/60) + 1 : (new Date(value*1000).getTimezoneOffset()/60) - 1;
+    console.log(`started value: ${value}`);
+    console.log(`Get Time Offest ${offsetHours} h`)
+    let adjustedValuedt = new Date(value * 1000);
+    let adjustedOriginalValuedt = new Date(originalValue * 1000);
+    let adjustedValueTimeZone = format((adjustedValuedt.setHours(adjustedValuedt.getHours()+offHours)),"yyyy-MM-dd'T'HH:mm");
+    let adjustedOriginalValueTimeZone = format((adjustedOriginalValuedt.setHours(adjustedOriginalValuedt.getHours()+offHours)),"yyyy-MM-dd'T'HH:mm");
+    console.log("Editable Cell for Time Rendering Again....");
+    console.log(`value time stamp : ${adjustedValueTimeZone}`);
+    //let adjustedOriginalValueTimeZone = (new Date(originalValue * 1000)).toLocaleString('sv-SE', { timeZone: 'CET'});
+    console.log(`Value original value : ${adjustedOriginalValueTimeZone}`);
+    //const oldStartTimeValue = format(new Date(originalValue * 1000), "yyyy-MM-dd'T'HH:mm");
+    const oldStartTimeValue = format(new Date(adjustedOriginalValueTimeZone), "yyyy-MM-dd'T'HH:mm");
+    //const [tempValue, setTempValue] = React.useState(format(new Date(value * 1000), "yyyy-MM-dd'T'HH:mm"));
+    const [tempValue, setTempValue] = React.useState(format(new Date(adjustedValueTimeZone), "yyyy-MM-dd'T'HH:mm"));
     const [showErrorGeneral, setShowErrorGeneral] = React.useState(false);
     const [showError, setShowError] = React.useState(false);
+    //const filtered = allInvoices.filter((sb : any) => ((new Date(sb.startTime * 1000)).toLocaleString('sv-SE', { timeZone: 'CET'}).includes(selectedSegment[0]) && (parseInt(sb.serviceId)===parseInt(selectedLocation))));
+
+    //const formatedDate = `${(new Date(selectedSegment[0])).toLocaleDateString('de-DE')} ${selectedSegment[0].split(' ')[1]}`;
 
     const VerifyDate = (date : any) => {
+      console.log(`Values at the beginning of the Verify Date ${date}`);
+      console.log(date);
       const dt = new Date(Date.parse(date));
       //Shows Error if Selected Time is not rounded hour
       if(dt.getMinutes() > 0 ){ 
@@ -154,23 +176,46 @@ export function EditRowTable({inv} : any) {
       //Loop with every start hour
         for (let i = 0; i < parseInt(newLength); i++) {
           const relevantLocation = locationList.find((li:any) => li.serviceName===newService);
-          const basedStartTime = format(new Date(Date.parse(date)).getTime(), "yyyy-MM-dd'T'HH:mm")
-          const selectedStartTime = format(new Date(Date.parse(date)).getTime() + (i*60*60*1000), 'dd.MM.yyyy HH:mm:ss');
+          const basedStartTime = format(new Date(Date.parse(date)).getTime(), "yyyy-MM-dd'T'HH:mm");
+          const selectedStartTime = format(new Date(Date.parse(date)).getTime() + (i*60*60*1000), 'yyyy-MM-dd HH:mm:ss');
           const selectedStartTimeInstructorFormat = format(new Date(Date.parse(date)).getTime() + (i*60*60*1000), 'yyyy-MM-dd HH:mm:ss');
-          const fInvoicesByLocationId = allInvoices.filter((ai:any) => 
+          /*const fInvoicesByLocationId = allInvoices.filter((ai:any) => 
                 parseInt(ai.locationId)===parseInt(relevantLocation.locationId) && 
                 (newWithInstructor === ai.instructor) &&
                 (selectedStartTime===format(new Date(ai.startTime * 1000), 'dd.MM.yyyy HH:mm:ss'))
-              );
+          );*/
+          /*---------------------------------------------------------------------------------------------------*/
+          /*          Adjutment Necessary for the Time Zones Issue                                             */
+          /*---------------------------------------------------------------------------------------------------*/
+          const fInvoicesByLocationId = allInvoices.filter((ai:any) => 
+            parseInt(ai.locationId)===parseInt(relevantLocation.locationId) && 
+            (newWithInstructor === ai.instructor) &&
+            (selectedStartTime===(new Date(ai.startTime * 1000)).toLocaleString('sv-SE', { timeZone: 'CET'}))
+          );
+          /*allInvoices.forEach((inv:any) => {console.log(`Invoice Id ${inv.id}`); 
+          console.log(`Date: ${(new Date(inv.startTime * 1000)).toLocaleString('sv-SE', { timeZone: 'CET'})}`);
+          const isEqual = (new Date(inv.startTime * 1000)).toLocaleString('sv-SE', { timeZone: 'CET'}) === selectedStartTime;
+          console.log(`Is a match : ${isEqual}`)});
+          console.log(fInvoicesByLocationId); */
+          const fInvoicesByLocationIdDiffService = allInvoices.filter((ai:any) => 
+            parseInt(ai.locationId)===parseInt(relevantLocation.locationId) && 
+            (newWithInstructor === ai.instructor) &&
+            (selectedStartTime===(new Date(ai.startTime * 1000)).toLocaleString('sv-SE', { timeZone: 'CET'})) &&
+            (ai.serviceName !== newService)
+          );
+          /*
           const fInvoicesByLocationIdDiffService = allInvoices.filter((ai:any) => 
           parseInt(ai.locationId)===parseInt(relevantLocation.locationId) && 
           (newWithInstructor === ai.instructor) &&
           (selectedStartTime===format(new Date(ai.startTime * 1000), 'dd.MM.yyyy HH:mm:ss')) &&
           (ai.serviceName !== newService)
-              );
-          const fSegmentsInstructors = instructorSegments.filter((is : any) => 
+              );*/
+          const fSegmentsInstructors = allInstructSegments.filter((is : any) => 
             is.startTime === selectedStartTimeInstructorFormat
           );
+          /*allInstructSegments.forEach((iseg : any) => console.log(iseg.startTime));
+          console.log(selectedStartTimeInstructorFormat);
+          console.log(allInstructSegments);*/
           const sumOfCapacityInstructors = fSegmentsInstructors.length;
           //Get Capacity for the given start time segment
           let summOfBookedCapacity = 0;
@@ -189,6 +234,8 @@ export function EditRowTable({inv} : any) {
           if(capacityNotAvailable && !(oldStartTimeValue===basedStartTime)){
             setShowError(true);
           }
+          console.log(`Old Date Value ${tempValue}`);
+          console.log(`New Date Value ${date}`);
           setTempValue(date);
         }
       }
@@ -196,7 +243,10 @@ export function EditRowTable({inv} : any) {
     //Once clicking out of the calendar (Update the newValue) (ONLY IF NO ERRORS)
     const updateNewValue = () => {
       if(!showError && !showErrorGeneral){
-      updateFunction(Date.parse(tempValue)/1000);
+      const tempValuedt = new Date(tempValue);
+      const tempValueToLocal = new Date(tempValuedt.setHours(tempValuedt.getHours() - offHours))
+      //updateFunction(Date.parse(tempValue)/1000);
+      updateFunction(Date.parse(tempValueToLocal.toLocaleString())/1000);
     }
     }
     React.useEffect(() =>{    
@@ -211,14 +261,16 @@ export function EditRowTable({inv} : any) {
           min="2018-06-07T00:00"
           style={editableCell} 
           type="datetime-local" 
-          onChange={(e) => VerifyDate(e.target.value)}
+          onChange={(e) => {console.log("THE SElECTED DATE IS");console.log(e.target.value);VerifyDate(e.target.value)}}
           onBlur={(e) => updateNewValue()}
           />
           {showErrorGeneral && <div style={ErrorMessageStyle}>{errorMessageGeneral}</div>}
           {showError && <div style={ErrorMessageStyle}>{errorSegmentNotAvailable}</div>}
       </div> :
       <div style={{marginTop:'5px'}}>
-        {format(new Date(value * 1000), 'dd.MM.yyyy HH:mm:ss')}
+        {/*format(new Date(value * 1000), 'dd.MM.yyyy HH:mm:ss')*/}
+        {format(new Date(adjustedValueTimeZone), 'dd.MM.yyyy HH:mm:ss')}
+
       </div>
       }
       </>

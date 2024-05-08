@@ -89,7 +89,7 @@ export function EditRowTable({inv} : any) {
           setSelectedBooking,         globalVariabes,
           fieldsOnError,              setFieldsOnError,
           allInvoices,                instructorSegments,
-          setModificationInfo
+          setModificationInfo,        allInstructSegments
         } = React.useContext(ManagementDashboardContext);
   const arrayOfLenghts = [];
   for(let i=1; i<parseInt(globalVariabes.maxLengthBooking)+1;i++){
@@ -138,8 +138,19 @@ export function EditRowTable({inv} : any) {
   const TimeStampEditableCell = ({id, value, originalValue, updateFunction} : any) => {
     const errorMessageGeneral = "You must select a rounded hour.";
     const errorSegmentNotAvailable = "Segment Conditions not met."
-    const oldStartTimeValue = format(new Date(originalValue * 1000), "yyyy-MM-dd'T'HH:mm");
-    const [tempValue, setTempValue] = React.useState(format(new Date(value * 1000), "yyyy-MM-dd'T'HH:mm"));
+    const timeStampCET = new Date(new Date().toLocaleString('sv-SE', { timeZone: 'CET'}));
+    const timeStampLocal = new Date(new Date().toLocaleString());
+    const offHours = timeStampCET.getHours() - timeStampLocal.getHours();
+    console.log(`Off Hours (Between Prague and Local Browser Time) : ${offHours}`);
+    const offsetHours = (new Date(value*1000).getTimezoneOffset()/60) > 0 ? (new Date(value*1000).getTimezoneOffset()/60) + 1 : (new Date(value*1000).getTimezoneOffset()/60) - 1;
+    const adjustedValuedt = new Date(value * 1000);
+    const adjustedOriginalValuedt = new Date(originalValue * 1000);
+    const adjustedValueTimeZone = format((adjustedValuedt.setHours(adjustedValuedt.getHours()+offHours)),"yyyy-MM-dd'T'HH:mm");
+    const adjustedOriginalValueTimeZone = format((adjustedOriginalValuedt.setHours(adjustedOriginalValuedt.getHours()+offHours)),"yyyy-MM-dd'T'HH:mm");
+    const oldStartTimeValue = format(new Date(adjustedOriginalValueTimeZone), "yyyy-MM-dd'T'HH:mm");
+    //const oldStartTimeValue = format(new Date(originalValue * 1000), "yyyy-MM-dd'T'HH:mm");
+    const [tempValue, setTempValue] = React.useState(format(new Date(adjustedValueTimeZone), "yyyy-MM-dd'T'HH:mm"));
+    //const [tempValue, setTempValue] = React.useState(format(new Date(value * 1000), "yyyy-MM-dd'T'HH:mm"));
     const [showErrorGeneral, setShowErrorGeneral] = React.useState(false);
     const [showError, setShowError] = React.useState(false);
 
@@ -156,19 +167,34 @@ export function EditRowTable({inv} : any) {
         for (let i = 0; i < parseInt(newLength); i++) {
           const relevantLocation = locationList.find((li:any) => li.serviceName===newService);
           const basedStartTime = format(new Date(Date.parse(date)).getTime(), "yyyy-MM-dd'T'HH:mm")
-          const selectedStartTime = format(new Date(Date.parse(date)).getTime() + (i*60*60*1000), 'dd.MM.yyyy HH:mm:ss');
+          const selectedStartTime = format(new Date(Date.parse(date)).getTime() + (i*60*60*1000), 'yyyy-MM-dd HH:mm:ss');
           const selectedStartTimeInstructorFormat = format(new Date(Date.parse(date)).getTime() + (i*60*60*1000), 'yyyy-MM-dd HH:mm:ss');
+          /*---------------------------------------------------------------------------------------------------*/
+          /*          Adjutment Necessary for the Time Zones Issue                                             */
+          /*---------------------------------------------------------------------------------------------------*/
           const fInvoicesByLocationId = allInvoices.filter((ai:any) => 
+            parseInt(ai.locationId)===parseInt(relevantLocation.locationId) && 
+            (newWithInstructor === ai.instructor) &&
+            (selectedStartTime===(new Date(ai.startTime * 1000)).toLocaleString('sv-SE', { timeZone: 'CET'}))
+          );
+          /* const fInvoicesByLocationId = allInvoices.filter((ai:any) => 
                 parseInt(ai.locationId)===parseInt(relevantLocation.locationId) && 
                 (newWithInstructor === ai.instructor) &&
                 (selectedStartTime===format(new Date(ai.startTime * 1000), 'dd.MM.yyyy HH:mm:ss'))
-              );
+          );*/
+          const fInvoicesByLocationIdDiffService = allInvoices.filter((ai:any) => 
+            parseInt(ai.locationId)===parseInt(relevantLocation.locationId) && 
+            (newWithInstructor === ai.instructor) &&
+            (selectedStartTime===(new Date(ai.startTime * 1000)).toLocaleString('sv-SE', { timeZone: 'CET'})) &&
+            (ai.serviceName !== newService)
+          );
+          /*
           const fInvoicesByLocationIdDiffService = allInvoices.filter((ai:any) => 
           parseInt(ai.locationId)===parseInt(relevantLocation.locationId) && 
           (newWithInstructor === ai.instructor) &&
           (selectedStartTime===format(new Date(ai.startTime * 1000), 'dd.MM.yyyy HH:mm:ss')) &&
           (ai.serviceName !== newService)
-              );
+              );*/
           const fSegmentsInstructors = instructorSegments.filter((is : any) => 
             is.startTime === selectedStartTimeInstructorFormat
           );
@@ -197,14 +223,16 @@ export function EditRowTable({inv} : any) {
     //Once clicking out of the calendar (Update the newValue) (ONLY IF NO ERRORS)
     const updateNewValue = () => {
       if(!showError && !showErrorGeneral){
-      updateFunction(Date.parse(tempValue)/1000);
-    }
+        const tempValuedt = new Date(tempValue);
+        const tempValueToLocal = new Date(tempValuedt.setHours(tempValuedt.getHours() - offHours))
+        //updateFunction(Date.parse(tempValue)/1000);
+        updateFunction(Date.parse(tempValueToLocal.toLocaleString())/1000);    }
     }
     React.useEffect(() =>{    
       VerifyDate(tempValue);
     },[])
     return(
-      <>
+      <div>
       {edit ? 
       <div style={{marginTop:'5px'}}>
         <input id={id}  value={tempValue}
@@ -218,10 +246,11 @@ export function EditRowTable({inv} : any) {
           {showError && <div style={ErrorMessageStyle}>{errorSegmentNotAvailable}</div>}
       </div> :
       <div style={{marginTop:'5px'}}> 
-        {format(new Date(value * 1000), 'dd.MM.yyyy HH:mm:ss')}
+        {/*format(new Date(value * 1000), 'dd.MM.yyyy HH:mm:ss')*/}
+        {format(new Date(adjustedValueTimeZone), 'dd.MM.yyyy HH:mm:ss')}
       </div>
       }
-      </>
+      </div>
     )
   }
   /*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/

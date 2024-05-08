@@ -73,6 +73,7 @@ export function WrapperManagementDashboard({gVariables} : any) {
   const [instructosListFromDB, setInstructorsListFromDB]              = React.useState([]);
   const [fullInfoInstructors, setFullInfoInstructors]                 = React.useState([]);
   const [instructorSegments, setInstructorSegments ]                  = React.useState(anyArray);
+  const [allInstructSegments, setAllInstructorSegments]               = React.useState(anyArray);
   const [summaryBookingSegments, setSummaryBookingSegments ]          = React.useState(anyArray);
   const [controlAPI, setControlAPI]                                   = React.useState(anyArray);
   const [refreshManagementBoard, setRefreshManagementBoard]           = React.useState(0);
@@ -118,6 +119,7 @@ export function WrapperManagementDashboard({gVariables} : any) {
       method: "GET",
   }).then((res) => {
     setInstructorSegments(reArrangeInstructorSegments(res.data));
+    setAllInstructorSegments(res.data);
     const controlArray = controlAPI;
     controlArray.push('INSTRUCTOR_SEGMENTS');
     setControlAPI(controlArray);
@@ -208,7 +210,8 @@ export function WrapperManagementDashboard({gVariables} : any) {
                                                         selectedBooking,          setSelectedBooking,
                                                         fieldsOnError,             setFieldsOnError,
                                                         modificationInfo,       setModificationInfo,
-                                                        sendGridKeyAPI,         setSendGridKeyAPI
+                                                        sendGridKeyAPI,         setSendGridKeyAPI,
+                                                        allInstructSegments, setAllInstructorSegments
                                                       }}>
           {(showingPage==="LOADING")    &&  <>LOADING....</>}
           {(showingPage==="DASHBOARD")  &&  <TabManagement />}
