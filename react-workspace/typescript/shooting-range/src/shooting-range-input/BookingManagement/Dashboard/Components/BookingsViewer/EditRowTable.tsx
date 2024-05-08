@@ -135,17 +135,21 @@ export function EditRowTable({inv} : any) {
   /*                                                                      Editable Time Stamp Box                                                                      */
   /*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
   const TimeStampEditableCell = ({id, value, originalValue, updateFunction} : any) => {
-    let errorMessageGeneral = "You must select a rounded hour.";
-    let errorSegmentNotAvailable = "Segment Conditions not met.";
+    let errorMessageGeneral = globalVariabes.msgErrorNonZeroHour;
+    let errorSegmentNotAvailable = globalVariabes.msgErrorWrongConditions;
     const timeStampCET = new Date(new Date().toLocaleString('sv-SE', { timeZone: 'CET'}));
     const timeStampLocal = new Date(new Date().toLocaleString());
-    let offHours = timeStampCET.getHours() - timeStampLocal.getHours();
+    //var hours = Math.abs(date1 - date2) / 36e5;
+    console.log(`Local Browser Time ${timeStampLocal}`);
+    console.log(`Time in CET ${timeStampLocal.getDate()}`);
+    let offHours = Math.abs(timeStampCET.getTime() - timeStampLocal.getTime())/3600000;
     console.log(`Off Hours (Between Prague and Local Browser Time) : ${offHours}`);
     const offsetHours = (new Date(value*1000).getTimezoneOffset()/60) > 0 ? (new Date(value*1000).getTimezoneOffset()/60) + 1 : (new Date(value*1000).getTimezoneOffset()/60) - 1;
     console.log(`started value: ${value}`);
     console.log(`Get Time Offest ${offsetHours} h`)
     let adjustedValuedt = new Date(value * 1000);
     let adjustedOriginalValuedt = new Date(originalValue * 1000);
+    console.log(adjustedOriginalValuedt.getDate())
     let adjustedValueTimeZone = format((adjustedValuedt.setHours(adjustedValuedt.getHours()+offHours)),"yyyy-MM-dd'T'HH:mm");
     let adjustedOriginalValueTimeZone = format((adjustedOriginalValuedt.setHours(adjustedOriginalValuedt.getHours()+offHours)),"yyyy-MM-dd'T'HH:mm");
     console.log("Editable Cell for Time Rendering Again....");
@@ -304,10 +308,10 @@ export function EditRowTable({inv} : any) {
     const [tempValue, setTempValue] = React.useState(value);
     const [showError, setShowError] = React.useState(false);
     if(id === 'phone_number'){
-      errorMessage = 'Test Error Message';
+      errorMessage = globalVariabes.msgErrorPhoneNumber;
     }
     else if(id==='email'){
-      errorMessage = 'Test Error Message Email';
+      errorMessage = globalVariabes.msgErrorEmail;
     }
     const verifyTextFieldConditions = () => {
       if(id === 'phone_number'){
@@ -328,6 +332,7 @@ export function EditRowTable({inv} : any) {
     )
   }
   const modifyReservationModal = () => {
+    console.log(oldStartTime);
     const oldObject = {
       uuid: inv.uuid,
       location: oldLocation,

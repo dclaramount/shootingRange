@@ -148,7 +148,7 @@ export function ManagementPopUp({closeModalFunction} : any) {
       const selectedServiceId = locationList.find((location : any) => location.serviceName === modificationInfo.newInfo.service).id;
       console.log(`Selected Service Id ${selectedServiceId}`)
       axios({
-        url: `${globalVariabes.apiRootURL}postCreateBooking.php?selectedLocationId=${selectedServiceId}&selectedSegment=${format(new Date(modificationInfo.newInfo.startTime * 1000), "yyyy-MM-d' 'HH:mm")}&selectedBookingDuration=${modificationInfo.newInfo.length}&selectedOccupancy=${1}&shootingInstructor=${modificationInfo.newInfo.withInstructor}&userId=${userAccount.id}&comment=${newComment}&uuidInvoice=${modificationInfo.newInfo.uuid}`,
+        url: `${globalVariabes.apiRootURL}postCreateBooking.php?selectedLocationId=${selectedServiceId}&selectedSegment=${new Date(new Date(modificationInfo.newInfo.startTime * 1000)).toLocaleString('en-CA', { timeZone: 'CET', hour12:false,}).replace(',','')}&selectedBookingDuration=${modificationInfo.newInfo.length}&selectedOccupancy=${1}&shootingInstructor=${modificationInfo.newInfo.withInstructor}&userId=${userAccount.id}&comment=${newComment}&uuidInvoice=${modificationInfo.newInfo.uuid}`,
         method: "GET",
       }).then((res) => {
         setResponse(res.data);
@@ -158,8 +158,10 @@ export function ManagementPopUp({closeModalFunction} : any) {
     }
     //4 Send Email Confirmation Reservation.
     else if(section==="SEND_EMAIL"){
-      const formatedDate = `${(new Date(selectedSegment[0])).toLocaleDateString('de-DE')} ${selectedSegment[0].split(' ')[1]}`;
-      const formatedSelectedSegment = selectedSegment.length > 1 ? `${formatedDate}-${selectedSegment[selectedSegment.length-1].split(' ')[1]}` : formatedDate;    
+      const formatedDate = `${new Date(new Date(modificationInfo.newInfo.startTime * 1000)).toLocaleString('cs-CZ', { timeZone: 'CET', hour12:false,})}`;
+      const formatedDateTimeZone = (new Date(modificationInfo.newInfo.startTime * 1000)).toLocaleString('cs-CZ', { timeZone: 'CET', hour12:false,})
+      const hours = new Date(formatedDateTimeZone).getHours()+modificationInfo.newInfo.length
+      const formatedSelectedSegment = modificationInfo.newInfo.length > 1 ? `${formatedDate}-${hours}:00:00` : formatedDate;    
       axios({
         url: `${globalVariabes.apiRootURL}postSendChangeEmail.php?sendGridKey=${sendGridKeyAPI}&emailTo=${modificationInfo.newInfo.email}&emailFrom=${globalVariabes.emailFrom}&templateId=${globalVariabes.changeEmailTemplateId}&segmentBooked=${formatedSelectedSegment}&nameOnReservation=${modificationInfo.newInfo.name}&shootingRangeName=${modificationInfo.newInfo.service}&phoneNumber=+${modificationInfo.newInfo.phone}&comment=${newComment}&uuidInvoice=${modificationInfo.newInfo.uuid}`,
         method: "GET",
@@ -269,8 +271,8 @@ export function ManagementPopUp({closeModalFunction} : any) {
                 </tr>
                 <tr id={'startTime'}>
                   <th style={tableCellSummary}>Start Time</th>
-                  <th style={tableCellSummary}>{format(new Date(modificationInfo.oldInfo.startTime * 1000), "d-MM-yyyy' 'HH:mm:ss")}</th>
-                  <th style={tableCellSummary}>{format(new Date(modificationInfo.newInfo.startTime * 1000), "d-MM-yyyy' 'HH:mm:ss")}</th>
+                  <th style={tableCellSummary}>{new Date(new Date(modificationInfo.oldInfo.startTime * 1000)).toLocaleString('cs-CZ', { timeZone: 'CET'})}</th>
+                  <th style={tableCellSummary}>{new Date(new Date(modificationInfo.newInfo.startTime * 1000)).toLocaleString('cs-CZ', { timeZone: 'CET'})}</th>
                 </tr>
                 <tr id={'length'}>
                   <th style={tableCellSummary}>Length (h)</th>

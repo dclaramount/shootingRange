@@ -37,7 +37,12 @@ export function ShootingRangeInput(props: ShootingRangeInputProps) {
       deleteEmailTemplate:           res.data.find((variable : any) => variable.name==="Cancelation_email_template").value,
       sendGridEncryptedKey: res.data.find((variable : any) => variable.name==="SendGrid_Key_Encrypted").value,
       decryptionKey:        res.data.find((variable : any) => variable.name==="Decryption_Key").value,
-      emailFrom:        res.data.find((variable : any) => variable.name==="Email_From").value
+      emailFrom:        res.data.find((variable : any) => variable.name==="Email_From").value,
+      msgErrorNonZeroHour:           res.data.find((variable : any) => variable.name==="error_time_slot_not_rounded").value,
+      msgErrorWrongConditions:       res.data.find((variable : any) => variable.name==="error_time_slot_wrong_conditions").value,
+      msgErrorEmail:                 res.data.find((variable : any) => variable.name==="error_email").value,
+      msgErrorPhoneNumber:           res.data.find((variable : any) => variable.name==="error_phone_number").value,
+      msgErrorInstructor:            res.data.find((variable : any) => variable.name==="error_instructor").value
     }))
   })
     .catch((err) => { console.log(err) });

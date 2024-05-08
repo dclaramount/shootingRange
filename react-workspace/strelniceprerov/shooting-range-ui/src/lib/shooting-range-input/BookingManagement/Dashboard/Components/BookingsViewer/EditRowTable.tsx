@@ -117,7 +117,7 @@ export function EditRowTable({inv} : any) {
       updateFunction(newValue);
     }
     return(
-      <>
+      <div>
       {edit ? 
       <div style={wrapperDropDown}>
         {/*<label htmlFor="services">Service:</label>*/}
@@ -129,15 +129,15 @@ export function EditRowTable({inv} : any) {
         {value}
       </div>
       }
-      </>
+      </div>
     )
   }
   /*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
   /*                                                                      Editable Time Stamp Box                                                                      */
   /*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
   const TimeStampEditableCell = ({id, value, originalValue, updateFunction} : any) => {
-    const errorMessageGeneral = "You must select a rounded hour.";
-    const errorSegmentNotAvailable = "Segment Conditions not met."
+    const errorMessageGeneral = globalVariabes.msgErrorNonZeroHour;
+    const errorSegmentNotAvailable = globalVariabes.msgErrorWrongConditions;
     const timeStampCET = new Date(new Date().toLocaleString('sv-SE', { timeZone: 'CET'}));
     const timeStampLocal = new Date(new Date().toLocaleString());
     const offHours = timeStampCET.getHours() - timeStampLocal.getHours();
@@ -281,10 +281,10 @@ export function EditRowTable({inv} : any) {
     const [tempValue, setTempValue] = React.useState(value);
     const [showError, setShowError] = React.useState(false);
     if(id === 'phone_number'){
-      errorMessage = 'Test Error Message';
+      errorMessage = globalVariabes.msgErrorPhoneNumber;
     }
     else if(id==='email'){
-      errorMessage = 'Test Error Message Email';
+      errorMessage = globalVariabes.msgErrorEmail;
     }
     const verifyTextFieldConditions = () => {
       if(id === 'phone_number'){
