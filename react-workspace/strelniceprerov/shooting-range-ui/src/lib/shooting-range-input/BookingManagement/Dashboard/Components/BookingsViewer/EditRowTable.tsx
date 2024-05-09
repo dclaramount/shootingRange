@@ -37,7 +37,11 @@ const tableCell: React.CSSProperties  = {
 const EmptyStyle: React.CSSProperties = {
 }
 const ErrorMessageStyle: React.CSSProperties = {
-  fontWeight:'bold', color:'red'
+  fontWeight:'bold', color:'red',
+  textWrap: 'wrap',
+  maxWidth: '170px',
+  marginLeft: 'auto',
+  marginRight: 'auto'
 }
 const iconsCell: React.CSSProperties = {
   display: "flex",
