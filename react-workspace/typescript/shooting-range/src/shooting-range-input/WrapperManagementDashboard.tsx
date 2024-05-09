@@ -93,9 +93,13 @@ export function WrapperManagementDashboard({gVariables} : any) {
   const [showUpPopUpCancelation, setShowUpPopUpCancelation]           = React.useState(false);
   const [showUpPopUpModification, setShowUpPopUpModification]         = React.useState(false);
   const [selectedBooking, setSelectedBooking]                         = React.useState([]);
-  const [fieldsOnError, setFieldsOnError]                              = React.useState<string[]>([]);
-  const [modificationInfo, setModificationInfo]                        = React.useState({});
+  const [fieldsOnError, setFieldsOnError]                             = React.useState<string[]>([]);
+  const [modificationInfo, setModificationInfo]                       = React.useState({});
   const [sendGridKeyAPI, setSendGridKeyAPI]                           = React.useState(sendGridKey);
+  const [showMsgErrorGralDate, setShowMsgErrorGralDate]               = React.useState(false);
+  const [showMsgErrorDate, setShowMsgErrorDate]                       = React.useState(false);
+  const [showMsgErrorEmail, setShowMsgErrorEmail]                     = React.useState(false);
+  const [showMsgErrorPhone, setShowMsgErrorPhone]                     = React.useState(false);
 
 
   /*-------------------------------------------------------------------------------------------------------------*/
@@ -211,7 +215,11 @@ export function WrapperManagementDashboard({gVariables} : any) {
                                                         fieldsOnError,             setFieldsOnError,
                                                         modificationInfo,       setModificationInfo,
                                                         sendGridKeyAPI,         setSendGridKeyAPI,
-                                                        allInstructSegments, setAllInstructorSegments
+                                                        allInstructSegments, setAllInstructorSegments,
+                                                        showMsgErrorGralDate, setShowMsgErrorGralDate,
+                                                        showMsgErrorDate, setShowMsgErrorDate,
+                                                        showMsgErrorEmail, setShowMsgErrorEmail,
+                                                        showMsgErrorPhone, setShowMsgErrorPhone
                                                       }}>
           {(showingPage==="LOADING")    &&  <>LOADING....</>}
           {(showingPage==="DASHBOARD")  &&  <TabManagement />}

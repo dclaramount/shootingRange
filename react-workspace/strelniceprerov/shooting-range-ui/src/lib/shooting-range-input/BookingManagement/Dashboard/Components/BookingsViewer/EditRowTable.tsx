@@ -93,7 +93,11 @@ export function EditRowTable({inv} : any) {
           setSelectedBooking,         globalVariabes,
           fieldsOnError,              setFieldsOnError,
           allInvoices,                instructorSegments,
-          setModificationInfo,        allInstructSegments
+          setModificationInfo,        allInstructSegments,
+          showMsgErrorGralDate,       setShowMsgErrorGralDate,
+          showMsgErrorDate,           setShowMsgErrorDate,
+          showMsgErrorEmail,          setShowMsgErrorEmail,
+          showMsgErrorPhone,          setShowMsgErrorPhone
         } = React.useContext(ManagementDashboardContext);
   const arrayOfLenghts = [];
   for(let i=1; i<parseInt(globalVariabes.maxLengthBooking)+1;i++){
@@ -167,6 +171,7 @@ export function EditRowTable({inv} : any) {
       }
       //If the selected time is rounded hour proceed with evaluation
       else{
+      setShowErrorGeneral(false);
       //Loop with every start hour
         for (let i = 0; i < parseInt(newLength); i++) {
           const relevantLocation = locationList.find((li:any) => li.serviceName===newService);
@@ -283,22 +288,24 @@ export function EditRowTable({inv} : any) {
   const TextEditableCell = ({id, value, updateFunction} : any) => {
     let errorMessage = "";
     const [tempValue, setTempValue] = React.useState(value);
-    const [showError, setShowError] = React.useState(false);
+    let showError = false;
     if(id === 'phone_number'){
+      showError = showMsgErrorPhone;
       errorMessage = globalVariabes.msgErrorPhoneNumber;
     }
     else if(id==='email'){
+      showError = showMsgErrorEmail;
       errorMessage = globalVariabes.msgErrorEmail;
     }
     const verifyTextFieldConditions = () => {
       if(id === 'phone_number'){
       const patternPhoneNumber = /420[1-9][0-9]{8}$/;
       const resultPhoneNumberValidation = patternPhoneNumber.test(tempValue);
-      if(!resultPhoneNumberValidation){setShowError(true);}else{setShowError(false)}
+      if(!resultPhoneNumberValidation){setShowMsgErrorPhone(true);}else{setShowMsgErrorPhone(false)}
       } else if(id === 'email'){
         const patternEmail = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
         const resultEmailValidation = patternEmail.test(tempValue);
-        if(!resultEmailValidation){setShowError(true);}else{setShowError(false)}
+        if(!resultEmailValidation){setShowMsgErrorEmail(true);}else{setShowMsgErrorEmail(false)}
       }
       updateFunction(tempValue);
     }

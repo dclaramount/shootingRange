@@ -92,6 +92,12 @@ export function WrapperManagementDashboard({gVariables} : any) {
   const [fieldsOnError, setFieldsOnError]                              = React.useState<string[]>([]);
   const [modificationInfo, setModificationInfo]                        = React.useState({});
   const [sendGridKeyAPI, setSendGridKeyAPI]                           = React.useState(sendGridKey);
+  const [showMsgErrorGralDate, setShowMsgErrorGralDate]               = React.useState(false);
+  const [showMsgErrorDate, setShowMsgErrorDate]                       = React.useState(false);
+  const [showMsgErrorEmail, setShowMsgErrorEmail]                     = React.useState(false);
+  const [showMsgErrorPhone, setShowMsgErrorPhone]                     = React.useState(false);
+
+  
 
 
 
@@ -210,7 +216,11 @@ export function WrapperManagementDashboard({gVariables} : any) {
                                                         selectedBooking,          setSelectedBooking,
                                                         fieldsOnError,             setFieldsOnError,
                                                         modificationInfo,       setModificationInfo,
-                                                        sendGridKeyAPI, setSendGridKeyAPI
+                                                        sendGridKeyAPI, setSendGridKeyAPI,
+                                                        showMsgErrorGralDate, setShowMsgErrorGralDate,
+                                                        showMsgErrorDate, setShowMsgErrorDate,
+                                                        showMsgErrorEmail, setShowMsgErrorEmail,
+                                                        showMsgErrorPhone, setShowMsgErrorPhone
                                                       }}>
           {(showingPage==="LOADING")    &&  <>LOADING....</>}
           {(showingPage==="DASHBOARD")  &&  <TabManagement/>}
