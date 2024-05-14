@@ -14,7 +14,7 @@ const EMPTY_OCCUPANCY = '';
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 function isDayInThePast(day : any, daysOfWeek: any, isoDaysOfWeek: any){
   const idx = daysOfWeek.indexOf(day); 
-  if(idx > 0){
+  if(idx >= 0){
     const currentDayToAnalyze = new Date(isoDaysOfWeek[idx]);
     const today = new Date();
     return today>currentDayToAnalyze;

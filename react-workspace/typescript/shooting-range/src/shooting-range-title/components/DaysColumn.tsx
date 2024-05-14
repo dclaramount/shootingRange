@@ -1,6 +1,6 @@
 import React from 'react';
 import { BookingContext } from './Context/BookingContext';
-import {format } from 'date-fns';
+import {daysToWeeks, format } from 'date-fns';
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /*                                                              CONSTANTS                                                                                                      */
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -13,8 +13,10 @@ const EMPTY_OCCUPANCY = '';
 /*                                         Function to check if the current day being examined is in the past                                                                  */
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 function isDayInThePast(day : any, daysOfWeek: any, isoDaysOfWeek: any){
+  console.log("CHECK THIS")
+  console.log(daysOfWeek)
   const idx = daysOfWeek.indexOf(day); 
-  if(idx > 0){
+  if(idx >= 0){
     const currentDayToAnalyze = new Date(isoDaysOfWeek[idx]);
     const today = new Date();
     return today>currentDayToAnalyze;
