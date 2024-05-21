@@ -150,6 +150,8 @@ export function EditRowTable({inv} : any) {
     //var hours = Math.abs(date1 - date2) / 36e5;
     console.log(`Local Browser Time ${timeStampLocal}`);
     console.log(`Time in CET ${timeStampLocal.getDate()}`);
+    console.log(`The timeStampCET is ${timeStampCET}`);
+    console.log(`The timeStampLocal is ${timeStampLocal}`);
     let offHours = Math.abs(timeStampCET.getTime() - timeStampLocal.getTime())/3600000;
     console.log(`Off Hours (Between Prague and Local Browser Time) : ${offHours}`);
     const offsetHours = (new Date(value*1000).getTimezoneOffset()/60) > 0 ? (new Date(value*1000).getTimezoneOffset()/60) + 1 : (new Date(value*1000).getTimezoneOffset()/60) - 1;

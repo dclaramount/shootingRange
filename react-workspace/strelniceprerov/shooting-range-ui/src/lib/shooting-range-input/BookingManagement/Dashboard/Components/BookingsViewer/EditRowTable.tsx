@@ -147,7 +147,7 @@ export function EditRowTable({inv} : any) {
     const errorMessageGeneral = globalVariabes.msgErrorNonZeroHour;
     const errorSegmentNotAvailable = globalVariabes.msgErrorWrongConditions;
     const timeStampCET = new Date(new Date().toLocaleString('sv-SE', { timeZone: 'CET'}));
-    const timeStampLocal = new Date(new Date().toLocaleString());
+    const timeStampLocal = new Date(); // Not Necessary to use "new Date(new Date().toLocaleString()"
     const offHours = timeStampCET.getHours() - timeStampLocal.getHours();
     console.log(`Off Hours (Between Prague and Local Browser Time) : ${offHours}`);
     const offsetHours = (new Date(value*1000).getTimezoneOffset()/60) > 0 ? (new Date(value*1000).getTimezoneOffset()/60) + 1 : (new Date(value*1000).getTimezoneOffset()/60) - 1;
