@@ -16,6 +16,7 @@
     "@mui/material": "^5.9.1",
     "@mui/x-data-grid": "^6.19.6",
     "@reduxjs/toolkit": "^1.6.1",
+    "@syncfusion/ej2-react-schedule": "^25.2.4",
     "@types/crypto-js": "^4.2.2",
     "axios": "^1.6.7",
     "crypto-js": "^4.2.0",
