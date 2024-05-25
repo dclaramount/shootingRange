@@ -1,5 +1,5 @@
-DROP VIEW IF EXISTS Summary_View_Bookings;
-CREATE VIEW `Summary_View_Bookings` AS
+DROP VIEW IF EXISTS Summary_View_Bookings_Test_View;
+CREATE VIEW `Summary_View_Bookings_Test_View` AS
 SELECT
     iItem.id                as 'id',
     iItem.invoice_id        as 'invoiceId',
@@ -30,5 +30,5 @@ FROM invoice_item as iItem
     INNER JOIN `invoice_type` invType
                ON inv.invoice_type_id = invType.id
     INNER JOIN `user_list` uInfo
-               ON uInfo.id = inv.user_id
+               ON Convert(uInfo.id  USING utf8mb4) COLLATE utf8mb4_unicode_ci = inv.user_id
 ORDER BY iItem.invoice_id ASC, iItem.created ASC;

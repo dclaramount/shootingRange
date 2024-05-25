@@ -36,7 +36,9 @@ CREATE TABLE user_list
         FOREIGN KEY (user_type_id) REFERENCES user_type(id)
             ON DELETE CASCADE
             ON UPDATE RESTRICT
-);
+)
+    CHARACTER SET 'utf8mb4'
+    COLLATE 'utf8mb4_czech_ci';
 
 CREATE TABLE invoice_type
 (
@@ -76,7 +78,9 @@ CREATE TABLE invoice
     updated             DATETIME(6) NOT NULL DEFAULT NOW(),
     CONSTRAINT `fk_user` FOREIGN KEY (user_id) REFERENCES user(id),
     CONSTRAINT `fk_invoice_type` FOREIGN KEY (invoice_type_id) REFERENCES invoice_type(id)
-);
+)
+    CHARACTER SET 'utf8'
+     COLLATE 'utf8_general_ci';
 
 CREATE TABLE invoice_item
 (
@@ -94,7 +98,9 @@ CREATE TABLE invoice_item
     updated             DATETIME(6) NOT NULL DEFAULT NOW(),
     CONSTRAINT `fk_invoice` FOREIGN KEY (invoice_id) REFERENCES invoice(id),
     CONSTRAINT `fk_location` FOREIGN KEY (location_id) REFERENCES location(id)
-);
+)
+    CHARACTER SET 'utf8'
+    COLLATE 'utf8_general_ci';
 
 CREATE TABLE instructors
 (
