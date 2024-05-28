@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import InstructorsCalendar from './InstructorsCalendar';
 import { BookingManagementSpace } from '../BookingManagement/BookingManagementSpace';
+import WrapperSegmentBlocker from '../Wrappers/WrapperSegmentBlocker';
 
 
 interface TabPanelProps {
@@ -52,6 +53,7 @@ export default function TabManagement() {
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="New Management Dashboard" {...a11yProps(0)} />
           <Tab label="Instructors Calendar" {...a11yProps(1)} />
+          <Tab label="Blocking Segments" {...a11yProps(1)} />
           <Tab label="Events" {...a11yProps(2)} />
           {/*
           <Tab label="Summary Table" {...a11yProps(0)} />
@@ -69,6 +71,9 @@ export default function TabManagement() {
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <InstructorsCalendar/> 
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={2}>
+        <WrapperSegmentBlocker/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         PlaceHolder for Events.....
