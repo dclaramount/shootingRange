@@ -12,13 +12,16 @@ const EMPTY_OCCUPANCY = '';
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /*                                         Function to check if the current day being examined is in the past                                                                  */
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-function isDayInThePast(day : any, daysOfWeek: any, isoDaysOfWeek: any){
-  console.log("CHECK THIS")
-  console.log(daysOfWeek)
+function isDayInThePast(day : any, daysOfWeek: any, isoDaysOfWeek: any, hour:any){
   const idx = daysOfWeek.indexOf(day); 
   if(idx >= 0){
     const currentDayToAnalyze = new Date(isoDaysOfWeek[idx]);
+    currentDayToAnalyze.setHours(hour);
     const today = new Date();
+    today.setMinutes(0);
+    today.setSeconds(0);
+    today.setMilliseconds(0);
+    console.log(`Current day to analyze ${currentDayToAnalyze}`);
     return today>currentDayToAnalyze;
   }
   return false;
@@ -121,7 +124,7 @@ export function DaysColumn(){
     const ldate = `${lmonth}-${lday}`;
     const partialDate = `${ldate} ${ltime}`;
     //1st Verification Check if the day is in the past and disable the cell
-    if (isDayInThePast(day, daysOfWeek, isoDaysOfWeek)){
+    if (isDayInThePast(day, daysOfWeek, isoDaysOfWeek, time)){
         return EMPTY_OCCUPANCY;
     }
     //2nd Verification if there is another booking for the same segment that is already using the same location
@@ -154,7 +157,7 @@ export function DaysColumn(){
   function status(day : any, time : any){
     const ltime = `${time}:00`
     //1st Verification Check if the day is in the past and disable the cell
-    if (isDayInThePast(day, daysOfWeek, isoDaysOfWeek)){
+    if (isDayInThePast(day, daysOfWeek, isoDaysOfWeek, time)){
       return BLOCKED_CELL;
     }
     //2nd Verification if there is another booking for the same segment that is already using the same location
