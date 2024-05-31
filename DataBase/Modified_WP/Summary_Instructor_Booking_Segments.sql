@@ -7,5 +7,5 @@ SELECT
     sISegments.AvailableInstructors				as 'MaxOccupancy'
 FROM  `Summary_Instructor_Segments` as sISegments
           LEFT JOIN `Summary_Booking_Segments` sBSegments
-                    ON sISegments.SegmentStarts = sBSegments.SegmentStarts AND sBSegments.InstructorsBooked = 1
+                    ON sISegments.SegmentStarts = sBSegments.SegmentStarts AND sBSegments.InstructorsBooked > 1
 ORDER BY sISegments.SegmentStarts ASC;
