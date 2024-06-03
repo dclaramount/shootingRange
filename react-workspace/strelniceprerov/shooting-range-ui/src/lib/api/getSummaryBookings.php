@@ -22,7 +22,8 @@ $query = "SELECT  sBookings.Location_Id       as  'LocationId',
                   sBookings.Max_Occupancy     as  'MaxOccupancy',
                   sBookings.SegmentStarts     as  'SegmentStarts',
                   sBookings.SegmentEnds       as  'SegmentEnd',
-                  sBookings.InstructorsBooked as  'Instructor'
+                  sBookings.InstructorsBooked as  'Instructor',
+                  sBookings.IsFullyBooked     as  'isLocationFullyBooked'
                   FROM  Summary_Booking_Segments as sBookings;";
  
 //Retrieving the records
@@ -39,7 +40,8 @@ if ($res) {
                             'maxOccupancy'                    => $row[5],
                             'segmentStarts'                   => $row[6],
                             'segmentEnd'                      => $row[7],
-                            'instructoresBooked'              => $row[8]
+                            'instructoresBooked'              => $row[8],
+                            'segmentLocationFullyBooked'      => (bool) $row[9]
                           );
     $index++;
   }
