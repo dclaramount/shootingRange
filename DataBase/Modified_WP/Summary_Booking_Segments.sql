@@ -9,7 +9,8 @@ SELECT
     services.max_capacity				    as 'Max_Occupancy',
     iBookingSegment.start_time        		as 'SegmentStarts',
     iBookingSegment.end_time  				as 'SegmentEnds',
-    SUM(iBookingSegment.with_instructor)	as 'InstructorsBooked'
+    SUM(iBookingSegment.with_instructor)	as 'InstructorsBooked',
+    IF(SUM(iBookingSegment.number_of_people) >= services.max_capacity, 1,0) AS 'IsFullyBooked'
 FROM  `invoice_item` as iBookingSegment
           INNER JOIN `services`
                      ON iBookingSegment.location_id = services.id
