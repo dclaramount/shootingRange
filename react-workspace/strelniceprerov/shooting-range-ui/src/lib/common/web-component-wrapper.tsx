@@ -83,7 +83,51 @@ export function WebComponentWrapper(
       linkElem12.setAttribute('rel', 'stylesheet');
       linkElem12.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/bw-calendar-instructors.css');
 
+      //CSS files for the plugin of calendar
+      const linkElem13 = document.createElement('link');
+      linkElem13.setAttribute('rel', 'stylesheet');
+      linkElem13.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/ej2_react_schedule_material.css');
+
+      const linkElem14 = document.createElement('link');
+      linkElem14.setAttribute('rel', 'stylesheet');
+      linkElem14.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/ej2_splitbuttons_material.css');
   
+      const linkElem15 = document.createElement('link');
+      linkElem15.setAttribute('rel', 'stylesheet');
+      linkElem15.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/ej2_popups_material.css');
+
+      const linkElem16 = document.createElement('link');
+      linkElem16.setAttribute('rel', 'stylesheet');
+      linkElem16.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/ej2_navigations_material.css');
+
+      const linkElem17 = document.createElement('link');
+      linkElem17.setAttribute('rel', 'stylesheet');
+      linkElem17.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/ej2_lists_material.css');
+
+      const linkElem18 = document.createElement('link');
+      linkElem18.setAttribute('rel', 'stylesheet');
+      linkElem18.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/ej2_inputs_material.css');
+
+      const linkElem19 = document.createElement('link');
+      linkElem19.setAttribute('rel', 'stylesheet');
+      linkElem19.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/ej2_dropdowns_material.css');
+
+      const linkElem20 = document.createElement('link');
+      linkElem20.setAttribute('rel', 'stylesheet');
+      linkElem20.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/ej2_calendars_material.css');
+
+      const linkElem21 = document.createElement('link');
+      linkElem21.setAttribute('rel', 'stylesheet');
+      linkElem21.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/ej2_buttons_material.css');
+
+      const linkElem22 = document.createElement('link');
+      linkElem22.setAttribute('rel', 'stylesheet');
+      linkElem22.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/ej2_base_material.css');
+
+      const linkElem23 = document.createElement('link');
+      linkElem23.setAttribute('rel', 'stylesheet');
+      linkElem23.setAttribute('href', 'https://strelniceprerov.cz/wp-admin/css/smart.default.css');
+
       mountPoint.id = NAME;
       shadowRoot.appendChild(mountPoint);
       shadowRoot.appendChild(emotionRoot);
@@ -99,8 +143,17 @@ export function WebComponentWrapper(
       shadowRoot.appendChild(linkElem10);
       shadowRoot.appendChild(linkElem11);
       shadowRoot.appendChild(linkElem12);
-
-
+      shadowRoot.appendChild(linkElem13);
+      shadowRoot.appendChild(linkElem14);
+      shadowRoot.appendChild(linkElem15);
+      shadowRoot.appendChild(linkElem16);
+      shadowRoot.appendChild(linkElem17);
+      shadowRoot.appendChild(linkElem18);
+      shadowRoot.appendChild(linkElem19);
+      shadowRoot.appendChild(linkElem20);
+      shadowRoot.appendChild(linkElem21);
+      shadowRoot.appendChild(linkElem22);
+      shadowRoot.appendChild(linkElem23);
 
       const cache = createCache({
         key: 'css',
