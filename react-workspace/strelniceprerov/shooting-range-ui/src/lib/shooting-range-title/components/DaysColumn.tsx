@@ -52,12 +52,31 @@ function calculateOccupancy(summaryBookings : any, summaryBookingInstructor: any
   const idx = daysOfWeek.indexOf(day); 
   const currentDayToAnalyze = new Date(`${isoDaysOfWeek[idx]} ${time}`);
   const formatedCurrentSegmentToAnalyze = format(currentDayToAnalyze, 'yyyy-MM-dd HH:mm:ss');
+  const segmentLocationStatus = summaryBookings.find((sum:any) => sum.segmentStarts.includes(formatedCurrentSegmentToAnalyze) && parseInt(sum.serviceId)===parseInt(selectedServiceId));
   const filteredValue = shootingInstructorSelected ? summaryBookingInstructor.find((sum:any) => sum.segmentStarts.includes(formatedCurrentSegmentToAnalyze)) : 
     summaryBookings.find((sum:any) => sum.segmentStarts.includes(formatedCurrentSegmentToAnalyze) && parseInt(sum.serviceId)===parseInt(selectedServiceId));
   if (filteredValue){
+    if(segmentLocationStatus && segmentLocationStatus.segmentLocationFullyBooked){ 
+      //For the case that the location is full (we will show the occupancy (for the given configuration (Instructors or NOT instructors) accordingly.))
+      return `${filteredValue.maxOccupancy}/${filteredValue.maxOccupancy}`;
+    }
+    if(segmentLocationStatus && shootingInstructorSelected){
+      const normalOccupancyBookedLocation = parseInt(segmentLocationStatus.occupancyBooked) - parseInt(segmentLocationStatus.instructoresBooked);
+      const occupancyLeftForInstructors   = parseInt(segmentLocationStatus.maxOccupancy) - normalOccupancyBookedLocation;
+      /* We will check how many slots for instructors are left, and if are greater or equal to the real available instructos slots we will show ALL otherwise we will adjust accordingly*/
+      const maxOccupancyInstructors       = occupancyLeftForInstructors >= parseInt(filteredValue.maxOccupancy) ?  filteredValue.maxOccupancy : occupancyLeftForInstructors;
+      return (`${filteredValue.occupancyBooked}/${maxOccupancyInstructors}`);
+    }
+    else if(!segmentLocationStatus && shootingInstructorSelected){
+      /* This is the case where there are no normal bookings for the segmentLocation (which means instructor capacity (if there is) is fully available)*/
+      return (`${filteredValue.occupancyBooked}/${filteredValue.maxOccupancy}`);
+    }
     return `${filteredValue.occupancyBooked}/${filteredValue.maxOccupancy}`;
   }
   else{
+    /* This is for the cases that dont return results */
+    /* For the case of normal bookings this means 0 occupancy booked */
+    /* For the case of Instructors this means that needs to be calculated */
     if (shootingInstructorSelected){
       const filteredValue = summaryBookingInstructor.find((sum:any) => sum.segmentStarts.includes(formatedCurrentSegmentToAnalyze));
       if (filteredValue){
@@ -76,9 +95,14 @@ function getOccupancyStatus(summaryBookings : any, summaryBookingInstructor: any
   const idx = daysOfWeek.indexOf(day); 
   const currentDayToAnalyze = new Date(`${isoDaysOfWeek[idx]} ${time}`);
   const formatedCurrentSegmentToAnalyze = format(currentDayToAnalyze, 'yyyy-MM-dd HH:mm:ss');
+  const segmentLocationStatus = summaryBookings.find((sum:any) => sum.segmentStarts.includes(formatedCurrentSegmentToAnalyze) && parseInt(sum.serviceId)===parseInt(selectedServiceId));
   const filteredValue = shootingInstructorSelected ? summaryBookingInstructor.find((sum:any) => sum.segmentStarts.includes(formatedCurrentSegmentToAnalyze)) : 
     summaryBookings.find((sum:any) => sum.segmentStarts.includes(formatedCurrentSegmentToAnalyze) && parseInt(sum.serviceId)===parseInt(selectedServiceId));
   if (filteredValue){
+    //First Check is if the control column for the given segment of time and location is fully booked.
+    if(segmentLocationStatus && segmentLocationStatus.segmentLocationFullyBooked){
+      return 'occupied';
+    }
     //If there is a filtered value it means there are bookings done for this time segment for this service.
     const left = parseInt(filteredValue.maxOccupancy) - parseInt(filteredValue.occupancyBooked);
     if(shootingInstructorSelected && parseInt(filteredValue.occupancyBooked)===0){return ''} //Special case to color the segment for the instructor booking calendar
@@ -139,10 +163,28 @@ export function DaysColumn(){
 /*                                   Function that helps catalog a segment as available or unavailable (based on bookings done)                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
   function isTimeSegmentAvailable(timeSegment : string){
+    const segmentLocationStatus = summaryBookingSegments.find((sum:any) => sum.segmentStarts.includes(timeSegment) && parseInt(sum.serviceId)===parseInt(selectedLocation));
+    const normalBookings = summaryBookingSegments.find((sum:any) => sum.segmentStarts.includes(timeSegment) && parseInt(sum.serviceId)===parseInt(selectedLocation));
     const filteredValue = shootingInstructor ? sumInstBookingSegments.find((sum:any) => sum.segmentStarts.includes(timeSegment)) : 
       summaryBookingSegments.find((sum:any) => sum.segmentStarts.includes(timeSegment) && parseInt(sum.serviceId)===parseInt(selectedLocation));
     if(filteredValue){
-      return (parseInt(filteredValue.occupancyBooked) < parseInt(filteredValue.maxOccupancy))
+      if(!shootingInstructor){
+        return (parseInt(filteredValue.occupancyBooked) < parseInt(filteredValue.maxOccupancy))
+      }
+      else{
+        //For the case of Shooting Instructor (FALSE means is not Available)
+        if(segmentLocationStatus){
+          const shouldBeBlocked = parseInt(segmentLocationStatus.occupancyBooked) >= parseInt(segmentLocationStatus.maxOccupancy) && //Evaluate if the Location has Capacity
+                                  parseInt(filteredValue.occupancyBooked) >= parseInt(filteredValue.maxOccupancy)                    //Evaluate if Instructors have Capacity
+          return shouldBeBlocked;
+        }
+        else if(typeof filteredValue === 'undefined' && shootingInstructor){
+          return false
+        }
+        else{
+          return true
+        }
+      }
     }
     else if(typeof filteredValue === 'undefined' && shootingInstructor){
       return false
