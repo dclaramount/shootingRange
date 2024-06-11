@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS user_list;
 DROP TABLE IF EXISTS update_users_logs;
 DROP TABLE IF EXISTS global_variables;
 DROP TABLE IF EXISTS services;
+DROP TABLE IF EXISTS blocking_segments;
 
 CREATE TABLE user_type
 (
@@ -135,7 +136,8 @@ CREATE TABLE global_variables
     userId              VARCHAR(100) NOT NULL,
     created             DATETIME(6) NOT NULL DEFAULT NOW(),
     updated             DATETIME(6) NOT NULL DEFAULT NOW()
-);
+)    CHARACTER SET 'utf8'
+     COLLATE 'utf8_general_ci';
 CREATE TABLE update_users_logs
 (
     id                  MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -159,6 +161,19 @@ CREATE TABLE services
     created             DATETIME(6) NOT NULL DEFAULT NOW(),
     updated             DATETIME(6) NOT NULL DEFAULT NOW(),
     CONSTRAINT `fk_location` FOREIGN KEY (location_id) REFERENCES location(id)
+)
+    CHARACTER SET 'utf8'
+    COLLATE 'utf8_general_ci';
+CREATE TABLE blocking_segments
+(
+    id                  SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    guid                VARCHAR(100) NOT NULL,
+    start_time          DATETIME,
+    end_time            DATETIME,
+    isDeleted           BOOLEAN NOT NULL DEFAULT FALSE,
+    userId              VARCHAR(100) NOT NULL,
+    created             DATETIME(6) NOT NULL DEFAULT NOW(),
+    updated             DATETIME(6) NOT NULL DEFAULT NOW()
 )
     CHARACTER SET 'utf8'
     COLLATE 'utf8_general_ci';
