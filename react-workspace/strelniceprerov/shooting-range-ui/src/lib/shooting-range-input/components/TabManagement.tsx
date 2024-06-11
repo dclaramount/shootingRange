@@ -6,7 +6,6 @@ import Box from '@mui/material/Box';
 import InstructorsCalendar from './InstructorsCalendar';
 import { BookingManagementSpace } from '../BookingManagement/BookingManagementSpace';
 import WrapperSegmentBlocker from '../Wrappers/WrapperSegmentBlocker';
-import { NewSegmentBlockerCalendar } from './Context/NewSegmentBlockerCalendar';
 
 
 interface TabPanelProps {
@@ -74,7 +73,7 @@ export default function TabManagement() {
         <InstructorsCalendar/> 
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        <NewSegmentBlockerCalendar/>
+        <WrapperSegmentBlocker/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         PlaceHolder for Events.....

@@ -13,7 +13,7 @@ const WrapperSegmentBlocker = () => {
   return(
   <div>
     {dataFetched ? 
-      <SegmentBlockerProvider gVariables={[]}>
+      <SegmentBlockerProvider gVariables={globalVariabes}>
         <SegmentBlockerCalendar/>
       </SegmentBlockerProvider>
       :

@@ -42,7 +42,8 @@ export function ShootingRangeInput(props: ShootingRangeInputProps) {
       msgErrorWrongConditions:       res.data.find((variable : any) => variable.name==="error_time_slot_wrong_conditions").value,
       msgErrorEmail:                 res.data.find((variable : any) => variable.name==="error_email").value,
       msgErrorPhoneNumber:           res.data.find((variable : any) => variable.name==="error_phone_number").value,
-      msgErrorInstructor:            res.data.find((variable : any) => variable.name==="error_instructor").value
+      msgErrorInstructor:            res.data.find((variable : any) => variable.name==="error_instructor").value,
+      blockSegmentFormTitle:         res.data.find((variable : any) => variable.name==="title_block_segment_form").value
     }))
   })
     .catch((err) => { console.log(err) });
