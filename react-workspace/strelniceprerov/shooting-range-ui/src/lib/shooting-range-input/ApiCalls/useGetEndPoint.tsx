@@ -27,9 +27,10 @@ function useGetEndPoint(apiRootURL : string, endpoint : string, urlParameters  =
           setStatus(response.status);
           setMessage(response.data.message)
         }).catch(e=>{
-          setRequestStatus(REQUEST_STATUS.FAILURE);
+          setRequestStatus(REQUEST_STATUS.SUCCESS);
           setError(e);
-          setStatus(500)
+          setPayload(e.response.data);
+          setStatus(e.response.status)
           setMessage(e)
         })
       }
