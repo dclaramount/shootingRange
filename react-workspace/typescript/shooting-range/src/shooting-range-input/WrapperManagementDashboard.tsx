@@ -100,7 +100,7 @@ export function WrapperManagementDashboard({gVariables} : any) {
   const [showMsgErrorDate, setShowMsgErrorDate]                       = React.useState(false);
   const [showMsgErrorEmail, setShowMsgErrorEmail]                     = React.useState(false);
   const [showMsgErrorPhone, setShowMsgErrorPhone]                     = React.useState(false);
-
+  const [refreshManagementDashboard, setRefreshManagementDashboard]   = React.useState(0);
 
   /*-------------------------------------------------------------------------------------------------------------*/
   /*                                                API CALLS                                                    */
@@ -219,7 +219,8 @@ export function WrapperManagementDashboard({gVariables} : any) {
                                                         showMsgErrorGralDate, setShowMsgErrorGralDate,
                                                         showMsgErrorDate, setShowMsgErrorDate,
                                                         showMsgErrorEmail, setShowMsgErrorEmail,
-                                                        showMsgErrorPhone, setShowMsgErrorPhone
+                                                        showMsgErrorPhone, setShowMsgErrorPhone,
+                                                        refreshManagementDashboard, setRefreshManagementDashboard
                                                       }}>
           {(showingPage==="LOADING")    &&  <>LOADING....</>}
           {(showingPage==="DASHBOARD")  &&  <TabManagement />}

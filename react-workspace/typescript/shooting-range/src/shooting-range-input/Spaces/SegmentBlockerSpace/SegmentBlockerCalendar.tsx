@@ -3,6 +3,7 @@ import { SegmentBlockerContext } from '../../Context/SegmentBlockerContext';
 import { generateDayPilotCalendarEvents } from '../../helper_functions/SegmentBlockerCalendar';
 import { DayPilotEvent } from '../../types/blocking-segment.types';
 import { PostPopUp } from '../../shared/PostPopUp';
+import { ManagementDashboardContext } from '../../Context/ManagementDashboardContext';
 const dns = require ("@daypilot/daypilot-lite-react");
 const styles = {
   wrap: {
@@ -22,8 +23,9 @@ export const SegmentBlockerCalendar = () => {
   const [endpoint, setEndPoint]                                     =   React.useState("");
   const [refresh, setRefresh]                                       =   React.useState(false);
   const {globalVariabes:gVariables, blockegSegmentsList}            =   React.useContext(SegmentBlockerContext);
+  const {refreshManagementDashboard, setRefreshManagementDashboard} =   React.useContext(ManagementDashboardContext);
   const calendarRef                                                 =   React.useRef<any>()
-  const closeModalPopUp                                             =   () => {setShowPopUp(false);}
+  const closeModalPopUp                                             =   () => {setRefreshManagementDashboard(refreshManagementDashboard+1);setShowPopUp(false);}
   /*-------------------------------------------------------------------------------------------------*/
   /*                    HANDLES THE CLICK ON THE CALENDAR OBJECT                                     */
   /*-------------------------------------------------------------------------------------------------*/
