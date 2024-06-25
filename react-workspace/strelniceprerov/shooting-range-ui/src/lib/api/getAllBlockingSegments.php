@@ -22,11 +22,11 @@ $res = mysqli_query($mysqli, $query, MYSQLI_USE_RESULT) or die( mysqli_error($my
 if ($res) {
   $index = 1;
   while ($row = mysqli_fetch_row($res)) {
-    $responseArray[]=array( 'id'                => $row[0],
+    $responseArray[]=array( 'id'                => intval($row[0]),
                             'name'              => $row[1],
                             'uuid'              => $row[2],
-                            'startTime'         => $row[3],
-                            'endTime'           => $row[3]
+                            'startTime'         => strtotime($row[3])*1000, //Converting form unix timestamp https://stackoverflow.com/questions/10837022/convert-php-date-into-javascript-date-format
+                            'endTime'           => strtotime($row[4])*1000
                           );
     $index++;
   }
