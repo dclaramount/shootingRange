@@ -167,6 +167,7 @@ CREATE TABLE services
 CREATE TABLE blocking_segments
 (
     id                  SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name                VARCHAR(100) NOT NULL,
     guid                VARCHAR(100) NOT NULL,
     start_time          DATETIME,
     end_time            DATETIME,
