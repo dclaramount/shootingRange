@@ -51,16 +51,6 @@ try{
     $guid                                             =   "";
   }
   /*------------------------------------------------------------------------------------------------------------*/
-  /*                    Verification if Start Segment is older than actual time                                 */  
-  /*------------------------------------------------------------------------------------------------------------*/
-  $start                                              =   new DateTime($startSegment);
-  $end                                                =   new DateTime($endSegment);
-  $startSegmentIsInThePast                            =   $start <=  $dateTimeActual;
-  if($startSegmentIsInThePast){
-    $requestResponse                                  =   $CONFLICT;
-    $responseMessage                                  =   $resultMessage[$CONFLICT];
-  };
-  /*------------------------------------------------------------------------------------------------------------*/
   /*                                  Change the Flag of the segment to Deleted it                              */  
   /*------------------------------------------------------------------------------------------------------------*/
   $query = "UPDATE blocking_segments SET isDeleted=1 WHERE guid LIKE '%$guid%';";
@@ -84,7 +74,6 @@ try{
 /*------------------------------------------------------------------------------------------------------------*/
 $responseArray=array(
   'message'                                           =>  strval($responseMessage),
-  'payload'                                           =>  $blockingSegments
 );
 http_response_code($requestResponse);
 echo json_encode($responseArray);

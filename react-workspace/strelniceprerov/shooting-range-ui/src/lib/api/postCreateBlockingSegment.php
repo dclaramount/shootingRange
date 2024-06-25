@@ -89,7 +89,7 @@ try{
       $startStr                                       =   $start->format('Y-m-d H:i:s');
       $start->modify('+1 hour');
       $endStr                                         =   $start->format('Y-m-d H:i:s');
-      $query                                          =   "SELECT * FROM blocking_segments WHERE start_time='$startStr';";
+      $query                                          =   "SELECT * FROM blocking_segments WHERE start_time='$startStr' AND isDeleted=false;";
       $res                                            =   mysqli_query($mysqli, $query, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
       if (!is_null($res->fetch_row())){
         $blockSegmentAlreadyCreated                   =   true;
