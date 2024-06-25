@@ -106,6 +106,8 @@ export const SegmentBlockerCalendar = () => {
       }
       else{
         //Step 4.2 If Modal is submitted then the POST request will be send tot he Post End Point.
+        let startSegmentAPI;
+        let endSegmentAPI;
         let startSegment;
         let endSegment;
         const guid              =   uniqueGUI;
@@ -118,13 +120,17 @@ export const SegmentBlockerCalendar = () => {
           endSegment            =   new Date(Date.parse(modal.result.daySelected.split('T')[0]));
           startSegment.setHours(parseInt(gVariables.startBusinessHours) + timeZoneOffset);
           endSegment.setHours(parseInt(gVariables.endBusinessHours) + timeZoneOffset);
+          startSegmentAPI       = startSegment.toISOString();
+          endSegmentAPI         = endSegment.toISOString();
         }
         else{
           startSegment          =   modal.result.start;
           endSegment            =   modal.result.end;
+          startSegmentAPI       =   modal.result.start.value;
+          endSegmentAPI         =   modal.result.end.value;
         }
         setEndPoint("postCreateBlockingSegment") 
-        setPostParameters(`start=${startSegment.toISOString()}&end=${endSegment.toISOString()}&guid=${guid}&name=${name}`);
+        setPostParameters(`start=${startSegmentAPI}&end=${endSegmentAPI}&guid=${guid}&name=${name}`);
         setShowPopUp(true);
       }
     },

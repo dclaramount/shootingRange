@@ -59,7 +59,8 @@ export function WrapperBookingSection() {
           setShowingPage,               setInstructorSegments,      setSummaryBookingSegments,    
           setSumInstBookingSegments,    showPopUpBookingProcess,    setShowPopUpBookingProcess,   
           refreshEntirePlugin,          setRefreshEntirePlugin,     setComment,
-          showWarningChooseAnotherSegment, setShowWarningChooseAnotherSegment
+          showWarningChooseAnotherSegment, setShowWarningChooseAnotherSegment,
+          setAllBlockingSegments
         } = React.useContext(BookingContext);
   const closeModal = (e : any) => {
     if(e==="BOOKING_COMPLETE"){
@@ -150,7 +151,19 @@ export function WrapperBookingSection() {
     })
       .catch((err) => { console.log(err) });
     },[refreshBookingEnv])
-  if(controlAPI.includes('SHOOTING_RANGE_LIST' && 'BOOKINGS_FILTERED' && 'INSTRUCTOR_SEGMENTS'&& 'SUMMARY_BOOKINGS' && 'SUMMARY_INST_BOOKINGS')){
+    React.useEffect(() =>{    
+      axios({
+        url: `${apiURL}getAllBlockingSegments.php`,
+        method: "GET",
+    }).then((res) => {
+      setAllBlockingSegments(res.data);
+      const controlArray = controlAPI;
+      controlArray.push('ALL_BLOCKING_SEGMENTS');
+      setControlAPI(controlArray);
+    })
+      .catch((err) => { console.log(err) });
+    },[refreshBookingEnv])
+  if(controlAPI.includes('SHOOTING_RANGE_LIST' && 'BOOKINGS_FILTERED' && 'INSTRUCTOR_SEGMENTS'&& 'SUMMARY_BOOKINGS' && 'SUMMARY_INST_BOOKINGS' && 'ALL_BLOCKING_SEGMENTS')){
     setShowingPage('BOOKING_CALENDAR');
     setControlAPI([]);
   }

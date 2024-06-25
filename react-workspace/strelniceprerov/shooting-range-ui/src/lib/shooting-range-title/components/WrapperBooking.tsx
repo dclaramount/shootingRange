@@ -51,6 +51,7 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
   const [withInstructors, setWithInstructors]                   = React.useState(false);
   const [summaryBookingSegments, setSummaryBookingSegments]     = React.useState([]);
   const [sumInstBookingSegments, setSumInstBookingSegments]     = React.useState([]);
+  const [blockingSegments,       setAllBlockingSegments]        = React.useState([]);
   const [showingPage, setShowingPage]                           = React.useState("LOADING");
   const [showPopUpBookingProcess, setShowPopUpBookingProcess]   = React.useState(false);
   const [sendGridKeyAPI, setSendGridKeyAPI]                     = React.useState(sendGridKey);
@@ -105,7 +106,8 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
                                     sendGridTemplateConfirmationId, setSendGridTemplateConfirmationId,
                                     refreshEntirePlugin,      setRefreshEntirePlugin,
                                     comment,                  setComment,
-                                    showWarningChooseAnotherSegment, setShowWarningChooseAnotherSegment
+                                    showWarningChooseAnotherSegment, setShowWarningChooseAnotherSegment,
+                                    blockingSegments,       setAllBlockingSegments
                                     }}>
   <div className="container">
     <div className="row">

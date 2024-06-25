@@ -10,6 +10,19 @@ const EMPTY_OCCUPANCY = '';
 /*                                                            HELPER FUNCTIONS                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/*                                                        Function to Check if segment is Blocked                                                                               */
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+function isSegmentBlocked(day : any, daysOfWeek: any, isoDaysOfWeek: any, hour:any, blockedSegments:any){
+  const idx = daysOfWeek.indexOf(day); 
+  if(idx >= 0){
+    const currentDayToAnalyze = new Date(isoDaysOfWeek[idx]);
+    currentDayToAnalyze.setHours(hour);
+    const fBlockedSegment = blockedSegments.filter((seg:any) => seg.startTime===currentDayToAnalyze.getTime());
+    return fBlockedSegment.length >0;
+  }
+  return false;
+}
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /*                                         Function to check if the current day being examined is in the past                                                                  */
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 function isDayInThePast(day : any, daysOfWeek: any, isoDaysOfWeek: any, hour:any){
@@ -132,7 +145,8 @@ export function DaysColumn(){
           sumInstBookingSegments, 
           shootingInstructor,
           refreshEntirePlugin,
-          selectedWeek  } = React.useContext(BookingContext);
+          selectedWeek,
+          blockingSegments  } = React.useContext(BookingContext);
 
   const daysOftheWeek = ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle'];
   function padWithLeadingZeros(num : any, totalLength: any) {
@@ -147,6 +161,10 @@ export function DaysColumn(){
     const lmonth = padWithLeadingZeros(parseInt(day.split(".")[1]),2);
     const ldate = `${lmonth}-${lday}`;
     const partialDate = `${ldate} ${ltime}`;
+    //0 is Segment Blocked
+    if (isSegmentBlocked(day, daysOfWeek, isoDaysOfWeek, time, blockingSegments)){
+    return EMPTY_OCCUPANCY;
+    }
     //1st Verification Check if the day is in the past and disable the cell
     if (isDayInThePast(day, daysOfWeek, isoDaysOfWeek, time)){
         return EMPTY_OCCUPANCY;
@@ -198,7 +216,10 @@ export function DaysColumn(){
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
   function status(day : any, time : any){
     const ltime = `${time}:00`
-
+    //0 is Segment Blocked
+    if (isSegmentBlocked(day, daysOfWeek, isoDaysOfWeek, time, blockingSegments)){
+      return BLOCKED_CELL;
+    }
     //1st Verification Check if the day is in the past and disable the cell
     if (isDayInThePast(day, daysOfWeek, isoDaysOfWeek, time)){
       return BLOCKED_CELL;
