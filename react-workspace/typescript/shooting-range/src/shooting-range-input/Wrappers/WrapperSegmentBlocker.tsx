@@ -9,11 +9,13 @@ const WrapperSegmentBlocker = () => {
   let dataFetched                           =   false;
   const   {globalVariabes}                  =   React.useContext(ManagementDashboardContext);
   const fetchListOfInstructors              =   useGetEndPoint(globalVariabes.apiRootURL, 'getAllInstructors');
-  dataFetched                               =   fetchListOfInstructors.requestStatus  === REQUEST_STATUS.SUCCESS
+  const fetchBlockingSegments               =   useGetEndPoint(globalVariabes.apiRootURL, 'getAllBlockingSegments');
+  dataFetched                               =   fetchListOfInstructors.requestStatus  === REQUEST_STATUS.SUCCESS &&
+                                                fetchBlockingSegments.requestStatus === REQUEST_STATUS.SUCCESS
   return(
   <>
     {dataFetched ? 
-      <SegmentBlockerProvider gVariables={globalVariabes}>
+      <SegmentBlockerProvider gVariables={globalVariabes} blockedSegmentList={fetchBlockingSegments.payload}>
         <SegmentBlockerCalendar/>
       </SegmentBlockerProvider>
       :
