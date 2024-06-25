@@ -136,26 +136,28 @@ try{
   /*------------------------------------------------------------------------------------------------------------*/
   /*                                 Fetching the segments created                                              */
   /*------------------------------------------------------------------------------------------------------------*/
-  $query                                              =   "SELECT * FROM `blocking_segments` WHERE isDeleted=false AND guid='$guid';";
-  $res                                                =   mysqli_query($mysqli, $query, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
-  if ($res) {
-    $index                                            =   1;
-    while ($row = mysqli_fetch_row($res)) {
-      $blockingSegments[]                             =   array(  
-                                                      'id'                    => intval($row[0]),
-                                                      'name'                  => $row[1],
-                                                      'uuid'                  => $row[2],
-                                                      'startTime'             => strtotime($row[3])*1000, //Converting form unix timestamp https://stackoverflow.com/questions/10837022/convert-php-date-into-javascript-date-format
-                                                      'endTime'               => strtotime($row[4])*1000,
-                                                      'isDeleted'             => boolval($row[5]),
-                                                      'userId'                => intval($row[6]),
-                                                      'created'               => strtotime($row[7])*1000,
-                                                      'updated'               => strtotime($row[8])*1000
-                                                    );
-      $index++;
-    }
-  };
-  mysqli_close($mysqli);
+  if(!$startSegmentIsInThePast &&  !$blockSegmentAlreadyCreated && !$bookingPresentInTimeSegment){
+    $query                                              =   "SELECT * FROM `blocking_segments` WHERE isDeleted=false AND guid='$guid';";
+    $res                                                =   mysqli_query($mysqli, $query, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
+    if ($res) {
+      $index                                            =   1;
+      while ($row = mysqli_fetch_row($res)) {
+        $blockingSegments[]                             =   array(  
+                                                        'id'                    => intval($row[0]),
+                                                        'name'                  => $row[1],
+                                                        'uuid'                  => $row[2],
+                                                        'startTime'             => strtotime($row[3])*1000, //Converting form unix timestamp https://stackoverflow.com/questions/10837022/convert-php-date-into-javascript-date-format
+                                                        'endTime'               => strtotime($row[4])*1000,
+                                                        'isDeleted'             => boolval($row[5]),
+                                                        'userId'                => intval($row[6]),
+                                                        'created'               => strtotime($row[7])*1000,
+                                                        'updated'               => strtotime($row[8])*1000
+                                                      );
+        $index++;
+      }
+    };
+    mysqli_close($mysqli);
+  }
 } catch (Exception $e){
   /*------------------------------------------------------------------------------------------------------------*/
   /*                                  Catch Loop for 500-Internal Server Error                                  */
