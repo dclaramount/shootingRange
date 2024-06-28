@@ -84,7 +84,7 @@ try{
   if(!$startSegmentIsInThePast){
     $start                                              =   new DateTime($startSegment);
     $end                                                =   new DateTime($endSegment);
-    $orderOfDatesIsWrong                                =   $start <=  $end;
+    $orderOfDatesIsWrong                                =   $start >=  $end;
     if($orderOfDatesIsWrong){
       $requestResponse                                  =   $BAD_REQUEST;
       $responseMessage                                  =   $resultMessage[$BAD_REQUEST];
