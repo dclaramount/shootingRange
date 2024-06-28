@@ -20,7 +20,7 @@ const Banner = (props :any) => {
       {props.status===400 &&          <Typography sx={{ p: 2 }} style={{height:'100%', marginTop:'auto', marginBottom:'auto', fontWeight:'bold', color:'orange', textAlign:'center'}}>{props.payload.message}</Typography>}
       {props.status===400 &&          <Button onClick={()=>props.closeModal()} variant='contained' style={{marginTop:'auto', backgroundColor:'orange', fontWeight:'bolder', color:'white', width:'auto', borderColor:'orange'}}>{Translations.PostPoup.CloseButton}</Button>}
       {/* REPONSE 409 - CONFLICT*/}
-      {props.status===409 &&          <i className="fa fa-exchange fa-4x"   style={{color:'orange',  marginLeft:'auto', marginRight:'auto', marginTop:'15px', marginBottom:'15px'}} aria-hidden="true"></i>}
+      {props.status===409 &&          <i className="fa fa-random fa-4x"   style={{color:'orange',  marginLeft:'auto', marginRight:'auto', marginTop:'15px', marginBottom:'15px'}} aria-hidden="true"></i>}
       {props.status===409 &&          <Typography sx={{ p: 2 }} style={{height:'100%', marginTop:'auto', marginBottom:'auto', fontWeight:'bold', color:'orange', textAlign:'center'}}>{props.payload.message}</Typography>}
       {props.status===409 &&          <Button onClick={()=>props.closeModal()} variant='contained' style={{marginTop:'auto', backgroundColor:'orange', fontWeight:'bolder', color:'white', width:'auto', borderColor:'orange'}}>{Translations.PostPoup.CloseButton}</Button>}
       {/* REPONSE 500 - INTERNAL SERVER ERROR*/}

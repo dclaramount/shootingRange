@@ -140,25 +140,60 @@ export const InstructorCalendarManagement = () => {
     contextMenu: new dns.DayPilot.Menu({
       items: [
         {
-          text: "Delete",
+          text: "Edit...",
           onClick: async (args:any) => {
+            const segment         = instructorSegmentsList.find((seg:any) => seg.uuid===args.source.data.uuid);
+            const _guid           = segment.uuid;
+            const _guid1          = dns.DayPilot.guid();
+            const _guid2          = dns.DayPilot.guid();
+            const _instructorId   = segment.id;
+            //Form for editing 
+            //Step 2. The form for creating a new blocking segment is shown (and has to be properly configured.).
+            const editform = [
+              { name:   `SPLIT SEGMENT`,  type: "title" },
+              { name:   "Start of the Blocking Segment: ",             id:     "start",  dateFormat: "d.M.yyyy", timeFormat: "H:mm", timeInterval: 60, type: "datetime"},
+              { name:   "End of the Blocking Segment Segment: ",       id:     "end",    dateFormat: "d.M.yyyy", timeFormat: "H:mm", timeInterval: 60, type: "datetime"},            
+              ];
             const dp = calendarRef.current.control;
-            const modal = await dns.DayPilot.Modal.confirm("Are you sure you want to delete this blocking segment?", {okText: "Delete"});
+            const data = {
+              start :         args.source.data.start.value,
+              end   :         args.source.data.end.value
+            };
+            const modal = await dns.DayPilot.Modal.form(editform, data, {okText: "Modify"});
             if (!modal.result) { 
               //IF MODAL IS CANCELLED NOTHING HAPPENS
               return; 
             }
             else{
-              setEndPoint("postDeleteBlockingSegment") 
-              setPostParameters(`guid=${args.source.data.uuid}`);
-              setShowPopUp(true);
-              dp.events.remove(args.source);
+                const startSegmentAPI       =   modal.result.start.value;
+                const endSegmentAPI         =   modal.result.end.value;
+                setEndPoint("postEditInstructorSegment") 
+                setPostParameters(`guid=${_guid}&start=${startSegmentAPI}&end=${endSegmentAPI}&instructor=${_instructorId}&originalStart=${args.source.data.start.value}&originalEnd=${args.source.data.end.value}&guid1=${_guid1}&guid2=${_guid2}`);
+                setShowPopUp(true);
             }
+              dp.events.remove(args.source);
           },
-        },
-        {
-          text: "-"
-        }
+          },
+          {
+            text: "-"
+          },
+          {
+            text: "Delete",
+            onClick: async (args:any) => {
+              const dp = calendarRef.current.control;
+              const modal = await dns.DayPilot.Modal.confirm("Are you sure you want to delete this blocking segment?", {okText: "Delete"});
+              if (!modal.result) { 
+                //IF MODAL IS CANCELLED NOTHING HAPPENS
+                return; 
+              }
+              else{
+                setEndPoint("postDeleteBlockingSegment") 
+                setPostParameters(`guid=${args.source.data.uuid}`);
+                setShowPopUp(true);
+                dp.events.remove(args.source);
+              }
+            },
+          }
       ]
     }),
     onBeforeEventRender: (args:any) => {
