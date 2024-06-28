@@ -6,6 +6,7 @@ import React from "react";
 import { ManagementDashboardContext } from "../Context/ManagementDashboardContext";
 import { REQUEST_STATUS } from "../ApiCalls/enums";
 import { Spinner } from "./Placeholders";
+import { Translations } from "../types/translations";
 //Icons -> https://fontawesome.com/v4/icons/
 const Banner = (props :any) => {
   return(
