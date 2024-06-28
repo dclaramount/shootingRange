@@ -11,6 +11,7 @@ export function InstructorsCalendarProvider({children, gVariables, iList, iSegme
     id: segment.id,
     name: segment.instructorName, 
     uuid: segment.guid,
+    color: iList.find((instructor : any) => parseInt(instructor.id)===parseInt(segment.instructorId)).color,
     startTime: segment.startTime, 
     endTime: segment.endTime
   }))
