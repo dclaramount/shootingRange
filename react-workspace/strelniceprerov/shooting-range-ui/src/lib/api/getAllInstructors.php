@@ -15,7 +15,8 @@ $responseArray = array();
 
 //Executing the multi query
 $query = "SELECT  instructors.id as 'Id',
-                  instructors.name as 'Name'
+                  instructors.name as 'Name',
+                  instructors.color as 'color'
                   FROM  instructors as instructors;";
  
 //Retrieving the records
@@ -24,7 +25,8 @@ if ($res) {
   $index = 1;
   while ($row = mysqli_fetch_row($res)) {
     $responseArray[]=array( 'name'            => $row[1],
-                            'id'              => $row[0]
+                            'id'              => intval($row[0]),
+                            'color'           => $row[2],
                           );
     $index++;
   }
