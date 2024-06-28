@@ -19,7 +19,8 @@ $query = "SELECT  instructor_segments.id                as 'id',
                   instructors.name                      as 'instructorName',
                   instructor_segments.guid              as 'guid',
                   instructor_segments.start_time        as 'startTime',
-                  instructor_segments.end_time          as 'endTime'
+                  instructor_segments.end_time          as 'endTime',
+                  instructors.id                        as 'instructorId'
                   FROM  instructor_segments             as instructor_segments
                   INNER JOIN instructors as instructors ON instructor_segments.instructor_id=instructors.id
                   WHERE instructor_segments.isDeleted =   false;";
@@ -34,7 +35,8 @@ if ($res) {
                             'instructorName'            => $row[2],
                             'guid'                      => $row[3],
                             'startTime'                 => $row[4],
-                            'endTime'                   => $row[5]
+                            'endTime'                   => $row[5],
+                            'instructorId'              => $row[6]
                           );
     $index++;
   }
