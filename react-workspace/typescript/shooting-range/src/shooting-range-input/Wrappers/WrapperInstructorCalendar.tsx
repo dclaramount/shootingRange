@@ -3,6 +3,7 @@ import { REQUEST_STATUS } from '../ApiCalls/enums';
 import { useGetEndPoint } from '../ApiCalls/useGetEndPoint';
 import { ManagementDashboardContext } from '../Context/ManagementDashboardContext';
 import { InstructorsCalendarProvider } from '../Context/InstructorCalendarContext';
+import { InstructorCalendarManagement } from '../Spaces/InstructorCalendarSpace/InstructorCalendarManagement';
 
 const WrapperInstructorCalendar = () => {
   let dataFetched                           =   false;
@@ -15,7 +16,7 @@ const WrapperInstructorCalendar = () => {
   <>
     {dataFetched ? 
       <InstructorsCalendarProvider gVariables={globalVariabes} iList={fetchListOfInstructors.payload} iSegmentList={fetchInstructorSegments.payload}>
-        New Instructor Calendar
+        <InstructorCalendarManagement />
       </InstructorsCalendarProvider>
       :
       <div>
