@@ -2,6 +2,7 @@ export type DBBlockTimeSegment = {
   id:           number;
   name:         string;
   uuid:         string;
+  color?:       string;
   startTime:    Date;
   endTime:      Date;
 }
