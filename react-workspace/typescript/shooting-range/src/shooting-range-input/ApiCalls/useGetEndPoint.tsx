@@ -3,11 +3,11 @@ import axios from 'axios';
 import { REQUEST_STATUS } from './enums';
 import { ManagementDashboardContext } from '../Context/ManagementDashboardContext';
 
-function useGetEndPoint(apiRootURL : string, endpoint : string, urlParameters : string  ='')
+function useGetEndPoint(apiRootURL : string, endpoint : string, urlParameters  ='')
 {
-  const   itHasUrlParameters                =   urlParameters==='' ? '' : '?';
-  let     requestUri                        =   `${apiRootURL}${endpoint}.php${itHasUrlParameters}${urlParameters}`;
   const {refreshManagementDashboard}        =   React.useContext(ManagementDashboardContext);
+  const   itHasUrlParameters                =   urlParameters==='' ? '' : '?';
+  const   requestUri                        =   `${apiRootURL}${endpoint}.php${itHasUrlParameters}${urlParameters}`;
   const   [payload, setPayload]             =   React.useState();
   const   [message, setMessage]             =   React.useState("");
   const   [status, setStatus]               =   React.useState(0);
@@ -15,7 +15,7 @@ function useGetEndPoint(apiRootURL : string, endpoint : string, urlParameters : 
   const   [error, setError]                 =   React.useState(""); 
   React.useEffect(() => {
     async function FetchData(){
-      if(requestStatus=== ""){
+      if(requestStatus!== REQUEST_STATUS.LOADING){
         console.log("SET REQUEST")
         setRequestStatus(REQUEST_STATUS.LOADING);
         await axios.get(
@@ -27,9 +27,10 @@ function useGetEndPoint(apiRootURL : string, endpoint : string, urlParameters : 
           setStatus(response.status);
           setMessage(response.data.message)
         }).catch(e=>{
-          setRequestStatus(REQUEST_STATUS.FAILURE);
+          setRequestStatus(REQUEST_STATUS.SUCCESS);
           setError(e);
-          setStatus(500)
+          setPayload(e.response.data);
+          setStatus(e.response.status)
           setMessage(e)
         })
       }
