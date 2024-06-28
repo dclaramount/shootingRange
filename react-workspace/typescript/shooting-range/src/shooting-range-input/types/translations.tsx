@@ -8,5 +8,8 @@ export const Translations = {
       "Create_Button"               : "Vytvořit",
       "Cancel_Button"               : "Zrušit"
     }
+  },
+  "PostPoup":{
+    "CloseButton" : "Zrušit"
   }
 }
