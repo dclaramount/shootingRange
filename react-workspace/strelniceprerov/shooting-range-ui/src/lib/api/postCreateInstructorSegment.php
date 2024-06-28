@@ -96,7 +96,7 @@ try{
   if(!$startSegmentIsInThePast && !$orderOfDatesIsWrong){
     $start                                            =   new DateTime($startSegment);
     $end                                              =   new DateTime($endSegment);
-    while($start < $end && !$bookingPresentInTimeSegment) {
+    while($start < $end && !$instructorSegmentAlreadyCreated) {
       $startStr                                       =   $start->format('Y-m-d H:i:s');
       $start->modify('+1 hour');
       $endStr                                         =   $start->format('Y-m-d H:i:s');
