@@ -21,11 +21,12 @@ function useGetEndPoint(apiRootURL : string, endpoint : string, urlParameters  =
         await axios.get(
           requestUri
         ).then(response => {
-          setPayload(response.data);
-          setRequestStatus(REQUEST_STATUS.SUCCESS);
-          console.log(response);
-          setStatus(response.status);
-          setMessage(response.data.message)
+          setTimeout(() => {
+            setPayload(response.data);
+            setRequestStatus(REQUEST_STATUS.SUCCESS);
+            setStatus(response.status);
+            setMessage(response.data.message)
+          }, 500);
         }).catch(e=>{
           setRequestStatus(REQUEST_STATUS.SUCCESS);
           setError(e);

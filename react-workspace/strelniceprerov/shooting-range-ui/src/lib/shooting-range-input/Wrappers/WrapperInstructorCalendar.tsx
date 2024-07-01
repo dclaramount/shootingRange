@@ -20,7 +20,7 @@ const WrapperInstructorCalendar = () => {
         <InstructorCalendarManagement/>
       </InstructorsCalendarProvider>
       :
-      <div style={{width:'848px', height:'800px'}}>
+      <div style={{width:'100%', height:'800px'}}>
         <Spinner/>
       </div>
     }

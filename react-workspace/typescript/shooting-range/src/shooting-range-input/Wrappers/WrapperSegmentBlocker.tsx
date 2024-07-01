@@ -4,6 +4,7 @@ import { useGetEndPoint } from '../ApiCalls/useGetEndPoint';
 import { ManagementDashboardContext } from '../Context/ManagementDashboardContext';
 import { SegmentBlockerProvider } from '../Context/SegmentBlockerContext';
 import { SegmentBlockerCalendar } from '../Spaces/SegmentBlockerSpace/SegmentBlockerCalendar';
+import { Spinner } from '../shared/Placeholders';
 
 const WrapperSegmentBlocker = () => {
   let dataFetched                           =   false;
@@ -19,8 +20,8 @@ const WrapperSegmentBlocker = () => {
         <SegmentBlockerCalendar/>
       </SegmentBlockerProvider>
       :
-      <div>
-        PLACEHOLDER
+      <div style={{width:'100%', height:'800px'}}>
+        <Spinner/>
       </div>
     }
   </>

@@ -26,7 +26,20 @@ export const SegmentBlockerCalendar = () => {
   const {refreshManagementDashboard, setRefreshManagementDashboard} =   React.useContext(ManagementDashboardContext);
   const calendarRef                                                 =   React.useRef<any>()
   const closeModalPopUp                                             =   () => {setRefreshManagementDashboard(refreshManagementDashboard+1);setShowPopUp(false);}
-  console.log(locationList);
+  const Legend = ({props} : any) => {
+    return(
+          <div style={{display:'flex', flexDirection:'row', width:'auto',justifyContent:'space-around'}}>
+            {props.map((prop : any) => {
+              const color = prop.color;
+              const name = prop.name;
+              return(
+                <div style={{display:'flex', flexDirection:'row', margin:'10px'}}>
+                    <em style={{display: 'inline-block', width:'20px', height:'20px', border:`1px solid ${color}`, background:`${color}`, color:`${color}`, borderRadius:'50%', margin:'0 5px 0 0'}}>.</em>
+                      <div>{name}</div>
+                </div>)
+            })}
+          </div>);
+  }
   /*-------------------------------------------------------------------------------------------------*/
   /*                    HANDLES THE CLICK ON THE CALENDAR OBJECT                                     */
   /*-------------------------------------------------------------------------------------------------*/
@@ -222,29 +235,32 @@ export const SegmentBlockerCalendar = () => {
   }, [refresh]);
   console.log("RELOAD THE SEGMENT BLOCKER CALENDAR");
   return (
-    <div style={styles.wrap}>
-      <div style={styles.left}>
-        <dns.DayPilotNavigator
-          selectMode={"Week"}
-          showMonths={2}
-          skipMonths={2}
-          startDate={`${new Date().toISOString()}`}
-          selectionDay={`${new Date().toISOString()}`}
-          onTimeRangeSelected={ (args : any) => {
-            calendarRef.current.control.update({
-              startDate: args.day
-            });
-          }}
-        />
+    <div>
+      <Legend props={locationList}/>
+      <div style={styles.wrap}>
+        <div style={styles.left}>
+          <dns.DayPilotNavigator
+            selectMode={"Week"}
+            showMonths={2}
+            skipMonths={2}
+            startDate={`${new Date().toISOString()}`}
+            selectionDay={`${new Date().toISOString()}`}
+            onTimeRangeSelected={ (args : any) => {
+              calendarRef.current.control.update({
+                startDate: args.day
+              });
+            }}
+          />
+        </div>
+        <div style={styles.main}>
+          <dns.DayPilotCalendar
+            {...calendarConfig}
+            ref={calendarRef}
+          />
+        </div>
+        {/*Vámi vybraný čas k vyblokování není možné zrušit z důvodu existujících rezervací. Prosím o kontrolu.*/}
+        {showPopUp && postParameters!=='' && <PostPopUp postAPI={endpoint} postParameters={postParameters} closeModal={closeModalPopUp}/>}
       </div>
-      <div style={styles.main}>
-        <dns.DayPilotCalendar
-          {...calendarConfig}
-          ref={calendarRef}
-        />
-      </div>
-      {/*Vámi vybraný čas k vyblokování není možné zrušit z důvodu existujících rezervací. Prosím o kontrolu.*/}
-      {showPopUp && postParameters!=='' && <PostPopUp postAPI={endpoint} postParameters={postParameters} closeModal={closeModalPopUp}/>}
     </div>
   );
 };
