@@ -12,12 +12,14 @@ const EMPTY_OCCUPANCY = '';
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /*                                                        Function to Check if segment is Blocked                                                                               */
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-function isSegmentBlocked(day : any, daysOfWeek: any, isoDaysOfWeek: any, hour:any, blockedSegments:any){
+function isSegmentBlocked(day : any, daysOfWeek: any, isoDaysOfWeek: any, hour:any, blockedSegments:any, selectedServiceId: any, locationList:any){
   const idx = daysOfWeek.indexOf(day); 
   if(idx >= 0){
     const currentDayToAnalyze = new Date(isoDaysOfWeek[idx]);
     currentDayToAnalyze.setHours(hour);
-    const fBlockedSegment = blockedSegments.filter((seg:any) => seg.startTime===currentDayToAnalyze.getTime());
+    const locationOfSelectedService = locationList.find((ll:any) => parseInt(ll.id)===parseInt(selectedServiceId));
+    const _locationId = parseInt(locationOfSelectedService.locationId);
+    const fBlockedSegment = blockedSegments.filter((seg:any) => seg.startTime===currentDayToAnalyze.getTime() && seg.locationId===_locationId);
     return fBlockedSegment.length >0;
   }
   return false;
@@ -162,8 +164,8 @@ export function DaysColumn(){
     const ldate = `${lmonth}-${lday}`;
     const partialDate = `${ldate} ${ltime}`;
     //0 is Segment Blocked
-    if (isSegmentBlocked(day, daysOfWeek, isoDaysOfWeek, time, blockingSegments)){
-    return EMPTY_OCCUPANCY;
+    if (isSegmentBlocked(day, daysOfWeek, isoDaysOfWeek, time, blockingSegments, selectedLocation, locationList)){
+      return EMPTY_OCCUPANCY;
     }
     //1st Verification Check if the day is in the past and disable the cell
     if (isDayInThePast(day, daysOfWeek, isoDaysOfWeek, time)){
@@ -217,7 +219,7 @@ export function DaysColumn(){
   function status(day : any, time : any){
     const ltime = `${time}:00`
     //0 is Segment Blocked
-    if (isSegmentBlocked(day, daysOfWeek, isoDaysOfWeek, time, blockingSegments)){
+    if (isSegmentBlocked(day, daysOfWeek, isoDaysOfWeek, time, blockingSegments, selectedLocation, locationList)){
       return BLOCKED_CELL;
     }
     //1st Verification Check if the day is in the past and disable the cell

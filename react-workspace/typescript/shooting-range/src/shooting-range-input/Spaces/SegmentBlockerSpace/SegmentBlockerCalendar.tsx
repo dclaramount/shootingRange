@@ -22,10 +22,11 @@ export const SegmentBlockerCalendar = () => {
   const [postParameters, setPostParameters]                         =   React.useState("");
   const [endpoint, setEndPoint]                                     =   React.useState("");
   const [refresh, setRefresh]                                       =   React.useState(false);
-  const {globalVariabes:gVariables, blockegSegmentsList}            =   React.useContext(SegmentBlockerContext);
+  const {globalVariabes:gVariables,blockegSegmentsList,locationList}=   React.useContext(SegmentBlockerContext);
   const {refreshManagementDashboard, setRefreshManagementDashboard} =   React.useContext(ManagementDashboardContext);
   const calendarRef                                                 =   React.useRef<any>()
   const closeModalPopUp                                             =   () => {setRefreshManagementDashboard(refreshManagementDashboard+1);setShowPopUp(false);}
+  console.log(locationList);
   /*-------------------------------------------------------------------------------------------------*/
   /*                    HANDLES THE CLICK ON THE CALENDAR OBJECT                                     */
   /*-------------------------------------------------------------------------------------------------*/
@@ -77,6 +78,12 @@ export const SegmentBlockerCalendar = () => {
     //Step 2. The form for creating a new blocking segment is shown (and has to be properly configured.).
       const form = [
         { name:   `${gVariables.blockSegmentFormTitle}`,  type: "title" },
+        { 
+          name:             'Select Location',  
+          id:               "location",
+          options:          locationList,
+          type:             "select"
+        },
         { name:   "Name of Segment",        id: "text"    },
         { name:   "Type of Event:",         id: "All_Day",    type: "radio",  options: [
           { name: "All Day Event",          id: "allDayEvent", 
@@ -111,6 +118,7 @@ export const SegmentBlockerCalendar = () => {
         let endSegment;
         const guid              =   uniqueGUI;
         const name              =   modal.result.text;
+        const locationId        =   modal.result.location;
         if(modal.result.All_Day==="allDayEvent"){
           //Manipulation of Date selected to account for the Offset of TimeZone
           const today           =   new Date(Date.parse(modal.result.daySelected.split('T')[0]));
@@ -127,7 +135,7 @@ export const SegmentBlockerCalendar = () => {
           endSegmentAPI       =   modal.result.end.value;
         }
         setEndPoint("postCreateBlockingSegment") 
-        setPostParameters(`start=${startSegmentAPI}&end=${endSegmentAPI}&guid=${guid}&name=${name}`);
+        setPostParameters(`start=${startSegmentAPI}&end=${endSegmentAPI}&guid=${guid}&name=${name}&locationId=${locationId}`);
         setShowPopUp(true);
       }
     },

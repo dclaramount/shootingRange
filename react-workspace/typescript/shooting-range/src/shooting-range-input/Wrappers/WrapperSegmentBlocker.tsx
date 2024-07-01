@@ -8,14 +8,14 @@ import { SegmentBlockerCalendar } from '../Spaces/SegmentBlockerSpace/SegmentBlo
 const WrapperSegmentBlocker = () => {
   let dataFetched                           =   false;
   const   {globalVariabes}                  =   React.useContext(ManagementDashboardContext);
-  const fetchListOfInstructors              =   useGetEndPoint(globalVariabes.apiRootURL, 'getAllInstructors');
+  const fetchListOfLocations                =   useGetEndPoint(globalVariabes.apiRootURL, 'getAllLocations');
   const fetchBlockingSegments               =   useGetEndPoint(globalVariabes.apiRootURL, 'getAllBlockingSegments');
-  dataFetched                               =   fetchListOfInstructors.requestStatus  === REQUEST_STATUS.SUCCESS &&
+  dataFetched                               =   fetchListOfLocations.requestStatus  === REQUEST_STATUS.SUCCESS &&
                                                 fetchBlockingSegments.requestStatus === REQUEST_STATUS.SUCCESS
   return(
   <>
     {dataFetched ? 
-      <SegmentBlockerProvider gVariables={globalVariabes} blockedSegmentList={fetchBlockingSegments.payload}>
+      <SegmentBlockerProvider gVariables={globalVariabes} blockedSegmentList={fetchBlockingSegments.payload} locationsList={fetchListOfLocations.payload}>
         <SegmentBlockerCalendar/>
       </SegmentBlockerProvider>
       :
