@@ -18,7 +18,8 @@ $query = "SELECT  bSegments.id                      as 'id',
                   bSegments.guid                    as 'uuid',
                   bSegments.start_time              as 'startTime',
                   bSegments.end_time                as 'endTime',
-                  bSegments.location_id             as 'locationId'
+                  bSegments.location_id             as 'locationId',
+                  loc.color                         as 'color'
                   FROM  blocking_segments           as bSegments
                   INNER JOIN location as loc ON bSegments.location_id=loc.id
                   WHERE bSegments.isDeleted =   false;";
@@ -32,7 +33,8 @@ if ($res) {
                             'uuid'              => $row[2],
                             'startTime'         => strtotime($row[3])*1000, //Converting form unix timestamp https://stackoverflow.com/questions/10837022/convert-php-date-into-javascript-date-format
                             'endTime'           => strtotime($row[4])*1000,
-                            'locationId'        => intval($row[5])
+                            'locationId'        => intval($row[5]),
+                            'color'             => $row[6]
                           );
     $index++;
   }
