@@ -146,7 +146,7 @@ export const InstructorCalendarManagement = () => {
             const _guid           = segment.uuid;
             const _guid1          = dns.DayPilot.guid();
             const _guid2          = dns.DayPilot.guid();
-            const _instructorId   = segment.id;
+            const _instructorId   = segment.instructorId;
             //Form for editing 
             //Step 2. The form for creating a new blocking segment is shown (and has to be properly configured.).
             const editform = [

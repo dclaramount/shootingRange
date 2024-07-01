@@ -5,6 +5,7 @@ export type DBBlockTimeSegment = {
   color?:       string;
   startTime:    Date;
   endTime:      Date;
+  instructorId?: number;
 }
 export type DayPilotEvent = {
   id:           number;
