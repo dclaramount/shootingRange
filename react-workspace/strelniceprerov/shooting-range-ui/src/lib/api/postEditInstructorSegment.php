@@ -27,6 +27,8 @@ $splitSegmentOutOfBoundaries                          =   false;
 $notEnoughInstructorsIfDeleted                        =   false;
 $blockSegmentAlreadyCreated                           =   false;
 $responseMessage                                      =   "";
+$oldInstructorSegments                                =   [];
+$newInstructorSegments                                =   [];
 //Retrieving the Messages for the differnt HTTP-Codes of this endpoint
 $query                                                =   "SELECT value FROM `global_variables` WHERE name='200_postCreateBlockingSegment';";
 $res                                                  =   mysqli_query($mysqli, $query, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
@@ -157,10 +159,10 @@ try{
       $query                                          =   "SELECT * FROM Summary_Instructor_Booking_Segments WHERE SegmentStarts='$startStr';";
       $res                                            =   mysqli_query($mysqli, $query, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
       while ($row = mysqli_fetch_row($res)) {
-        $instructorOccupancyBooked                  =   intval($row[2]);
-        $maxInstructorAvailability                  =   intval($row[3]);
-        $leftAvailability                           =   $maxInstructorAvailability - $instructorOccupancyBooked;
-        $notEnoughInstructorsIfDeleted              =   $leftAvailability===0;
+        $instructorOccupancyBooked                      =   intval($row[2]);
+        $maxInstructorAvailability                      =   intval($row[3]);
+        $leftAvailability                               =   $maxInstructorAvailability - $instructorOccupancyBooked;
+        $notEnoughInstructorsIfDeleted                  =   $leftAvailability===0;
         if($notEnoughInstructorsIfDeleted){
           $requestResponse                              =   $CONFLICT;
           $responseMessage                              =   $resultMessage[$CONFLICT];
@@ -169,88 +171,119 @@ try{
     };
   };
   /*------------------------------------------------------------------------------------------------------------*/
+  /*                        7. Pull the old 1 hour instructor segments                                          */  
+  /*------------------------------------------------------------------------------------------------------------*/
+  if(!$startSegmentIsInThePast && !$orderOfDatesIsWrong && !$differentDatesWithOriginalSegment && !$splitSegmentOutOfBoundaries && !$notEnoughInstructorsIfDeleted){
+    $query                                              =   "SELECT * FROM `instructor_segments` WHERE isDeleted=false AND guid='$guid';";
+    $res                                                =   mysqli_query($mysqli, $query, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
+    if ($res) {
+      $index                                            =   1;
+      while ($row = mysqli_fetch_row($res)) {
+        $oldInstructorSegments[]                             =   array(  
+                                                        'id'                    => intval($row[0]),
+                                                        'instructorId'          => intval($row[1]),
+                                                        'uuid'                  => $row[2],
+                                                        'startTime'             => strtotime($row[3])*1000, //Converting form unix timestamp https://stackoverflow.com/questions/10837022/convert-php-date-into-javascript-date-format
+                                                        'endTime'               => strtotime($row[4])*1000,
+                                                        'isDeleted'             => boolval($row[5]),
+                                                        'userId'                => intval($row[6]),
+                                                        'created'               => strtotime($row[7])*1000,
+                                                        'updated'               => strtotime($row[8])*1000
+                                                      );
+        $index++;
+      }
+    };
+  }
+  /*------------------------------------------------------------------------------------------------------------*/
   /*                                6. Flag the old segment as Deleted.                                         */  
   /*------------------------------------------------------------------------------------------------------------*/
-
-  // /*------------------------------------------------------------------------------------------------------------*/
-  // /*              Verification if there is a Block Segment already for the time slots requested                 */  
-  // /*------------------------------------------------------------------------------------------------------------*/
-  // if(!$startSegmentIsInThePast){
-  //   $start                                            =   new DateTime($startSegment);
-  //   $end                                              =   new DateTime($endSegment);
-  //   while($start < $end && !$bookingPresentInTimeSegment) {
-  //     $startStr                                       =   $start->format('Y-m-d H:i:s');
-  //     $start->modify('+1 hour');
-  //     $endStr                                         =   $start->format('Y-m-d H:i:s');
-  //     $query                                          =   "SELECT * FROM blocking_segments WHERE start_time='$startStr' AND isDeleted=false;";
-  //     $res                                            =   mysqli_query($mysqli, $query, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
-  //     if (!is_null($res->fetch_row())){
-  //       $blockSegmentAlreadyCreated                   =   true;
-  //       $requestResponse                              =   $CONFLICT;
-  //       $responseMessage                              =   $resultMessage[$CONFLICT];
-  //     };
-  //   };
-  // }
-  // /*------------------------------------------------------------------------------------------------------------*/
-  // /*             Verification if there is a booking in the time segment that you are trying to block            */
-  // /*------------------------------------------------------------------------------------------------------------*/
-  // if(!$startSegmentIsInThePast && !$blockSegmentAlreadyCreated){
-  //   $start                                            =   new DateTime($startSegment);
-  //   $end                                              =   new DateTime($endSegment);
-  //   while($start < $end && !$bookingPresentInTimeSegment) {
-  //     $startStr                                       =   $start->format('Y-m-d H:i:s');
-  //     $start->modify('+1 hour');
-  //     $endStr                                         =   $start->format('Y-m-d H:i:s');
-  //     $query                                          =   "SELECT * FROM Summary_Booking_Segments WHERE SegmentStarts='$startStr';";
-  //     $res                                            =   mysqli_query($mysqli, $query, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
-  //     if (!is_null($res->fetch_row())){
-  //       $bookingPresentInTimeSegment                  =   true;
-  //       $requestResponse                              =   $BAD_REQUEST;
-  //       $responseMessage                              =   $resultMessage[$BAD_REQUEST];
-  //     };
-  //   };
-  // }
-  // /*------------------------------------------------------------------------------------------------------------*/
-  // /*                                  Creation of the blocking segments                                         */
-  // /*------------------------------------------------------------------------------------------------------------*/
-  // if(!$startSegmentIsInThePast &&  !$blockSegmentAlreadyCreated && !$bookingPresentInTimeSegment){
-  //   $start                                            =   new DateTime($startSegment);
-  //   $end                                              =   new DateTime($endSegment);
-  //   while($start < $end) {
-  //     $startStr                                       =   $start->format('Y-m-d H:i:s');
-  //     $start->modify('+1 hour');
-  //     $endStr                                         =   $start->format('Y-m-d H:i:s');
-  //     $query                                          =   "INSERT INTO blocking_segments (name, guid, start_time, end_time, isDeleted, userId)
-  //                                                         VALUES ('$name', '$guid', '$startStr', '$endStr', false, 1);";
-  //     $res                                            =   mysqli_query($mysqli, $query, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
-  //   };
-  //   $responseMessage                                  =   $resultMessage[$GOOD_REQUEST];
-  // }
-  // /*------------------------------------------------------------------------------------------------------------*/
-  // /*                                 Fetching the segments created                                              */
-  // /*------------------------------------------------------------------------------------------------------------*/
-  // if(!$startSegmentIsInThePast &&  !$blockSegmentAlreadyCreated && !$bookingPresentInTimeSegment){
-  //   $query                                              =   "SELECT * FROM `blocking_segments` WHERE isDeleted=false AND guid='$guid';";
-  //   $res                                                =   mysqli_query($mysqli, $query, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
-  //   if ($res) {
-  //     $index                                            =   1;
-  //     while ($row = mysqli_fetch_row($res)) {
-  //       $blockingSegments[]                             =   array(  
-  //                                                       'id'                    => intval($row[0]),
-  //                                                       'name'                  => $row[1],
-  //                                                       'uuid'                  => $row[2],
-  //                                                       'startTime'             => strtotime($row[3])*1000, //Converting form unix timestamp https://stackoverflow.com/questions/10837022/convert-php-date-into-javascript-date-format
-  //                                                       'endTime'               => strtotime($row[4])*1000,
-  //                                                       'isDeleted'             => boolval($row[5]),
-  //                                                       'userId'                => intval($row[6]),
-  //                                                       'created'               => strtotime($row[7])*1000,
-  //                                                       'updated'               => strtotime($row[8])*1000
-  //                                                     );
-  //       $index++;
-  //     }
-  //   };
-  //   mysqli_close($mysqli);
-  // }
+  if(!$startSegmentIsInThePast && !$orderOfDatesIsWrong && !$differentDatesWithOriginalSegment && !$splitSegmentOutOfBoundaries && !$notEnoughInstructorsIfDeleted){
+    $query = "UPDATE instructor_segments SET isDeleted=1 WHERE guid LIKE '%$guid%';";
+    $res = mysqli_query($mysqli, $query, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
+  }
+  /*------------------------------------------------------------------------------------------------------------*/
+  /*                                7. Create New Segment (Part 1)                                              */  
+  /*------------------------------------------------------------------------------------------------------------*/
+  if(!$startSegmentIsInThePast && !$orderOfDatesIsWrong && !$differentDatesWithOriginalSegment && !$splitSegmentOutOfBoundaries && !$notEnoughInstructorsIfDeleted){
+    $start                                            =   new DateTime($originalStart);
+    $end                                              =   new DateTime($startSegment);
+    $startTest = $start->format('Y-m-d H:i:s');
+    $endTest = $end->format('Y-m-d H:i:s');
+    echo "We will create a segment from '$startTest' to '$endTest'";
+    while($start < $end) {
+      $startStr                                       =   $start->format('Y-m-d H:i:s');
+      $start->modify('+1 hour');
+      $endStr                                         =   $start->format('Y-m-d H:i:s');
+      $query                                          = "INSERT INTO instructor_segments (instructor_id, guid, start_time, end_time, isDeleted, userId)
+                                                        VALUES ('$instructor', '$guid1', '$startStr', '$endStr', false, 1);";
+                                                        echo $query;
+      $res                                            = mysqli_query($mysqli, $query, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
+    }
+  }
+  /*------------------------------------------------------------------------------------------------------------*/
+  /*                        8. Pull the  1 hour instructor segments (1st Segment)                               */  
+  /*------------------------------------------------------------------------------------------------------------*/
+  if(!$startSegmentIsInThePast && !$orderOfDatesIsWrong && !$differentDatesWithOriginalSegment && !$splitSegmentOutOfBoundaries && !$notEnoughInstructorsIfDeleted){
+    $query                                              =   "SELECT * FROM `instructor_segments` WHERE isDeleted=false AND guid='$guid1';";
+    $res                                                =   mysqli_query($mysqli, $query, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
+    if ($res) {
+      $index                                            =   1;
+      while ($row = mysqli_fetch_row($res)) {
+        $newInstructorSegments[]                             =   array(  
+                                                        'id'                    => intval($row[0]),
+                                                        'instructorId'          => intval($row[1]),
+                                                        'uuid'                  => $row[2],
+                                                        'startTime'             => strtotime($row[3])*1000, //Converting form unix timestamp https://stackoverflow.com/questions/10837022/convert-php-date-into-javascript-date-format
+                                                        'endTime'               => strtotime($row[4])*1000,
+                                                        'isDeleted'             => boolval($row[5]),
+                                                        'userId'                => intval($row[6]),
+                                                        'created'               => strtotime($row[7])*1000,
+                                                        'updated'               => strtotime($row[8])*1000
+                                                      );
+        $index++;
+      }
+    };
+  }
+  /*------------------------------------------------------------------------------------------------------------*/
+  /*                                9. Create New Segment (Part 2)                                              */  
+  /*------------------------------------------------------------------------------------------------------------*/
+  if(!$startSegmentIsInThePast && !$orderOfDatesIsWrong && !$differentDatesWithOriginalSegment && !$splitSegmentOutOfBoundaries && !$notEnoughInstructorsIfDeleted){
+    $start                                            =   new DateTime($endSegment);
+    $end                                              =   new DateTime($originalEnd);
+    while($start < $end) {
+      $startStr                                       =   $start->format('Y-m-d H:i:s');
+      $start->modify('+1 hour');
+      $endStr                                         =   $start->format('Y-m-d H:i:s');
+      $query                                          = "INSERT INTO instructor_segments (instructor_id, guid, start_time, end_time, isDeleted, userId)
+                                                        VALUES ('$instructor', '$guid2', '$startStr', '$endStr', false, 1);";
+      $res                                            = mysqli_query($mysqli, $query, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
+    }
+  }
+  /*------------------------------------------------------------------------------------------------------------*/
+  /*                        10. Pull the  1 hour instructor segments (2nd Segment)                              */  
+  /*------------------------------------------------------------------------------------------------------------*/
+  if(!$startSegmentIsInThePast && !$orderOfDatesIsWrong && !$differentDatesWithOriginalSegment && !$splitSegmentOutOfBoundaries && !$notEnoughInstructorsIfDeleted){
+    $query                                              =   "SELECT * FROM `instructor_segments` WHERE isDeleted=false AND guid='$guid2';";
+    $res                                                =   mysqli_query($mysqli, $query, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
+    if ($res) {
+      $index                                            =   1;
+      while ($row = mysqli_fetch_row($res)) {
+        $newInstructorSegments[]                             =   array(  
+                                                        'id'                    => intval($row[0]),
+                                                        'instructorId'          => intval($row[1]),
+                                                        'uuid'                  => $row[2],
+                                                        'startTime'             => strtotime($row[3])*1000, //Converting form unix timestamp https://stackoverflow.com/questions/10837022/convert-php-date-into-javascript-date-format
+                                                        'endTime'               => strtotime($row[4])*1000,
+                                                        'isDeleted'             => boolval($row[5]),
+                                                        'userId'                => intval($row[6]),
+                                                        'created'               => strtotime($row[7])*1000,
+                                                        'updated'               => strtotime($row[8])*1000
+                                                      );
+        $index++;
+      }
+    };
+    $responseMessage                                  =   $resultMessage[$GOOD_REQUEST];
+  }
 } catch (Exception $e){
   /*------------------------------------------------------------------------------------------------------------*/
   /*                                  Catch Loop for 500-Internal Server Error                                  */
@@ -273,7 +306,7 @@ $responseArray=array(
   'splitSegmentOutOfBoundaries'                       =>  boolval($splitSegmentOutOfBoundaries),
   'notEnoughInstructorsIfDeleted'                     =>  boolval($notEnoughInstructorsIfDeleted),
   'message'                                           =>  strval($responseMessage),
-  'payload'                                           =>  $blockingSegments
+  'payload'                                           =>  array('oldSegment' => $oldInstructorSegments, 'newSegments' => $newInstructorSegments)
 );
 http_response_code($requestResponse);
 echo json_encode($responseArray);

@@ -11,6 +11,7 @@ $databasePassword                                     =   'bQASvDoM9K4g';
 $databaseName                                         =   'www-strelnic';
 $dateTimeActual                                       =   new DateTime();
 $mysqli                                               =   mysqli_connect($databaseHost, $databaseUsername, $databasePassword, $databaseName);
+$mysqli->set_charset("utf8mb4");
 //HTTP-Codes that will return
 $GOOD_REQUEST                                         =   200;
 $BAD_REQUEST                                          =   400;
@@ -79,7 +80,7 @@ try{
     $responseMessage                                  =   $resultMessage[$BAD_REQUEST];
   };
   /*------------------------------------------------------------------------------------------------------------*/
-  /*                    2. Verification if Finish Segment is older than Start Segment                              */  
+  /*                    2. Verification if Finish Segment is older than Start Segment                           */  
   /*------------------------------------------------------------------------------------------------------------*/
   if(!$startSegmentIsInThePast){
     $start                                              =   new DateTime($startSegment);
@@ -148,12 +149,14 @@ try{
         $index++;
       }
     };
+    $responseMessage                                  =   $resultMessage[$GOOD_REQUEST];
     mysqli_close($mysqli);
   }
 } catch (Exception $e){
   /*------------------------------------------------------------------------------------------------------------*/
   /*                                  6. Internal Server Error                                                  */
-  /*------------------------------------------------------------------------------------------------------------*/$requestResponse                                    =   $INTERNAL_SERVER_ERROR;
+  /*------------------------------------------------------------------------------------------------------------*/
+  $requestResponse                                    =   $INTERNAL_SERVER_ERROR;
   $eMessage                                           =   $e->getMessage();
   $eLine                                              =   $e->getLine();
   $eFile                                              =   $e->getFile();

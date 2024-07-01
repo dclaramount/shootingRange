@@ -12,11 +12,16 @@ $mysqli = mysqli_connect($databaseHost, $databaseUsername, $databasePassword, $d
 
 //Variable that will hold the response
 $responseArray = array();
-
-"SELECT * FROM `blocking_segments` WHERE isDeleted=false;";
 //Executing the multi query
-$query = "SELECT * FROM `blocking_segments` WHERE isDeleted=false;";
- 
+$query = "SELECT  bSegments.id                      as 'id',
+                  bSegments.name                    as 'name',
+                  bSegments.guid                    as 'uuid',
+                  bSegments.start_time              as 'startTime',
+                  bSegments.end_time                as 'endTime',
+                  bSegments.location_id             as 'locationId'
+                  FROM  blocking_segments           as bSegments
+                  INNER JOIN location as loc ON bSegments.location_id=loc.id
+                  WHERE bSegments.isDeleted =   false;";
 //Retrieving the records
 $res = mysqli_query($mysqli, $query, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
 if ($res) {
@@ -26,7 +31,8 @@ if ($res) {
                             'name'              => $row[1],
                             'uuid'              => $row[2],
                             'startTime'         => strtotime($row[3])*1000, //Converting form unix timestamp https://stackoverflow.com/questions/10837022/convert-php-date-into-javascript-date-format
-                            'endTime'           => strtotime($row[4])*1000
+                            'endTime'           => strtotime($row[4])*1000,
+                            'locationId'        => intval($row[5])
                           );
     $index++;
   }

@@ -69,6 +69,11 @@ try{
   } else {
     $name                                             =   "";
   }
+  if (isset($_GET['locationId']) && $_GET['locationId']!="") {
+    $locationId                                       =   $_GET['locationId'];
+  } else {
+    $locationId                                       =   "";
+  }
   /*------------------------------------------------------------------------------------------------------------*/
   /*                    Verification if Start Segment is older than actual time                                 */  
   /*------------------------------------------------------------------------------------------------------------*/
@@ -127,8 +132,8 @@ try{
       $startStr                                       =   $start->format('Y-m-d H:i:s');
       $start->modify('+1 hour');
       $endStr                                         =   $start->format('Y-m-d H:i:s');
-      $query                                          =   "INSERT INTO blocking_segments (name, guid, start_time, end_time, isDeleted, userId)
-                                                          VALUES ('$name', '$guid', '$startStr', '$endStr', false, 1);";
+      $query                                          =   "INSERT INTO blocking_segments (location_id, name, guid, start_time, end_time, isDeleted, userId)
+                                                          VALUES ('$locationId', '$name', '$guid', '$startStr', '$endStr', false, 1);";
       $res                                            =   mysqli_query($mysqli, $query, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
     };
     $responseMessage                                  =   $resultMessage[$GOOD_REQUEST];
@@ -144,14 +149,15 @@ try{
       while ($row = mysqli_fetch_row($res)) {
         $blockingSegments[]                             =   array(  
                                                         'id'                    => intval($row[0]),
-                                                        'name'                  => $row[1],
-                                                        'uuid'                  => $row[2],
-                                                        'startTime'             => strtotime($row[3])*1000, //Converting form unix timestamp https://stackoverflow.com/questions/10837022/convert-php-date-into-javascript-date-format
-                                                        'endTime'               => strtotime($row[4])*1000,
-                                                        'isDeleted'             => boolval($row[5]),
-                                                        'userId'                => intval($row[6]),
-                                                        'created'               => strtotime($row[7])*1000,
-                                                        'updated'               => strtotime($row[8])*1000
+                                                        'locationId'            => intval($row[1]),
+                                                        'name'                  => $row[2],
+                                                        'uuid'                  => $row[3],
+                                                        'startTime'             => strtotime($row[4])*1000, //Converting form unix timestamp https://stackoverflow.com/questions/10837022/convert-php-date-into-javascript-date-format
+                                                        'endTime'               => strtotime($row[5])*1000,
+                                                        'isDeleted'             => boolval($row[6]),
+                                                        'userId'                => intval($row[7]),
+                                                        'created'               => strtotime($row[8])*1000,
+                                                        'updated'               => strtotime($row[9])*1000
                                                       );
         $index++;
       }
