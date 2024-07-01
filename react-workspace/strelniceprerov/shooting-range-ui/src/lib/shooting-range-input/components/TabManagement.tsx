@@ -75,7 +75,7 @@ export default function TabManagement() {
       <CustomTabPanel value={value} index={2}>
         <WrapperSegmentBlocker/>
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
+      <CustomTabPanel value={value} index={3}>
         PlaceHolder for Events.....
       </CustomTabPanel>
     </Box>
