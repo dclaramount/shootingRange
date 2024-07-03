@@ -3,9 +3,9 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { BookingManagementSpace } from './BookingManagement/BookingManagementSpace';
 import WrapperSegmentBlocker from './Wrappers/WrapperSegmentBlocker';
 import WrapperInstructorCalendar from './Wrappers/WrapperInstructorCalendar';
+import WrapperBookingManagement from './Wrappers/WrapperBookingManagement';
 
 
 interface TabPanelProps {
@@ -55,19 +55,10 @@ export default function TabManagement({globalVariables} : any) {
           <Tab label="Instructors Calendar" {...a11yProps(1)} />
           <Tab label="Blocking Segments" {...a11yProps(1)} />
           <Tab label="Events" {...a11yProps(2)} />
-          {/*
-          <Tab label="Summary Table" {...a11yProps(0)} />
-          <Tab label="Booking Management Table" {...a11yProps(2)} /> */}
         </Tabs>
       </Box>
-      {/*<CustomTabPanel value={value} index={0}>
-        {/*<SummaryBookingTable/>
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-        <SummaryBookings/>      
-      </CustomTabPanel>*/}
       <CustomTabPanel value={value} index={0}>
-        <BookingManagementSpace/>
+        <WrapperBookingManagement/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <WrapperInstructorCalendar />
