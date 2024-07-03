@@ -1,4 +1,10 @@
 export const Translations = {
+  "ManagementDashboard":{
+    'Title_Reservation_Management'        : 'Správa rezervací',
+    'Title_Instructors_Management'        : 'Správa instruktorů',
+    'Title_Blocking_Segments_Management'  : 'Správa událostí',
+    'Title_Events'                        : 'Události'
+  },
   "InstructorSegmentManagementCalendar": {
     "CreateSegmentPopUp":{
       "Title": "Vytvořte segment",

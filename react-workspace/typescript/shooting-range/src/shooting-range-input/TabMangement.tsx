@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import WrapperSegmentBlocker from './Wrappers/WrapperSegmentBlocker';
 import WrapperInstructorCalendar from './Wrappers/WrapperInstructorCalendar';
 import WrapperBookingManagement from './Wrappers/WrapperBookingManagement';
+import { Translations } from './types/translations';
 
 
 interface TabPanelProps {
@@ -51,10 +52,10 @@ export default function TabManagement({globalVariables} : any) {
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="New Management Dashboard" {...a11yProps(0)} />
-          <Tab label="Instructors Calendar" {...a11yProps(1)} />
-          <Tab label="Blocking Segments" {...a11yProps(1)} />
-          <Tab label="Events" {...a11yProps(2)} />
+          <Tab label={Translations.ManagementDashboard.Title_Reservation_Management} {...a11yProps(0)} />
+          <Tab label={Translations.ManagementDashboard.Title_Instructors_Management} {...a11yProps(1)} />
+          <Tab label={Translations.ManagementDashboard.Title_Blocking_Segments_Management} {...a11yProps(1)} />
+          <Tab label={Translations.ManagementDashboard.Title_Events} {...a11yProps(2)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
