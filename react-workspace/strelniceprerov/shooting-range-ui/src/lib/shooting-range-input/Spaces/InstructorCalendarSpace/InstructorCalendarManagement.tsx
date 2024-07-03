@@ -201,8 +201,10 @@ export const InstructorCalendarManagement = () => {
                 return; 
               }
               else{
-                setEndPoint("postDeleteBlockingSegment") 
-                setPostParameters(`guid=${args.source.data.uuid}`);
+                const startSegmentAPI =   args.source.data.start.value;
+                const endSegmentAPI   =   args.source.data.end.value;        
+                setEndPoint("postDeleteInstructorSegment") 
+                setPostParameters(`guid=${args.source.data.uuid}&start=${startSegmentAPI}&end=${endSegmentAPI}`);
                 setShowPopUp(true);
                 dp.events.remove(args.source);
               }

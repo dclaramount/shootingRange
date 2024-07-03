@@ -12,6 +12,7 @@ $databasePassword                                     =   'bQASvDoM9K4g';
 $databaseName                                         =   'www-strelnic';
 $dateTimeActual                                       =   new DateTime();
 $mysqli                                               =   mysqli_connect($databaseHost, $databaseUsername, $databasePassword, $databaseName);
+$mysqli->set_charset("utf8mb4");
 //HTTP-Codes that will return
 $GOOD_REQUEST                                         =   200;
 $BAD_REQUEST                                          =   400;
@@ -94,12 +95,12 @@ try{
       $startStr                                       =   $start->format('Y-m-d H:i:s');
       $start->modify('+1 hour');
       $endStr                                         =   $start->format('Y-m-d H:i:s');
-      $query                                          =   "SELECT * FROM blocking_segments WHERE start_time='$startStr' AND isDeleted=false;";
+      $query                                          =   "SELECT * FROM blocking_segments WHERE start_time='$startStr' AND location_id='$locationId' AND isDeleted=false;";
       $res                                            =   mysqli_query($mysqli, $query, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
       if (!is_null($res->fetch_row())){
         $blockSegmentAlreadyCreated                   =   true;
-        $requestResponse                              =   $CONFLICT;
-        $responseMessage                              =   $resultMessage[$CONFLICT];
+        $requestResponse                              =   $BAD_REQUEST;
+        $responseMessage                              =   $resultMessage[$BAD_REQUEST];
       };
     };
   }
@@ -113,12 +114,12 @@ try{
       $startStr                                       =   $start->format('Y-m-d H:i:s');
       $start->modify('+1 hour');
       $endStr                                         =   $start->format('Y-m-d H:i:s');
-      $query                                          =   "SELECT * FROM Summary_Booking_Segments WHERE SegmentStarts='$startStr';";
+      $query                                          =   "SELECT * FROM Summary_Booking_Segments WHERE SegmentStarts='$startStr' AND location_id='$locationId';";
       $res                                            =   mysqli_query($mysqli, $query, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
       if (!is_null($res->fetch_row())){
         $bookingPresentInTimeSegment                  =   true;
-        $requestResponse                              =   $BAD_REQUEST;
-        $responseMessage                              =   $resultMessage[$BAD_REQUEST];
+        $requestResponse                              =   $CONFLICT;
+        $responseMessage                              =   $resultMessage[$CONFLICT];
       };
     };
   }
