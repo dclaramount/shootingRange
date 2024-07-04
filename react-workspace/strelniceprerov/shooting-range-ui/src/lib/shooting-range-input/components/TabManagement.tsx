@@ -7,6 +7,7 @@ import { BookingManagementSpace } from '../BookingManagement/BookingManagementSp
 import WrapperSegmentBlocker from '../Wrappers/WrapperSegmentBlocker';
 import WrapperInstructorCalendar from '../Wrappers/WrapperInstructorCalendar';
 import { Translations } from '../types/translations';
+import WrapperGlobalVariables from '../Wrappers/WrapperGlobalVariables';
 
 
 interface TabPanelProps {
@@ -77,7 +78,7 @@ export default function TabManagement() {
         <WrapperSegmentBlocker/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3}>
-        PlaceHolder for Events.....
+        <WrapperGlobalVariables/>
       </CustomTabPanel>
     </Box>
   );
