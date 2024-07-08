@@ -72,7 +72,8 @@ export function ConfirmationPage( {setPage} : any) {
     <div style={{marginTop:'2vh', marginBottom:'2vh'}}>
       <input style={{marginRight:'15px'}} type="checkbox" id="terms_conditions" name="scales" checked={checked} onClick={()=>setChecked(!checked)}/>
       <label style={{marginTop:'auto', marginBottom:'auto'}} htmlFor="terms_conditions">I agree with the</label>
-      <span style={{fontWeight:'bold', textDecoration:'underline', color:'blue', marginLeft:'10px'}} onClick={()=>setOpen(true)}> Terms & Conditions</span>
+      <a href="https://strelniceprerov.cz/provozni-rad/" target="_blank" rel="noreferrer">Terms & Conditions</a>
+      {/*<span style={{fontWeight:'bold', textDecoration:'underline', color:'blue', marginLeft:'10px'}} onClick={()=>setOpen(true)}> Terms & Conditions</span>*/}
     </div>
       <Popup open={open} modal closeOnDocumentClick={false} >
         <TermsAndConditions closeModalFunction={setOpen}/>
