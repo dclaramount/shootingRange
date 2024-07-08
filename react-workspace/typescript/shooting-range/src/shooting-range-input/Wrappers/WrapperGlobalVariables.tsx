@@ -4,7 +4,7 @@ import { useGetEndPoint } from '../ApiCalls/useGetEndPoint';
 import { ManagementDashboardContext } from '../Context/ManagementDashboardContext';
 import { Spinner } from '../shared/Placeholders';
 import { GlobalVariablesProvider } from '../Context/GlobalVariablesContext';
-import { GlobalVariablesManagement } from '../Spaces/GlobalVariablesSpace/GlobalVariablesManagement';
+import GlobalVariablesManagement from '../Spaces/GlobalVariablesSpace/GlobalVariablesManagement';
 
 const WrapperGlobalVariables = () => {
   let dataFetched                           =   false;

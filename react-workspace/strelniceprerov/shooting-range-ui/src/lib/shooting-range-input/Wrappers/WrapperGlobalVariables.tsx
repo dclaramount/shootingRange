@@ -2,9 +2,9 @@ import React from 'react';
 import { REQUEST_STATUS } from '../ApiCalls/enums';
 import { useGetEndPoint } from '../ApiCalls/useGetEndPoint';
 import { Spinner } from '../shared/Placeholders';
-import { GlobalVariablesManagement } from '../Spaces/GlobalVariablesSpace/GlobalVariablesManagement';
 import { ManagementDashboardContext } from '../components/Context/ManagementDashboardContext';
 import { GlobalVariablesProvider } from '../components/Context/GlobalVariablesContext';
+import GlobalVariablesManagement from '../Spaces/GlobalVariablesSpace/GlobalVariablesManagement';
 
 const WrapperGlobalVariables = () => {
   let dataFetched                           =   false;
