@@ -4,6 +4,7 @@ import { generateDayPilotCalendarEvents } from '../../helper_functions/SegmentBl
 import { DayPilotEvent } from '../../types/blocking-segment.types';
 import { PostPopUp } from '../../shared/PostPopUp';
 import { ManagementDashboardContext } from '../../Context/ManagementDashboardContext';
+import { Translations } from '../../types/translations';
 const dns = require ("@daypilot/daypilot-lite-react");
 const styles = {
   wrap: {
@@ -104,22 +105,22 @@ export const SegmentBlockerCalendar = () => {
       });
     //Step 2. The form for creating a new blocking segment is shown (and has to be properly configured.).
       const form = [
-        { name:   `${gVariables.blockSegmentFormTitle}`,  type: "title" },
+        { name:   `${Translations.BlockingSegment.CreateSegmentPopUp.Title}`,  type: "title" },
         { 
-          name:             'Select Location',  
+          name:             `${Translations.BlockingSegment.CreateSegmentPopUp.SubTitle_SelectLocation}`,  
           id:               "location",
           options:          locationList,
           type:             "select",
         },
-        { name:   "Name of Segment",        id: "text"    ,onValidate: validateTextRequired},
-        { name:   "Type of Event:",         id: "All_Day",    type: "radio",  options: [
-          { name: "All Day Event",          id: "allDayEvent", 
+        { name:   `${Translations.BlockingSegment.CreateSegmentPopUp.SubTitle_NameOfSegment}`,        id: "text"    ,onValidate: validateTextRequired},
+        { name:   `${Translations.BlockingSegment.CreateSegmentPopUp.SubTitle_TypeOfEvent}`,          id: "All_Day",    type: "radio",  options: [
+          { name: `${Translations.BlockingSegment.CreateSegmentPopUp.SubTitle_AllDay}`,               id: "allDayEvent", 
             children: [
-              { name: "Date",           id: "daySelected",  type: "date", dateFormat: "d.M.yyyy", locale:'cs-cz'}
+              { name: `${Translations.BlockingSegment.CreateSegmentPopUp.Date}`,                      id: "daySelected",  type: "date", dateFormat: "d.M.yyyy", locale:'cs-cz'}
             ]},
-          {name: "Not_All_Day", id: "Hourly", children: [
-            { name:   "Start of the Segment: ",     id:     "start",  dateFormat: "d.M.yyyy", timeFormat: "H:mm", timeInterval: 60, type: "datetime", locale:'cs-cz'},
-            { name:   "End of the Segment: ",       id:     "end",    dateFormat: "d.M.yyyy", timeFormat: "H:mm", timeInterval: 60, type: "datetime", locale:'cs-cz'},            
+          {name:`${Translations.BlockingSegment.CreateSegmentPopUp.SubTitle_NotAllDay}`,              id: "Hourly", children: [
+            { name:`${Translations.BlockingSegment.CreateSegmentPopUp.SubTitle_SelectStartSegment}`,  id: "start",  dateFormat: "d.M.yyyy", timeFormat: "H:mm", timeInterval: 60, type: "datetime", locale:'cs-cz'},
+            { name:`${Translations.BlockingSegment.CreateSegmentPopUp.SubTitle_SelectEndSegment}`,    id: "end",    dateFormat: "d.M.yyyy", timeFormat: "H:mm", timeInterval: 60, type: "datetime", locale:'cs-cz'},            
           ]}
         ]}
       ];
@@ -137,7 +138,7 @@ export const SegmentBlockerCalendar = () => {
         start :         tStart,
         end   :         tEnd
       };
-      const modal = await dns.DayPilot.Modal.form(form, data, {okText: "Create"});
+      const modal = await dns.DayPilot.Modal.form(form, data, {okText: `${Translations.BlockingSegment.CreateSegmentPopUp.Create_Button}`, cancelText:`${Translations.BlockingSegment.CreateSegmentPopUp.Cancel_Button}`});
       dp.clearSelection();
       //Step 4. The modal gets closed for 1 out 2 reasons (either it was cancelled or submitted)
       if (!modal.result) { 
@@ -180,11 +181,11 @@ export const SegmentBlockerCalendar = () => {
     contextMenu: new dns.DayPilot.Menu({
       items: [
         {
-          text: "Delete",
+          text: `${Translations.BlockingSegment.SubMenuSegment.Delete}`,
           onClick: async (args:any) => {
             console.log(args.source.data.uuid);
             const dp = calendarRef.current.control;
-            const modal = await dns.DayPilot.Modal.confirm("Are you sure you want to delete this blocking segment?", {okText: "Delete"});
+            const modal = await dns.DayPilot.Modal.confirm(`${Translations.BlockingSegment.DeleteSegmentPopUp.Disclaimer}`, {okText: `${Translations.BlockingSegment.DeleteSegmentPopUp.Delete_Button}`, cancelText:`${Translations.BlockingSegment.DeleteSegmentPopUp.Cancel_Button}`});
             if (!modal.result) { 
               //IF MODAL IS CANCELLED NOTHING HAPPENS
               return; 

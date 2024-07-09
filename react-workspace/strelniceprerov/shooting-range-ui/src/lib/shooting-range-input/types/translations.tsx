@@ -31,6 +31,29 @@ export const Translations = {
       "Cancel_Button"               : "Zrušit"
     }
   },
+  "BlockingSegment":{
+    "SubMenuSegment":{
+      "Delete"                      : "Vymazat"
+    },
+    "DeleteSegmentPopUp" : {
+      "Disclaimer"                  : "Jste si jistí že chcete vymazat tuto událost?",
+      "Delete_Button"               : "Vymazat",
+      "Cancel_Button"               : "Zrušit"
+    },
+    "CreateSegmentPopUp":{
+      "Title"                       : "Vytvořit událost",
+      "SubTitle_SelectLocation"     : "Výběr lokace:",
+      "SubTitle_NameOfSegment"      : "Název události:",
+      "SubTitle_TypeOfEvent"        : "Typ události",
+      "SubTitle_AllDay"             : "Celodenní událost",
+      "Date"                        : "Datum",
+      "SubTitle_NotAllDay"          : "Část dne",
+      "SubTitle_SelectStartSegment" : "Začátek události:",
+      "SubTitle_SelectEndSegment"   : "Konec události:",
+      "Create_Button"               : "Vytvořit",
+      "Cancel_Button"               : "Zrušit"
+    },
+  },
   "PostPoup":{
     "CloseButton" : "Zrušit"
   }
