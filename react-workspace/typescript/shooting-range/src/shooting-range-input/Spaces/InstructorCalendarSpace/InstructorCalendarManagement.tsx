@@ -156,7 +156,7 @@ export const InstructorCalendarManagement = () => {
     contextMenu: new dns.DayPilot.Menu({
       items: [
         {
-          text: "Edit...",
+          text: Translations.InstructorSegmentManagementCalendar.SubMenuSegment.Edit,
           onClick: async (args:any) => {
             const segment         = instructorSegmentsList.find((seg:any) => seg.uuid===args.source.data.uuid);
             const _guid           = segment.uuid;
@@ -166,16 +166,16 @@ export const InstructorCalendarManagement = () => {
             //Form for editing 
             //Step 2. The form for creating a new blocking segment is shown (and has to be properly configured.).
             const editform = [
-              { name:   `SPLIT SEGMENT`,  type: "title" },
-              { name:   "Start of the Blocking Segment: ",             id:     "start",  dateFormat: "d.M.yyyy", timeFormat: "H:mm", timeInterval: 60, type: "datetime"},
-              { name:   "End of the Blocking Segment Segment: ",       id:     "end",    dateFormat: "d.M.yyyy", timeFormat: "H:mm", timeInterval: 60, type: "datetime"},            
+              { name:   `${Translations.InstructorSegmentManagementCalendar.EditSegmentPopUp.Title}`,  type: "title" },
+              { name:   `${Translations.InstructorSegmentManagementCalendar.EditSegmentPopUp.Start_of_the_blocking_segment}`, id: "start",  dateFormat: "d.M.yyyy", timeFormat: "H:mm", timeInterval: 60, type: "datetime"},
+              { name:   `${Translations.InstructorSegmentManagementCalendar.EditSegmentPopUp.End_of_the_blocking_segment}`,   id: "end",    dateFormat: "d.M.yyyy", timeFormat: "H:mm", timeInterval: 60, type: "datetime"},            
               ];
             const dp = calendarRef.current.control;
             const data = {
               start :         args.source.data.start.value,
               end   :         args.source.data.end.value
             };
-            const modal = await dns.DayPilot.Modal.form(editform, data, {okText: "Modify"});
+            const modal = await dns.DayPilot.Modal.form(editform, data, {okText: `${Translations.InstructorSegmentManagementCalendar.EditSegmentPopUp.Modify_Button}`, cancelText:`${Translations.InstructorSegmentManagementCalendar.EditSegmentPopUp.Cancel_Button}`});
             if (!modal.result) { 
               //IF MODAL IS CANCELLED NOTHING HAPPENS
               return; 
@@ -196,10 +196,10 @@ export const InstructorCalendarManagement = () => {
             text: "-"
           },
           {
-            text: "Delete",
+            text: Translations.InstructorSegmentManagementCalendar.SubMenuSegment.Delete,
             onClick: async (args:any) => {
               const dp = calendarRef.current.control;
-              const modal = await dns.DayPilot.Modal.confirm("Are you sure you want to delete this blocking segment?", {okText: "Delete"});
+              const modal = await dns.DayPilot.Modal.confirm(`${Translations.InstructorSegmentManagementCalendar.DeleteSegmentPopUp.Disclaimer}`, {okText: `${Translations.InstructorSegmentManagementCalendar.DeleteSegmentPopUp.Delete_Button}`, cancelText:`${Translations.InstructorSegmentManagementCalendar.DeleteSegmentPopUp.Cancel_Button}`});
               if (!modal.result) { 
                 //IF MODAL IS CANCELLED NOTHING HAPPENS
                 return; 
