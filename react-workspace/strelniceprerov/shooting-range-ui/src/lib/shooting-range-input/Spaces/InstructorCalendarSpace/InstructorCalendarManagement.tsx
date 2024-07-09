@@ -104,7 +104,8 @@ export const InstructorCalendarManagement = () => {
           dateFormat:       "d.M.yyyy",
           timeFormat:       "H:mm",
           timeInterval:     60,
-          type:             "datetime"
+          type:             "datetime",
+          locale:           'cs-cz'
         },
         { 
           name:             Translations.InstructorSegmentManagementCalendar.CreateSegmentPopUp.SubTitle_SelectEndSegment,  
@@ -112,7 +113,8 @@ export const InstructorCalendarManagement = () => {
           dateFormat:       "d.M.yyyy",
           timeFormat:       "H:mm",
           timeInterval:     60,
-          type:             "datetime"
+          type:             "datetime",
+          locale:           'cs-cz'
       },
       ];
       //Step 3. This data will be auto-populating the modal (for creating a new segment). 
@@ -271,6 +273,7 @@ export const InstructorCalendarManagement = () => {
     <div style={styles.wrap}>
       <div style={styles.left}>
         <dns.DayPilotNavigator
+          locale='cs-cz'
           selectMode={"Week"}
           showMonths={2}
           skipMonths={2}

@@ -17,7 +17,20 @@ const styles = {
     flexGrow: "1"
   }
 };
-
+/*-------------------------------------------------------------------------------------------------*/
+/*                                    VALIDATE TEXT FIELD                                          */
+/*-------------------------------------------------------------------------------------------------*/
+function validateTextRequired(args : any) {
+  const value = args.value || "";
+  if (value.trim().length === 0) {
+    args.valid = false;
+    args.message = "Text required";
+  }
+  else if (value.length > 6) {
+    args.valid = false;
+    args.message = "Text should not exceed 6 characters.";
+  }
+}
 export const SegmentBlockerCalendar = () => {
   const [showPopUp,    setShowPopUp]                                =   React.useState(false);
   const [postParameters, setPostParameters]                         =   React.useState("");
@@ -98,23 +111,31 @@ export const SegmentBlockerCalendar = () => {
           options:          locationList,
           type:             "select"
         },
-        { name:   "Name of Segment",        id: "text"    },
+        { name:   "Name of Segment",        id: "text"    ,onValidate: validateTextRequired},
         { name:   "Type of Event:",         id: "All_Day",    type: "radio",  options: [
           { name: "All Day Event",          id: "allDayEvent", 
             children: [
-              { name: "Date",           id: "daySelected",  type: "date"}
+              { name: "Date",           id: "daySelected",  type: "date", dateFormat: "d.M.yyyy", locale:'cs-cz'}
             ]},
           {name: "Not_All_Day", id: "Hourly", children: [
-            { name:   "Start of the Segment: ",     id:     "start",  dateFormat: "d.M.yyyy", timeFormat: "H:mm", timeInterval: 60, type: "datetime"},
-            { name:   "End of the Segment: ",       id:     "end",    dateFormat: "d.M.yyyy", timeFormat: "H:mm", timeInterval: 60, type: "datetime"},            
+            { name:   "Start of the Segment: ",     id:     "start",  dateFormat: "d.M.yyyy", timeFormat: "H:mm", timeInterval: 60, type: "datetime", locale:'cs-cz'},
+            { name:   "End of the Segment: ",       id:     "end",    dateFormat: "d.M.yyyy", timeFormat: "H:mm", timeInterval: 60, type: "datetime", locale:'cs-cz'},            
           ]}
         ]}
       ];
       //Step 3. This data will be auto-populating the modal (for creating a new segment). 
+      const tStart             = new Date(Date.parse(args.start));
+      const tEnd               = new Date(Date.parse(args.end));
+      const timeZoneOffset     =   tStart.getTimezoneOffset()/60;
+      const timeZoneOffsetEnd  =   tEnd.getTimezoneOffset()/60;
+      tStart.setHours(tStart.getHours() - timeZoneOffset);
+      tEnd.setHours(tEnd.getHours() - timeZoneOffsetEnd);
+      if(tStart.getMinutes() !== 0) { tStart.setMinutes(0); }
+      if(tEnd.getMinutes() !== 0) { tEnd.setMinutes(0); tEnd.setHours(tEnd.getHours()+1)}
       const data = { 
-        daySelected :   args.start,
-        start :         args.start,
-        end   :         args.end
+        daySelected :   args.start.value,
+        start :         tStart,
+        end   :         tEnd
       };
       const modal = await dns.DayPilot.Modal.form(form, data, {okText: "Create"});
       dp.clearSelection();
@@ -241,6 +262,7 @@ export const SegmentBlockerCalendar = () => {
     <div style={styles.wrap}>
       <div style={styles.left}>
         <dns.DayPilotNavigator
+          locale= "cs-cz"
           selectMode={"Week"}
           showMonths={2}
           skipMonths={2}
