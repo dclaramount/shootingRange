@@ -1,6 +1,7 @@
 import React from 'react';
 import { BookingContext } from './Context/BookingContext';
 import {daysToWeeks, format } from 'date-fns';
+import { Translations } from '../types/translations';
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /*                                                              CONSTANTS                                                                                                      */
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -10,16 +11,37 @@ const EMPTY_OCCUPANCY = '';
 /*                                                            HELPER FUNCTIONS                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/*                                                        Function the reason for blocked segment                                                                              */
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+function getBlockedReason(day : any, daysOfWeek: any, isoDaysOfWeek: any, hour:any, blockedSegments:any, selectedServiceId: any, locationList:any){
+  const idx = daysOfWeek.indexOf(day); 
+  if(idx >= 0){
+    //const currentDayToAnalyze = new Date(isoDaysOfWeek[idx]);
+    const dateObject = new Date(isoDaysOfWeek[idx]);
+    const currentDayToAnalyze = new Date(Date.UTC(dateObject.getFullYear(), dateObject.getMonth(), dateObject.getDate(), hour-2,0,0,0))
+    const locationOfSelectedService = locationList.find((ll:any) => parseInt(ll.id)===parseInt(selectedServiceId));
+    const _locationId = parseInt(locationOfSelectedService.locationId);
+    const fBlockedSegment = blockedSegments.find((seg:any) => new Date(seg.startTime).toISOString()===new Date(currentDayToAnalyze).toISOString() && seg.locationId===_locationId);
+    return (
+              <div style={{margin:'auto'}}>
+                {fBlockedSegment.name.substring(0,6)}
+              </div>
+            );
+  }
+  return EMPTY_OCCUPANCY;
+}
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /*                                                        Function to Check if segment is Blocked                                                                               */
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 function isSegmentBlocked(day : any, daysOfWeek: any, isoDaysOfWeek: any, hour:any, blockedSegments:any, selectedServiceId: any, locationList:any){
   const idx = daysOfWeek.indexOf(day); 
   if(idx >= 0){
-    const currentDayToAnalyze = new Date(isoDaysOfWeek[idx]);
-    currentDayToAnalyze.setHours(hour);
+    //const currentDayToAnalyze = new Date(isoDaysOfWeek[idx]);
+    const dateObject = new Date(isoDaysOfWeek[idx]);
+    const currentDayToAnalyze = new Date(Date.UTC(dateObject.getFullYear(), dateObject.getMonth(), dateObject.getDate(), hour-2,0,0,0))
     const locationOfSelectedService = locationList.find((ll:any) => parseInt(ll.id)===parseInt(selectedServiceId));
     const _locationId = parseInt(locationOfSelectedService.locationId);
-    const fBlockedSegment = blockedSegments.filter((seg:any) => seg.startTime===currentDayToAnalyze.getTime() && seg.locationId===_locationId);
+    const fBlockedSegment = blockedSegments.filter((seg:any) => new Date(seg.startTime).toISOString()===new Date(currentDayToAnalyze).toISOString() && seg.locationId===_locationId);
     return fBlockedSegment.length >0;
   }
   return false;
@@ -75,20 +97,70 @@ function calculateOccupancy(summaryBookings : any, summaryBookingInstructor: any
   if (filteredValue){
     if(segmentLocationStatus && segmentLocationStatus.segmentLocationFullyBooked){ 
       //For the case that the location is full (we will show the occupancy (for the given configuration (Instructors or NOT instructors) accordingly.))
-      return `${filteredValue.maxOccupancy}/${filteredValue.maxOccupancy}`;
+      return (
+        <div style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', pointerEvents:'none'}}>
+          <div style={{fontSize:'xx-small', marginLeft:'auto', marginRight:'auto', pointerEvents:'none'}}>
+            {Translations.BookingDashboard.FullyOccupied}
+          </div>
+          <div style={{fontSize:'xx-small', fontWeight:'lighter', paddingRight:'5px', pointerEvents:'none'}}>
+            {`${filteredValue.maxOccupancy}/${filteredValue.maxOccupancy}`}
+          </div>
+        </div>
+      );
     }
     if(segmentLocationStatus && shootingInstructorSelected){
       const normalOccupancyBookedLocation = parseInt(segmentLocationStatus.occupancyBooked) - parseInt(segmentLocationStatus.instructoresBooked);
       const occupancyLeftForInstructors   = parseInt(segmentLocationStatus.maxOccupancy) - normalOccupancyBookedLocation;
       /* We will check how many slots for instructors are left, and if are greater or equal to the real available instructos slots we will show ALL otherwise we will adjust accordingly*/
       const maxOccupancyInstructors       = occupancyLeftForInstructors >= parseInt(filteredValue.maxOccupancy) ?  filteredValue.maxOccupancy : occupancyLeftForInstructors;
-      return (`${filteredValue.occupancyBooked}/${maxOccupancyInstructors}`);
+      /*There are other types of bookings in this segment (E.g.) and we have to decide whether to handle as fully free or partially free*/
+      if(parseInt(filteredValue.occupancyBooked) > 0){
+        return (
+          <div style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', pointerEvents:'none'}}>
+            <div style={{fontSize:'xx-small', marginLeft:'auto', marginRight:'auto', pointerEvents:'none'}}>
+              {Translations.BookingDashboard.Partially_Occupied}
+            </div>
+            <div style={{fontSize:'xx-small', fontWeight:'lighter', paddingRight:'5px', pointerEvents:'none'}}>
+              {`${filteredValue.occupancyBooked}/${maxOccupancyInstructors}`}
+            </div>
+          </div>
+        );
+      }
+      else{
+        return (
+          <div style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', pointerEvents:'none'}}>
+            <div style={{fontSize:'xx-small', marginLeft:'auto', marginRight:'auto', pointerEvents:'none'}}>
+              {Translations.BookingDashboard.Free_Segment}
+            </div>
+            <div style={{fontSize:'xx-small', fontWeight:'lighter', paddingRight:'5px', pointerEvents:'none'}}>
+              {`${filteredValue.occupancyBooked}/${maxOccupancyInstructors}`}
+            </div>
+          </div>
+        );
+      }
     }
     else if(!segmentLocationStatus && shootingInstructorSelected){
       /* This is the case where there are no normal bookings for the segmentLocation (which means instructor capacity (if there is) is fully available)*/
-      return (`${filteredValue.occupancyBooked}/${filteredValue.maxOccupancy}`);
+      return (<div style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', pointerEvents:'none'}}>
+        <div style={{fontSize:'xx-small', marginLeft:'auto', marginRight:'auto', pointerEvents:'none'}}>
+          {Translations.BookingDashboard.Free_Segment}
+        </div>
+        <div style={{fontSize:'xx-small', fontWeight:'lighter', paddingRight:'5px', pointerEvents:'none'}}>
+          {`${filteredValue.occupancyBooked}/${filteredValue.maxOccupancy}`}
+        </div>
+      </div>)
     }
-    return `${filteredValue.occupancyBooked}/${filteredValue.maxOccupancy}`;
+    /*  Normal Bookings (W/out instructors) */
+    return (
+            <div style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', pointerEvents:'none'}}>
+              <div style={{fontSize:'xx-small', marginLeft:'auto', marginRight:'auto', pointerEvents:'none'}}>
+                {Translations.BookingDashboard.Partially_Occupied}
+              </div>
+              <div style={{fontSize:'xx-small', fontWeight:'lighter', paddingRight:'5px', pointerEvents:'none'}}>
+                {`${filteredValue.occupancyBooked}/${filteredValue.maxOccupancy}`}
+              </div>
+            </div>
+    );
   }
   else{ 
     /* This is for the cases that dont return results */
@@ -97,10 +169,26 @@ function calculateOccupancy(summaryBookings : any, summaryBookingInstructor: any
     if (shootingInstructorSelected){
       const filteredValue = summaryBookingInstructor.find((sum:any) => sum.segmentStarts.includes(formatedCurrentSegmentToAnalyze));
       if (filteredValue){
-        return `${filteredValue.occupancyBooked}/${filteredValue.maxOccupancy}`
+        return (
+                <div style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', pointerEvents:'none'}}>
+                  <div style={{fontSize:'xx-small', marginLeft:'auto', marginRight:'auto', pointerEvents:'none'}}>
+                    {Translations.BookingDashboard.Free_Segment}
+                  </div>
+                  <div style={{fontSize:'xx-small', fontWeight:'lighter', paddingRight:'5px', pointerEvents:'none'}}>
+                    {`${filteredValue.occupancyBooked}/${filteredValue.maxOccupancy}`}
+                  </div>
+                </div>
+                ) 
       }
     } else{
-      return `0/${locationList.find((ll:any) => parseInt(ll.id)===parseInt(selectedServiceId)).capacity}`;
+      return (<div style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', pointerEvents:'none'}}>
+                <div style={{fontSize:'xx-small', marginLeft:'auto', marginRight:'auto', pointerEvents:'none'}}>
+                  {Translations.BookingDashboard.Free_Segment}
+                </div>
+                <div style={{fontSize:'xx-small', fontWeight:'lighter', paddingRight:'5px', pointerEvents:'none'}}>
+                  {`0/${locationList.find((ll:any) => parseInt(ll.id)===parseInt(selectedServiceId)).capacity}`}
+                </div>
+              </div>)
     }
 
   }
@@ -168,7 +256,7 @@ export function DaysColumn(){
     const partialDate = `${ldate} ${ltime}`;
     //0 is Segment Blocked
     if (isSegmentBlocked(day, daysOfWeek, isoDaysOfWeek, time, blockingSegments, selectedLocation, locationList)){
-    return EMPTY_OCCUPANCY;
+      return getBlockedReason(day, daysOfWeek, isoDaysOfWeek, time, blockingSegments, selectedLocation, locationList);
     }
     //1st Verification Check if the day is in the past and disable the cell
     if (isDayInThePast(day, daysOfWeek, isoDaysOfWeek, time)){
@@ -297,7 +385,7 @@ export function DaysColumn(){
         </div>
         {timesToShow.map((timeToShow : string) => {
         return(
-        <div className={`reservation-cal-table-day-block ${status(day,timeToShow)} ${selected(`${isoDaysOfWeek[idx]} ${timeToShow}:00`)}`} id={`${isoDaysOfWeek[idx]} ${timeToShow}:00`} onClick={(e) => handlerClick(e)}>
+        <div className={`reservation-cal-table-day-block ${status(day,timeToShow)} ${selected(`${isoDaysOfWeek[idx]} ${timeToShow}:00`)}`} id={`${isoDaysOfWeek[idx]} ${timeToShow}:00`} style={{margin:'0px', padding:'0px'}} onClick={(e) => handlerClick(e)}>
           {getOccupancy(day,timeToShow)}
         </div>)
       })}

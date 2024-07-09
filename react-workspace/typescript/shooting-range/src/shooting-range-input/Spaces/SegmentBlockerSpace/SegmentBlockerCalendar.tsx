@@ -233,7 +233,6 @@ export const SegmentBlockerCalendar = () => {
     calendarRef.current.control.update({startDate, events});
     setRefresh(true);
   }, [refresh]);
-  console.log("RELOAD THE SEGMENT BLOCKER CALENDAR");
   return (
     <div>
       <Legend props={locationList}/>

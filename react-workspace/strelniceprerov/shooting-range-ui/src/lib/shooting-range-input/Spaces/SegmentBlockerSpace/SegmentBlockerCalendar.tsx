@@ -163,7 +163,6 @@ export const SegmentBlockerCalendar = () => {
         {
           text: "Delete",
           onClick: async (args:any) => {
-            console.log(args.source.data.uuid);
             const dp = calendarRef.current.control;
             const modal = await dns.DayPilot.Modal.confirm("Are you sure you want to delete this blocking segment?", {okText: "Delete"});
             if (!modal.result) { 
@@ -236,7 +235,6 @@ export const SegmentBlockerCalendar = () => {
     calendarRef.current.control.update({startDate, events});
     setRefresh(true);
   }, [refresh]);
-  console.log("RELOAD THE SEGMENT BLOCKER CALENDAR");
   return (
     <div>
     <Legend props={locationList}/>
