@@ -52,12 +52,15 @@ function isSegmentBlocked(day : any, daysOfWeek: any, isoDaysOfWeek: any, hour:a
 function isDayInThePast(day : any, daysOfWeek: any, isoDaysOfWeek: any, hour:any){
   const idx = daysOfWeek.indexOf(day); 
   if(idx >= 0){
-    const currentDayToAnalyze = new Date(isoDaysOfWeek[idx]);
-    currentDayToAnalyze.setHours(hour);
-    const today = new Date();
-    today.setMinutes(0);
-    today.setSeconds(0);
-    today.setMilliseconds(0);
+    const dateObject = new Date(isoDaysOfWeek[idx]);
+    const currentDayToAnalyze = new Date(Date.UTC(dateObject.getFullYear(), dateObject.getMonth(), dateObject.getDate(), hour-2,0,0,0))
+    //const currentDayToAnalyze = new Date(isoDaysOfWeek[idx]);
+    //currentDayToAnalyze.setHours(hour);
+    const todayDateObject = new Date();
+    const today = new Date(Date.UTC(todayDateObject.getFullYear(), todayDateObject.getMonth(), todayDateObject.getDate(), todayDateObject.getHours()+todayDateObject.getTimezoneOffset()/60,0,0,0))
+    //today.setMinutes(0);
+    //today.setSeconds(0);
+    //today.setMilliseconds(0);
     //console.log(`Current day to analyze ${currentDayToAnalyze}`);
     return today>currentDayToAnalyze;
   }
