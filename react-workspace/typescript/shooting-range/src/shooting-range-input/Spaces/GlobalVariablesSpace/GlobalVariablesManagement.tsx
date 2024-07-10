@@ -23,6 +23,7 @@ import {
 import { GlobalVariablesContext } from '../../Context/GlobalVariablesContext';
 import { PostPopUp } from '../../shared/PostPopUp';
 import { ManagementDashboardContext } from '../../Context/ManagementDashboardContext';
+import { InfoOutlined } from '@mui/icons-material';
 export type rowProps = {
   id:           number;
   vName:        string;
@@ -42,7 +43,7 @@ export default function GlobalVariablesManagement() {
   const [showPopUp,    setShowPopUp]                                =   React.useState(false);
   const [postParameters, setPostParameters]                         =   React.useState("");
   const [endpoint, setEndPoint]                                     =   React.useState("");
-  const closeModalPopUp                                             =   () => {setRefreshManagementDashboard(refreshManagementDashboard+1);setShowPopUp(false);}
+  const closeModalPopUp                                             =   () => {if(endpoint!=='getGlobalVariableById'){setRefreshManagementDashboard(refreshManagementDashboard+1);}setShowPopUp(false);}
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -58,8 +59,11 @@ export default function GlobalVariablesManagement() {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id: GridRowId) => () => {
-    setRows(rows.filter((row) => row.id !== id));
+  const handleInfoClick = (id: GridRowId) => () => {
+    console.log(`This is info click ${id}`);
+    setEndPoint("getGlobalVariableById") 
+    setPostParameters(`gVariableId=${id}`);
+    setShowPopUp(true);
   };
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -91,9 +95,12 @@ export default function GlobalVariablesManagement() {
     { field: 'vName', headerName: 'Name', width: 180, editable: false },
     { field: 'vValue',headerName: 'Value',type: 'string',width: 500,editable: true, renderCell: (params: any) =>  {
       return(
-      <Tooltip title={params.row.vComment} >
-         <span className="table-cell-trucate">{params.row.vValue}</span>
-       </Tooltip>)
+        <span title={params.row.vComment}>
+          {params.row.vValue}
+          {/*<Tooltip title={params.row.vComment} >
+            <span className="table-cell-trucate">{params.row.vValue}</span>
+          </Tooltip>*/}
+       </span>)
      },},
     {
       field: 'actions',
@@ -131,15 +138,14 @@ export default function GlobalVariablesManagement() {
             className="textPrimary"
             onClick={handleEditClick(id)}
             color="inherit"
-          />]
-          /*
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={handleDeleteClick(id)}
-            color="inherit"
           />,
-        ];*/
+          <GridActionsCellItem
+            icon={<InfoOutlined />}
+            label="Info"
+            onClick={handleInfoClick(id)}
+            color="inherit"
+          />
+        ];
       },
     },
   ];
@@ -149,7 +155,9 @@ export default function GlobalVariablesManagement() {
     <Box
       sx={{
         height: 500,
-        width: '100%',
+        width: '70%',
+        marginLeft:'auto',
+        marginRight: 'auto',
         '& .actions': {
           color: 'text.secondary',
         },
