@@ -33,14 +33,7 @@ try{
   if ($res) {
     $index                                            =   1;
     while ($row = mysqli_fetch_row($res)) {
-      $variables[]                                    =array( 
-                                                      'id'                  => intval($row[0]),
-                                                      'name'                => $row[1], 
-                                                      'value'               => $row[2],
-                                                      'comment'             => $row[3],
-                                                      'userId'              => intval($row[4]),
-                                                      'createdAt'           => strtotime($row[5])*1000,
-                                                      'updatedAt'           => strtotime($row[6])*1000);
+      $responseMessage                                =   $row[3];
       }
     };
     mysqli_close($mysqli);
@@ -57,6 +50,7 @@ try{
   mysqli_close($mysqli);
 }
 $responseArray=array(
+  'message'                                           =>  strval($responseMessage),
   'payload'                                           =>  $variables
 );
 http_response_code($requestResponse);
