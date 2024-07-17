@@ -10,7 +10,10 @@ export function BookingDateTime(){
     if(selectedSegment.length===0){
       return'';
     }else{
-      return selectedSegment.length>1? `${selectedSegment[0]}-${selectedSegment[selectedSegment.length-1].split(' ')[1]}` : selectedSegment[0];
+      const finishTimeStamp = selectedSegment[selectedSegment.length-1].split(' ')[1];
+      const finishTime= parseInt(finishTimeStamp.split(':')[0]) + 1;
+      return `${selectedSegment[0]}->${finishTime.toString()}:00`;
+      //return selectedSegment.length>1? `${selectedSegment[0]}-${selectedSegment[selectedSegment.length-1].split(' ')[1]}` : selectedSegment[0];
     }
   }
   return(

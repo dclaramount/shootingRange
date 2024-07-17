@@ -154,7 +154,10 @@ export function BookingFlowSpace({closeModalFunction} : any) {
       console.log(locationList);
       const selectedLocationName = locationList.find((location : any) => parseInt(location.id) === parseInt(selectedLocation)).serviceName;
       const formatedDate = `${(new Date(selectedSegment[0])).toLocaleDateString('de-DE')} ${selectedSegment[0].split(' ')[1]}`;
-      const formatedSelectedSegment = selectedSegment.length > 1 ? `${formatedDate}-${selectedSegment[selectedSegment.length-1].split(' ')[1]}` : formatedDate;    
+      const finishTimeStamp = selectedSegment[selectedSegment.length-1].split(' ')[1];
+      const finishTime= parseInt(finishTimeStamp.split(':')[0]) + 1;
+      const formatedSelectedSegment = `${formatedDate}->${finishTime.toString()}:00`;
+      //const formatedSelectedSegment = selectedSegment.length > 1 ? `${formatedDate}-${selectedSegment[selectedSegment.length-1].split(' ')[1]}` : formatedDate;    
       axios({
         url: `${apiURL}postSendEmail.php?sendGridKey=${sendGridKeyAPI}&emailTo=${email}&emailFrom=${sendGridFromEmail}&templateId=${sendGridTemplateConfirmationId}&segmentBooked=${formatedSelectedSegment}&nameOnReservation=${name}&shootingRangeName=${selectedLocationName}&phoneNumber=+${phone}&comment=${comment}&uuidInvoice=${uniqueIdentifier}`,
         method: "GET",
@@ -168,16 +171,16 @@ export function BookingFlowSpace({closeModalFunction} : any) {
   },[section])
 
   return(
-    <div style={{width:'500px', height: '625px'}}>
+    <div style={{width:'500px', height: '625px', backgroundColor:'#F2B51B'}}>
       {(  section==="LOADING" || 
           section==="GETTING_USER_BY_EMAIL" || 
           section==="GETTING_USER_BY_PHONE_NUMBER" || 
           section==="VERIFY_DATA_USER" || 
           section==="PROCEED_TO_CREATE_RESERVATION" || 
           section === "SEND_EMAIL" 
-        ) &&<CreatingBookingPlaceholder/>}
+        ) &&<CreatingBookingPlaceholder background='#F2B51B'/>}
       {section==="SUMMARY" && 
-      <div style={{backgroundColor:'white', width:'100%', height:'100%', paddingTop:'5px', paddingRight:'15px', paddingLeft:'15px', paddingBottom:'15px', border:'2px solid black', borderRadius:'10px', outline:'10px solid transparent', display:'flex', flexDirection:'column'}}>
+      <div style={{backgroundColor:'#F2B51B', width:'100%', height:'100%', paddingTop:'5px', paddingRight:'15px', paddingLeft:'15px', paddingBottom:'15px', border:'2px solid black', borderRadius:'10px', outline:'10px solid transparent', display:'flex', flexDirection:'column'}}>
         <div className="close" style={{marginLeft:'95%', marginRight:'auto', width:'24px', height:'24px', cursor:'pointer'}} onClick={closeModalFunction}>
           <i className="fa fa-times"></i>
         </div>

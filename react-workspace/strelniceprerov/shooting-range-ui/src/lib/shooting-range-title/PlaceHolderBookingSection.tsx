@@ -83,10 +83,13 @@ export function BookingConfPlaceHolder() {
     </div>
   );
 }
-export function CreatingBookingPlaceholder() {
+interface PlaceHoldeProps {
+  background?: string;
+}
+export function CreatingBookingPlaceholder({background='white'}:PlaceHoldeProps) {
   return(
     <div style={{width:'100%', height:'100%', display:'flex'}}>
-    <div style={{background:'white', width: '100%', height:'100%',padding:'5px', border:'2px solid black', borderRadius:'10px', display:'flex' }}>
+    <div style={{background:`${background}`, width: '100%', height:'100%',padding:'5px', border:'2px solid black', borderRadius:'10px', display:'flex' }}>
       <div style={{margin:'auto', width:'auto', height:'auto'}}>
       <i className="fa fa-spinner fa-spin" style={{fontSize:'84px'}}></i>
       </div>
