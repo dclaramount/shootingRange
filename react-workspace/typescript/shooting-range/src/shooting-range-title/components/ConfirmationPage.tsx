@@ -86,7 +86,7 @@ export function ConfirmationPage( {setPage} : any) {
         <TermsAndConditions closeModalFunction={setOpen}/>
       </Popup>
     </div>
-    {!checked && <button type="button" style={{ height:'35px', backgroundColor:'rgba(239, 239, 240, 0.12)', border:'1px solid rgba(0, 0, 0, 0.26)', boxShadow:'none', color:'rgba(0, 0, 0, 0.26)', textAlign:'center' }} disabled={!checked}  onClick={()=>setPage("GETTING_USER_BY_EMAIL")}>{Translations.SumaryBooking.Button_Create.toUpperCase()}</button> }
+    {!checked && <button type="button" style={{ height:'35px', backgroundColor:'rgba(34,139,34, 0.5)', border:'1px solid rgba(34,139,34, 0.5)', boxShadow:'none', color:'rgba(255,255,255, 0.5)', textAlign:'center', fontSize:'0.875rem', fontWeight:'bolder', borderRadius:'4px' }} disabled={!checked}  onClick={()=>setPage("GETTING_USER_BY_EMAIL")}>{Translations.SumaryBooking.Button_Create.toUpperCase()}</button> }
     {checked && <Button  variant="contained" color="success" style={{backgroundColor:'forestgreen', fontWeight:'bolder', color:'white', border:'1px solid forestgreen'}} disabled={!checked} onClick={()=>setPage("GETTING_USER_BY_EMAIL")}>{Translations.SumaryBooking.Button_Create}</Button> }
     </div>
     </div>
