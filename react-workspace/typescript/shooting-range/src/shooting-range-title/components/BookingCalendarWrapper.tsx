@@ -6,7 +6,7 @@ import { DaysColumn } from './DaysColumn';
 export function BookingCalendarWrappper(){
 const {daysOfWeek, setDaysOfWeek} = React.useContext(BookingContext);
  return (
-  <div className="reservation-cal">
+  <div className="reservation-cal" style={{width:'100%'}}>
     <div className="reservation-cal-table">
       <BookCalendarTable />
       <DaysColumn />

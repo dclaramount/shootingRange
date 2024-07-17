@@ -169,14 +169,16 @@ export function WrapperBookingSection() {
   }
   return(
     <>
+    <div style={{display:'flex', opacity:`${(showPopUpBookingProcess || showWarningChooseAnotherSegment) ? '0.5' : '1'}`, pointerEvents:`${showPopUpBookingProcess ? 'none' : 'auto'}`}}>
     <div className="wrapperPopUp" style={{opacity:`${(showPopUpBookingProcess || showWarningChooseAnotherSegment) ? '0.5' : '1'}`, pointerEvents:`${showPopUpBookingProcess ? 'none' : 'auto'}`}}>
       {(showingPage!=="POPUP_LENGTH" && showingPage!=="CONFIRMATION_PAGE") &&  <RenderHeader/>}
       {showingPage==="LOADING"          && <PlaceHolderBookingSection/>}
       {showingPage==="BOOKING_CALENDAR" && 
-      <>
+      <div style={{width:'100%'}}>
         <BookingCalendarWrappper/>
-        <BookingFormWrapper />
-      </>}
+      </div>}
+      </div>
+      <BookingFormWrapper />
       </div>
        <Popup open={showPopUpBookingProcess} onClose={closeModal} closeOnDocumentClick={false} >
         <BookingFlowSpace closeModalFunction={closeModal}/>

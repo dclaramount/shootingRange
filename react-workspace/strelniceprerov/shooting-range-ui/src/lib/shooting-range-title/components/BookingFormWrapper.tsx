@@ -24,7 +24,7 @@ export function BookingFormWrapper() {
   }
 
   return(
-    <div className="reservation-order">
+    <div className="reservation-order" style={{marginRight:'100px'}}>
       <form onSubmit={(e)=>submitHandler(e)}>
         <h3>Rezervace</h3>
           <SelectedShootingRange/>
