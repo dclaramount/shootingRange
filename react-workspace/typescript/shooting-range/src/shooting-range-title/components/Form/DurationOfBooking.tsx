@@ -51,16 +51,14 @@ export function DurationOfBooking(){
     <label htmlFor="select-box-location">Délka rezervace</label>
     <div className="input-duration-wrap">
         <a className="input-number-minus" onClick={(e) => onReduceSegmentDuration(e)} style={{cursor:'pointer'}}>
-            <span className="fa fa-minus">
-            </span>
+        <span style={{ display:'flex'}}>&#8722;</span> 
         </a>
         <input type="text" name="duration" maxLength={10} size={50} className="input-duration" data-number-max="3" id="input-duration" value="2">
         </input>
         <input type="text" className="input-duration-display" readOnly={true} value={`${selectedBookingDuration}h`}>
         </input>
         <a className="input-number-plus" onClick={(e) => onIncreaseSegmentDuration(e)} style={{cursor:'pointer'}}>
-            <span className="fa fa-plus">
-            </span>
+        <span style={{ display:'flex', marginBottom:'10px'}}>&#43;</span>            
         </a>
     </div>
 </div>
