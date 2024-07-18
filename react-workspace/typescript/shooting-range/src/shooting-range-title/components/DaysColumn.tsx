@@ -112,12 +112,33 @@ function calculateOccupancy(summaryBookings : any, summaryBookingInstructor: any
       );
     }
     if(segmentLocationStatus && shootingInstructorSelected){
+      console.log("SELECTED INSTRUCTOR")
+  
       const normalOccupancyBookedLocation = parseInt(segmentLocationStatus.occupancyBooked) - parseInt(segmentLocationStatus.instructoresBooked);
       const occupancyLeftForInstructors   = parseInt(segmentLocationStatus.maxOccupancy) - normalOccupancyBookedLocation;
       /* We will check how many slots for instructors are left, and if are greater or equal to the real available instructos slots we will show ALL otherwise we will adjust accordingly*/
       const maxOccupancyInstructors       = occupancyLeftForInstructors >= parseInt(filteredValue.maxOccupancy) ?  filteredValue.maxOccupancy : occupancyLeftForInstructors;
       /*There are other types of bookings in this segment (E.g.) and we have to decide whether to handle as fully free or partially free*/
-      if(parseInt(filteredValue.occupancyBooked) > 0){
+      if(formatedCurrentSegmentToAnalyze==='2024-07-22 13:00:00'){
+        console.log(`SegmentLocationStatu ${segmentLocationStatus}`);
+        console.log(segmentLocationStatus)
+        console.log(`shootingInstructorSelected ${shootingInstructorSelected}`);
+        console.log(`Instructor Occupancy Booked ${filteredValue.occupancyBooked}`);
+        console.log(`Occupancy Left  ${occupancyLeftForInstructors}`);
+      }
+      if (parseInt(filteredValue.occupancyBooked) >= maxOccupancyInstructors){
+        return (
+          <div style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', pointerEvents:'none'}}>
+            <div style={{fontSize:'xx-small', marginLeft:'auto', marginRight:'auto', pointerEvents:'none'}}>
+              {Translations.BookingDashboard.FullyOccupied}
+            </div>
+            <div style={{fontSize:'xx-small', fontWeight:'lighter', paddingRight:'5px', pointerEvents:'none'}}>
+              {`${filteredValue.occupancyBooked}/${maxOccupancyInstructors}`}
+            </div>
+          </div>
+        );
+      }
+      else if(parseInt(filteredValue.occupancyBooked) > 0){
         return (
           <div style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', pointerEvents:'none'}}>
             <div style={{fontSize:'xx-small', marginLeft:'auto', marginRight:'auto', pointerEvents:'none'}}>
@@ -225,7 +246,6 @@ function getOccupancyStatus(summaryBookings : any, summaryBookingInstructor: any
 }
 
 export function DaysColumn(){
-
   const { locationList, 
           timesToShow,                   
           daysOfWeek,                    
