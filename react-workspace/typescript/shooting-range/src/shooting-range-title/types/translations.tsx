@@ -6,6 +6,8 @@ export const Translations = {
   },
   "SumaryBooking":{
     "Title":                                 'Shrnutí rezervace',
+    "WithInstructor" :                       'S instruktorem',
+    "WithoutInstructor":                     'Bez instruktorem',
     "Terms_And_Conditions_Agree":            'Souhlasím s',
     "Terms_And_Contitions_Link":             'provozní řádem střelnice',
     "Button_Create":                         'Vytvořit rezervaci'

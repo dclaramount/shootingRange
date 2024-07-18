@@ -73,6 +73,7 @@ curl_setopt_array($curl, array(
   CURLOPT_POSTFIELDS => "{\n  
                               \"personalizations\":   [\n         {\n      
                                   \"to\":             [\n         {\n           \"email\":      \"$emailTo\"\n        }\n       ],\n
+                                  \"bcc\":            [\n         {\n           \"email\":      \"info@strelniceprerov.cz\"\n        }\n       ],\n
                                   \"dynamic_template_data\":             {\n           
                                         \"invoiceId\":                  \"$uuidInvoice\",\n
                                         \"name\":                       \"$nameOnReservation\",\n

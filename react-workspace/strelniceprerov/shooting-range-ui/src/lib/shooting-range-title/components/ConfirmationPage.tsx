@@ -60,7 +60,7 @@ export function ConfirmationPage( {setPage} : any) {
       </div>}
       {(!shootingPermit || (shootingPermit && shootingInstructor)) && <div style={{display:'flex', marginTop:separation}}>
         <span style={{color:colorIcons}}><i className={`fa fa-graduation-cap ${sizeOfIcons}`} aria-hidden="true" ></i></span>
-        <div style={{fontFamily:fontText, fontSize:fontSize, color:colorFont, fontWeight:fontWeight, marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}}>{shootingInstructor ? "With Instructor" : "Without Instructor"}</div>
+        <div style={{fontFamily:fontText, fontSize:fontSize, color:colorFont, fontWeight:fontWeight, marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}}>{shootingInstructor ? `${Translations.SumaryBooking.WithInstructor}` : `${Translations.SumaryBooking.WithoutInstructor}`}</div>
       </div>}
       <div style={{display:'flex', marginTop:separation}}>
         <span style={{color:colorIcons}}><i className={`fa fa-id-badge ${sizeOfIcons}`} aria-hidden="true" ></i></span>
