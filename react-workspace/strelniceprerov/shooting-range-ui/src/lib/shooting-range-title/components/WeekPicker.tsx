@@ -46,18 +46,18 @@ export const HonestWeekPicker = ({ onChange }) => {
   };
 
   const months = [
-    "Jan.",
-    "Feb.",
-    "Mar.",
-    "Apr.",
-    "May",
-    "Jun",
-    "July",
-    "Aug.",
-    "Sep.",
-    "Oct.",
-    "Nov.",
-    "Dec."
+    "leden.",
+    "únor.",
+    "březen.",
+    "duben.",
+    "květen",
+    "červen",
+    "červenec",
+    "srpen.",
+    "září.",
+    "říjen.",
+    "listopad.",
+    "prosinec."
   ];
 
   const days = {
@@ -199,13 +199,13 @@ export const HonestWeekPicker = ({ onChange }) => {
             </div>
           </div>
           <div className="numbers-container">
-            <div className="single-number day">Mon</div>
-            <div className="single-number day">Tue</div>
-            <div className="single-number day">Wed</div>
-            <div className="single-number day">Thu</div>
-            <div className="single-number day">Fri</div>
-            <div className="single-number day">Sat</div>
-            <div className="single-number day">Sun</div>
+            <div className="single-number day">po</div>
+            <div className="single-number day">út</div>
+            <div className="single-number day">st</div>
+            <div className="single-number day">čt</div>
+            <div className="single-number day">pá</div>
+            <div className="single-number day">so</div>
+            <div className="single-number day">ne</div>
           </div>
           <div className="numbers-container">{renderDays()}</div>
         </div>
