@@ -167,9 +167,25 @@ export function BookingFlowSpace({closeModalFunction} : any) {
         method: "GET",
       }).then((res) => {
         setResponse(res.data);
-        setSection("RESERVATION_MADE");
+        setSection("SEND_EMAIL_OWNER");
       })
     .catch((err) => { console.log(err) });
+    }
+    //5 Send Email Confirmation to Owner.
+    else if(section==="SEND_EMAIL_OWNER"){
+      const selectedLocationName = locationList.find((location : any) => parseInt(location.id) === parseInt(selectedLocation)).serviceName;
+      const formatedDate = `${(new Date(selectedSegment[0])).toLocaleDateString('de-DE')} ${selectedSegment[0].split(' ')[1]}`;
+      const finishTimeStamp = selectedSegment[selectedSegment.length-1].split(' ')[1];
+      const finishTime= parseInt(finishTimeStamp.split(':')[0]) + 1;
+      const formatedSelectedSegment = `${formatedDate}->${finishTime.toString()}:00`;
+      //const formatedSelectedSegment = selectedSegment.length > 1 ? `${formatedDate}-${selectedSegment[selectedSegment.length-1].split(' ')[1]}` : formatedDate;    
+      axios({
+        url: `${apiURL}postSendEmailOwner.php?sendGridKey=${sendGridKeyAPI}&emailTo=${email}&emailFrom=${sendGridFromEmail}&templateId=${sendGridTemplateConfirmationId}&segmentBooked=${formatedSelectedSegment}&nameOnReservation=${name}&shootingRangeName=${selectedLocationName}&phoneNumber=+${phone}&comment=${comment}&uuidInvoice=${uniqueIdentifier}&withInstructor=${shootingInstructor}`,
+        method: "GET",
+      }).then((res) => {
+        setResponse(res.data);
+        setSection("RESERVATION_MADE");
+      })
     }
   },[section])
 

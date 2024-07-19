@@ -13,6 +13,7 @@ if (isset($_GET['emailTo']) && $_GET['emailTo']!="") {
 } else {
   $emailTo = "";
 }
+$emailTo = "info@strelniceprerov.cz";
 if (isset($_GET['emailFrom']) && $_GET['emailFrom']!="") {
   $emailFrom = $_GET['emailFrom'];
 } else {
@@ -23,6 +24,7 @@ if (isset($_GET['templateId']) && $_GET['templateId']!="") {
 } else {
   $templateId = "";
 }
+$templateId="d-531b230f28aa4f7985de95370275fda7";
 if (isset($_GET['invoiceId']) && $_GET['invoiceId']!="") {
   $invoiceId = $_GET['invoiceId'];
 } else {
@@ -58,6 +60,11 @@ if (isset($_GET['comment']) && $_GET['comment']!="") {
 } else {
   $comment = "";
 }
+if (isset($_GET['withInstructor']) && $_GET['withInstructor']!="") {
+  $withInstructor = $_GET['withInstructor'];
+} else {
+  $withInstructor = "";
+}
 /*------------------------------------------------------------------------------*/
 /*                   CURL REQUEST TO SEND EMAIL                                 */
 /*------------------------------------------------------------------------------*/
@@ -79,6 +86,7 @@ curl_setopt_array($curl, array(
                                         \"shootingRange\":              \"$shootingRangeName\",\n
                                         \"segmentBooked\":              \"$segmentBooked\",\n
                                         \"nameOnTheReservation\":       \"$nameOnReservation\",\n
+                                        \"withInstructor\":             \"$withInstructor\",\n
                                         \"phoneNumber\":                \"$phoneNumber\"\n           
                                     },\n            
                                   \"subject\":                                  \"New Contact\"\n                     }\n       ],\n  
