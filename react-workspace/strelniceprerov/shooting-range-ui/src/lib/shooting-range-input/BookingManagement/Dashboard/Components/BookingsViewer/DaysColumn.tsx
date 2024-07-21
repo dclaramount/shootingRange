@@ -2,7 +2,7 @@ import React from 'react';
 import {format } from 'date-fns';
 import { ManagementDashboardContext } from '../../../../components/Context/ManagementDashboardContext';
 
-function bookedOccupancy(summaryBookings : any, day : any, daysOfWeek:any, isoDaysOfWeek : any, time : any, selectedServiceId: any, locationList:any){
+function bookedOccupancy(summaryBookings : any, day : any, daysOfWeek:any, isoDaysOfWeek : any, time : any, selectedServiceId: any, locationList:any, allInvoices:any, selectedLocation:any){
   const idx = daysOfWeek.indexOf(day); 
   const currentDayToAnalyze = new Date(`${isoDaysOfWeek[idx+1]} ${time}`);
   const formatedCurrentSegmentToAnalyze = format(currentDayToAnalyze, 'yyyy-MM-dd HH:mm:ss');
@@ -10,26 +10,20 @@ function bookedOccupancy(summaryBookings : any, day : any, daysOfWeek:any, isoDa
   const bookingsWithInstructor = bookingsForTheSegment.filter((bfts:any) => parseInt(bfts.instructoresBooked)===1);
   const color = bookingsWithInstructor.length > 0 ? '#F2B51B' : 'black'
   const sum = 0;
-  const names = [];
-  //bookingsForTheSegment.forEach((bfts : any) => names.push(bfts.))
-  const occupancyToShow =   bookingsForTheSegment.length>0 ? sum : ''
+  const names : string[] = [];
+  const filtered = allInvoices.filter((sb : any) => ((new Date(sb.startTime * 1000)).toLocaleString('sv-SE', { timeZone: 'CET'}).includes(formatedCurrentSegmentToAnalyze) && (parseInt(sb.serviceId)===parseInt(selectedLocation))));
+  filtered.forEach((bfts : any, idx:number) => {if(idx<2){names.push(bfts.customerName)}else if(idx===2){names.push(`${bfts.customerName}...`)}})
   if(bookingsForTheSegment.length>0){
     return (
       <div className="reservation-cal-legend-item occupied" style={{display:'flex', flexDirection:'row', width:'100%', height:'100%', padding:'0 5px 0 5px', margin:'0px'}}>
-        <span style={{width:'100%', height:'100%', textAlign:'left'}}>
-          {/*
+        <span style={{width:'100%', height:'100%', textAlign:'left'}} id={`${isoDaysOfWeek[idx+1]} ${time}`}>
+        {names.map((n:any) => 
             <div style={{fontSize:'8px', margin:'0px', padding:'0px', fontWeight:'lighter'}}>
-              Jiri Kolacia
-            </div>
-            <div style={{fontSize:'8px', margin:'0px', padding:'0px', fontWeight:'lighter'}}>
-              Diego Claramount
-            </div>
-            <div style={{fontSize:'8px', margin:'0px', padding:'0px', fontWeight:'lighter'}}>
-              Frankie Claramount...
-            </div>*/}
-            {occupancyToShow}
+            {n}
+          </div>
+          )}
         </span>
-        <em style={{marginBottom:'auto', marginTop:'5px', display: 'inline-block', width:'10px', height:'10px', border:`1px solid ${color}`, background:`${color}`, color:`${color}`, borderRadius:'50%', margin:'0 5px 0 auto'}}></em>
+        <em style={{marginBottom:'auto', marginTop:'5px', display: 'inline-block', width:'10px', height:'10px', border:`1px solid ${color}`, background:`${color}`, color:`${color}`, borderRadius:'50%', margin:'0 5px 0 auto', pointerEvents:'none'}}></em>
       </div>
     )
   }
@@ -111,9 +105,9 @@ const handlerClick = (e : any) => {
         </div>
         {timesToShow.map((timeToShow : string) => {
         return(
-        <div className={`reservation-cal-table-day-block ${selected(`${isoDaysOfWeek[idx]} ${timeToShow}:00`)}`} id={`${isoDaysOfWeek[idx]} ${timeToShow}:00`} onClick={(e) => handlerClick(e)}>
-          {bookedOccupancy(summaryBookingSegments, day, daysOfWeek, isoDaysOfWeek, `${timeToShow}:00`, parseInt(selectedLocation), locationList)}
-        </div>)
+        <div className={`reservation-cal-table-day-block ${selected(`${isoDaysOfWeek[idx+1]} ${timeToShow}:00`)}`} id={`${isoDaysOfWeek[idx+1]} ${timeToShow}:00`} style={{padding:'0px'}} onClick={(e) => handlerClick(e)}>
+          {bookedOccupancy(summaryBookingSegments, day, daysOfWeek, isoDaysOfWeek, `${timeToShow}:00`, parseInt(selectedLocation), locationList,allInvoices, selectedLocation)}
+          </div>)
       })}
     </div>)})}
   </>
