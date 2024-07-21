@@ -41,7 +41,7 @@ export function WeekSelector(){
       <label>Datum</label>
       <HonestWeekPicker onChange={onChange}/>
     </div>
-    <LegendText/>
+    {/*<LegendText/>*/}
     </>
   )
 }

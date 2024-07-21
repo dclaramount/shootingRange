@@ -5,6 +5,10 @@ export const Translations = {
     'Title_Blocking_Segments_Management'  : 'Správa událostí',
     'Title_Events'                        : 'Události'
   },
+  "BookingManagmentTab":{
+    "BlockWInstructor"                    : 'Blok s instruktorem',
+    "BlockWoutInstructor"                 : 'Blok bez instruktora'
+  },
   "InstructorSegmentManagementCalendar": {
     "CreateSegmentPopUp":{
       "Title"                       : "Vytvořte segment",
