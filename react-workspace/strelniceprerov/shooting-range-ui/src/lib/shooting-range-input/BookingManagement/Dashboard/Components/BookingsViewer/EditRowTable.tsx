@@ -68,7 +68,7 @@ export function EditRowTable({inv} : any) {
   const [oldService, setOldService]               =   React.useState(inv.serviceName);
   const [oldStartTime, setOldStartTime]           =   React.useState(inv.startTime);
   const [oldLength, setOldLength]                 =   React.useState(inv.lenght);
-  const [oldShootingPermit, setOldShootingPermit] =   React.useState("PLACEHOLDER");
+  const [oldShootingPermit, setOldShootingPermit] =   React.useState(inv.shootingPermit);
   const [oldWithInstructor, setOldWithInstructor] =   React.useState(inv.instructor)
   const [oldName, setOldName]                     =   React.useState(inv.customerName);
   const [oldEmail, setOldEmail]                   =   React.useState(inv.customerEmail);
@@ -79,7 +79,7 @@ export function EditRowTable({inv} : any) {
    const [newService, setNewService]               =   React.useState(inv.serviceName);
    const [newStartTime, setNewStartTime]           =   React.useState(inv.startTime);
    const [newLength, setNewLength]                 =   React.useState(inv.lenght);
-   const [newShootingPermit, setNewShootingPermit] =   React.useState("PLACEHOLDER");
+   const [newShootingPermit, setNewShootingPermit] =   React.useState(inv.shootingPermit);
    const [newWithInstructor, setNewWithInstructor] =   React.useState(inv.instructor)
    const [newName, setNewName]                     =   React.useState(inv.customerName);
    const [newEmail, setNewEmail]                   =   React.useState(inv.customerEmail);
@@ -354,7 +354,7 @@ export function EditRowTable({inv} : any) {
             <td style={tableCell}><DropDownEditableCell name={`list_of_services`} value={newService} listOfValues={locationList} updateFunction={setNewService}/></td>
             <td style={tableCell}><TimeStampEditableCell value={newStartTime} originalValue={oldStartTime} updateFunction={setNewStartTime}/></td>
             <td style={tableCell}><DropDownEditableCell name={`list_of_lengths`} updateFunction={setNewLength} value={newLength} listOfValues={arrayOfLenghts}/></td>
-            <td style={tableCell}><div style={{marginTop:'5px'}}>PlaceHolder</div></td>
+            <td style={tableCell}><TextEditableCell id={'shooting_permit'} value={newShootingPermit} updateFunction={setNewShootingPermit}/></td>
             <td style={tableCell}><CheckBoxEditable id={'instructor_checkbox'} value={newWithInstructor} updateFunction={setNewWithInstructor}/></td>
             <td style={tableCell}><TextEditableCell id={'customer_name'} value={newName} updateFunction={setNewName}/></td>
             <td style={tableCell}><TextEditableCell id={'email'} value={newEmail} updateFunction={setNewEmail}/></td>

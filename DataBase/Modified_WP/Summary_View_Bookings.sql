@@ -19,7 +19,8 @@ SELECT
     uInfo.email             as  'customerEmail',
     uInfo.phoneNumber       as  'customerPhoneNumber',
     inv.uuidInvoice         as  'uuidInvoice',
-    inv.comment             as  'comment'
+    inv.comment             as  'comment',
+    uInfo.shootingPermit    as  'shootingPermit'
 FROM invoice_item as iItem
     INNER JOIN `services` serv
                     ON iItem.location_id = serv.id
@@ -30,5 +31,5 @@ FROM invoice_item as iItem
     INNER JOIN `invoice_type` invType
                ON inv.invoice_type_id = invType.id
     INNER JOIN `user_list` uInfo
-               ON Convert(uInfo.id  USING utf8mb4) COLLATE utf8mb4_unicode_ci = inv.user_id
+               ON uInfo.id  = inv.user_id
 ORDER BY iItem.invoice_id ASC, iItem.created ASC;

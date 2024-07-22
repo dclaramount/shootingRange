@@ -38,7 +38,8 @@ if ($res) {
                             'customerEmail'           => $row[15],
                             'phoneNumber'             => $row[16],
                             'uuid'                    => $row[17],
-                            'comment'                 => $row[18]
+                            'comment'                 => $row[18],
+                            'shootingPermit'          => $row[19]
                           );
   }
   $res->free_result();
