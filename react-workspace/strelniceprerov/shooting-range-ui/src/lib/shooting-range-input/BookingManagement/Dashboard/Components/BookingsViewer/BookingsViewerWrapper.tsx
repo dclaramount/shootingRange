@@ -36,8 +36,10 @@ export function BookingsViewerWrapper(){
       {`Table last updated on: ${lastRefreshTime}`}
       </div>
     </div>
+    <div style={{width:'100%', marginRight:'auto', marginLeft:'auto'}}>
     <Legend props={[{color:'black', name:`${Translations.BookingManagmentTab.BlockWoutInstructor}`},{color:'#f2b51b' , name:`${Translations.BookingManagmentTab.BlockWInstructor}`}]} />
-    <div className="reservation-cal-table" style={{marginRight:'20%'}}>
+    </div>
+    <div className="reservation-cal-table">
       <BookCalendarTable />
       <DaysColumn />
     </div>
