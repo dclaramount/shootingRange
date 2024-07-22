@@ -1,5 +1,6 @@
 import React from 'react';
 import { ManagementDashboardContext } from '../../../../Context/ManagementDashboardContext';
+import { Translations } from '../../../../types/translations';
 
 
 export function SelectedShootingRange(){
@@ -10,7 +11,7 @@ export function SelectedShootingRange(){
       <div className="select-box">
         <label htmlFor="select-location-dropdown-menu">Střelnice</label>
         <select onChange={(e) => setSelectedLocation(e.target.value)} name="service" id="select-location-dropdown-menu" defaultValue={""}>
-          <option value="" selected disabled hidden>Vyberte Střelnice</option>
+          <option value="" selected disabled hidden>{Translations.ManagementDashboard.Default_Select_Service}</option>
           {locationList.map((location : any) => {
             return(
               <option value={location.id}>{location.serviceName}</option>

@@ -3,7 +3,8 @@ export const Translations = {
     'Title_Reservation_Management'        : 'Správa rezervací',
     'Title_Instructors_Management'        : 'Správa instruktorů',
     'Title_Blocking_Segments_Management'  : 'Správa událostí',
-    'Title_Events'                        : 'Události'
+    'Title_Events'                        : 'Události',
+    'Default_Select_Service'              : 'Vyberte střeliště'
   },
   "BookingManagmentTab":{
     "BlockWInstructor"                    : 'Blok s instruktorem',
