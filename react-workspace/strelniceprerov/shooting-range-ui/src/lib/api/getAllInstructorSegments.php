@@ -23,7 +23,8 @@ $query = "SELECT  instructor_segments.id                as 'id',
                   instructors.id                        as 'instructorId'
                   FROM  instructor_segments             as instructor_segments
                   INNER JOIN instructors as instructors ON instructor_segments.instructor_id=instructors.id
-                  WHERE instructor_segments.isDeleted =   false;";
+                  WHERE instructor_segments.isDeleted =   false 
+                  ORDER BY instructor_segments.guid, instructor_segments.start_time;";
  
 //Retrieving the records
 $res = mysqli_query($mysqli, $query, MYSQLI_USE_RESULT) or die( mysqli_error($mysqli));
