@@ -74,6 +74,7 @@ export const InstructorCalendarManagement = () => {
     timeHeaderCellDuration :                                        60,
     durationBarVisible:                                             true,
     timeRangeSelectedHandling:                                      "Enabled",
+    locale:                                                         'cs-cz',
     //Step 0.1. The Table Headers personalization
     onBeforeHeaderRender: (args : any) => {
       const headerCell                                              =   new Date(Date.parse(args.column.start)).toLocaleDateString('cs-CZ', {weekday:'short', month:'2-digit', day:'2-digit'});
