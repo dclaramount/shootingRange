@@ -69,7 +69,7 @@ export const InstructorCalendarManagement = () => {
     dayEndsHour:                                                    parseInt(gVariables.endDayHours),
     /*Other parameters for the calendar for the blocking of the segments*/
     viewType:                                                      "Week",
-    scrollToHour:                                                   8,
+    /*scrollToHour:                                                   8,*/
     cellDuration:                                                   60,
     timeHeaderCellDuration :                                        60,
     durationBarVisible:                                             true,

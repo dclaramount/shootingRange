@@ -26,7 +26,7 @@ function validateTextRequired(args : any) {
     args.valid = false;
     args.message = "Text required";
   }
-  else if (value.length > 6) {
+  else if (value.length > 7) {
     args.valid = false;
     args.message = "Text should not exceed 6 characters.";
   }
@@ -82,7 +82,7 @@ export const SegmentBlockerCalendar = () => {
     dayEndsHour:                                                    parseInt(gVariables.endDayHours),
     /*Other parameters for the calendar for the blocking of the segments*/
     viewType:                                                      "Week",
-    scrollToHour:                                                   8,
+    /*scrollToHour:                                                   8,*/
     cellDuration:                                                   60,
     timeHeaderCellDuration :                                        60,
     durationBarVisible:                                             true,
