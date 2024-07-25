@@ -61,5 +61,6 @@ export const Translations = {
   },
   "PostPoup":{
     "CloseButton" : "Zrušit"
-  }
+  },
+  "ConfirmedPassword" : 'Napište heslo'
 }

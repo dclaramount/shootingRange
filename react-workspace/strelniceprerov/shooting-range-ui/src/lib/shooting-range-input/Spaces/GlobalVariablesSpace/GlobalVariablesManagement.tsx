@@ -23,6 +23,7 @@ import { PostPopUp } from '../../shared/PostPopUp';
 import { GlobalVariablesContext } from '../../components/Context/GlobalVariablesContext';
 import { ManagementDashboardContext } from '../../components/Context/ManagementDashboardContext';
 import { InfoOutlined } from '@mui/icons-material';
+import { Translations } from '../../types/translations';
 export type rowProps = {
   id:           number;
   vName:        string;
@@ -42,6 +43,7 @@ export default function GlobalVariablesManagement() {
   const [showPopUp,    setShowPopUp]                                =   React.useState(false);
   const [postParameters, setPostParameters]                         =   React.useState("");
   const [endpoint, setEndPoint]                                     =   React.useState("");
+  const [password, setPassword]                                     =   React.useState("");
   const closeModalPopUp                                             =   () => {if(endpoint!=='getGlobalVariableById'){setRefreshManagementDashboard(refreshManagementDashboard+1);}setShowPopUp(false);}
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
@@ -55,6 +57,12 @@ export default function GlobalVariablesManagement() {
   };
 
   const handleSaveClick = (id: GridRowId) => () => {
+    const password = prompt(Translations.ConfirmedPassword);
+    const CryptoJS = require("crypto-js"); 
+    const encryptedPassword = CryptoJS.SHA3(`${password}`);
+    //const encryptedPassword = CryptoJS.AES.encrypt(`${password}`, `test-key`, { mode: CryptoJS.mode.ECB });
+    //console.log(`Encrypted Value => ${encryptedPassword.toString()}`);
+    setPassword(encryptedPassword);
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
@@ -81,7 +89,7 @@ export default function GlobalVariablesManagement() {
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row)));
     setEndPoint("postUpdateGlobalVariable") 
-    setPostParameters(`id=${newRow.id}&newValue=${newRow.vValue}`);
+    setPostParameters(`id=${newRow.id}&newValue=${newRow.vValue}&password=${password}`);
     setShowPopUp(true);
     return updatedRow;
   };

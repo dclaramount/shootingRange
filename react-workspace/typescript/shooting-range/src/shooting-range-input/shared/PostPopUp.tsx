@@ -27,6 +27,10 @@ const Banner = (props :any) => {
       {props.status===409 &&          <i className="fa fa-random fa-4x"   style={{color:'orange',  marginLeft:'auto', marginRight:'auto', marginTop:'15px', marginBottom:'15px'}} aria-hidden="true"></i>}
       {props.status===409 &&          <Typography sx={{ p: 2 }} style={{height:'100%', marginTop:'auto', marginBottom:'auto', fontWeight:'bold', color:'orange', textAlign:'center'}}>{props.payload.message}</Typography>}
       {props.status===409 &&          <Button onClick={()=>props.closeModal()} variant='contained' style={{marginTop:'auto', backgroundColor:'orange', fontWeight:'bolder', color:'white', width:'auto', borderColor:'orange'}}>{Translations.PostPoup.CloseButton}</Button>}
+      {/* REPONSE 401 - NOT AUTHORIZED*/}
+      {props.status===401 &&          <i className="fa fa-ban fa-5x"   style={{color:'red',  marginLeft:'auto', marginRight:'auto', marginTop:'15px', marginBottom:'15px'}} aria-hidden="true"></i>}
+      {props.status===401 &&          <Typography sx={{ p: 2 }} style={{height:'100%', marginTop:'auto', marginBottom:'auto', fontWeight:'bold', color:'red', textAlign:'center'}}>{props.payload.message}</Typography>}
+      {props.status===401 &&          <Button onClick={()=>props.closeModal()} variant='contained' style={{marginTop:'auto', backgroundColor:'red', fontWeight:'bolder', color:'white', width:'auto', borderColor:'red'}}>{Translations.PostPoup.CloseButton}</Button>}
       {/* REPONSE 500 - INTERNAL SERVER ERROR*/}
       {props.status===500 &&          <i className="fa fa-times-circle fa-5x"   style={{color:'red',  marginLeft:'auto', marginRight:'auto', marginTop:'15px', marginBottom:'15px'}} aria-hidden="true"></i>}
       {props.status===500 &&          <Typography sx={{ p: 2 }} style={{height:'100%', marginTop:'auto', marginBottom:'auto', fontWeight:'bold', color:'red', textAlign:'center'}}>{props.payload.message}</Typography>}
