@@ -4,13 +4,13 @@ import { BookingContext } from '../Context/BookingContext';
 
 export function BookingPhoneNumber(){
 
-  const {phone, setPhone} = React.useContext(BookingContext);
+  const {isNormalComputer, phone, setPhone} = React.useContext(BookingContext);
 
   const handlePhoneNumberChange = (e:any) => {
     setPhone(e.target.value);
   }
   return(
-    <div className="reservation-order-row">
+    <div className="reservation-order-row" style={styles.container(isNormalComputer)}>
         <label htmlFor="frm-reservationCalendar-orderForm-phone">
           Telefon
         </label>
@@ -18,3 +18,9 @@ export function BookingPhoneNumber(){
     </div>
   )
 }
+const styles = {
+  container: (isNormalComputer: boolean)  => ({
+   marginRight:'100px',
+   width: isNormalComputer ? '100%' : '100%'
+  })
+};

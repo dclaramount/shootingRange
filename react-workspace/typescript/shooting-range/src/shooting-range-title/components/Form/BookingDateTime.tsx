@@ -4,7 +4,7 @@ import { BookingContext } from '../Context/BookingContext';
 
 export function BookingDateTime(){
 
-  const {selectedSegment} = React.useContext(BookingContext);
+  const {selectedSegment, isNormalComputer} = React.useContext(BookingContext);
 
   const constructValueDateAndTime = () => {
     if(selectedSegment.length===0){
@@ -17,9 +17,14 @@ export function BookingDateTime(){
     }
   }
   return(
-    <div className="reservation-order-row" data-tooltip data-original-title="V kalendáři vyberte kliknutím den a čas rezervace.">
+    <div className="reservation-order-row" data-tooltip data-original-title="V kalendáři vyberte kliknutím den a čas rezervace." style={styles.container(isNormalComputer)}>
     <label htmlFor="reservation-datetime">Datum a čas</label>
       <input style={{pointerEvents:'none'}} value={constructValueDateAndTime()} type='text' name='datetime' size={50} maxLength={50} id='reservation-datetime' required={true} onInvalid={e => (e.target as HTMLInputElement).setCustomValidity('Select a segment from the calendar')} onInput={e => (e.target as HTMLInputElement).setCustomValidity('')}/>
   </div>
   )
 }
+const styles = {
+  container: (isNormalComputer: boolean)  => ({
+   width: isNormalComputer ? 'unset' : '100%'
+  })
+};

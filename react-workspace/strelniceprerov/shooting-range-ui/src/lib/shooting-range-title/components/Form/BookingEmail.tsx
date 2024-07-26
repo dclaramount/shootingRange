@@ -4,13 +4,13 @@ import { BookingContext } from '../Context/BookingContext';
 
 export function BookingEmail(){
 
-  const {email, setEmail} = React.useContext(BookingContext);
+  const {isNormalComputer, email, setEmail} = React.useContext(BookingContext);
   const emailPattern = "[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$";
   const handleEmailChange = (e:any) => {
     setEmail(e.target.value);
   }
   return(
-    <div className="reservation-order-row">
+    <div className="reservation-order-row" style={styles.container(isNormalComputer)}>
         <label htmlFor="frm-reservationCalendar-orderForm-email">
           E-mail
         </label>
@@ -19,3 +19,9 @@ export function BookingEmail(){
     </div>
   )
 }
+const styles = {
+  container: (isNormalComputer: boolean)  => ({
+   marginRight:'100px',
+   width: isNormalComputer ? '100%' : '100%'
+  })
+};

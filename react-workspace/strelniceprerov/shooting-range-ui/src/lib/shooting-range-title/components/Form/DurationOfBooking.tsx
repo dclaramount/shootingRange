@@ -4,7 +4,7 @@ import { BookingContext } from '../Context/BookingContext';
 export function DurationOfBooking(){
   const { selectedBookingDuration,  setSelectedBookingDuration, 
           selectedSegment,          setSelectedSegment, 
-          notAvailableSegments, setShowWarningChooseAnotherSegment
+          notAvailableSegments, setShowWarningChooseAnotherSegment, isNormalComputer
         } = React.useContext(BookingContext);
   /*--------------Handler for Reduction of Length of Reservation----------------*/
   const onReduceSegmentDuration = (e : any) => {
@@ -44,7 +44,7 @@ export function DurationOfBooking(){
     }
   };
   return(
-    <div id={"Lenght_Reservation"} className="reservation-order-row">
+    <div id={"Lenght_Reservation"} className="reservation-order-row" style={styles.container(isNormalComputer)}>
     <label htmlFor="select-box-location">Délka rezervace</label>
     <div className="input-duration-wrap">
         <a className="input-number-minus" onClick={(e) => onReduceSegmentDuration(e)} style={{cursor:'pointer'}}>
@@ -61,3 +61,8 @@ export function DurationOfBooking(){
 </div>
   )
 }
+const styles = {
+  container: (isNormalComputer: boolean)  => ({
+   width: isNormalComputer ? '100%' : '100%'
+  })
+};

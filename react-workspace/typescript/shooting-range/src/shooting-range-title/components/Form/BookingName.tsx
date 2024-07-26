@@ -4,13 +4,13 @@ import { BookingContext } from '../Context/BookingContext';
 
 export function BookingName(){
 
-  const {name, setName} = React.useContext(BookingContext);
+  const {isNormalComputer, name, setName} = React.useContext(BookingContext);
 
   const handleNameChange = (e:any) => {
     setName(e.target.value);
   }
   return(
-    <div className="reservation-order-row">
+    <div className="reservation-order-row" style={styles.container(isNormalComputer)}>
         <label htmlFor="frm-reservationCalendar-orderForm-name">
           Jméno a příjmení
         </label>
@@ -18,3 +18,9 @@ export function BookingName(){
     </div>
   )
 }
+const styles = {
+  container: (isNormalComputer: boolean)  => ({
+   marginRight:'100px',
+   width: isNormalComputer ? '100%' : '100%'
+  })
+};

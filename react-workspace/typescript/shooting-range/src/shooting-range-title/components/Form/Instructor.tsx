@@ -4,13 +4,13 @@ import { BookingContext } from '../Context/BookingContext';
 
 export function Instructor(){
 
-  const {shootingPermit, shootingInstructor, setShootingInstructor, setSelectedSegment} = React.useContext(BookingContext);
+  const {isNormalComputer, shootingPermit, shootingInstructor, setShootingInstructor, setSelectedSegment} = React.useContext(BookingContext);
 
 
   return(
-    <div className="reservation-order-row">
+    <div className="reservation-order-row" style={stylesCheckBox.container(isNormalComputer)}>
       <label htmlFor="select-box-location">Instruktor</label>
-        <div className="reservation-order-row-radios" data-tooltip data-original-title="Instruktor je povinný pro střelce bez ZP.">
+        <div style={stylesCheckBox2.container(isNormalComputer)} className="reservation-order-row-radios" data-tooltip data-original-title="Instruktor je povinný pro střelce bez ZP.">
           <input checked={shootingInstructor} onClick={(e) => {setShootingInstructor(true); setSelectedSegment([])}} type="radio" name="instructor" id="frm-reservationCalendar-orderForm-instructor-1" value="1" />
             <label htmlFor="frm-reservationCalendar-orderForm-instructor-1">
               Ano
@@ -23,3 +23,14 @@ export function Instructor(){
     </div>
   )
 }
+const stylesCheckBox = {
+  container: (isNormalComputer: boolean)  => ({
+  width: isNormalComputer ? 'unset' : '100%',
+   margin: isNormalComputer ? 'unset' : '0 auto 0 auto'
+  })
+};
+const stylesCheckBox2 = {
+  container: (isNormalComputer: boolean)  => ({
+   justifyContent: isNormalComputer ? 'unset' : 'center'
+  })
+};

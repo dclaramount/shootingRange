@@ -62,6 +62,7 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
   const [sendGridFromEmail, setSendGridFromEmail]                                               = React.useState(gVariables.emailFrom);
   const [sendGridTemplateConfirmationId, setSendGridTemplateConfirmationId]                     = React.useState(gVariables.confirmationTemplateId);
   const [refreshEntirePlugin, setRefreshEntirePlugin]                                           = React.useState(false);
+  const [isNormalComputer, setIsNormalComputer]                                                 = React.useState(true);
   const [showWarningChooseAnotherSegment, setShowWarningChooseAnotherSegment] = React.useState(false);
   const delayInMilliseconds = 5000; //1 second
   setTimeout(function() {
@@ -107,7 +108,8 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
                                     refreshEntirePlugin,      setRefreshEntirePlugin,
                                     comment,                  setComment,
                                     showWarningChooseAnotherSegment, setShowWarningChooseAnotherSegment,
-                                    blockingSegments,       setAllBlockingSegments
+                                    blockingSegments,       setAllBlockingSegments,
+                                    isNormalComputer, setIsNormalComputer
                                     }}>
   <div className="container">
     <div className="row">

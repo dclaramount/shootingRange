@@ -13,7 +13,7 @@ import React from 'react';
 export function BookingFormWrapper() {
 
   const {
-    setShowPopUpBookingProcess
+    setShowPopUpBookingProcess,isNormalComputer
 } = React.useContext(BookingContext);
 
 
@@ -24,7 +24,7 @@ export function BookingFormWrapper() {
   }
 
   return(
-    <div className="reservation-order" style={{marginRight:'100px'}}>
+    <div className="reservation-order" style={styles.container(isNormalComputer)}>
       <form onSubmit={(e)=>submitHandler(e)}>
         <h3>Rezervace</h3>
           <SelectedShootingRange/>
@@ -38,9 +38,20 @@ export function BookingFormWrapper() {
           <BookingEmail/>
           <BookingPhoneNumber/>
           <CommentsField />
-          <div className="reservation-order-row">
+          <div className="reservation-order-row" style={stylesButton.container(isNormalComputer)}>
             <input type="submit" name="_submit" className="btn btn-primary" value="Odeslat rezervaci" onSubmit={() => {return false}} />
           </div>
       </form>
     </div>
 )}
+const styles = {
+  container: (isNormalComputer: boolean)  => ({
+   marginRight:'100px',
+   width: isNormalComputer ? '310px' : '100%'
+  })
+};
+const stylesButton = {
+  container: (isNormalComputer: boolean)  => ({
+   width: isNormalComputer ? '' : '100%'
+  })
+};

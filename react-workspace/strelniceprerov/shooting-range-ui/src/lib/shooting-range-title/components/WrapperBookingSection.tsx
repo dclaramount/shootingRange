@@ -10,6 +10,7 @@ import WarningIcon from '@mui/icons-material/Warning';
 import Popup from "reactjs-popup";
 import { BookingFlowSpace } from "./BookingFlowSpace";
 import PlaceHolderBookingSection from "../PlaceHolderBookingSection";
+import { useMediaQuery } from "../hooks/useMediaQuery";
 /*-------------------------------------------------------------------------------------------------------------*/
 /*                                            HELPER FUNCTIONS                                                 */
 /*-------------------------------------------------------------------------------------------------------------*/
@@ -61,8 +62,9 @@ export function WrapperBookingSection() {
           refreshEntirePlugin,      setSummaryBookingSegments,    setSumInstBookingSegments,
           showPopUpBookingProcess,  setShowPopUpBookingProcess,   setComment,
           showWarningChooseAnotherSegment, setShowWarningChooseAnotherSegment,
-          setAllBlockingSegments
+          setAllBlockingSegments, setIsNormalComputer, isNormalComputer
         } = React.useContext(BookingContext);
+  setIsNormalComputer(useMediaQuery('(min-width: 500px)'));
   const closeModal  = (e : any) => {
     if(e==="BOOKING_COMPLETE"){
       setShowPopUpBookingProcess(false);
@@ -169,7 +171,7 @@ export function WrapperBookingSection() {
   }
   return(
     <>
-    <div style={{display:'flex', opacity:`${(showPopUpBookingProcess || showWarningChooseAnotherSegment) ? '0.5' : '1'}`, pointerEvents:`${showPopUpBookingProcess ? 'none' : 'auto'}`}}>
+    <div className='BookingSpaceWrapper' style={styles.container(isNormalComputer, showPopUpBookingProcess, showWarningChooseAnotherSegment)}>
     <div className="wrapperPopUp" style={{opacity:`${(showPopUpBookingProcess || showWarningChooseAnotherSegment) ? '0.5' : '1'}`, pointerEvents:`${showPopUpBookingProcess ? 'none' : 'auto'}`}}>
       {(showingPage!=="POPUP_LENGTH" && showingPage!=="CONFIRMATION_PAGE") &&  <RenderHeader/>}
       {showingPage==="LOADING"          && <PlaceHolderBookingSection/>}
@@ -194,3 +196,11 @@ export function WrapperBookingSection() {
       </Popup>
     </>
 )}
+const styles = {
+  container: (isNormalComputer: boolean, showPopUpBookingProcess: boolean, showWarningChooseAnotherSegment:boolean)  => ({
+    display:'flex',
+    opacity:(showPopUpBookingProcess || showWarningChooseAnotherSegment) ? '0.5' : '1',
+    pointerEvents: showPopUpBookingProcess ? 'none' as React.CSSProperties["pointerEvents"] : 'auto' as React.CSSProperties["pointerEvents"],
+    flexDirection: isNormalComputer ? 'row' as React.CSSProperties["flexDirection"] : 'column' as React.CSSProperties["flexDirection"],
+  })
+};
