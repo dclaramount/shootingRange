@@ -26,7 +26,7 @@
 .reservation-order {
     width: 325px; /* Changed it to 325px to adjust the view styling */
     height: 825px; /* Changed it to 710px to adjust the view styling */
-    background: #f7e9e0;
+    background: #F2B51B; /* original color was #f7e9e0*/
     padding: 0px 30px 30px 30px;
     position: relative;
     margin: 15px 0 0 10px;
@@ -66,6 +66,7 @@
     float: left;
     margin-top: 5px;
 }
+
 @media (max-width: 768px) {
     .reservation-order-row {
         width: 200px;
@@ -385,7 +386,7 @@
     align-items: end;
 }
 .reservation-cal-table-day-block.partlyOccupied {
-    background: #fbf2ed;
+    background: #F2B51B; /*original color #fbf2ed*/
     color: black;
     font-size: x-small;
     font-weight: bold;
@@ -395,10 +396,10 @@
 }
 .reservation-cal-table-day-block:hover {
     z-index: 1;
-    background: #fafafa;
+    background: #fafafa; /* original color #fafafa*/
 }
 .reservation-cal-table-day-block.occupied {
-    background: #63564e;
+    background: #2b2929cc;    /* original color #63564e */;
     color: white;
     font-size: x-small;
     font-weight: bold;
@@ -469,10 +470,10 @@
     border-radius: 50%;
 }
 .reservation-cal-legend-item.occupied em {
-    background: #63564e;
+    background: #000; /*original color was #63564e*/
 }
 .reservation-cal-legend-item.occupiedPartly em {
-    background: #fbf2ed;
+    background: #F2B51B; /*original color was #fbf2ed*/
 }
 .reservation-loader {
     width: 100%;

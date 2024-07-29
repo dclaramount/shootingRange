@@ -411,6 +411,7 @@ export function DaysColumn(){
 }
 const styles_header_cell = {
   container: (isNormalComputer: boolean)  => ({
-    display: isNormalComputer ? '' : 'block'
+    display: isNormalComputer ? '' : 'block',
+    fontSize: isNormalComputer ? 'small' : 'x-small'
   })
 };

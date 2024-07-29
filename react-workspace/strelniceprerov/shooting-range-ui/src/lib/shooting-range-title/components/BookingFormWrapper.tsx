@@ -47,7 +47,8 @@ export function BookingFormWrapper() {
 const styles = {
   container: (isNormalComputer: boolean)  => ({
    marginRight:'100px',
-   width: isNormalComputer ? '310px' : '100%'
+   width: isNormalComputer ? '310px' : '100%',
+   marginLeft: isNormalComputer ? 'unsent' : '0px'
   })
 };
 const stylesButton = {

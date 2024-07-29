@@ -172,11 +172,12 @@ export function WrapperBookingSection() {
   return(
     <>
     <div className='BookingSpaceWrapper' style={styles.container(isNormalComputer, showPopUpBookingProcess, showWarningChooseAnotherSegment)}>
-    <div className="wrapperPopUp" style={{opacity:`${(showPopUpBookingProcess || showWarningChooseAnotherSegment) ? '0.5' : '1'}`, pointerEvents:`${showPopUpBookingProcess ? 'none' : 'auto'}`}}>
+    <div className="wrapperPopUp" style={stylesWrapperPopUp.container(isNormalComputer, showPopUpBookingProcess, showWarningChooseAnotherSegment)}>
       {(showingPage!=="POPUP_LENGTH" && showingPage!=="CONFIRMATION_PAGE") &&  <RenderHeader/>}
       {showingPage==="LOADING"          && <PlaceHolderBookingSection/>}
       {showingPage==="BOOKING_CALENDAR" && 
-      <div className="Wrapper_Booking_Area" style={{width:'100%', marginLeft:'-125px'}}>
+      //Specific to the WordPress environment ----
+      <div className="Wrapper_Booking_Area" style={styleWrapperBookingArea.container(isNormalComputer)}>
         <BookingCalendarWrappper/>
       </div>}
     </div>
@@ -202,5 +203,21 @@ const styles = {
     opacity:(showPopUpBookingProcess || showWarningChooseAnotherSegment) ? '0.5' : '1',
     pointerEvents: showPopUpBookingProcess ? 'none' as React.CSSProperties["pointerEvents"] : 'auto' as React.CSSProperties["pointerEvents"],
     flexDirection: isNormalComputer ? 'row' as React.CSSProperties["flexDirection"] : 'column' as React.CSSProperties["flexDirection"],
+    width: isNormalComputer ? '100%' : 'calc(100vw - 60px)',
+    margin: isNormalComputer ? '' : '0px auto 0px auto'
+  })
+};
+const styleWrapperBookingArea = {
+  container: (isNormalComputer: boolean)  => ({
+    marginLeft: isNormalComputer ? '-125px' : 'unset',
+    scale: isNormalComputer ? 'unset' : '0.95'
+  })
+};
+const stylesWrapperPopUp = {
+  container: (isNormalComputer: boolean, showPopUpBookingProcess: boolean, showWarningChooseAnotherSegment:boolean)  => ({
+    opacity:`${(showPopUpBookingProcess || showWarningChooseAnotherSegment) ? '0.5' : '1'}`, 
+    pointerEvents: showPopUpBookingProcess ? 'none' as React.CSSProperties["pointerEvents"] : 'auto' as React.CSSProperties["pointerEvents"],
+    height: isNormalComputer ? 'unsnet' : '710px',
+   // marginLeft: isNormalComputer ? '0px' : '-4vw'
   })
 };

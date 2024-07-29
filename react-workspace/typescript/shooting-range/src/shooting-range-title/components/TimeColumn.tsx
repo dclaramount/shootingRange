@@ -3,11 +3,11 @@ import { BookingContext } from './Context/BookingContext';
 
 export function TimeColumn(){
 
-  const {timesToShow, setTimesToShow} = React.useContext(BookingContext);
+  const {timesToShow, setTimesToShow, isNormalComputer} = React.useContext(BookingContext);
   
   return(
     <div className="reservation-cal-table-times">
-      <div className="reservation-cal-table-times-time">
+      <div className="reservation-cal-table-times-time" style={styles_time_cell.container(isNormalComputer)}>
       </div>
       {timesToShow.map((timeToShow : string, idx: number) => {
         if(idx+1<timesToShow.length){
@@ -29,3 +29,8 @@ export function TimeColumn(){
       })}
     </div>)
 }
+const styles_time_cell = {
+  container: (isNormalComputer: boolean)  => ({
+    display: isNormalComputer ? '' : 'block'
+  })
+};

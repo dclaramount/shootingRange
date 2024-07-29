@@ -263,7 +263,8 @@ export function DaysColumn(){
           shootingInstructor,
           refreshEntirePlugin,
           selectedWeek,
-          blockingSegments} = React.useContext(BookingContext);
+          blockingSegments,
+          isNormalComputer} = React.useContext(BookingContext);
   const daysOftheWeek = ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle'];
   function padWithLeadingZeros(num : any, totalLength: any) {
     return String(num).padStart(totalLength, '0');
@@ -397,7 +398,7 @@ export function DaysColumn(){
       {daysOfWeek.map((day : string, idx : number) => { 
         return(
         <div className="reservation-cal-table-day">
-        <div className="reservation-cal-table-day-head">
+        <div className="reservation-cal-table-day-head" style={styles_header_cell.container(isNormalComputer)}>
           <span>
           {daysOftheWeek[idx]}
           </span>
@@ -416,3 +417,8 @@ export function DaysColumn(){
   </>
   )
 }
+const styles_header_cell = {
+  container: (isNormalComputer: boolean)  => ({
+    display: isNormalComputer ? '' : 'block'
+  })
+};

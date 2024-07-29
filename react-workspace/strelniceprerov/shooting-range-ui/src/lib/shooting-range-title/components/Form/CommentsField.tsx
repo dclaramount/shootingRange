@@ -10,11 +10,11 @@ export function CommentsField(){
     setComment(e.target.value);
   }
   return(
-    <div className="reservation-order-row">
-        <label htmlFor="frm-reservationCalendar-orderForm-phone" style={styles.container(isNormalComputer)}>
+    <div className="reservation-order-row" style={{width:'100%'}}>
+        <label style={stylesLabelField.container(isNormalComputer)} htmlFor="frm-reservationCalendar-orderForm-phone" >
         Poznámky
         </label>
-        <textarea style={{paddingTop:'25px', paddingLeft:'10px', paddingRight:'10px', paddingBottom:'10px'}} onChange={handleCommentFieldChange} value={comment} maxLength={150} rows={4} cols={isNormalComputer ? 29 : 41}/>
+        <textarea style={stylesInputField.container(isNormalComputer)} onChange={handleCommentFieldChange} value={comment} maxLength={150} rows={4} cols={isNormalComputer ? 25 : 37}/>
     </div>
   )
   }
@@ -23,3 +23,29 @@ export function CommentsField(){
      textAlign:isNormalComputer ? 'unset' : 'right' as React.CSSProperties["textAlign"],
     })
   };
+  const stylesLabelField = {
+    container: (isNormalComputer: boolean)  => ({
+      position:       'absolute' as React.CSSProperties["position"],
+      top:            '4px',
+      left:           '10px',
+      fontSize:       '12px',
+      width:          '100%',
+      color:          '#888',
+      fontWeight:     '400',
+      fontFamily:     "'Open Sans', Arial, sans-serif",
+      zIndex:         '1'
+    })
+  }
+  const stylesInputField = {
+    container: (isNormalComputer: boolean)  => ({
+      width:          '100%',
+      border:         '1px solid #aaa',
+      fontSize:       '14px',
+      paddingTop:     '24px',
+      height:         '100px',
+      borderRadius:   '5px',
+      paddingLeft:    '10px',
+      paddingBottom:  '5px',
+      fontWeight:     'bolder',
+    })
+  }

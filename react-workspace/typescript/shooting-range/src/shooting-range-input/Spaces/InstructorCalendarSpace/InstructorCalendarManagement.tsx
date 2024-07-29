@@ -159,10 +159,8 @@ export const InstructorCalendarManagement = () => {
         //const startSegmentAPI   =   modal.result.start;
         //const endSegmentAPI     =   modal.result.end;
         const date              =   modal.result.date.split('T');
-        console.log(date);
         const startSegmentAPI   =   `${date[0]}T${modal.result.start}:00`
         const endSegmentAPI     =   `${date[0]}T${modal.result.end}:00`
-        console.log(startSegmentAPI);
         setEndPoint("postCreateInstructorSegment") 
         setPostParameters(`start=${startSegmentAPI}&end=${endSegmentAPI}&guid=${guid}&instructorId=${instructorId}`);
         setShowPopUp(true);

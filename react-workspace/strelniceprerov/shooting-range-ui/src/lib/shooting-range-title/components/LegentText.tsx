@@ -1,10 +1,15 @@
+import * as React from 'react';
+import { BookingContext } from './Context/BookingContext';
 
-export const LegendText = () => (
-  <div className="reservation-cal-legend">
+export const LegendText = () => {
+  
+  const { isNormalComputer } = React.useContext(BookingContext);
+  return(
+  <div className="reservation-cal-legend" style={stylesLegendWrapper.container(isNormalComputer)}>
     <p className="visible-xs-block">
       Vyberte dostupný čas rezervace v levém kalendáři a vpravo doplňte údaje o rezervaci.
     </p>
-    <div className="reservation-cal-legend-item occupied">
+    <div className="reservation-cal-legend-item occupied" >
       <em>.</em>
         <span>Obsazeno</span>
     </div>
@@ -17,4 +22,10 @@ export const LegendText = () => (
         <span>Volno</span>
     </div>
   </div>
-);
+  );
+};
+const stylesLegendWrapper = {
+  container: (isNormalComputer: boolean)  => ({
+    fontSize: isNormalComputer ? '0.9em' : 'x-small'
+  })
+};

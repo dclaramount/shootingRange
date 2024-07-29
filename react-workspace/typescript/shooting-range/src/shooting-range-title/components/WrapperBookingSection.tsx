@@ -64,6 +64,7 @@ export function WrapperBookingSection() {
           showWarningChooseAnotherSegment, setShowWarningChooseAnotherSegment,
           setAllBlockingSegments, setIsNormalComputer, isNormalComputer
         } = React.useContext(BookingContext);
+  const scaleFactor = window.innerWidth/430;
   setIsNormalComputer(useMediaQuery('(min-width: 500px)'));
   const closeModal = (e : any) => {
     if(e==="BOOKING_COMPLETE"){
@@ -172,8 +173,8 @@ export function WrapperBookingSection() {
   }
   return(
     <>
-    <div className='BookingSpaceWrapper' style={styles.container(isNormalComputer, showPopUpBookingProcess, showWarningChooseAnotherSegment)}>
-    <div className="wrapperPopUp" style={{opacity:`${(showPopUpBookingProcess || showWarningChooseAnotherSegment) ? '0.5' : '1'}`, pointerEvents:`${showPopUpBookingProcess ? 'none' : 'auto'}`}}>
+    <div className='BookingSpaceWrapper' style={styles.container(isNormalComputer, showPopUpBookingProcess, showWarningChooseAnotherSegment, scaleFactor)}>
+    <div className="wrapperPopUp" style={stylesWrapperPopUp.container(isNormalComputer, showPopUpBookingProcess, showWarningChooseAnotherSegment, scaleFactor)}>
       {(showingPage!=="POPUP_LENGTH" && showingPage!=="CONFIRMATION_PAGE") &&  <RenderHeader/>}
       {showingPage==="LOADING"          && <PlaceHolderBookingSection/>}
       {showingPage==="BOOKING_CALENDAR" && 
@@ -199,10 +200,19 @@ export function WrapperBookingSection() {
     </>
 )}
 const styles = {
-  container: (isNormalComputer: boolean, showPopUpBookingProcess: boolean, showWarningChooseAnotherSegment:boolean)  => ({
+  container: (isNormalComputer: boolean, showPopUpBookingProcess: boolean, showWarningChooseAnotherSegment:boolean, scaleFactor:any)  => ({
     display:'flex',
     opacity:(showPopUpBookingProcess || showWarningChooseAnotherSegment) ? '0.5' : '1',
     pointerEvents: showPopUpBookingProcess ? 'none' as React.CSSProperties["pointerEvents"] : 'auto' as React.CSSProperties["pointerEvents"],
     flexDirection: isNormalComputer ? 'row' as React.CSSProperties["flexDirection"] : 'column' as React.CSSProperties["flexDirection"],
+    width: '100%',
+    scale: isNormalComputer ? 'unsnet' : scaleFactor
+  })
+};
+const stylesWrapperPopUp = {
+  container: (isNormalComputer: boolean, showPopUpBookingProcess: boolean, showWarningChooseAnotherSegment:boolean, scaleFactor:number)  => ({
+    opacity:`${(showPopUpBookingProcess || showWarningChooseAnotherSegment) ? '0.5' : '1'}`, 
+    pointerEvents: showPopUpBookingProcess ? 'none' as React.CSSProperties["pointerEvents"] : 'auto' as React.CSSProperties["pointerEvents"],
+    height: isNormalComputer ? 'unsnet' : `${(1/scaleFactor) * 710}px`
   })
 };
