@@ -82,6 +82,7 @@ export const InstructorCalendarManagement = () => {
     },
     //Step 1. Upon clicking there should be a placeholder created for the segment being created
     onTimeRangeSelected: async (args : any) => {
+      console.log(args);
       const dp                                                      =   calendarRef.current.control;
       const uniqueGUI                                               =   dns.DayPilot.guid(); //Unique GUID to register the segment in the DB.
       dp.events.add({
@@ -100,21 +101,27 @@ export const InstructorCalendarManagement = () => {
           options:          instructorsList,
           type:             "select"
         },
+        { name:             Translations.InstructorSegmentManagementCalendar.CreateSegmentPopUp.SubTitle_Date, 
+          id:               "date",
+          dateFormat:       "d.M.yyyy",
+          type:             "date",
+          locale:           'cs-cz'
+        },
         { name:             Translations.InstructorSegmentManagementCalendar.CreateSegmentPopUp.SubTitle_SelectStartSegment, 
           id:               "start",
-          dateFormat:       "d.M.yyyy",
+          //dateFormat:       "d.M.yyyy",
           timeFormat:       "H:mm",
           timeInterval:     60,
-          type:             "datetime",
+          type:             "time",
           locale:           'cs-cz'
         },
         { 
           name:             Translations.InstructorSegmentManagementCalendar.CreateSegmentPopUp.SubTitle_SelectEndSegment,  
           id:               "end",
-          dateFormat:       "d.M.yyyy",
+          //dateFormat:       "d.M.yyyy",
           timeFormat:       "H:mm",
           timeInterval:     60,
-          type:             "datetime",
+          type:             "time",
           locale:           'cs-cz'
       },
       ];
@@ -127,10 +134,15 @@ export const InstructorCalendarManagement = () => {
       tEnd.setHours(tEnd.getHours() - timeZoneOffsetEnd);
       if(tStart.getMinutes() !== 0) { tStart.setMinutes(0); };
       if(tEnd.getMinutes() !== 0) { tEnd.setMinutes(0); tEnd.setHours(tEnd.getHours()+1)};
+      const piecesStart = tStart.toLocaleTimeString('cz-CZ',{hour12:false}).split(' ')[0].split(':');
+      const timeStart = `${piecesStart[0]}:${piecesStart[1]}`;
+      const piecesEnd = tEnd.toLocaleTimeString('cz-CZ',{hour12:false}).split(' ')[0].split(':');
+      const timeEnd = `${piecesEnd[0]}:${piecesEnd[1]}`;
       const data = { 
         daySelected :   args.start,
-        start :         tStart.toISOString(),
-        end   :         tEnd.toISOString()
+        start :         timeStart,
+        end   :         timeEnd,
+        date  :         tStart
       };
       const modal = await dns.DayPilot.Modal.form(form, data, {okText: Translations.InstructorSegmentManagementCalendar.CreateSegmentPopUp.Create_Button, cancelText:Translations.InstructorSegmentManagementCalendar.CreateSegmentPopUp.Cancel_Button});
       dp.clearSelection();
@@ -144,8 +156,13 @@ export const InstructorCalendarManagement = () => {
         //Step 4.2 If Modal is submitted then the POST request will be send tot he Post End Point.
         const guid              =   uniqueGUI;
         const instructorId      =   modal.result.instructor;
-        const startSegmentAPI   =   modal.result.start;
-        const endSegmentAPI     =   modal.result.end;
+        //const startSegmentAPI   =   modal.result.start;
+        //const endSegmentAPI     =   modal.result.end;
+        const date              =   modal.result.date.split('T');
+        console.log(date);
+        const startSegmentAPI   =   `${date[0]}T${modal.result.start}:00`
+        const endSegmentAPI     =   `${date[0]}T${modal.result.end}:00`
+        console.log(startSegmentAPI);
         setEndPoint("postCreateInstructorSegment") 
         setPostParameters(`start=${startSegmentAPI}&end=${endSegmentAPI}&guid=${guid}&instructorId=${instructorId}`);
         setShowPopUp(true);

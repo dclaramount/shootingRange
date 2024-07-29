@@ -14,6 +14,7 @@ export const Translations = {
     "CreateSegmentPopUp":{
       "Title"                       : "Vytvořte segment",
       "SubTitle_SelectInstructor"   : "Instruktor:",
+      "SubTitle_Date"               : "Datum:",
       "SubTitle_SelectStartSegment" : "Začátek bloku:",
       "SubTitle_SelectEndSegment"   : "Konec bloku:",
       "Create_Button"               : "Vytvořit",
