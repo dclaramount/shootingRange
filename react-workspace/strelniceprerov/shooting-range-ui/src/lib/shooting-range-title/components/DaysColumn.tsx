@@ -24,7 +24,7 @@ function getBlockedReason(day : any, daysOfWeek: any, isoDaysOfWeek: any, hour:a
     const fBlockedSegment = blockedSegments.find((seg:any) => new Date(seg.startTime).toISOString()===new Date(currentDayToAnalyze).toISOString() && seg.locationId===_locationId);
     return (
               <div style={{margin:'auto'}}>
-                {fBlockedSegment.name.substring(0,6)}
+                {fBlockedSegment.name.substring(0,7)}
               </div>
             );
   }
@@ -253,7 +253,8 @@ export function DaysColumn(){
           shootingInstructor,
           refreshEntirePlugin,
           selectedWeek,
-          blockingSegments  } = React.useContext(BookingContext);
+          blockingSegments,
+          isNormalComputer  } = React.useContext(BookingContext);
 
   const daysOftheWeek = ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle'];
   function padWithLeadingZeros(num : any, totalLength: any) {
@@ -389,7 +390,7 @@ export function DaysColumn(){
       {daysOfWeek.map((day : string, idx : number) => { 
         return(
         <div className="reservation-cal-table-day">
-        <div className="reservation-cal-table-day-head">
+        <div className="reservation-cal-table-day-head" style={styles_header_cell.container(isNormalComputer)}>
           <span>
           {daysOftheWeek[idx]}
           </span>
@@ -408,3 +409,8 @@ export function DaysColumn(){
   </>
   )
 }
+const styles_header_cell = {
+  container: (isNormalComputer: boolean)  => ({
+    display: isNormalComputer ? '' : 'block'
+  })
+};
