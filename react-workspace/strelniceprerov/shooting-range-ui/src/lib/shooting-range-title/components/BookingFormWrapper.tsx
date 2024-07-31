@@ -15,7 +15,12 @@ export function BookingFormWrapper() {
   const {
     setShowPopUpBookingProcess,isNormalComputer
 } = React.useContext(BookingContext);
-
+  let factor = 1;
+  if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+    factor = 0;
+  }else{
+    factor = 1;
+  }
 
   const submitHandler = (e:any) => {
     e.preventDefault();
@@ -24,7 +29,7 @@ export function BookingFormWrapper() {
   }
 
   return(
-    <div className="reservation-order" style={styles.container(isNormalComputer)}>
+    <div className="reservation-order" style={styles.container(isNormalComputer, factor)}>
       <form onSubmit={(e)=>submitHandler(e)}>
         <h3>Rezervace</h3>
           <SelectedShootingRange/>
@@ -45,10 +50,12 @@ export function BookingFormWrapper() {
     </div>
 )}
 const styles = {
-  container: (isNormalComputer: boolean)  => ({
-   marginRight:'100px',
+  container: (isNormalComputer: boolean, factor:number)  => ({
+    marginRight: (isNormalComputer && factor===1) ? '100px' : '0',
+   //marginRight: `calc(100vw * ${0.05 * factor})`,
    width: isNormalComputer ? '310px' : '100%',
-   marginLeft: isNormalComputer ? 'unsent' : '0px'
+   marginLeft: isNormalComputer ? 'unsent' : '0px',
+   maxWidth: isNormalComputer ? '100%' : '430px'
   })
 };
 const stylesButton = {

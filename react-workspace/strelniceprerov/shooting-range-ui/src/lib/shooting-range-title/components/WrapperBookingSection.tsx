@@ -64,7 +64,7 @@ export function WrapperBookingSection() {
           showWarningChooseAnotherSegment, setShowWarningChooseAnotherSegment,
           setAllBlockingSegments, setIsNormalComputer, isNormalComputer
         } = React.useContext(BookingContext);
-  setIsNormalComputer(useMediaQuery('(min-width: 500px)'));
+  setIsNormalComputer(useMediaQuery('(min-width: 739px)'));
   const closeModal  = (e : any) => {
     if(e==="BOOKING_COMPLETE"){
       setShowPopUpBookingProcess(false);
@@ -169,6 +169,12 @@ export function WrapperBookingSection() {
     setShowingPage('BOOKING_CALENDAR');
     setControlAPI([]);
   }
+  let factor = 1;
+  if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+    factor = 0;
+  }else{
+    factor = 1;
+  }
   return(
     <>
     <div className='BookingSpaceWrapper' style={styles.container(isNormalComputer, showPopUpBookingProcess, showWarningChooseAnotherSegment)}>
@@ -177,7 +183,7 @@ export function WrapperBookingSection() {
       {showingPage==="LOADING"          && <PlaceHolderBookingSection/>}
       {showingPage==="BOOKING_CALENDAR" && 
       //Specific to the WordPress environment ----
-      <div className="Wrapper_Booking_Area" style={styleWrapperBookingArea.container(isNormalComputer)}>
+      <div className="Wrapper_Booking_Area" style={styleWrapperBookingArea.container(isNormalComputer, factor)}>
         <BookingCalendarWrappper/>
       </div>}
     </div>
@@ -208,8 +214,11 @@ const styles = {
   })
 };
 const styleWrapperBookingArea = {
-  container: (isNormalComputer: boolean)  => ({
-    marginLeft: isNormalComputer ? '-125px' : 'unset',
+  container: (isNormalComputer: boolean, factor:number)  => ({
+    marginLeft: (isNormalComputer && factor ===1) ? '-125px' : 'unset',
+    display: (isNormalComputer && factor ===1) ? 'block' : 'flex',
+    alignItems: (isNormalComputer && factor ===1) ? 'unset' : 'center',
+    justifyContent: (isNormalComputer && factor ===1) ? 'unset' : 'center',
     scale: isNormalComputer ? 'unset' : '0.95'
   })
 };

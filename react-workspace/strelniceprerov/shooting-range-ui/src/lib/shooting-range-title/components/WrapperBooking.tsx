@@ -61,7 +61,6 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
   const [showWarningChooseAnotherSegment, setShowWarningChooseAnotherSegment] = React.useState(false);
   const [isNormalComputer, setIsNormalComputer]                                                 = React.useState(true);
 
-
   const delayInMilliseconds = 5000; //1 second
 
   setTimeout(function() {
