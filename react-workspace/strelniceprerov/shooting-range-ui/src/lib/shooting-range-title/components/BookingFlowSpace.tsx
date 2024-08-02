@@ -34,7 +34,8 @@ export function BookingFlowSpace({closeModalFunction} : any) {
     sendGridKeyAPI,
     sendGridFromEmail,
     sendGridTemplateConfirmationId,
-    comment
+    comment,
+    isNormalComputer
 } = React.useContext(BookingContext);
 
   const [section, setSection]  =   React.useState("LOADING"); 
@@ -190,7 +191,7 @@ export function BookingFlowSpace({closeModalFunction} : any) {
   },[section])
 
   return(
-    <div style={{width:'500px', height: '625px', backgroundColor:'#F2B51B'}}>
+    <div style={stylePopUp.container(isNormalComputer)}>
       {(  section==="LOADING" || 
           section==="GETTING_USER_BY_EMAIL" || 
           section==="GETTING_USER_BY_PHONE_NUMBER" || 
@@ -209,3 +210,12 @@ export function BookingFlowSpace({closeModalFunction} : any) {
       {section==="ERROR_ON_API_CALL" && <>PLACEHOLDER FOR ERROR</>}
     </div>
 )}
+
+const stylePopUp = {
+  container: (isNormalComputer: boolean)  => ({
+   width:             isNormalComputer ? '500px' : '100vw', 
+   height:            '625px', 
+   backgroundColor:   '#F2B51B',
+   borderRadius:      '10px'
+  })
+};

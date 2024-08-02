@@ -29,7 +29,7 @@ export function BookingsViewerWrapper(){
   },[selectedLocation])
 
  return (
-  <div className="reservation-cal" style={{width:'100%'}}>
+  <div className="reservation-cal" style={{width:'100%', marginLeft:'0.01vw'}}>
     <div style={{width:'100%', marginLeft:'auto', marginRight:'auto'}}>
       <FormWrapper />
       <div style={{color:'gray', fontWeight:'lighter', fontSize:'12px', textAlign:'center'}}>
