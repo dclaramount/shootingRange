@@ -69,7 +69,9 @@ export const Translations = {
     "MainToHeader"                  : 'To Week:',
     "Headers"                       : ['Select', 'UUID', 'Name', 'Time Segment', 'Name', 'TimeSegment'],
     "CopyButton"                    : "Copy",
-    "CloseButton"                   : "Close"
+    "CloseButton"                   : "Close",
+    "LabelCopyWeek"                 : "Copy Week",
+    "ToWeek"                        : "To Week:"
   },
   "ConfirmedPassword"               : 'Napište heslo'
 }

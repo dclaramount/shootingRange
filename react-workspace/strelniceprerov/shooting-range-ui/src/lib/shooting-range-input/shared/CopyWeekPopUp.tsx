@@ -9,8 +9,8 @@ import { REQUEST_STATUS } from "../ApiCalls/enums";
 import { SegmentBlockerContext } from "../components/Context/SegmentBlockerContext";
 import { ManagementDashboardContext } from "../components/Context/ManagementDashboardContext";
 
-export const CopyWeekPopUp = ({listOfAllEvents, startDateOfSelectedWeek, closeModal} : any) => {
-  const [selectedWeek, setSelectedWeek]                                   =   React.useState({firstDay: startOfWeek(new Date(), { weekStartsOn: 1 }),lastDay: endOfWeek(new Date(), { weekStartsOn: 1 })});
+export const CopyWeekPopUp = ({listOfAllEvents, startDateOfSelectedWeek, closeModal, toWeek} : any) => {
+  //const [selectedWeek, setSelectedWeek]                                   =   React.useState({firstDay: startOfWeek(new Date(), { weekStartsOn: 1 }),lastDay: endOfWeek(new Date(), { weekStartsOn: 1 })});
   const {blockingSegmentsToCopy, setBlockingSegmentsToCopy}               =   React.useContext(SegmentBlockerContext);
   const [copyButtonClick, setCopyButtonClicked]                           =   React.useState(false);
   listOfAllEvents.sort((a : any, b : any) => new Date(a.start).getTime()  - new Date(b.start).getTime());
@@ -65,13 +65,13 @@ export const CopyWeekPopUp = ({listOfAllEvents, startDateOfSelectedWeek, closeMo
     setBlockingSegmentsToCopy(listOfSegmentsToCopy);
     setCopyButtonClicked(true);
   }
-  startDateTo         = new Date(selectedWeek.firstDay);
+  startDateTo         = new Date(toWeek.firstDay);
   const oneJanSelectedDateTo : Date = new Date(startDateTo.getFullYear(),0,1);
   const numberOfDaysTo : number =  Math.floor((startDate.getTime() - oneJanSelectedDateTo.getTime()) / (24 * 60 * 60 * 1000));   
   toWeekNumber =  Math.ceil(( startDate.getDay() + 1 + numberOfDaysTo) / 7);
 
   const onChange = (week : any) => {
-    setSelectedWeek(week);
+    //setSelectedWeek(week);
     startDateTo         = new Date(week.firstDay);
     oneJanSelectedDate = new Date(startDate.getFullYear(),0,1);
     numberOfDays =  Math.floor((startDate.getTime() - oneJanSelectedDate.getTime()) / (24 * 60 * 60 * 1000));   
@@ -106,7 +106,7 @@ export const CopyWeekPopUp = ({listOfAllEvents, startDateOfSelectedWeek, closeMo
         actualDayOfWeek = dayOfWeek.getDay();
         break;
     }
-    const iterationDay = new Date(selectedWeek.firstDay)
+    const iterationDay = new Date(toWeek.firstDay)
     iterationDay.setDate(iterationDay.getDate() + actualDayOfWeek - 1);
     iterationDay.setHours(dayOfWeek.getHours(),0,0,0)
     return `${iterationDay.toLocaleString('cs-CZ', { timeZone: 'CET', hour12:false})} -> ${dayOfWeekEnd.getHours()}:00:00`;
@@ -141,8 +141,9 @@ export const CopyWeekPopUp = ({listOfAllEvents, startDateOfSelectedWeek, closeMo
                     <div>
                       {`${Translations.CopyBlockSegments.MainToHeader.toUpperCase()} ${toWeekNumber}`}
                     </div>
-                    <div style={style.wrapperWeekPicker()}>
-                      <HonestWeekPicker onChange={onChange}/>
+                    <div>
+                      {`${new Date(toWeek.firstDay).toLocaleDateString('cs-CZ', { timeZone: 'CET', hour12:false})} -> ${new Date(toWeek.lastDay).toLocaleDateString('cs-CZ', { timeZone: 'CET', hour12:false})}`}
+                      {/*<HonestWeekPicker onChange={onChange}/>*/}
                     </div>
                   </th> 
                   <th  style={style.mainHeaderFrom()} colSpan={1}/>
@@ -266,7 +267,7 @@ const style = {
     color:            'white',
     border:           '1px solid black',
     position:         'sticky' as React.CSSProperties["position"],
-    top:              '79px',
+    top:              '50px',
     zIndex:           '998'
   }),
   normalrow: ()  => ({

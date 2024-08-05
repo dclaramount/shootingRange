@@ -7,6 +7,9 @@ import { ManagementDashboardContext } from '../../Context/ManagementDashboardCon
 import { Translations } from '../../types/translations';
 import { CopyWeekPopUp } from '../../shared/CopyWeekPopUp';
 import Popup from 'reactjs-popup';
+import { HonestWeekPicker } from '../../BookingManagement/Dashboard/Components/WeekSelector/WeekPicker';
+import {endOfWeek, startOfWeek } from "date-fns";
+
 const dns = require ("@daypilot/daypilot-lite-react");
 const styles = {
   wrap: {
@@ -39,6 +42,7 @@ function validateTextRequired(args : any) {
 
 export const SegmentBlockerCalendar = () => {
   const [showPopUp,    setShowPopUp]                                =   React.useState(false);
+  const [copyWeek,     setCopyWeek]                                 =   React.useState(false);
   const [postParameters, setPostParameters]                         =   React.useState("");
   const [endpoint, setEndPoint]                                     =   React.useState("");
   const [refresh, setRefresh]                                       =   React.useState(false);
@@ -256,6 +260,8 @@ export const SegmentBlockerCalendar = () => {
   });
   const showCopyWeekPopUp                           =   React.useRef<any>();
   const [events, setEvents]                         =   React.useState<DayPilotEvent[]>();
+  const [selectedWeek, setSelectedWeek]             =   React.useState({firstDay: startOfWeek(new Date(), { weekStartsOn: 1 }),lastDay: endOfWeek(new Date(), { weekStartsOn: 1 })});
+
   const closeModal                                  =   (e : any) => {showCopyWeekPopUp.current?.close()}
   React.useEffect(() => {
     let events : DayPilotEvent[] = generateDayPilotCalendarEvents(blockegSegmentsList);
@@ -264,9 +270,27 @@ export const SegmentBlockerCalendar = () => {
     setEvents(events);
     setRefresh(true);
   }, [refresh]);
+  const onChange = (week : any) => {
+    setSelectedWeek(week); 
+    const arrayDaysOfWeek = []
+    const isoDaysOfWeek = []
+    for (let i=0; i<=7; i++){
+      const dt = new Date(week.firstDay);
+      dt.setDate(dt.getDate() + i);
+      isoDaysOfWeek.push(dt.toISOString().split('T')[0]);
+      if(i<7){
+        arrayDaysOfWeek.push(`${dt.getDate()}.${dt.getMonth() + 1}`);
+      }
+    }
+  };
   return (
     <div>
-      <input type="button" name="copyWeekPopUp" className="btn btn-secondary" value="Copy Week" style={styles.copyButton()} onClick={(e)=>{showCopyWeekPopUp.current?.open()}}/> 
+      <div style={{display:'flex'}}>
+          <input style={{margin:'auto 0 auto 0'}} id={'checkbox_copy_week'} name="checkbox_copy_week"  type="checkbox" checked={copyWeek} onClick={(e) => setCopyWeek(!copyWeek)} />
+          <label style={{verticalAlign:'middle', margin:'auto 0 auto 10px'}} htmlFor="checkbox_copy_week">{Translations.CopyBlockSegments.LabelCopyWeek}</label>
+          {copyWeek && <div style={{margin:'0 0 0 auto'}}>{Translations.CopyBlockSegments.ToWeek}<HonestWeekPicker onChange={onChange}/> </div>}
+          {copyWeek && <input type="button" name="copyWeekPopUp" className="btn btn-secondary" value="Copy Week" style={styles.copyButton()} onClick={(e)=>{showCopyWeekPopUp.current?.open()}}/> }
+      </div>
       <Legend props={locationList}/>
       <div style={styles.wrap}>
         <div style={styles.left}>
@@ -293,7 +317,7 @@ export const SegmentBlockerCalendar = () => {
         {/*Vámi vybraný čas k vyblokování není možné zrušit z důvodu existujících rezervací. Prosím o kontrolu.*/}
         {showPopUp && postParameters!=='' && <PostPopUp postAPI={endpoint} postParameters={postParameters} closeModal={closeModalPopUp}/>}
         <Popup ref={showCopyWeekPopUp} onClose={(e)=>closeModal(e)} closeOnDocumentClick={false} >
-          <CopyWeekPopUp popUpRef={showCopyWeekPopUp} closeModal={closeModal} listOfAllEvents={events} startDateOfSelectedWeek={calendarRef.current}/>
+          <CopyWeekPopUp toWeek={selectedWeek} popUpRef={showCopyWeekPopUp} closeModal={closeModal} listOfAllEvents={events} startDateOfSelectedWeek={calendarRef.current}/>
         </Popup>
       </div>
     </div>
