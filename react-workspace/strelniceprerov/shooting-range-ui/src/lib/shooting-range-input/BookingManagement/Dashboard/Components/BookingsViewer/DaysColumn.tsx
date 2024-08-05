@@ -18,7 +18,7 @@ function bookedOccupancy(summaryBookings : any, day : any, daysOfWeek:any, isoDa
       <div className="reservation-cal-legend-item occupied" style={{display:'flex', flexDirection:'row', width:'100%', height:'100%', padding:'0 5px 0 5px', margin:'0px'}}>
         <span style={{width:'100%', height:'100%', textAlign:'left'}} id={`${isoDaysOfWeek[idx+1]} ${time}`}>
         {names.map((n:any) => 
-            <div style={{fontSize:'8px', margin:'0px', padding:'0px', fontWeight:'lighter'}}>
+            <div style={{fontSize:'8px', margin:'0px', padding:'0px', fontWeight:'lighter', pointerEvents:'none'}}>
             {n}
           </div>
           )}

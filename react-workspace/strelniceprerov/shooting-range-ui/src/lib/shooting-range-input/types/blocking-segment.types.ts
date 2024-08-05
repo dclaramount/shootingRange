@@ -6,6 +6,15 @@ export type DBBlockTimeSegment = {
   startTime:    Date;
   endTime:      Date;
   instructorId?: number;
+  locationId?:number;
+}
+export type BlockSegmentToCreate = {
+  start:        string, 
+  end:          string, 
+  uuid:         string, 
+  name:         string, 
+  locationId:   number, 
+  url:          string
 }
 export type DayPilotEvent = {
   id:           number;
@@ -14,6 +23,7 @@ export type DayPilotEvent = {
   end:          string;
   backColor?:   string;
   uuid:         string;
+  locationId?:   number;
 } | {
   id:           number;
   text:         string;
@@ -21,4 +31,5 @@ export type DayPilotEvent = {
   end:          string;
   backColor:    string;
   uuid:         string;
+  locationId?:   number;
 }

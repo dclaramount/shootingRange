@@ -62,6 +62,14 @@ export const Translations = {
   },
   "PostPoup":{
     "CloseButton" : "Zrušit"
+  },  
+  "CopyBlockSegments" : {
+    "Title"                         : "Copying Blocking Segments",
+    "MainFromHeader"                : 'Current Week:',
+    "MainToHeader"                  : 'To Week:',
+    "Headers"                       : ['Select', 'UUID', 'Name', 'Time Segment', 'Name', 'TimeSegment'],
+    "CopyButton"                    : "Copy",
+    "CloseButton"                   : "Close"
   },
-  "ConfirmedPassword" : 'Napište heslo'
+  "ConfirmedPassword"               : 'Napište heslo'
 }

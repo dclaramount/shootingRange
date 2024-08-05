@@ -5,6 +5,8 @@ import { DayPilotEvent } from '../../types/blocking-segment.types';
 import { PostPopUp } from '../../shared/PostPopUp';
 import { ManagementDashboardContext } from '../../Context/ManagementDashboardContext';
 import { Translations } from '../../types/translations';
+import { CopyWeekPopUp } from '../../shared/CopyWeekPopUp';
+import Popup from 'reactjs-popup';
 const dns = require ("@daypilot/daypilot-lite-react");
 const styles = {
   wrap: {
@@ -15,7 +17,10 @@ const styles = {
   },
   main: {
     flexGrow: "1"
-  }
+  },
+  copyButton: ()  => ({
+    marginLeft: 'auto'
+   })
 };
 /*-------------------------------------------------------------------------------------------------*/
 /*                                    VALIDATE TEXT FIELD                                          */
@@ -184,7 +189,6 @@ export const SegmentBlockerCalendar = () => {
         {
           text: `${Translations.BlockingSegment.SubMenuSegment.Delete}`,
           onClick: async (args:any) => {
-            console.log(args.source.data.uuid);
             const dp = calendarRef.current.control;
             const modal = await dns.DayPilot.Modal.confirm(`${Translations.BlockingSegment.DeleteSegmentPopUp.Disclaimer}`, {okText: `${Translations.BlockingSegment.DeleteSegmentPopUp.Delete_Button}`, cancelText:`${Translations.BlockingSegment.DeleteSegmentPopUp.Cancel_Button}`});
             if (!modal.result) { 
@@ -250,15 +254,19 @@ export const SegmentBlockerCalendar = () => {
       }
     }
   });
-
+  const showCopyWeekPopUp                           =   React.useRef<any>();
+  const [events, setEvents]                         =   React.useState<DayPilotEvent[]>();
+  const closeModal                                  =   (e : any) => {showCopyWeekPopUp.current?.close()}
   React.useEffect(() => {
     let events : DayPilotEvent[] = generateDayPilotCalendarEvents(blockegSegmentsList);
     const startDate = `${new Date().toISOString()}`;
     calendarRef.current.control.update({startDate, events});
+    setEvents(events);
     setRefresh(true);
   }, [refresh]);
   return (
     <div>
+      <input type="button" name="copyWeekPopUp" className="btn btn-secondary" value="Copy Week" style={styles.copyButton()} onClick={(e)=>{showCopyWeekPopUp.current?.open()}}/> 
       <Legend props={locationList}/>
       <div style={styles.wrap}>
         <div style={styles.left}>
@@ -284,6 +292,9 @@ export const SegmentBlockerCalendar = () => {
         </div>
         {/*Vámi vybraný čas k vyblokování není možné zrušit z důvodu existujících rezervací. Prosím o kontrolu.*/}
         {showPopUp && postParameters!=='' && <PostPopUp postAPI={endpoint} postParameters={postParameters} closeModal={closeModalPopUp}/>}
+        <Popup ref={showCopyWeekPopUp} onClose={(e)=>closeModal(e)} closeOnDocumentClick={false} >
+          <CopyWeekPopUp popUpRef={showCopyWeekPopUp} closeModal={closeModal} listOfAllEvents={events} startDateOfSelectedWeek={calendarRef.current}/>
+        </Popup>
       </div>
     </div>
   );
