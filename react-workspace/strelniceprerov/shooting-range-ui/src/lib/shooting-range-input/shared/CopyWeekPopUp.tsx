@@ -50,12 +50,11 @@ export const CopyWeekPopUp = ({listOfAllEvents, startDateOfSelectedWeek, closeMo
   const onCopyClick = () => {
     const  filteredSegmentsToCopy = listOfAllEvents.filter((loa: any) => selectedSegments.includes(loa.uuid));
     const  listOfSegmentsToCopy : BlockSegmentToCreate[] = [];
-    const uniqueGUI      =   dns.DayPilot.guid(); //Unique GUID to register the segment in the DB.
 
     filteredSegmentsToCopy.forEach((fstc : any) => {
-      const startDateTime = getEquivalentStart(fstc.start);
-      const endDateTime = getEquivalentEnd(fstc.start, fstc.end);
-
+      const startDateTime   =   getEquivalentStart(fstc.start);
+      const endDateTime     =   getEquivalentEnd(fstc.start, fstc.end);
+      const uniqueGUI       =   dns.DayPilot.guid(); //Unique GUID to register the segment in the DB.
       const segmentToCopy : BlockSegmentToCreate = {
         start:        startDateTime,
         end :         endDateTime,
