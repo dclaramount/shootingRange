@@ -8,9 +8,9 @@ import { useGetEndPoint } from "../ApiCalls/useGetEndPoint";
 import { REQUEST_STATUS } from "../ApiCalls/enums";
 import { SegmentBlockerContext } from "../components/Context/SegmentBlockerContext";
 import { ManagementDashboardContext } from "../components/Context/ManagementDashboardContext";
+const dns = require ("@daypilot/daypilot-lite-react");
 
 export const CopyWeekPopUp = ({listOfAllEvents, startDateOfSelectedWeek, closeModal, toWeek} : any) => {
-  //const [selectedWeek, setSelectedWeek]                                   =   React.useState({firstDay: startOfWeek(new Date(), { weekStartsOn: 1 }),lastDay: endOfWeek(new Date(), { weekStartsOn: 1 })});
   const {blockingSegmentsToCopy, setBlockingSegmentsToCopy}               =   React.useContext(SegmentBlockerContext);
   const [copyButtonClick, setCopyButtonClicked]                           =   React.useState(false);
   listOfAllEvents.sort((a : any, b : any) => new Date(a.start).getTime()  - new Date(b.start).getTime());
@@ -25,17 +25,16 @@ export const CopyWeekPopUp = ({listOfAllEvents, startDateOfSelectedWeek, closeMo
   let toWeekNumber                                                        =   0;
 
   if(startDateOfSelectedWeek){
-    //let startDateOfWeek = new Date(startDateOfSelectedWeek.value).setHours(0,0,0,0);
-    startDate   = new Date(startDateOfSelectedWeek.control.ta[0].start);
-    oneJanSelectedDate = new Date(startDate.getFullYear(),0,1);
-    numberOfDays =  Math.floor((startDate.getTime() - oneJanSelectedDate.getTime()) / (24 * 60 * 60 * 1000));   
-    weekNumber =  Math.ceil(( startDate.getDay() + 1 + numberOfDays) / 7); 
-    endDate     = new Date(startDateOfSelectedWeek.control.ta[6].start);
+    startDate                                                             =   new Date(startDateOfSelectedWeek.control.ta[0].start);
+    oneJanSelectedDate                                                    =   new Date(startDate.getFullYear(),0,1);
+    numberOfDays                                                          =   Math.floor((startDate.getTime() - oneJanSelectedDate.getTime()) / (24 * 60 * 60 * 1000));   
+    weekNumber                                                            =   Math.ceil(( startDate.getDay() + 1 + numberOfDays) / 7); 
+    endDate                                                               =   new Date(startDateOfSelectedWeek.control.ta[6].start);
   }
-  const [selectedSegments, setSelectedSegments]   =   React.useState(listOfAllEvents.filter((loa:any) => (new Date(loa.start) >= startDate) && (new Date(loa.end) <= endDate)).map((a : any)=> a.uuid));
+  const [selectedSegments, setSelectedSegments]                           =   React.useState(listOfAllEvents.filter((loa:any) => (new Date(loa.start) >= startDate) && (new Date(loa.end) <= endDate)).map((a : any)=> a.uuid));
   const TimeSegmentString = (start : any , end : any) => {
-    const baseString = new Date(start).toLocaleString('cs-CZ', { timeZone: 'CET', hour12:false});
-    const endString = new Date(end).toLocaleString('cs-CZ', { timeZone: 'CET', hour12:false}).split(' ')[3];
+    const baseString                                                      =   new Date(start).toLocaleString('cs-CZ', { timeZone: 'CET', hour12:false});
+    const endString                                                       =   new Date(end).toLocaleString('cs-CZ', { timeZone: 'CET', hour12:false}).split(' ')[3];
     return `${baseString} -> ${endString}`;
   }
   const NameOfSegment = (props : DayPilotEvent) => {
@@ -47,18 +46,23 @@ export const CopyWeekPopUp = ({listOfAllEvents, startDateOfSelectedWeek, closeMo
                 <div>{name}</div>
           </div>)
   }
-
+  /*  onCopyClick() Function that handles the click of copy in the copy popup.  */
   const onCopyClick = () => {
     const  filteredSegmentsToCopy = listOfAllEvents.filter((loa: any) => selectedSegments.includes(loa.uuid));
     const  listOfSegmentsToCopy : BlockSegmentToCreate[] = [];
+    const uniqueGUI      =   dns.DayPilot.guid(); //Unique GUID to register the segment in the DB.
+
     filteredSegmentsToCopy.forEach((fstc : any) => {
+      const startDateTime = getEquivalentStart(fstc.start);
+      const endDateTime = getEquivalentEnd(fstc.start, fstc.end);
+
       const segmentToCopy : BlockSegmentToCreate = {
-        start:        fstc.start.value,
-        end :         fstc.end.value,
+        start:        startDateTime,
+        end :         endDateTime,
         uuid:         fstc.uuid,
         name:         fstc.text,
         locationId:   parseInt(fstc.locationId),
-        url:          `start=${fstc.start.value}&end=${fstc.end.value}&guid=${fstc.uuid}&name=${fstc.text}&locationId=${parseInt(fstc.locationId)}`
+        url:          `start=${startDateTime}&end=${endDateTime}&guid=${uniqueGUI}&name=${fstc.text}&locationId=${parseInt(fstc.locationId)}`
       }
       listOfSegmentsToCopy.push(segmentToCopy);
     });
@@ -69,9 +73,8 @@ export const CopyWeekPopUp = ({listOfAllEvents, startDateOfSelectedWeek, closeMo
   const oneJanSelectedDateTo : Date = new Date(startDateTo.getFullYear(),0,1);
   const numberOfDaysTo : number =  Math.floor((startDate.getTime() - oneJanSelectedDateTo.getTime()) / (24 * 60 * 60 * 1000));   
   toWeekNumber =  Math.ceil(( startDate.getDay() + 1 + numberOfDaysTo) / 7);
-
+  /*  onChange() Function that handles the week picker update (that was deleted from this component).  */
   const onChange = (week : any) => {
-    //setSelectedWeek(week);
     startDateTo         = new Date(week.firstDay);
     oneJanSelectedDate = new Date(startDate.getFullYear(),0,1);
     numberOfDays =  Math.floor((startDate.getTime() - oneJanSelectedDate.getTime()) / (24 * 60 * 60 * 1000));   
@@ -87,6 +90,7 @@ export const CopyWeekPopUp = ({listOfAllEvents, startDateOfSelectedWeek, closeMo
       }
     }
   };
+  /*  updateSelectedList() Function that updates which segments are selected to be copied.  */
   const updateSelectedList = (e : any) =>{
     if(selectedSegments.includes(e.target.id)){
       setSelectedSegments(selectedSegments.filter((ss:any)=> ss!== e.target.id))
@@ -94,6 +98,42 @@ export const CopyWeekPopUp = ({listOfAllEvents, startDateOfSelectedWeek, closeMo
       setSelectedSegments((selectedSegments : string[]) => [...selectedSegments, e.target.id])
     }
   }
+  /*  getEquivalentStart() Function to get the equivalent end day for the POST request  */
+  const getEquivalentStart = (start : any) =>{
+    const dayOfWeek = new Date(start.value);
+    let actualDayOfWeek = 0;
+    switch(dayOfWeek.getDay()){
+      case 0:
+        actualDayOfWeek = 7;
+        break;
+      default:
+        actualDayOfWeek = dayOfWeek.getDay();
+        break;
+    }
+    const iterationDay = new Date(toWeek.firstDay)
+    iterationDay.setDate(iterationDay.getDate() + actualDayOfWeek - 1);
+    iterationDay.setHours(dayOfWeek.getHours(),0,0,0)
+    return `${iterationDay.getFullYear()}-${iterationDay.getMonth()+1}-${iterationDay.getDate()}T${iterationDay.getHours()}:00:00`;
+  }
+  /*  getEquivalentEnd() Function to get the equivalent end day for the POST request  */
+  const getEquivalentEnd = (start : any, end : any) =>{
+    const dayOfWeek = new Date(start.value);
+    const dayOfWeekEnd = new Date(end.value);
+    let actualDayOfWeek = 0;
+    switch(dayOfWeek.getDay()){
+      case 0:
+        actualDayOfWeek = 7;
+        break;
+      default:
+        actualDayOfWeek = dayOfWeek.getDay();
+        break;
+    }
+    const iterationDay = new Date(toWeek.firstDay)
+    iterationDay.setDate(iterationDay.getDate() + actualDayOfWeek - 1);
+    iterationDay.setHours(dayOfWeekEnd.getHours(),0,0,0)
+    return `${iterationDay.getFullYear()}-${iterationDay.getMonth()+1}-${iterationDay.getDate()}T${iterationDay.getHours()}:00:00`;
+  }
+  /*  getEquivalent() Function to get the equivalent day (on the to week) column in the table  */
   const getEquivalent = (start : any, end : any) =>{
     const dayOfWeek = new Date(start.value);
     const dayOfWeekEnd = new Date(end.value);
@@ -111,12 +151,14 @@ export const CopyWeekPopUp = ({listOfAllEvents, startDateOfSelectedWeek, closeMo
     iterationDay.setHours(dayOfWeek.getHours(),0,0,0)
     return `${iterationDay.toLocaleString('cs-CZ', { timeZone: 'CET', hour12:false})} -> ${dayOfWeekEnd.getHours()}:00:00`;
   }
-  // Post Creationg of Blocking Segments
+  /*------------------------------------------------------------------------------------------------------------------------------------------*/
+  /*                                        MAIN FUNCTION ELEMENT OF THIS COMPONENT                                                           */  
+  /*------------------------------------------------------------------------------------------------------------------------------------------*/
   const PostBlockingCreation = (uuid : any) => {
-    const segment = blockingSegmentsToCopy.filter((bstc : any) => bstc.uuid===uuid);
+    const segment = blockingSegmentsToCopy.find((bstc : any) => bstc.uuid===uuid.uuid);
     let     postDone                          =   false;
     const   {globalVariabes}                  =   React.useContext(ManagementDashboardContext);
-    const   postCreationOfSegment             =   useGetEndPoint(globalVariabes.apiRootURL, 'Dummy.php', segment.url);
+    const   postCreationOfSegment             =   useGetEndPoint(globalVariabes.apiRootURL, 'postCreateBlockingSegment', segment.url);
     postDone                                  =   postCreationOfSegment.requestStatus  === REQUEST_STATUS.SUCCESS   
     return(<div>{postDone ? (postCreationOfSegment.status === 200 ? <div><i className="fa fa-check" aria-hidden="true"></i></div> : <div><i className="fa fa-times-circle" aria-hidden="true" style={{color:'red'}}></i></div>) : <div className="loading" style={{fontSize:'15px'}}>...</div>}</div>)
   }
@@ -168,7 +210,7 @@ export const CopyWeekPopUp = ({listOfAllEvents, startDateOfSelectedWeek, closeMo
             </div>
             <div style={style.buttonWrapper()}>
               {!copyButtonClick  && <Button  variant="contained" color="success" style={style.button()}  onClick={()=>onCopyClick()}>{Translations.CopyBlockSegments.CopyButton}</Button>}
-              {copyButtonClick  && <Button  variant="contained" color="success" style={style.closePopUpButton()}  onClick={()=>onCopyClick()}>{Translations.CopyBlockSegments.CloseButton}</Button>}
+              {copyButtonClick  && <Button  variant="contained" color="success" style={style.closePopUpButton()}  onClick={closeModal}>{Translations.CopyBlockSegments.CloseButton}</Button>}
             </div>
             </div>
           </div>
@@ -202,7 +244,9 @@ const style = {
   title: () => ({
     margin:           '10px', 
     color:            'black', 
-    alignContent:     'center'
+    alignContent:     'center',
+    marginRight:      'auto',
+    marginLeft:       'auto'
   }),
   buttonWrapper: () => ({
     width:            "auto",

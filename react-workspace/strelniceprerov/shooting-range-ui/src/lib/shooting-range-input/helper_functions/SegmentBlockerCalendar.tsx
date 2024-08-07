@@ -7,7 +7,7 @@ export function generateDayPilotCalendarEvents(lOfSegments: DBBlockTimeSegment [
     if(!returnArray.some((event:DayPilotEvent) => event.uuid === segment.uuid)){
       const lengthOfSegment = lOfSegments.filter((seg:DBBlockTimeSegment) => seg.uuid===segment.uuid).length;
       //const startTime = new Date(segment.startTime).setMinutes(new Date(segment.startTime).getMinutes() -  new Date(segment.startTime).getTimezoneOffset());
-      const startTime = new Date(segment.startTime).setMinutes(new Date(segment.startTime).getMinutes() + 120); //We fixed the time to Prague Time which is -120 offset timezone
+      const startTime = new Date(segment.startTime).setMinutes(new Date(segment.startTime).getMinutes() - new Date(segment.startTime).getTimezoneOffset()); //Fixed the Time Zone accordingly.
       const newEvent: DayPilotEvent = {
         id:             idx+1,
         start:          new Date(startTime).toISOString(),

@@ -8,6 +8,10 @@ export type DBBlockTimeSegment = {
   instructorId?: number;
   locationId?:number;
 }
+export type WeekPickerType = {
+  firstDay:      Date,
+  lastDay:      Date
+}
 export type BlockSegmentToCreate = {
   start:        string, 
   end:          string, 

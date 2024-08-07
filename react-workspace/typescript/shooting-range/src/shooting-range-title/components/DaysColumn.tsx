@@ -18,7 +18,9 @@ function getBlockedReason(day : any, daysOfWeek: any, isoDaysOfWeek: any, hour:a
   if(idx >= 0){
     //const currentDayToAnalyze = new Date(isoDaysOfWeek[idx]);
     const dateObject = new Date(isoDaysOfWeek[idx]);
-    const currentDayToAnalyze = new Date(Date.UTC(dateObject.getFullYear(), dateObject.getMonth(), dateObject.getDate(), hour-2,0,0,0))
+    const factorHours = dateObject.getTimezoneOffset()/60;
+    const currentDayToAnalyze = new Date(Date.UTC(dateObject.getFullYear(), dateObject.getMonth(), dateObject.getDate(), hour,0,0,0))
+    currentDayToAnalyze.setHours(currentDayToAnalyze.getHours()+ factorHours);
     const locationOfSelectedService = locationList.find((ll:any) => parseInt(ll.id)===parseInt(selectedServiceId));
     const _locationId = parseInt(locationOfSelectedService.locationId);
     const fBlockedSegment = blockedSegments.find((seg:any) => new Date(seg.startTime).toISOString()===new Date(currentDayToAnalyze).toISOString() && seg.locationId===_locationId);
@@ -38,7 +40,9 @@ function isSegmentBlocked(day : any, daysOfWeek: any, isoDaysOfWeek: any, hour:a
   if(idx >= 0){
     //const currentDayToAnalyze = new Date(isoDaysOfWeek[idx]);
     const dateObject = new Date(isoDaysOfWeek[idx]);
-    const currentDayToAnalyze = new Date(Date.UTC(dateObject.getFullYear(), dateObject.getMonth(), dateObject.getDate(), hour-2,0,0,0))
+    const factorHours = dateObject.getTimezoneOffset()/60;
+    const currentDayToAnalyze = new Date(Date.UTC(dateObject.getFullYear(), dateObject.getMonth(), dateObject.getDate(), hour,0,0,0))
+    currentDayToAnalyze.setHours(currentDayToAnalyze.getHours()+ factorHours);
     const locationOfSelectedService = locationList.find((ll:any) => parseInt(ll.id)===parseInt(selectedServiceId));
     const _locationId = parseInt(locationOfSelectedService.locationId);
     const fBlockedSegment = blockedSegments.filter((seg:any) => new Date(seg.startTime).toISOString()===new Date(currentDayToAnalyze).toISOString() && seg.locationId===_locationId);
@@ -119,13 +123,7 @@ function calculateOccupancy(summaryBookings : any, summaryBookingInstructor: any
       /* We will check how many slots for instructors are left, and if are greater or equal to the real available instructos slots we will show ALL otherwise we will adjust accordingly*/
       const maxOccupancyInstructors       = occupancyLeftForInstructors >= parseInt(filteredValue.maxOccupancy) ?  filteredValue.maxOccupancy : occupancyLeftForInstructors;
       /*There are other types of bookings in this segment (E.g.) and we have to decide whether to handle as fully free or partially free*/
-      if(formatedCurrentSegmentToAnalyze==='2024-07-22 13:00:00'){
-        console.log(`SegmentLocationStatu ${segmentLocationStatus}`);
-        console.log(segmentLocationStatus)
-        console.log(`shootingInstructorSelected ${shootingInstructorSelected}`);
-        console.log(`Instructor Occupancy Booked ${filteredValue.occupancyBooked}`);
-        console.log(`Occupancy Left  ${occupancyLeftForInstructors}`);
-      }
+      
       if (parseInt(filteredValue.occupancyBooked) >= maxOccupancyInstructors){
         return (
           <div style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', pointerEvents:'none'}}>

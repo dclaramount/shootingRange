@@ -1,6 +1,6 @@
 import React from "react";
 import { Translations } from "../types/translations";
-import { BlockSegmentToCreate, DayPilotEvent } from "../types/blocking-segment.types";
+import { BlockSegmentToCreate, DayPilotEvent, WeekPickerType,  } from "../types/blocking-segment.types";
 import { HonestWeekPicker } from "../BookingManagement/Dashboard/Components/WeekSelector/WeekPicker";
 import {endOfWeek, startOfWeek } from "date-fns";
 import { Button } from '@mui/material';
@@ -8,10 +8,14 @@ import { SegmentBlockerContext } from "../Context/SegmentBlockerContext";
 import { ManagementDashboardContext } from "../Context/ManagementDashboardContext";
 import { useGetEndPoint } from "../ApiCalls/useGetEndPoint";
 import { REQUEST_STATUS } from "../ApiCalls/enums";
+const dns = require ("@daypilot/daypilot-lite-react");
+
 
 export const CopyWeekPopUp = ({listOfAllEvents, startDateOfSelectedWeek, closeModal, toWeek} : any) => {
-  //const [selectedWeek, setSelectedWeek]                                   =   React.useState({firstDay: startOfWeek(toWeek.firstDay, { weekStartsOn: 1 }),lastDay: endOfWeek(toWeek.lastDay, { weekStartsOn: 1 })});
-  //const [selectedWeek, setSelectedWeek]                                   =   React.useState({firstDay: startOfWeek(new Date(), { weekStartsOn: 1 }),lastDay: endOfWeek(new Date(), { weekStartsOn: 1 })});
+  //const toWeek : WeekPickerType = ref.current as WeekPickerType;
+  //const [selectedWeek, setSelectedWeek]                                 =   React.useState({firstDay: startOfWeek(toWeek.firstDay, { weekStartsOn: 1 }),lastDay: endOfWeek(toWeek.lastDay, { weekStartsOn: 1 })});
+  //const [selectedWeek, setSelectedWeek]                                 =   React.useState({firstDay: startOfWeek(new Date(), { weekStartsOn: 1 }),lastDay: endOfWeek(new Date(), { weekStartsOn: 1 })});
+  
   const {blockingSegmentsToCopy, setBlockingSegmentsToCopy}               =   React.useContext(SegmentBlockerContext);
   const [copyButtonClick, setCopyButtonClicked]                           =   React.useState(false);
   listOfAllEvents.sort((a : any, b : any) => new Date(a.start).getTime()  - new Date(b.start).getTime());
@@ -54,14 +58,19 @@ export const CopyWeekPopUp = ({listOfAllEvents, startDateOfSelectedWeek, closeMo
   const onCopyClick = () => {
     const  filteredSegmentsToCopy = listOfAllEvents.filter((loa: any) => selectedSegments.includes(loa.uuid));
     const  listOfSegmentsToCopy : BlockSegmentToCreate[] = [];
+    const uniqueGUI      =   dns.DayPilot.guid(); //Unique GUID to register the segment in the DB.
+
     filteredSegmentsToCopy.forEach((fstc : any) => {
+      const startDateTime = getEquivalentStart(fstc.start);
+      const endDateTime = getEquivalentEnd(fstc.start, fstc.end);
+
       const segmentToCopy : BlockSegmentToCreate = {
-        start:        fstc.start.value,
-        end :         fstc.end.value,
+        start:        startDateTime,
+        end :         endDateTime,
         uuid:         fstc.uuid,
         name:         fstc.text,
         locationId:   parseInt(fstc.locationId),
-        url:          `start=${fstc.start.value}&end=${fstc.end.value}&guid=${fstc.uuid}&name=${fstc.text}&locationId=${parseInt(fstc.locationId)}`
+        url:          `start=${startDateTime}&end=${endDateTime}&guid=${uniqueGUI}&name=${fstc.text}&locationId=${parseInt(fstc.locationId)}`
       }
       listOfSegmentsToCopy.push(segmentToCopy);
     });
@@ -98,6 +107,40 @@ export const CopyWeekPopUp = ({listOfAllEvents, startDateOfSelectedWeek, closeMo
       setSelectedSegments((selectedSegments : string[]) => [...selectedSegments, e.target.id])
     }
   }
+  const getEquivalentStart = (start : any) =>{
+    const dayOfWeek = new Date(start.value);
+    console.log(dayOfWeek);
+    let actualDayOfWeek = 0;
+    switch(dayOfWeek.getDay()){
+      case 0:
+        actualDayOfWeek = 7;
+        break;
+      default:
+        actualDayOfWeek = dayOfWeek.getDay();
+        break;
+    }
+    const iterationDay = new Date(toWeek.firstDay)
+    iterationDay.setDate(iterationDay.getDate() + actualDayOfWeek - 1);
+    iterationDay.setHours(dayOfWeek.getHours(),0,0,0)
+    return `${iterationDay.getFullYear()}-${iterationDay.getMonth()+1}-${iterationDay.getDate()}T${iterationDay.getHours()}:00:00`;
+  }
+  const getEquivalentEnd = (start : any, end : any) =>{
+    const dayOfWeek = new Date(start.value);
+    const dayOfWeekEnd = new Date(end.value);
+    let actualDayOfWeek = 0;
+    switch(dayOfWeek.getDay()){
+      case 0:
+        actualDayOfWeek = 7;
+        break;
+      default:
+        actualDayOfWeek = dayOfWeek.getDay();
+        break;
+    }
+    const iterationDay = new Date(toWeek.firstDay)
+    iterationDay.setDate(iterationDay.getDate() + actualDayOfWeek - 1);
+    iterationDay.setHours(dayOfWeekEnd.getHours(),0,0,0)
+    return `${iterationDay.getFullYear()}-${iterationDay.getMonth()+1}-${iterationDay.getDate()}T${iterationDay.getHours()}:00:00`;
+  }
   const getEquivalent = (start : any, end : any) =>{
     const dayOfWeek = new Date(start.value);
     const dayOfWeekEnd = new Date(end.value);
@@ -117,10 +160,10 @@ export const CopyWeekPopUp = ({listOfAllEvents, startDateOfSelectedWeek, closeMo
   }
   // Post Creationg of Blocking Segments
   const PostBlockingCreation = (uuid : any) => {
-    const segment = blockingSegmentsToCopy.filter((bstc : any) => bstc.uuid===uuid);
+    const segment = blockingSegmentsToCopy.find((bstc : any) => bstc.uuid===uuid.uuid);
     let     postDone                          =   false;
     const   {globalVariabes}                  =   React.useContext(ManagementDashboardContext);
-    const   postCreationOfSegment             =   useGetEndPoint(globalVariabes.apiRootURL, 'Dummy.php', segment.url);
+    const   postCreationOfSegment             =   useGetEndPoint(globalVariabes.apiRootURL, 'postCreateBlockingSegment', segment.url);
     postDone                                  =   postCreationOfSegment.requestStatus  === REQUEST_STATUS.SUCCESS   
     return(<>{postDone ? (postCreationOfSegment.status === 200 ? <div><i className="fa fa-check" aria-hidden="true"></i></div> : <div><i className="fa fa-times-circle" aria-hidden="true" style={{color:'red'}}></i></div>) : <div className="loading" style={{fontSize:'15px'}}>...</div>}</>)
   }
@@ -172,7 +215,7 @@ export const CopyWeekPopUp = ({listOfAllEvents, startDateOfSelectedWeek, closeMo
             </div>
             <div style={style.buttonWrapper()}>
               {!copyButtonClick  && <Button  variant="contained" color="success" style={style.button()}  onClick={()=>onCopyClick()}>{Translations.CopyBlockSegments.CopyButton}</Button>}
-              {copyButtonClick  && <Button  variant="contained" color="success" style={style.closePopUpButton()}  onClick={()=>onCopyClick()}>{Translations.CopyBlockSegments.CloseButton}</Button>}
+              {copyButtonClick  && <Button  variant="contained" color="success" style={style.closePopUpButton()}  onClick={closeModal}>{Translations.CopyBlockSegments.CloseButton}</Button>}
             </div>
             </div>
           </>
