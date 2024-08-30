@@ -23,7 +23,7 @@ function getBlockedReason(day : any, daysOfWeek: any, isoDaysOfWeek: any, hour:a
     currentDayToAnalyze.setHours(currentDayToAnalyze.getHours()+ factorHours);
     const locationOfSelectedService = locationList.find((ll:any) => parseInt(ll.id)===parseInt(selectedServiceId));
     const _locationId = parseInt(locationOfSelectedService.locationId);
-    const fBlockedSegment = blockedSegments.find((seg:any) => new Date(seg.startTime).toISOString()===new Date(currentDayToAnalyze).toISOString() && seg.locationId===_locationId);
+    const fBlockedSegment = blockedSegments.find((seg:any) => new Date(seg.startTime).toISOString()===new Date(currentDayToAnalyze).toISOString() && (seg.locationId===_locationId || seg.locationId===3));
     return (
               <div style={{margin:'auto'}}>
                 {fBlockedSegment.name.substring(0,6)}
@@ -45,7 +45,7 @@ function isSegmentBlocked(day : any, daysOfWeek: any, isoDaysOfWeek: any, hour:a
     currentDayToAnalyze.setHours(currentDayToAnalyze.getHours()+ factorHours);
     const locationOfSelectedService = locationList.find((ll:any) => parseInt(ll.id)===parseInt(selectedServiceId));
     const _locationId = parseInt(locationOfSelectedService.locationId);
-    const fBlockedSegment = blockedSegments.filter((seg:any) => new Date(seg.startTime).toISOString()===new Date(currentDayToAnalyze).toISOString() && seg.locationId===_locationId);
+    const fBlockedSegment = blockedSegments.filter((seg:any) => new Date(seg.startTime).toISOString()===new Date(currentDayToAnalyze).toISOString() && (seg.locationId===_locationId || seg.locationId===3));
     return fBlockedSegment.length >0;
   }
   return false;
