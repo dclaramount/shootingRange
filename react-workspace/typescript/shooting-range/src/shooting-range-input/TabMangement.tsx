@@ -3,11 +3,12 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import { Translations } from './types/translations';
 import WrapperSegmentBlocker from './Wrappers/WrapperSegmentBlocker';
 import WrapperInstructorCalendar from './Wrappers/WrapperInstructorCalendar';
 import WrapperBookingManagement from './Wrappers/WrapperBookingManagement';
-import { Translations } from './types/translations';
 import WrapperGlobalVariables from './Wrappers/WrapperGlobalVariables';
+import WrapperAdminBookings from "./Wrappers/WrapperAdminBookings";
 
 
 interface TabPanelProps {
@@ -50,27 +51,31 @@ export default function TabManagement({globalVariables} : any) {
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label={Translations.ManagementDashboard.Title_Reservation_Management} {...a11yProps(0)} />
-          <Tab label={Translations.ManagementDashboard.Title_Instructors_Management} {...a11yProps(1)} />
-          <Tab label={Translations.ManagementDashboard.Title_Blocking_Segments_Management} {...a11yProps(1)} />
-          <Tab label={Translations.ManagementDashboard.Title_Events} {...a11yProps(2)} />
-        </Tabs>
+      <Box sx={{ width: '100%' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+            <Tab label={Translations.ManagementDashboard.Title_Reservation_Management} {...a11yProps(0)} />
+            <Tab label={Translations.ManagementDashboard.Title_Instructors_Management} {...a11yProps(1)} />
+            <Tab label={Translations.ManagementDashboard.Title_Blocking_Segments_Management} {...a11yProps(1)} />
+            <Tab label={Translations.ManagementDashboard.Title_Events} {...a11yProps(2)} />
+            <Tab label={Translations.ManagementDashboard.Admin_Bookings} {...a11yProps(2)} />
+          </Tabs>
+        </Box>
+        <CustomTabPanel value={value} index={0}>
+            <WrapperBookingManagement/>
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={1}>
+            <WrapperInstructorCalendar />
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={2}>
+            <WrapperSegmentBlocker/>
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={3}>
+            <WrapperGlobalVariables/>
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={4}>
+            <WrapperAdminBookings/>
+        </CustomTabPanel>
       </Box>
-      <CustomTabPanel value={value} index={0}>
-        <WrapperBookingManagement/>
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-        <WrapperInstructorCalendar />
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-        <WrapperSegmentBlocker/>
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={3}>
-        <WrapperGlobalVariables/>
-      </CustomTabPanel>
-    </Box>
   );
 }
