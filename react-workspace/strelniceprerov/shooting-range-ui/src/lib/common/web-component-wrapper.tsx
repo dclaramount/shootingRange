@@ -155,6 +155,31 @@ export function WebComponentWrapper(
       shadowRoot.appendChild(linkElem22);
       shadowRoot.appendChild(linkElem23);
 
+
+      const addStylesheetRules = (style : any) => {
+        const styleElement = document.createElement('style');
+        styleElement.setAttribute('id', 'Animation_Style_ShadowDom');
+        let styleSheet = null;
+
+        shadowRoot.appendChild(styleElement);
+
+        styleSheet = styleElement.sheet;
+
+        styleSheet?.insertRule(style, styleSheet.cssRules.length);
+        console.log(styleElement);
+      }
+      const keyframesStyle = `
+      @-webkit-keyframes pulse {
+          0% {
+            opacity: 1;
+          }
+          100% {
+            opacity: 0;
+          }
+      }
+    `;
+      addStylesheetRules(keyframesStyle);
+
       const cache = createCache({
         key: 'css',
         prepend: true,

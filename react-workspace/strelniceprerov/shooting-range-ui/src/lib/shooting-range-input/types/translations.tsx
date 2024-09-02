@@ -1,4 +1,5 @@
 export const Translations = {
+  "Loading": "Loading...",
   "ManagementDashboard":{
     'Title_Reservation_Management'        : 'Správa rezervací',
     'Title_Instructors_Management'        : 'Správa instruktorů',
