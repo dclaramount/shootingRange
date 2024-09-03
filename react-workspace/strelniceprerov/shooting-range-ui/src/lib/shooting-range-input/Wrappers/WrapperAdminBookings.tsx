@@ -14,7 +14,7 @@ const WrapperAdminBookings = () => {
 
     //Fetching required information from the DB prior to loading the dashboard
     const   {globalVariabes: globalVariables}   =   React.useContext(ManagementDashboardContext);
-    const   fetchListOfLocations                =   useGetEndPoint(globalVariables.apiRootURL, 'getAllLocations');
+    const   fetchListOfLocations                =   useGetEndPoint(globalVariables.apiRootURL, 'getListShootingRange');
     const   fetchFilteredBookingsByWeek         =   useGetEndPoint(globalVariables.apiRootURL, 'getBookingsFiltered',`firstDayOfWeek=${(new Date(thisWeek.firstDay)).toISOString()}&lastDayOfWeek=${(new Date(thisWeek.lastDay)).toISOString()}&location=${parseInt(globalVariables.defaultLocation)}`);
     const   fetchInstructorSegments             =   useGetEndPoint(globalVariables.apiRootURL, 'getAllInstructorSegments');
     const   fetchSummaryBookings                =   useGetEndPoint(globalVariables.apiRootURL, 'getSummaryBookings');

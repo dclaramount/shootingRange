@@ -3,6 +3,7 @@ import {AdminBookingsContext} from "../../components/Context/AdminBookingsContex
 import {ManagementDashboardContext} from "../../components/Context/ManagementDashboardContext";
 import {useMediaQuery} from "../../components/hooks/useMediaQuery";
 import {RenderHeader} from "../../components/RenderHeader";
+import {BookingCalendarWrappper} from "../../components/BookingCalendarWrapper";
 
 export function AdminBookingSpace() {
     const respArray : any[]                                             =   [];
@@ -43,6 +44,10 @@ export function AdminBookingSpace() {
             <div className='BookingSpaceWrapper' style={styles.container(isNormalComputer, showPopUpBookingProcess, showWarningChooseAnotherSegment, scaleFactor)}>
                 <div className="wrapperPopUp" style={stylesWrapperPopUp.container(isNormalComputer, showPopUpBookingProcess, showWarningChooseAnotherSegment, scaleFactor)}>
                     {(showingPage!=="POPUP_LENGTH" && showingPage!=="CONFIRMATION_PAGE") &&  <RenderHeader/>}
+                    {showingPage==="BOOKING_CALENDAR" &&
+                        <div style={{width:'100%'}}>
+                            <BookingCalendarWrappper/>
+                        </div>}
                 </div>
             </div>
         </>

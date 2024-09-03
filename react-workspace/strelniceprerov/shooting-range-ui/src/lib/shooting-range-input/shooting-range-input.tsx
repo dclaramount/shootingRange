@@ -26,24 +26,31 @@ export function ShootingRangeInput(props: ShootingRangeInputProps) {
     console.log("WE ARE HERE");
     console.log(res);
     setGlobalVariables(({
-      startBusinessHours: res.data.find((variable : any) => variable.name==="Start_Business_Hours").value,
-      endBusinessHours:   res.data.find((variable : any) => variable.name==="End_Business_Hours").value,
-      startDayHours:      res.data.find((variable : any) => variable.name==="Start_Day_Hours").value,
-      endDayHours:        res.data.find((variable : any) => variable.name==="End_Day_Hours").value,
-      maxLengthBooking:   res.data.find((variable : any) => variable.name==="Max_Length_Booking").value,
-      apiRootURL:         res.data.find((variable : any) => variable.name==="API_URL").value,
-      confirmationTemplateId:        res.data.find((variable : any) => variable.name==="Confirmation_email_template").value,
-      changeEmailTemplateId:         res.data.find((variable : any) => variable.name==="Change_email_template").value,
-      deleteEmailTemplate:           res.data.find((variable : any) => variable.name==="Cancelation_email_template").value,
-      sendGridEncryptedKey: res.data.find((variable : any) => variable.name==="SendGrid_Key_Encrypted").value,
-      decryptionKey:        res.data.find((variable : any) => variable.name==="Decryption_Key").value,
-      emailFrom:        res.data.find((variable : any) => variable.name==="Email_From").value,
+      startBusinessHours:           res.data.find((variable : any) => variable.name==="Start_Business_Hours").value,
+      endBusinessHours:             res.data.find((variable : any) => variable.name==="End_Business_Hours").value,
+      startDayHours:                res.data.find((variable : any) => variable.name==="Start_Day_Hours").value,
+      endDayHours:                  res.data.find((variable : any) => variable.name==="End_Day_Hours").value,
+      maxLengthBooking:             res.data.find((variable : any) => variable.name==="Max_Length_Booking").value,
+      apiRootURL:                   res.data.find((variable : any) => variable.name==="API_URL").value,
+      confirmationTemplateId:       res.data.find((variable : any) => variable.name==="Confirmation_email_template").value,
+      changeEmailTemplateId:        res.data.find((variable : any) => variable.name==="Change_email_template").value,
+      deleteEmailTemplate:          res.data.find((variable : any) => variable.name==="Cancelation_email_template").value,
+      sendGridEncryptedKey:         res.data.find((variable : any) => variable.name==="SendGrid_Key_Encrypted").value,
+      decryptionKey:                res.data.find((variable : any) => variable.name==="Decryption_Key").value,
+      emailFrom:                    res.data.find((variable : any) => variable.name==="Email_From").value,
       msgErrorNonZeroHour:           res.data.find((variable : any) => variable.name==="error_time_slot_not_rounded").value,
       msgErrorWrongConditions:       res.data.find((variable : any) => variable.name==="error_time_slot_wrong_conditions").value,
       msgErrorEmail:                 res.data.find((variable : any) => variable.name==="error_email").value,
       msgErrorPhoneNumber:           res.data.find((variable : any) => variable.name==="error_phone_number").value,
       msgErrorInstructor:            res.data.find((variable : any) => variable.name==="error_instructor").value,
-      blockSegmentFormTitle:         res.data.find((variable : any) => variable.name==="title_block_segment_form").value
+      blockSegmentFormTitle:         res.data.find((variable : any) => variable.name==="title_block_segment_form").value,
+      defaultLocation:    res.data.find((variable : any) => variable.name==="Default_Location").value,
+      maxOccupancy:       res.data.find((variable : any) => variable.name==="Max_Occupancy").value,
+      maxBookingLength:   res.data.find((variable : any) => variable.name==="Max_Length_Booking").value,
+      defaultDuration:    res.data.find((variable : any) => variable.name==="Default_Booking_Length").value,
+      defaultOccupancy:   res.data.find((variable : any) => variable.name==="Default_Booking_Occupancy").value,
+      msgAlertSlotFull:   res.data.find((variable : any) => variable.name==="Alert_Message_Slot_Full").value,
+      msgAlertOccupancy:  res.data.find((variable : any) => variable.name==="Alert_Message_Occupancy").value
     }))
   })
     .catch((err) => { console.log(err) });
