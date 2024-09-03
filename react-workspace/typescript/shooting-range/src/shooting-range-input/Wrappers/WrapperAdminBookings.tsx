@@ -6,6 +6,7 @@ import {TextPlaceholder} from '../shared/Placeholders';
 import {AdminBookingsProvider} from "../Context/AdminBookingsContext";
 import {endOfWeek, startOfWeek} from "date-fns";
 import {Translations} from "../types/translations";
+import {AdminBookingSpace} from "../Spaces/AdminBookingSpace/AdminBookingSpace";
 
 const WrapperAdminBookings = () => {
     const   thisWeek                            =   { firstDay: startOfWeek(new Date(), { weekStartsOn: 1 }), lastDay: endOfWeek(new Date(), { weekStartsOn: 1 })}       //The start week is THIS week.
@@ -26,7 +27,7 @@ const WrapperAdminBookings = () => {
         fetchInstructorSegments.requestStatus           === REQUEST_STATUS.SUCCESS &&
         fetchSummaryBookings.requestStatus              === REQUEST_STATUS.SUCCESS &&
         fetchSummaryInstructorBookings.requestStatus    === REQUEST_STATUS.SUCCESS &&
-        fetchBlockingSegments.requestStatus             === REQUEST_STATUS.FAILURE
+        fetchBlockingSegments.requestStatus             === REQUEST_STATUS.SUCCESS
 
 
     return(
@@ -42,7 +43,7 @@ const WrapperAdminBookings = () => {
                                        startBlockingSegmentList={fetchBlockingSegments.payload}
                                        locationsList={fetchListOfLocations.payload}
                                        thisWeek={thisWeek}>
-                    <div>PLACEHOLDER</div>
+                    <div><AdminBookingSpace/></div>
                 </AdminBookingsProvider>
                 :
                 <div style={{width:'100%', height:'800px'}}>

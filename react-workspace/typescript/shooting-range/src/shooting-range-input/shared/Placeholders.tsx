@@ -40,7 +40,6 @@ export function TextPlaceholder({text}:any){
         styleSheet = styleElement.sheet;
 
         styleSheet?.insertRule(style, styleSheet.cssRules.length);
-        console.log(styleElement);
     }
     const keyframesStyle = `
       @-webkit-keyframes pulse {
