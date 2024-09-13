@@ -9,8 +9,9 @@ import Button from '@mui/material/Button';
 import WarningIcon from '@mui/icons-material/Warning';
 import Popup from "reactjs-popup";
 import { BookingFlowSpace } from "./BookingFlowSpace";
-import PlaceHolderBookingSection from "../PlaceHolderBookingSection";
+import {TextPlaceholder} from "../PlaceHolderBookingSection";
 import { useMediaQuery } from "../hooks/useMediaQuery";
+import {Translations} from "../types/translations";
 /*-------------------------------------------------------------------------------------------------------------*/
 /*                                            HELPER FUNCTIONS                                                 */
 /*-------------------------------------------------------------------------------------------------------------*/
@@ -176,33 +177,34 @@ export function WrapperBookingSection() {
     factor = 1;
   }
   return(
-    <>
-    <div className='BookingSpaceWrapper' style={styles.container(isNormalComputer, showPopUpBookingProcess, showWarningChooseAnotherSegment)}>
-    <div className="wrapperPopUp" style={stylesWrapperPopUp.container(isNormalComputer, showPopUpBookingProcess, showWarningChooseAnotherSegment)}>
-      {(showingPage!=="POPUP_LENGTH" && showingPage!=="CONFIRMATION_PAGE") &&  <RenderHeader/>}
-      {showingPage==="LOADING"          && <PlaceHolderBookingSection/>}
-      {showingPage==="BOOKING_CALENDAR" && 
-      //Specific to the WordPress environment ----
-      <div className="Wrapper_Booking_Area" style={styleWrapperBookingArea.container(isNormalComputer, factor)}>
-        <BookingCalendarWrappper/>
-      </div>}
-    </div>
-    <BookingFormWrapper/>
-    </div>
-      <Popup open={showPopUpBookingProcess} onClose={closeModal} closeOnDocumentClick={false} >
-        <BookingFlowSpace closeModalFunction={closeModal}/>
-      </Popup>
-      <Popup open={showWarningChooseAnotherSegment} onClose={closeModalWarning} closeOnDocumentClick={false} >
-        <div style={{backgroundColor:'white', width:'500px', height:'250px', paddingTop:'5px', paddingRight:'15px', paddingLeft:'15px', paddingBottom:'15px', border:'2px solid black', borderRadius:'10px', outline:'10px solid transparent', display:'flex', flexDirection:'column'}}>
-          <WarningIcon style={{height:'72px', width:'72px', marginLeft:'auto', marginRight:'auto', marginTop:'10px', marginBottom:'10px', color:'orange'}}/>
+      <>
+        <div className='BookingSpaceWrapper' style={styles.container(isNormalComputer, showPopUpBookingProcess, showWarningChooseAnotherSegment)}>
+          <div className="wrapperPopUp" style={stylesWrapperPopUp.container(isNormalComputer, showPopUpBookingProcess, showWarningChooseAnotherSegment)}>
+            {showingPage === "LOADING" && <div style={{width: '100%', height: '882px', marginLeft: '100%'}}><TextPlaceholder text={Translations.LoadingPlaceholder}/></div>}
+            {showingPage === "BOOKING_CALENDAR" && <RenderHeader/>}
+            {showingPage === "BOOKING_CALENDAR" &&
+                <div className="Wrapper_Booking_Area" style={styleWrapperBookingArea.container(isNormalComputer, factor)}>
+                  <BookingCalendarWrappper/>
+                </div>
+            }
+          </div>
+          {showingPage === "BOOKING_CALENDAR" && <BookingFormWrapper/>}
+        </div>
+        <Popup open={showPopUpBookingProcess} onClose={closeModal} closeOnDocumentClick={false} >
+          <BookingFlowSpace closeModalFunction={closeModal}/>
+        </Popup>
+        <Popup open={showWarningChooseAnotherSegment} onClose={closeModalWarning} closeOnDocumentClick={false} >
+          <div style={{backgroundColor:'white', width:'500px', height:'250px', paddingTop:'5px', paddingRight:'15px', paddingLeft:'15px', paddingBottom:'15px', border:'2px solid black', borderRadius:'10px', outline:'10px solid transparent', display:'flex', flexDirection:'column'}}>
+            <WarningIcon style={{height:'72px', width:'72px', marginLeft:'auto', marginRight:'auto', marginTop:'10px', marginBottom:'10px', color:'orange'}}/>
             <Typography sx={{ p: 2 }} style={{ fontWeight:'bold', color:'black', textAlign:'center'}}>Vybral/a jste čas, který přesahuje do rezervace, která je plná. Prosíme o vybránní nového času nebo zkrácení doby rezervace.</Typography>
             <Button onClick={()=>setShowWarningChooseAnotherSegment(false)} variant='contained' style={{backgroundColor:'orange', fontWeight:'bolder', color:'white', width:'auto'}}>
               Close
             </Button>
-        </div>
-      </Popup>
-    </>
-)}
+          </div>
+        </Popup>
+      </>
+  )
+}
 const styles = {
   container: (isNormalComputer: boolean, showPopUpBookingProcess: boolean, showWarningChooseAnotherSegment:boolean)  => ({
     display:'flex',

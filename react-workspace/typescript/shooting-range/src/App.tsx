@@ -1,12 +1,10 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { WrapperBooking } from './shooting-range-title/components/WrapperBooking';
 import { WrapperManagementDashboard} from './shooting-range-input/WrapperManagementDashboard';
 import axios from 'axios';
-import DataGridSummaryTable from './shooting-range-input/DataGridSummaryTable';
-import TabManagement from './shooting-range-input/TabMangement';
-import PlaceHolderBookingSection from './shooting-range-title/PlaceHolderBookingSection';
+import {TextPlaceholder} from './shooting-range-title/PlaceHolderBookingSection';
+import {Translations} from './shooting-range-title/types/translations';
 
 function App() {
   const [allBookings, setAllBookings] = React.useState([]);
@@ -66,7 +64,7 @@ function App() {
       countStartHour=countStartHour+1;
     }
   }
-var delayInMilliseconds = 5000; //1 second
+var delayInMilliseconds = 500; //1 second
 setTimeout(function() {
   setWaitDone(true);
 }, delayInMilliseconds);
@@ -96,7 +94,7 @@ setTimeout(function() {
       </header>
       {/*<WrapperReservationManagement/>*/}
       <hr></hr>
-      {(Object.keys(globalVariables).length > 0 && waitDone) ? <WrapperBooking gVariables={globalVariables}/> : <PlaceHolderBookingSection/>}
+      {(Object.keys(globalVariables).length > 0 && waitDone) ? <WrapperBooking gVariables={globalVariables}/> : <div style={{width:'100%', height:'882px'}}><TextPlaceholder text={Translations.LoadingPlaceholder}/></div>}
       <hr/>
       {Object.keys(globalVariables).length > 0 ? <WrapperManagementDashboard gVariables={globalVariables}/> : "LOADING..."}
     </div>

@@ -18,14 +18,27 @@ export type ShootingRangeInputProps = InferProps<
  */
 export function ShootingRangeInput(props: ShootingRangeInputProps) {
   const [globalVariables, setGlobalVariables] = React.useState({});
-  React.useEffect(() =>{    
+    /********************************************************************************************************************************/
+    /* PART TO DEFINE LOCAL ENVIRONMENT */
+    /********************************************************************************************************************************/
+    const envVariables : string[] = process.env.NX_RELEASE_VERSION === undefined ? [] : process.env.NX_RELEASE_VERSION.split('.') ;
+    let thisEnv = envVariables[0];
+    let localURL = '';
+    if(envVariables.length>1){
+        localURL = envVariables[1];
+    }
+    let URL = "https://strelniceprerov.cz/wp-content/plugins/elementor-addon/widgets/getGlobalVariables.php";
+    if(thisEnv==='local'){
+        URL=`http://${localURL}.local/wp-content/plugins/elementor/getGlobalVariables.php`;
+    }
+    /********************************************************************************************************************************/
+    /********************************************************************************************************************************/
+    React.useEffect(() =>{
     axios({
-      url: "https://strelniceprerov.cz/wp-content/plugins/elementor-addon/widgets/getGlobalVariables.php",
+      url: `${URL}`,
       method: "GET",
   }).then((res) => {
-    console.log("WE ARE HERE");
-    console.log(res);
-    setGlobalVariables(({
+      setGlobalVariables(({
       startBusinessHours:           res.data.find((variable : any) => variable.name==="Start_Business_Hours").value,
       endBusinessHours:             res.data.find((variable : any) => variable.name==="End_Business_Hours").value,
       startDayHours:                res.data.find((variable : any) => variable.name==="Start_Day_Hours").value,
@@ -55,6 +68,8 @@ export function ShootingRangeInput(props: ShootingRangeInputProps) {
   })
     .catch((err) => { console.log(err) });
   },[])
+    console.log(`The actual variables retrieved from the DB are:`)
+    console.log(globalVariables);
   return (  
   <div className="container">
     <div className="row">

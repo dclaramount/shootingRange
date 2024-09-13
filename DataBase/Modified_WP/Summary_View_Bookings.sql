@@ -1,5 +1,5 @@
 DROP VIEW IF EXISTS Summary_View_Bookings_Test_View;
-CREATE VIEW `Summary_View_Bookings_Test_View` AS
+CREATE VIEW `Summary_View_Bookings` AS
 SELECT
     iItem.id                as 'id',
     iItem.invoice_id        as 'invoiceId',

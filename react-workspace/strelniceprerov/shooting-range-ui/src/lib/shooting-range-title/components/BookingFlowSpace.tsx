@@ -5,6 +5,7 @@ import axios from 'axios';
 import { BookingContext } from './Context/BookingContext';
 import { ReservationMade } from './ReservationMade';
 import { v4 } from "uuid";
+import {Translations} from "../types/translations";
 
 //This Renders the PopUp that will navigate the user throughout the booking confirmation process.
 export function BookingFlowSpace({closeModalFunction} : any) {
@@ -198,7 +199,7 @@ export function BookingFlowSpace({closeModalFunction} : any) {
           section==="VERIFY_DATA_USER" || 
           section==="PROCEED_TO_CREATE_RESERVATION" || 
           section === "SEND_EMAIL" 
-        ) &&<CreatingBookingPlaceholder background='#F2B51B'/>}
+        ) && <CreatingBookingPlaceholder background='#F2B51B' text={Translations.LoadingPlaceholder}/>}
       {section==="SUMMARY" && 
       <div style={{backgroundColor:'#F2B51B', width:'100%', height:'100%', paddingTop:'5px', paddingRight:'15px', paddingLeft:'15px', paddingBottom:'15px', border:'2px solid black', borderRadius:'10px', outline:'10px solid transparent', display:'flex', flexDirection:'column'}}>
         <div className="close" style={{marginLeft:'95%', marginRight:'auto', width:'24px', height:'24px', cursor:'pointer'}} onClick={closeModalFunction}>
