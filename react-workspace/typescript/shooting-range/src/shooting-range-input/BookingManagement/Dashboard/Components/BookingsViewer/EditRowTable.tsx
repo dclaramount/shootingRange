@@ -146,36 +146,21 @@ export function EditRowTable({inv} : any) {
     let errorMessageGeneral = globalVariabes.msgErrorNonZeroHour;
     let errorSegmentNotAvailable = globalVariabes.msgErrorWrongConditions;
     const timeStampCET = new Date(new Date().toLocaleString('sv-SE', { timeZone: 'CET'}));
-    const timeStampLocal = new Date(new Date().toLocaleString());
-    //var hours = Math.abs(date1 - date2) / 36e5;
-    console.log(`Local Browser Time ${timeStampLocal}`);
-    console.log(`Time in CET ${timeStampLocal.getDate()}`);
-    console.log(`The timeStampCET is ${timeStampCET}`);
-    console.log(`The timeStampLocal is ${timeStampLocal}`);
-    let offHours = Math.abs(timeStampCET.getTime() - timeStampLocal.getTime())/3600000;
+    const timeStampLocal = new Date(); // Not Necessary to use "new Date(new Date().toLocaleString()"
+    let offHours = timeStampCET.getHours() - timeStampLocal.getHours();
     console.log(`Off Hours (Between Prague and Local Browser Time) : ${offHours}`);
     const offsetHours = (new Date(value*1000).getTimezoneOffset()/60) > 0 ? (new Date(value*1000).getTimezoneOffset()/60) + 1 : (new Date(value*1000).getTimezoneOffset()/60) - 1;
-    console.log(`started value: ${value}`);
-    console.log(`Get Time Offest ${offsetHours} h`)
-    let adjustedValuedt = new Date(value * 1000);
-    let adjustedOriginalValuedt = new Date(originalValue * 1000);
-    console.log(adjustedOriginalValuedt.getDate())
-    let adjustedValueTimeZone = format((adjustedValuedt.setHours(adjustedValuedt.getHours()+offHours)),"yyyy-MM-dd'T'HH:mm");
-    let adjustedOriginalValueTimeZone = format((adjustedOriginalValuedt.setHours(adjustedOriginalValuedt.getHours()+offHours)),"yyyy-MM-dd'T'HH:mm");
-    console.log("Editable Cell for Time Rendering Again....");
-    console.log(`value time stamp : ${adjustedValueTimeZone}`);
-    //let adjustedOriginalValueTimeZone = (new Date(originalValue * 1000)).toLocaleString('sv-SE', { timeZone: 'CET'});
-    console.log(`Value original value : ${adjustedOriginalValueTimeZone}`);
-    //const oldStartTimeValue = format(new Date(originalValue * 1000), "yyyy-MM-dd'T'HH:mm");
+    const adjustedValuedt = new Date(value * 1000);
+    const adjustedOriginalValuedt = new Date(originalValue * 1000);
+    const adjustedValueTimeZone = format((adjustedValuedt.setHours(adjustedValuedt.getHours()+offHours)),"yyyy-MM-dd'T'HH:mm");
+    const adjustedOriginalValueTimeZone = format((adjustedOriginalValuedt.setHours(adjustedOriginalValuedt.getHours()+offHours)),"yyyy-MM-dd'T'HH:mm");
     const oldStartTimeValue = format(new Date(adjustedOriginalValueTimeZone), "yyyy-MM-dd'T'HH:mm");
-    //const [tempValue, setTempValue] = React.useState(format(new Date(value * 1000), "yyyy-MM-dd'T'HH:mm"));
+    //const oldStartTimeValue = format(new Date(originalValue * 1000), "yyyy-MM-dd'T'HH:mm");
     const [tempValue, setTempValue] = React.useState(format(new Date(adjustedValueTimeZone), "yyyy-MM-dd'T'HH:mm"));
+    //const [tempValue, setTempValue] = React.useState(format(new Date(value * 1000), "yyyy-MM-dd'T'HH:mm"));
     const [showErrorGeneral, setShowErrorGeneral] = React.useState(false);
     const [showError, setShowError] = React.useState(false);
-    //const filtered = allInvoices.filter((sb : any) => ((new Date(sb.startTime * 1000)).toLocaleString('sv-SE', { timeZone: 'CET'}).includes(selectedSegment[0]) && (parseInt(sb.serviceId)===parseInt(selectedLocation))));
-
-    //const formatedDate = `${(new Date(selectedSegment[0])).toLocaleDateString('de-DE')} ${selectedSegment[0].split(' ')[1]}`;
-    const VerifyDate = (date : any) => {
+      const VerifyDate = (date : any) => {
       console.log(`Values at the beginning of the Verify Date ${date}`);
       console.log(date);
       const dt = new Date(Date.parse(date));
