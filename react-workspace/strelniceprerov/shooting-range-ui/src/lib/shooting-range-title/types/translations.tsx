@@ -24,7 +24,7 @@ export const Translations = {
       "Subtitle":                             'Zbrojní průkaz',
       "Label":                                'Čislo Zbrojní průkaz',
       "onError":                              'Vyplňte prosím jako format ZP123456',
-      "RegExValidation":                      '^[A-Z]{2}[0-9]{6}$'
+      "RegExValidation":                      '([A-Z])\\w+'
     },
     "Instructor":{
       "Label":                                'Instruktor'
@@ -42,7 +42,7 @@ export const Translations = {
     "PhoneNumber":{
       "Label":                                'Telefon',
       "onError":                              'Vyplňte prosím telefon na format +420123456789',
-      "RegExValidation":                      '^\\+420[1-9][0-9]{8}$'
+      "RegExValidation":                      '^\\[1-9][0-9]{8}$'
     },
     "Comments":{
       "Label":                                'Poznámky'

@@ -8,6 +8,7 @@ $databaseUsername = 'www-strelnic';
 $databasePassword = 'bQASvDoM9K4g';
 $databaseName = 'www-strelnic';
 $mysqli = mysqli_connect($databaseHost, $databaseUsername, $databasePassword, $databaseName);
+$mysqli->set_charset("utf8mb4");
 
 if (isset($_GET['id']) && $_GET['id']!="") {
   $id = $_GET['id'];

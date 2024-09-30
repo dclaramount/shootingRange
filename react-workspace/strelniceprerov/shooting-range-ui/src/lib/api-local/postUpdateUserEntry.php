@@ -8,6 +8,7 @@ $databaseUsername = 'root';
 $databasePassword = 'root';
 $databaseName = 'local';
 $mysqli = mysqli_connect($databaseHost, $databaseUsername, $databasePassword, $databaseName);
+$mysqli->set_charset("utf8mb4");
 
 if (isset($_GET['id']) && $_GET['id']!="") {
   $id = $_GET['id'];
