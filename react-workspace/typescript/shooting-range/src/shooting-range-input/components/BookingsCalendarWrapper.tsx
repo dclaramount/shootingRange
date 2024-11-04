@@ -1,11 +1,12 @@
 import {BookCalendarTable} from './BookCalendarTable';
 import React from 'react';
 import { DaysColumn } from './DaysColumn';
-import { FormWrapper } from './FormWrapper';
-import { ManagementDashboardContext } from '../../../../Context/ManagementDashboardContext';
-import { Translations } from '../../../../types/translations';
+import * as Components from "./EditBookingSpace"
+import { Translations } from '../types/translations';
+import { EditBookingsContextType } from '../../Common/Types/interfaces';
+import { EditBookingsContext as ctx} from '../../Common/Contexts/EditBookingsContext.';
 
-export function BookingsViewerWrapper(){
+export function BookingsCalendarWrapper(){
 
 const Legend = ({props} : any) => {
   return(
@@ -23,16 +24,16 @@ const Legend = ({props} : any) => {
 }
 
   const [lastRefreshTime, setLastRefreshTime] = React.useState(new Date().toLocaleString());
-  const {selectedLocation} = React.useContext(ManagementDashboardContext);
-
+const   _ctx : EditBookingsContextType      =       React.useContext(ctx);
+  console.log(_ctx);
   React.useEffect(() =>{    
     setLastRefreshTime(new Date().toLocaleString())
-  },[selectedLocation])
+  },[_ctx.selectedLocation])
   
  return (
   <div className="reservation-cal" style={{width:'100%'}}>
     <div style={{width:'100%', marginLeft:'auto', marginRight:'auto'}}>
-      <FormWrapper />
+      <Components.EditBookingsFormWrapper {...ctx}/>
       <div style={{color:'gray', fontWeight:'lighter', fontSize:'12px', textAlign:'center'}}>
       {`Table last updated on: ${lastRefreshTime}`}
       </div>
@@ -40,7 +41,7 @@ const Legend = ({props} : any) => {
     </div>
     <div className="reservation-cal-table" >
       <BookCalendarTable />
-      <DaysColumn />
+      <DaysColumn/>
     </div>
 
   </div>

@@ -16,7 +16,6 @@ function useGetEndPoint(apiRootURL : string, endpoint : string, urlParameters  =
   React.useEffect(() => {
     async function FetchData(){
       if(requestStatus!== REQUEST_STATUS.LOADING){
-        console.log("SET REQUEST")
         setRequestStatus(REQUEST_STATUS.LOADING);
         await axios.get(
           requestUri

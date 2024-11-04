@@ -1,0 +1,23 @@
+{
+  "name": "strelnice-prerov-workspace",
+  "version": "1.0.0",
+  "description": "Workspace for Strelnice Prerov",
+  "main": "index.js",
+  "scripts": {
+    "local:website" : "cd ./typescript/shooting-range && npm run start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dclaramount/shootingRange.git"
+  },
+  "keywords": [
+    "strelniceprerov"
+  ],
+  "author": "Diego Claramount",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dclaramount/shootingRange/issues"
+  },
+  "homepage": "https://github.com/dclaramount/shootingRange#readme"
+}

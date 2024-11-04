@@ -1,9 +1,12 @@
 import React from 'react';
 import {format } from 'date-fns';
-import { ManagementDashboardContext } from '../../../../Context/ManagementDashboardContext';
+import {BookingManagementContext} from "../../../../Context/BookingManagementContext";
+import {EditBookingsContext} from "../../../../../Common/Contexts/EditBookingsContext.";
+import {EditBookingsContextType} from "../../../../../Common/Types/interfaces";
+import {daysOfTheWeekCZ} from "../../../../../Common/Types/constants";
 
 function bookedOccupancy(summaryBookings : any, day : any, daysOfWeek:any, isoDaysOfWeek : any, time : any, selectedServiceId: any, locationList:any, allInvoices:any, selectedLocation:any){
-  const idx = daysOfWeek.indexOf(day); 
+    const idx = daysOfWeek.indexOf(day);
   const currentDayToAnalyze = new Date(`${isoDaysOfWeek[idx+1]} ${time}`);
   const formatedCurrentSegmentToAnalyze = format(currentDayToAnalyze, 'yyyy-MM-dd HH:mm:ss');
   const bookingsForTheSegment = summaryBookings.length>0 ? summaryBookings.filter((sb : any) => (sb.segmentStarts===formatedCurrentSegmentToAnalyze) && (parseInt(sb.serviceId)===parseInt(selectedServiceId))) : [];
@@ -33,25 +36,16 @@ function bookedOccupancy(summaryBookings : any, day : any, daysOfWeek:any, isoDa
     )
   }
   else{ return('') };
-  
 }
-export function DaysColumn(){
+export function DaysColumn({context} : any){
+    const cEditBookings : EditBookingsContextType = React.useContext(EditBookingsContext);
 
-  const { 
-          timesToShow,                   
-          daysOfWeek,                    
-          selectedSegment,              
-          setSelectedSegment, 
-          isoDaysOfWeek,
-          allInvoices,  
-          summaryBookingSegments, 
-          locationList,             
-          selectedLocation, 
-        } 
-          = React.useContext(ManagementDashboardContext);
+    //Destructuring Editing Booking Management Tab Context
+    const bookingManagementContext    = React.useContext(BookingManagementContext);
+    const setSelectedSegment          = bookingManagementContext.setSelectedSegment;
+    console.log(cEditBookings);
 
-  const daysOftheWeek = ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle'];
-/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+    /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /*                                                      Function to Handle the Click on the Cell                                                                               */
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
   const handlerClick = (e : any) => {
@@ -65,14 +59,14 @@ export function DaysColumn(){
   }
 
   const selected = (clickedCell : string) => {
-    if(selectedSegment.includes(clickedCell)){
-      if(selectedSegment.length===1){
+    if(cEditBookings.selectedSegment.includes(clickedCell)){
+      if(cEditBookings.selectedSegment.length===1){
         return 'active first active last'
       }
-      if(selectedSegment.indexOf(clickedCell)===0){
+      if(cEditBookings.selectedSegment.indexOf(clickedCell)===0){
         return 'active first'
       }
-      else if(selectedSegment.indexOf(clickedCell)===selectedSegment.length-1){
+      else if(cEditBookings.selectedSegment.indexOf(clickedCell)===cEditBookings.selectedSegment.length-1){
         return 'active last'
       }
       else{
@@ -82,22 +76,22 @@ export function DaysColumn(){
   } 
   return(
     <>
-      {daysOfWeek.map((day : string, idx : number) => { 
+      {cEditBookings.daysOfWeek.map((day : string, idx : number) => {
         return(
         <div className="reservation-cal-table-day">
         <div className="reservation-cal-table-day-head">
           <span>
-          {daysOftheWeek[idx]}
+          {daysOfTheWeekCZ[idx]}
           </span>
           <br/>
           <strong>
             {day}
           </strong>
         </div>
-        {timesToShow.map((timeToShow : string) => {
+        {cEditBookings.businessHours.map((timeToShow : string) => {
         return(
-        <div className={`reservation-cal-table-day-block ${selected(`${isoDaysOfWeek[idx+1]} ${timeToShow}:00`)}`} id={`${isoDaysOfWeek[idx+1]} ${timeToShow}:00`} style={{padding:'0px'}} onClick={(e) => handlerClick(e)}>
-          {bookedOccupancy(summaryBookingSegments, day, daysOfWeek, isoDaysOfWeek, `${timeToShow}:00`, parseInt(selectedLocation), locationList,allInvoices, selectedLocation)}
+        <div className={`reservation-cal-table-day-block ${selected(`${cEditBookings.daysOfWeekISOFormat[idx+1]} ${timeToShow}:00`)}`} id={`${cEditBookings.daysOfWeekISOFormat[idx+1]} ${timeToShow}:00`} style={{padding:'0px'}} onClick={(e) => handlerClick(e)}>
+          {bookedOccupancy(cEditBookings.summaryBookingSegments, day, cEditBookings.daysOfWeek, cEditBookings.daysOfWeekISOFormat, `${timeToShow}:00`, cEditBookings.selectedLocation, cEditBookings.serviceList,cEditBookings.bookingsSummaryView, cEditBookings.selectedLocation)}
         </div>)
       })}
     </div>)})}

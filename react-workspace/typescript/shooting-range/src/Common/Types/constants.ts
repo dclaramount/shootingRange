@@ -1,0 +1,1 @@
+export const daysOfTheWeekCZ = ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle'];

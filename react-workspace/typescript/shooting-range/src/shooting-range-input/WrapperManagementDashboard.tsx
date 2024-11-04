@@ -3,6 +3,8 @@ import axios from 'axios';
 import 'devextreme/dist/css/dx.light.css';
 import { ManagementDashboardContext } from './Context/ManagementDashboardContext';
 import TabManagement from './TabMangement';
+import {GlobalVariableInterface} from "../Common/Types/interfaces";
+import {buildArrayOfBusinessHours, getNumberGlobalVariable, getStringGlobalVariable} from "../Common/Helpers";
 
 /*-------------------------------------------------------------------------------------------------------------*/
 /*                                            HELPER FUNCTIONS                                                 */
@@ -42,34 +44,19 @@ const reArrangeInstructorSegments = (instructorSegments: any) => {
   return(respArray);
 }
 
-const buildArrayOfBusinessHours = (startHour : any, endHour : any) => {
-  const Array = []
-  let countStartHour = parseInt(startHour);
-  while(countStartHour < parseInt(endHour)){
-    if(countStartHour < 10){
-      Array.push(`0${countStartHour}`);
-    }
-    else{
-      Array.push(`${countStartHour}`);
-    }
-    countStartHour=countStartHour+1;
-  }
-  return Array;
-}
-
-export function WrapperManagementDashboard({gVariables} : any) {
+export function WrapperManagementDashboard(listGlobalVariables: GlobalVariableInterface[]) {
   const anyArray : any[] = [];
   var CryptoJS = require("crypto-js"); 
   /*
   const testEncryptKey = CryptoJS.AES.encrypt(`PLACEHOLDER`, `test-key`);
   console.log(`encrypted value`);
   console.log(testEncryptKey.toString());*/
-  var sendGridKey  = CryptoJS.AES.decrypt(gVariables.sendGridEncryptedKey, gVariables.decryptionKey).toString(CryptoJS.enc.Utf8);
+  var sendGridKey  = CryptoJS.AES.decrypt(getStringGlobalVariable(listGlobalVariables,'sendGridKeyEncrypted'), getStringGlobalVariable(listGlobalVariables,'decryptionKey')).toString(CryptoJS.enc.Utf8);
 
   /*-------------------------------------------------------------------------------------------------------------*/
   /*                                     HOOKS IN CONTEXT PROVIDER                                               */
   /*-------------------------------------------------------------------------------------------------------------*/
-  const [globalVariabes, setGlobalVariables]                          = React.useState(gVariables);
+  const [globalVariabes, setGlobalVariables]                          = React.useState<GlobalVariableInterface[]>(listGlobalVariables);
   const [instructosListFromDB, setInstructorsListFromDB]              = React.useState([]);
   const [fullInfoInstructors, setFullInfoInstructors]                 = React.useState([]);
   const [instructorSegments, setInstructorSegments ]                  = React.useState(anyArray);
@@ -82,13 +69,13 @@ export function WrapperManagementDashboard({gVariables} : any) {
   //For the Management Dashboard
   const [daysOfWeek, setDaysOfWeek]                                   = React.useState([]);
   const [selectedWeek, setSelectedWeek]                               = React.useState([]); 
-  const [selectedService, setSelectedService]                         = React.useState(parseInt(gVariables.defaultLocation)); 
+  const [selectedService, setSelectedService]                         = React.useState<number>(getNumberGlobalVariable(listGlobalVariables,'defaultLocation'));
   const [bookings,setBookings]                                        = React.useState([]); 
   const [isoDaysOfWeek,setISODaysOfWeek]                              = React.useState([]);
-  const [timesToShow, setTimesToShow]                                 = React.useState(buildArrayOfBusinessHours(gVariables.startBusinessHours, gVariables.endBusinessHours)); 
+  const [timesToShow, setTimesToShow]                                 = React.useState<string[]>(buildArrayOfBusinessHours(getNumberGlobalVariable(listGlobalVariables,'startBusinessHours'), getNumberGlobalVariable(listGlobalVariables,'endBusinessHours')));
   const [selectedSegment, setSelectedSegment]                         = React.useState([]);
   const [locationList, setLocationList]                               = React.useState([]);
-  const [selectedLocation, setSelectedLocation]                       = React.useState(parseInt(gVariables.defaultLocation));
+  const [selectedLocation, setSelectedLocation]                       = React.useState<number>(getNumberGlobalVariable(listGlobalVariables,'defaultLocation'));
   const [showUpPopUp, setShowUpPopUp]                                 = React.useState(false);
   const [showUpPopUpCancelation, setShowUpPopUpCancelation]           = React.useState(false);
   const [showUpPopUpModification, setShowUpPopUpModification]         = React.useState(false);
@@ -107,7 +94,7 @@ export function WrapperManagementDashboard({gVariables} : any) {
   /*-------------------------------------------------------------------------------------------------------------*/
   React.useEffect(() =>{    
     axios({
-      url: `${gVariables.apiRootURL}getAllInstructors.php`,
+      url: `${getStringGlobalVariable(listGlobalVariables,'apiURL')}getAllInstructors.php`,
       method: "GET",
   }).then((res) => {
     setInstructorsListFromDB(res.data)
@@ -119,7 +106,7 @@ export function WrapperManagementDashboard({gVariables} : any) {
   },[refreshManagementBoard,selectedLocation])
   React.useEffect(() =>{    
     axios({
-      url: `${gVariables.apiRootURL}getAllInstructorSegments.php`,
+      url: `${getStringGlobalVariable(listGlobalVariables,'apiURL')}getAllInstructorSegments.php`,
       method: "GET",
   }).then((res) => {
     setInstructorSegments(reArrangeInstructorSegments(res.data));
@@ -132,7 +119,7 @@ export function WrapperManagementDashboard({gVariables} : any) {
   },[refreshManagementBoard, selectedLocation])
   React.useEffect(() =>{    
     axios({
-      url: `${gVariables.apiRootURL}getInfoInstructors.php`,
+      url: `${getStringGlobalVariable(listGlobalVariables,'apiURL')}getInfoInstructors.php`,
       method: "GET",
   }).then((res) => {
     setFullInfoInstructors(res.data);
@@ -144,7 +131,7 @@ export function WrapperManagementDashboard({gVariables} : any) {
   },[refreshManagementBoard, selectedLocation])
   React.useEffect(() =>{    
     axios({
-      url: `${gVariables.apiRootURL}getSummaryBookings.php`,
+      url: `${getStringGlobalVariable(listGlobalVariables,'apiURL')}getSummaryBookings.php`,
       method: "GET",
   }).then((res) => {
     setSummaryBookingSegments(res.data);
@@ -157,7 +144,7 @@ export function WrapperManagementDashboard({gVariables} : any) {
   React.useEffect(() =>{    
     console.log("REQUEST AGAIN ALL INVOICES....")
     axios({
-      url: `${gVariables.apiRootURL}getAllInvoices.php`,
+      url: `${getStringGlobalVariable(listGlobalVariables,'apiURL')}getAllInvoices.php`,
       method: "GET",
   }).then((res) => {
     setAllInvoices(res.data);
@@ -169,7 +156,7 @@ export function WrapperManagementDashboard({gVariables} : any) {
   },[refreshManagementBoard, selectedLocation])
   React.useEffect(() =>{    
     axios({
-      url: `${gVariables.apiRootURL}getListShootingRange.php`,
+      url: `${getStringGlobalVariable(listGlobalVariables,'apiURL')}getListShootingRange.php`,
       method: "GET",
   }).then((res) => {
     setLocationList(res.data)

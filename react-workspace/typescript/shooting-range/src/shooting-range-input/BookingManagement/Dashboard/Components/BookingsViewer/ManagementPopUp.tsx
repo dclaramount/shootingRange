@@ -5,6 +5,8 @@ import { EditRowTable } from './EditRowTable';
 import Popup from "reactjs-popup";
 import axios from 'axios';
 import { de } from 'date-fns/locale';
+import {ManagementBookingPopUpContext} from "../../../../Context/ManagementBookingPopUpContext";
+import {useGetEndPoint} from "../../../../ApiCalls/useGetEndPoint";
 
 
 const tableStyle : React.CSSProperties = { border: "1px solid black", borderCollapse: "collapse", borderRadius:'10px', marginTop:'15px', marginBottom:'15px'};
@@ -39,8 +41,8 @@ export function ManagementPopUp({closeModalFunction} : any) {
     userId: string;
   }
 
-  const {locationList, selectedSegment, selectedLocation, allInvoices, showUpPopUpCancelation, setShowUpPopUpCancelation, showUpPopUpModification, setShowUpPopUpModification, selectedBooking, setSelectedBooking, globalVariabes, setRefreshManagementBoard, modificationInfo, sendGridKeyAPI, sendGridFromEmail} = React.useContext(ManagementDashboardContext);
-  const filtered = allInvoices.filter((sb : any) => ((new Date(sb.startTime * 1000)).toLocaleString('sv-SE', { timeZone: 'CET'}).includes(selectedSegment[0]) && (parseInt(sb.serviceId)===parseInt(selectedLocation))));
+  const {locationList,  globalVariabes, setRefreshManagementBoard, sendGridKeyAPI, selectedSegment, selectedLocation} = React.useContext(ManagementDashboardContext);
+  const {invoicesByTimeSegment:filtered, setInvoicesByTimeSegment, selectedBooking, setSelectedBooking, modificationInfo, showUpPopUpCancelation, setShowUpPopUpCancelation, showUpPopUpModification, setShowUpPopUpModification, setEdit}        =   React.useContext(ManagementBookingPopUpContext);
   const [deleteBooking, setDeleteBooking] = React.useState(0);
   const [newComment, setNewComment] = React.useState("");
   const [section, setSection]  =   React.useState("LOADING"); 
@@ -63,9 +65,6 @@ export function ManagementPopUp({closeModalFunction} : any) {
   /*                                                                      Editable Text Field                                                                          */
   /*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
   const ModifyReservation = (information : any, newComment : any) => {
-    console.log("TO MODIFY");
-    console.log(information);
-    console.log(newComment);
     setSection("DELETE_OLD_RESERVATION");
   }
   /*----------------------------------------------------------------------*/
@@ -78,8 +77,6 @@ export function ManagementPopUp({closeModalFunction} : any) {
         url: `${globalVariabes.apiRootURL}postDeleteBooking.php?uuidInvoice=${modificationInfo.newInfo.uuid}`,
         method: "GET",
     }).then((res) => {
-      console.log("DELETED");
-      console.log(res);
       setSelectedBooking([]);
       setRefreshManagementBoard(Math.random());
       setSection("GETTING_USER_BY_EMAIL")
@@ -89,7 +86,6 @@ export function ManagementPopUp({closeModalFunction} : any) {
     }
     //2nd Step get the User Account by Email
     if(section==="GETTING_USER_BY_EMAIL"){
-      console.log("Starting");
       axios({
         url: `${globalVariabes.apiRootURL}getUserRecordByEmail.php?userEmail=${modificationInfo.newInfo.email}`,
         method: "GET",
@@ -134,7 +130,6 @@ export function ManagementPopUp({closeModalFunction} : any) {
     }
     //3 Verify User Entry.
     else if(section==="VERIFY_DATA_USER"){
-      console.log("Verifing User Data")
       if(hasUserDataChanged(userAccount)){
         axios({
           url: `${globalVariabes.apiRootURL}postUpdateUserEntry.php?id=${userAccount.id}&shootingPermit=${false}&shootingPermitNumber=${modificationInfo.newInfo.shootingPermit}&name=${modificationInfo.newInfo.name}&email=${modificationInfo.newInfo.email}&phone=${modificationInfo.newInfo.phone}`,
@@ -151,7 +146,6 @@ export function ManagementPopUp({closeModalFunction} : any) {
     //4 Create Reservation.
     else if(section==="PROCEED_TO_CREATE_RESERVATION"){
       const selectedServiceId = locationList.find((location : any) => location.serviceName === modificationInfo.newInfo.service).id;
-      console.log(`Selected Service Id ${selectedServiceId}`)
       axios({
         url: `${globalVariabes.apiRootURL}postCreateBooking.php?selectedLocationId=${selectedServiceId}&selectedSegment=${new Date(new Date(modificationInfo.newInfo.startTime * 1000)).toLocaleString('en-CA', { timeZone: 'CET', hour12:false,}).replace(',','')}&selectedBookingDuration=${modificationInfo.newInfo.length}&selectedOccupancy=${1}&shootingInstructor=${modificationInfo.newInfo.withInstructor}&userId=${userAccount.id}&comment=${newComment}&uuidInvoice=${modificationInfo.newInfo.uuid}`,
         method: "GET",
@@ -176,7 +170,17 @@ export function ManagementPopUp({closeModalFunction} : any) {
       })
     .catch((err) => { console.log(err) });
     setShowUpPopUpModification(false);    
-    closeModalFunction();
+    }
+    //5 Refresh Data.
+    else if(section==="RESERVATION_MADE"){
+      axios({
+        url: `${globalVariabes.apiRootURL}getInvoiceBy.php?startSegmentTime=${selectedSegment[0]}&serviceId=${selectedLocation}`,
+        method: "GET",
+      }).then((res) => {
+        setInvoicesByTimeSegment(res.data.payload);
+        setEdit(false);
+        setSection("RESERVATIONS_UPDATED");
+      })
     }
   },[section])
 
@@ -203,7 +207,6 @@ export function ManagementPopUp({closeModalFunction} : any) {
   })
     .catch((err) => { console.log(err) });
 
-    const formatedDate = `${(new Date(selectedBooking.startTime)).toLocaleDateString('de-DE')} ${selectedSegment[0].split(' ')[1]}`;
     const formatedSelectedSegment = ``;
     axios({
       url: `${globalVariabes.apiRootURL}postSendDeleteEmail.php?sendGridKey=${sendGridKeyAPI}&emailTo=${selectedBooking.customerEmail}&emailFrom=${globalVariabes.emailFrom}&templateId=${globalVariabes.deleteEmailTemplate}&segmentBooked=${formatedSelectedSegment}&nameOnReservation=${selectedBooking.customerName}&shootingRangeName=${selectedBooking.serviceName}&phoneNumber=+${selectedBooking.phoneNumber}&comment=${'PLACEHOLDER'}&uuidInvoice=${selectedBooking.uuid}`,

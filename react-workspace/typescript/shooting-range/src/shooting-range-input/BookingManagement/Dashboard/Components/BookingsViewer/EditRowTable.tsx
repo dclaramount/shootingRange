@@ -1,6 +1,7 @@
 import React from 'react';
 import { ManagementDashboardContext } from '../../../../Context/ManagementDashboardContext';
 import {format } from 'date-fns';
+import {ManagementBookingPopUpContext} from "../../../../Context/ManagementBookingPopUpContext";
 
 const wrapperDropDown : React.CSSProperties = {
   marginTop:'5px',
@@ -50,7 +51,8 @@ const iconsCell: React.CSSProperties = {
 }
 const iconStyle: React.CSSProperties = {
   display: "flex",
-  margin:'5px', 
+  margin:'5px',
+  cursor: 'pointer'
 }
 const iconStyleDisabled: React.CSSProperties = {
   display: "flex",
@@ -61,7 +63,6 @@ const iconStyleDisabled: React.CSSProperties = {
 }
 //This Renders the PopUp that will navigate the user throughout the booking confirmation process.
 export function EditRowTable({inv} : any) {
-  const [edit, setEdit]                                         = React.useState(false);
   //Old Values
   const [oldLocation, setOldLocation]             =   React.useState(inv.locationId);
   const [oldService, setOldService]               =   React.useState(inv.serviceName);
@@ -86,18 +87,18 @@ export function EditRowTable({inv} : any) {
    const [newComments, setNewComments]             =   React.useState<string>(inv.comment);
 
   const comment = newComments === null ? [] : newComments.split(';');
-  const { locationList,               showUpPopUpCancelation, 
-          setShowUpPopUpCancelation,  showUpPopUpModification, 
-          setShowUpPopUpModification, selectedBooking, 
+  const { locationList,               showUpPopUpCancelation,
+          selectedBooking,
           setSelectedBooking,         globalVariabes,
           fieldsOnError,              setFieldsOnError,
           allInvoices,                instructorSegments,
-          allInstructSegments,        setModificationInfo,
+          allInstructSegments,
           showMsgErrorGralDate,       setShowMsgErrorGralDate,
           showMsgErrorDate,           setShowMsgErrorDate,
           showMsgErrorEmail,          setShowMsgErrorEmail,
           showMsgErrorPhone,          setShowMsgErrorPhone
         } = React.useContext(ManagementDashboardContext);
+  const { setShowUpPopUpCancelation, setShowUpPopUpModification, setModificationInfo, edit, setEdit } = React.useContext(ManagementBookingPopUpContext)
   let arrayOfLenghts = [];
   for(let i=1; i<parseInt(globalVariabes.maxBookingLength)+1;i++){
     arrayOfLenghts.push(i);
@@ -148,21 +149,15 @@ export function EditRowTable({inv} : any) {
     const timeStampCET = new Date(new Date().toLocaleString('sv-SE', { timeZone: 'CET'}));
     const timeStampLocal = new Date(); // Not Necessary to use "new Date(new Date().toLocaleString()"
     let offHours = timeStampCET.getHours() - timeStampLocal.getHours();
-    console.log(`Off Hours (Between Prague and Local Browser Time) : ${offHours}`);
-    const offsetHours = (new Date(value*1000).getTimezoneOffset()/60) > 0 ? (new Date(value*1000).getTimezoneOffset()/60) + 1 : (new Date(value*1000).getTimezoneOffset()/60) - 1;
     const adjustedValuedt = new Date(value * 1000);
     const adjustedOriginalValuedt = new Date(originalValue * 1000);
     const adjustedValueTimeZone = format((adjustedValuedt.setHours(adjustedValuedt.getHours()+offHours)),"yyyy-MM-dd'T'HH:mm");
     const adjustedOriginalValueTimeZone = format((adjustedOriginalValuedt.setHours(adjustedOriginalValuedt.getHours()+offHours)),"yyyy-MM-dd'T'HH:mm");
     const oldStartTimeValue = format(new Date(adjustedOriginalValueTimeZone), "yyyy-MM-dd'T'HH:mm");
-    //const oldStartTimeValue = format(new Date(originalValue * 1000), "yyyy-MM-dd'T'HH:mm");
     const [tempValue, setTempValue] = React.useState(format(new Date(adjustedValueTimeZone), "yyyy-MM-dd'T'HH:mm"));
-    //const [tempValue, setTempValue] = React.useState(format(new Date(value * 1000), "yyyy-MM-dd'T'HH:mm"));
     const [showErrorGeneral, setShowErrorGeneral] = React.useState(false);
     const [showError, setShowError] = React.useState(false);
       const VerifyDate = (date : any) => {
-      console.log(`Values at the beginning of the Verify Date ${date}`);
-      console.log(date);
       const dt = new Date(Date.parse(date));
       //Shows Error if Selected Time is not rounded hour
       if(dt.getMinutes() > 0 ){ 
@@ -178,11 +173,6 @@ export function EditRowTable({inv} : any) {
           const basedStartTime = format(new Date(Date.parse(date)).getTime(), "yyyy-MM-dd'T'HH:mm");
           const selectedStartTime = format(new Date(Date.parse(date)).getTime() + (i*60*60*1000), 'yyyy-MM-dd HH:mm:ss');
           const selectedStartTimeInstructorFormat = format(new Date(Date.parse(date)).getTime() + (i*60*60*1000), 'yyyy-MM-dd HH:mm:ss');
-          /*const fInvoicesByLocationId = allInvoices.filter((ai:any) => 
-                parseInt(ai.locationId)===parseInt(relevantLocation.locationId) && 
-                (newWithInstructor === ai.instructor) &&
-                (selectedStartTime===format(new Date(ai.startTime * 1000), 'dd.MM.yyyy HH:mm:ss'))
-          );*/
           /*---------------------------------------------------------------------------------------------------*/
           /*          Adjutment Necessary for the Time Zones Issue                                             */
           /*---------------------------------------------------------------------------------------------------*/
@@ -191,50 +181,26 @@ export function EditRowTable({inv} : any) {
             (newWithInstructor === ai.instructor) &&
             (selectedStartTime===(new Date(ai.startTime * 1000)).toLocaleString('sv-SE', { timeZone: 'CET'}))
           );
-          /*allInvoices.forEach((inv:any) => {console.log(`Invoice Id ${inv.id}`); 
-          console.log(`Date: ${(new Date(inv.startTime * 1000)).toLocaleString('sv-SE', { timeZone: 'CET'})}`);
-          const isEqual = (new Date(inv.startTime * 1000)).toLocaleString('sv-SE', { timeZone: 'CET'}) === selectedStartTime;
-          console.log(`Is a match : ${isEqual}`)});
-          console.log(fInvoicesByLocationId); */
           const fInvoicesByLocationIdDiffService = allInvoices.filter((ai:any) => 
             parseInt(ai.locationId)===parseInt(relevantLocation.locationId) && 
             (newWithInstructor === ai.instructor) &&
             (selectedStartTime===(new Date(ai.startTime * 1000)).toLocaleString('sv-SE', { timeZone: 'CET'})) &&
             (ai.serviceName !== newService)
           );
-          /*
-          const fInvoicesByLocationIdDiffService = allInvoices.filter((ai:any) => 
-          parseInt(ai.locationId)===parseInt(relevantLocation.locationId) && 
-          (newWithInstructor === ai.instructor) &&
-          (selectedStartTime===format(new Date(ai.startTime * 1000), 'dd.MM.yyyy HH:mm:ss')) &&
-          (ai.serviceName !== newService)
-              );*/
           const fSegmentsInstructors = allInstructSegments.filter((is : any) => 
             is.startTime === selectedStartTimeInstructorFormat
           );
-          /*allInstructSegments.forEach((iseg : any) => console.log(iseg.startTime));
-          console.log(selectedStartTimeInstructorFormat);
-          console.log(allInstructSegments);*/
           const sumOfCapacityInstructors = fSegmentsInstructors.length;
           //Get Capacity for the given start time segment
           let summOfBookedCapacity = 0;
           fInvoicesByLocationId.forEach((inv : any) => summOfBookedCapacity=summOfBookedCapacity+ parseInt(inv.occupancy))
           const locationCapacityWOutInstructors = parseInt(locationList.find((loc:any) => parseInt(loc.id) === parseInt(relevantLocation.locationId)).capacity);
           const locationCapacity = newWithInstructor ? sumOfCapacityInstructors :locationCapacityWOutInstructors;
-          console.log(`/*-------------Information to Compare (${selectedStartTime}) -----------------*/`);
-          console.log(`Location Id: ${relevantLocation.locationId}:${relevantLocation.locationName}`);
-          console.log(`Service Id: ${relevantLocation.id}:${relevantLocation.serviceName} `);
-          console.log(`Status of Normal Occupancy: ${summOfBookedCapacity}/${relevantLocation.capacity}`);
-          console.log(`Status of Instructor Occupancy:${summOfBookedCapacity}/${sumOfCapacityInstructors}`); 
-
           const capacityNotAvailable =  (summOfBookedCapacity >= locationCapacity) || //Change is not available if (Capacity for any of the segments is not ther) 
                                         (fInvoicesByLocationIdDiffService.length>0);  //Or in the case of shared location (E.g. Streliste B and C) have blocking reservations.
-          console.log(`Capacity Not Available ${capacityNotAvailable}`);
           if(capacityNotAvailable && !(oldStartTimeValue===basedStartTime)){
             setShowError(true);
           }
-          console.log(`Old Date Value ${tempValue}`);
-          console.log(`New Date Value ${date}`);
           setTempValue(date);
         }
       }
@@ -249,7 +215,6 @@ export function EditRowTable({inv} : any) {
     }
     }
     React.useEffect(() =>{    
-      console.log('ONE CHECK');
       VerifyDate(tempValue);
     },[])
     return(

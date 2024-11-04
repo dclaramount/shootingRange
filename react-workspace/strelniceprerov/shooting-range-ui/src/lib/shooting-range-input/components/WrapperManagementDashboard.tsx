@@ -58,10 +58,7 @@ const buildArrayOfBusinessHours = (startHour : any, endHour : any) => {
 
 export function WrapperManagementDashboard({gVariables} : any) {
   const anyArray : any[] = [];
-  console.log("CHECK POINT");
-  console.log(gVariables);
   const sendGridKey  = CryptoJS.AES.decrypt(gVariables.sendGridEncryptedKey, gVariables.decryptionKey).toString(CryptoJS.enc.Utf8);
-  console.log(sendGridKey);
   /*-------------------------------------------------------------------------------------------------------------*/
   /*                                     HOOKS IN CONTEXT PROVIDER                                               */
   /*-------------------------------------------------------------------------------------------------------------*/
@@ -86,11 +83,7 @@ export function WrapperManagementDashboard({gVariables} : any) {
   const [locationList, setLocationList]                               = React.useState([]);
   const [selectedLocation, setSelectedLocation]                       = React.useState(parseInt(gVariables.defaultLocation));
   const [showUpPopUp, setShowUpPopUp]                                 = React.useState(false);
-  const [showUpPopUpCancelation, setShowUpPopUpCancelation]           = React.useState(false);
-  const [showUpPopUpModification, setShowUpPopUpModification]         = React.useState(false);
-  const [selectedBooking, setSelectedBooking]                         = React.useState([]);
   const [fieldsOnError, setFieldsOnError]                              = React.useState<string[]>([]);
-  const [modificationInfo, setModificationInfo]                        = React.useState({});
   const [sendGridKeyAPI, setSendGridKeyAPI]                           = React.useState(sendGridKey);
   const [showMsgErrorGralDate, setShowMsgErrorGralDate]               = React.useState(false);
   const [showMsgErrorDate, setShowMsgErrorDate]                       = React.useState(false);
@@ -149,7 +142,6 @@ export function WrapperManagementDashboard({gVariables} : any) {
       method: "GET",
   }).then((res) => {
     if(res){
-      console.log(res);
       setSummaryBookingSegments(res.data);
       const controlArray = controlAPI;
       controlArray.push('SUMMARY_BOOKINGS');
@@ -163,7 +155,6 @@ export function WrapperManagementDashboard({gVariables} : any) {
       url: `${gVariables.apiRootURL}getAllInvoices.php`,
       method: "GET",
   }).then((res) => {
-    console.log(res.data);
     setAllInvoices(res.data);
     const controlArray = controlAPI;
     controlArray.push('GET_ALL_INVOICES');
@@ -213,11 +204,7 @@ export function WrapperManagementDashboard({gVariables} : any) {
                                                         locationList,           setLocationList,
                                                         selectedLocation,       setSelectedLocation,
                                                         showUpPopUp,            setShowUpPopUp,
-                                                        showUpPopUpCancelation, setShowUpPopUpCancelation,
-                                                        showUpPopUpModification, setShowUpPopUpModification,
-                                                        selectedBooking,          setSelectedBooking,
                                                         fieldsOnError,             setFieldsOnError,
-                                                        modificationInfo,       setModificationInfo,
                                                         sendGridKeyAPI, setSendGridKeyAPI,
                                                         showMsgErrorGralDate, setShowMsgErrorGralDate,
                                                         showMsgErrorDate, setShowMsgErrorDate,

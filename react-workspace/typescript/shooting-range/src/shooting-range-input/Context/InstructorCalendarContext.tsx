@@ -5,6 +5,7 @@ export const InstructorCalendarContext = React.createContext<any>("");
 
 export function InstructorsCalendarProvider({children, gVariables, iList, iSegmentList} : any)
 {
+  console.log(iList);
   //Treatment for the response from API
   const newiSegmentList : DBBlockTimeSegment[]= [];
   iSegmentList.forEach((segment : any) => newiSegmentList.push({

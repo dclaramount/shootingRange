@@ -1,9 +1,8 @@
 import React from 'react';
 import Popup from "reactjs-popup";
 import { WeekSelector } from './Components/WeekSelector';
-import { BookingsViewerWrapper } from './Components/BookingsViewer/BookingsViewerWrapper';
 import { ManagementDashboardContext } from '../../Context/ManagementDashboardContext';
-import { ManagementPopUp } from './Components/BookingsViewer/ManagementPopUp';
+import ManagementBookingSpace from "./Spaces/ManagementBookingSpace";
 /*-------------------------------------------------------------------------------------------------------------*/
 /*                                            HELPER FUNCTIONS                                                 */
 /*-------------------------------------------------------------------------------------------------------------*/
@@ -41,17 +40,17 @@ const reArrangeInstructorSegments = (instructorSegments: any) => {
   return(respArray);
 }
 
+//This is the function that Returns the Component <ManagementDashboard>
 export function ManagementDashboard() {
-  const {showUpPopUp, setShowUpPopUp} = React.useContext(ManagementDashboardContext);
-  const closeModal = (e : any) => {
-    setShowUpPopUp(false);
-  }
+  const {showUpPopUp, setShowUpPopUp, setRefreshManagementDashboard} = React.useContext(ManagementDashboardContext);
+  const closeModal = (e : any) => {setShowUpPopUp(false);setRefreshManagementDashboard(Math.random())}
   return(
-    <div className="wrapperPopUp" style={{opacity:`${showUpPopUp ? '0.5' : '1'}`, pointerEvents:`${showUpPopUp ? 'none' : 'auto'}`}}>
-      <WeekSelector/>
-      <BookingsViewerWrapper/>
-       <Popup open={showUpPopUp} onClose={closeModal} closeOnDocumentClick={false} >
-        <ManagementPopUp closeModalFunction={closeModal}/>
-       </Popup>
-    </div>
-)}
+      <div className="wrapperPopUp" style={{opacity:`${showUpPopUp ? '0.5' : '1'}`, pointerEvents:`${showUpPopUp ? 'none' : 'auto'}`}}>
+        <WeekSelector/>
+        {/*<BookingsViewerWrapper context={}/>*/}
+        <Popup open={showUpPopUp} onClose={closeModal} closeOnDocumentClick={false} >
+          <ManagementBookingSpace closeModalFunction={closeModal}/>
+        </Popup>
+      </div>
+  )
+}

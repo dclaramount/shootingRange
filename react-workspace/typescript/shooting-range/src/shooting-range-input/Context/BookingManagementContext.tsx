@@ -20,6 +20,7 @@ export function BookingManagementProvider({children, gVariables, iList, iSegment
   const [selectedLocation, setSelectedLocation]                       = React.useState(parseInt(gVariables.defaultLocation));   //Stores the selected location Id (based on the menu) Default (comming from DB)
   const [showUpPopUp, setShowUpPopUp]                                 = React.useState(false);                                  //TODO: Comment
   const [summaryBookingSegments, setSummaryBookingSegments]           = React.useState(summaryBookingsFromDB);
+  const [selectedSegment, setSelectedSegment]                         = React.useState([]);                                     //Stores the selected location/service for the booking management tab.
 
   return(
     <BookingManagementContext.Provider value={{
@@ -35,7 +36,8 @@ export function BookingManagementProvider({children, gVariables, iList, iSegment
                                                   selectedWeek, setSelectedWeek,
                                                   selectedLocation, setSelectedLocation     ,
                                                   showUpPopUp, setShowUpPopUp   ,
-                                                  summaryBookingSegments, setSummaryBookingSegments                                  
+                                                  summaryBookingSegments, setSummaryBookingSegments,
+                                                  selectedSegment, setSelectedSegment
     }}>
       {children}
     </BookingManagementContext.Provider>
