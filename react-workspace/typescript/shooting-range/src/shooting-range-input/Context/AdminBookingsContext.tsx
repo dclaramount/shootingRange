@@ -23,6 +23,7 @@ export function AdminBookingsProvider({children, gVariables, startLocationList, 
     /*-------------------------------------------------------------------------------------------------------------*/
     /*                                     HOOKS IN CONTEXT PROVIDER                                               */
     /*-------------------------------------------------------------------------------------------------------------*/
+    const [apiURL, setApiURL]                                                                   = React.useState(gVariables.apiRootURL);
     const [globalVariables,         setGlobalVariables]                                         = React.useState(gVariables);                                           //Stores the list of global variables
     const [locationList,            setLocationList]                                            = React.useState(startLocationList);                                    //Stores the locations list fetched from DB
     const [bookings,                setBookings]                                                = React.useState(startBookingsList);                                    //Stores the start bookings from the DB
@@ -53,9 +54,11 @@ export function AdminBookingsProvider({children, gVariables, startLocationList, 
     const [daysOfWeek,  setDaysOfWeek]                                                          = React.useState([]);                                                   //Stores the Array of the days of the week in format dd.mm from the week picker.
     const [isoDaysOfWeek,setISODaysOfWeek]                                                      = React.useState([]);                                                   //Stores the Days of the Week (based on week selector) in ISO format.
     const [timesToShow, setTimesToShow]                                                         = React.useState(buildArrayOfBusinessHours(gVariables.startBusinessHours, gVariables.endBusinessHours));    //Array of business hours to render the days calendar.
+    const [shootingPermit, setShootingPermit]                                                   = React.useState(true);
 
     return(
         <AdminBookingsContext.Provider value={{
+            apiURL,                 setApiURL,
             globalVariables,        setGlobalVariables,
             locationList,           setLocationList,
             bookings,               setBookings,
@@ -84,6 +87,7 @@ export function AdminBookingsProvider({children, gVariables, startLocationList, 
             isoDaysOfWeek,          setISODaysOfWeek,
             timesToShow,            setTimesToShow,
             selectedOccupancy,      setSelectedOccupancy,
+            shootingPermit,         setShootingPermit,
         }}>
             {children}
         </AdminBookingsContext.Provider>

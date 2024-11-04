@@ -88,3 +88,18 @@ export function TextPlaceholder({text}:any){
     )
 
 }
+interface PlaceHolderProps {
+  background?: string;
+  text: string;
+}
+export function CreatingBookingPlaceholder({background='white', text}:PlaceHolderProps) {
+  return(
+    <div style={{width:'100%', height:'100%', display:'flex'}}>
+    <div style={{background:`${background}`, width: '100%', height:'100%',padding:'5px', border:'2px solid black', borderRadius:'10px', display:'flex' }}>
+      <div style={{margin:'auto', width:'auto', height:'auto'}}>
+        <TextPlaceholder text={text} />
+      </div>
+    </div>
+  </div>
+  )
+}
