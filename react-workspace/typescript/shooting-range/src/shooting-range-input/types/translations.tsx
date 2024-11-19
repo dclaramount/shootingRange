@@ -11,7 +11,8 @@ export const Translations = {
   },
   "BookingManagmentTab":{
     "BlockWInstructor"                    : 'Blok s instruktorem',
-    "BlockWoutInstructor"                 : 'Blok bez instruktora'
+    "BlockWoutInstructor"                 : 'Blok bez instruktora',
+    "LegendWithComments"                  : 'Rezervací s poznámkami'
   },
   "InstructorSegmentManagementCalendar": {
     "CreateSegmentPopUp":{

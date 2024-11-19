@@ -12,7 +12,7 @@ function bookedOccupancy(summaryBookings : any, day : any, daysOfWeek:any, isoDa
   const sum = 0;
   const names : string[] = [];
   const filtered = allInvoices.filter((sb : any) => ((new Date(sb.startTime * 1000)).toLocaleString('sv-SE', { timeZone: 'CET'}).includes(formatedCurrentSegmentToAnalyze) && (parseInt(sb.serviceId)===parseInt(selectedLocation))));
-  filtered.forEach((bfts : any, idx:number) => {if(idx<2){names.push(bfts.customerName)}else if(idx===2){names.push(`${bfts.customerName}...`)}})
+  filtered.forEach((bfts : any, idx:number) => {if(idx<2){names.push(`${bfts.customerName} ${bfts.comment.split(';')[0].length>0 ? '*' : ''}`)}else if(idx===2){names.push(`${bfts.customerName}...`)}})
   if(bookingsForTheSegment.length>0){
     return (
       <div className="reservation-cal-legend-item occupied" style={{display:'flex', flexDirection:'row', width:'100%', height:'100%', padding:'0 5px 0 5px', margin:'0px'}}>

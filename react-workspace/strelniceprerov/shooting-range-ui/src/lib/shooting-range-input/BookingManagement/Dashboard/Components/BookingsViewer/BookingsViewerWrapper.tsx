@@ -35,6 +35,9 @@ export function BookingsViewerWrapper(){
       <div style={{color:'gray', fontWeight:'lighter', fontSize:'12px', textAlign:'center'}}>
       {`Table last updated on: ${lastRefreshTime}`}
       </div>
+      <div style={{color:'gray', fontWeight:'lighter', fontSize:'12px', textAlign:'center', marginTop:'5px'}}>
+      {`* ${Translations.BookingManagmentTab.LegendWithComments}`}
+      </div>
     </div>
     <div style={{width:'100%', marginRight:'auto', marginLeft:'auto'}}>
     <Legend props={[{color:'black', name:`${Translations.BookingManagmentTab.BlockWoutInstructor}`},{color:'#f2b51b' , name:`${Translations.BookingManagmentTab.BlockWInstructor}`}]} />

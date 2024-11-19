@@ -16,7 +16,7 @@ function bookedOccupancy(summaryBookings : any, day : any, daysOfWeek:any, isoDa
   const filtered = allInvoices.filter((sb : any) => ((new Date(sb.startTime * 1000)).toLocaleString('sv-SE', { timeZone: 'CET'}).includes(formatedCurrentSegmentToAnalyze) && (parseInt(sb.serviceId)===parseInt(selectedLocation))));
 
   const names : string[]= [];
-  filtered.forEach((bfts : any, idx:number) => {if(idx<2){names.push(bfts.customerName)}else if(idx===2){names.push(`${bfts.customerName}...`)}})
+  filtered.forEach((bfts : any, idx:number) => {if(idx<2){names.push(`${bfts.customerName} ${bfts.comment.split(';')[0].length>0 ? '*' : ''}`)}else if(idx===2){names.push(`${bfts.customerName}...`)}})
   const occupancyToShow =   bookingsForTheSegment.length>0 ? sum : ''
   if(bookingsForTheSegment.length>0){
     return (
