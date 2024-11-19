@@ -20,6 +20,8 @@ const buildArrayOfBusinessHours = (startHour : any, endHour : any) => {
 
 export function AdminBookingsProvider({children, gVariables, startLocationList, startBookingsList, startInstructorsSegmentList, startSummaryBookingsList, startSumInstBookingSegments, startBlockingSegmentList, thisWeek} : any)
 {
+    var CryptoJS = require("crypto-js"); 
+    var sendGridKey  = CryptoJS.AES.decrypt(gVariables.sendGridEncryptedKey, gVariables.decryptionKey).toString(CryptoJS.enc.Utf8);
     /*-------------------------------------------------------------------------------------------------------------*/
     /*                                     HOOKS IN CONTEXT PROVIDER                                               */
     /*-------------------------------------------------------------------------------------------------------------*/
@@ -55,6 +57,9 @@ export function AdminBookingsProvider({children, gVariables, startLocationList, 
     const [isoDaysOfWeek,setISODaysOfWeek]                                                      = React.useState([]);                                                   //Stores the Days of the Week (based on week selector) in ISO format.
     const [timesToShow, setTimesToShow]                                                         = React.useState(buildArrayOfBusinessHours(gVariables.startBusinessHours, gVariables.endBusinessHours));    //Array of business hours to render the days calendar.
     const [shootingPermit, setShootingPermit]                                                   = React.useState(true);
+    const [sendGridKeyAPI, setSendGridKeyAPI]                                                   = React.useState(sendGridKey);
+    const [sendGridFromEmail, setSendGridFromEmail]                                             = React.useState(gVariables.emailFrom);
+    const [sendGridTemplateConfirmationId, setSendGridTemplateConfirmationId]                   = React.useState(gVariables.confirmationTemplateId);
 
     return(
         <AdminBookingsContext.Provider value={{
@@ -88,6 +93,10 @@ export function AdminBookingsProvider({children, gVariables, startLocationList, 
             timesToShow,            setTimesToShow,
             selectedOccupancy,      setSelectedOccupancy,
             shootingPermit,         setShootingPermit,
+            sendGridKeyAPI,         setSendGridKeyAPI,
+            sendGridFromEmail,      setSendGridFromEmail,
+            sendGridTemplateConfirmationId, setSendGridTemplateConfirmationId
+
         }}>
             {children}
         </AdminBookingsContext.Provider>

@@ -29,7 +29,7 @@ export function BookingFormWrapper() {
     e.preventDefault();
     setShootingPermitNumber(shootingPermitRef?.current?.value);
     setName(nameRef?.current?.value);
-    setEmail(`${nameRef?.current?.value.trim()}@email.cz`);
+    setEmail(`${nameRef?.current?.value.trim()}@strelnice-prerov.cz`);
     setPhone(`+420777222333`);
     setComment(commentsRef?.current?.value);
     setShowPopUpBookingProcess(true);
