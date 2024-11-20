@@ -148,7 +148,7 @@ export function ManagementPopUp({closeModalFunction} : any) {
       const selectedServiceId = locationList.find((location : any) => location.serviceName === modificationInfo.newInfo.service).id;
       console.log(`Selected Service Id ${selectedServiceId}`)
       axios({
-        url: `${globalVariabes.apiRootURL}postCreateBooking.php?selectedLocationId=${selectedServiceId}&selectedSegment=${new Date(new Date(modificationInfo.newInfo.startTime * 1000)).toLocaleString('en-CA', { timeZone: 'CET', hour12:false,}).replace(',','')}&selectedBookingDuration=${modificationInfo.newInfo.length}&selectedOccupancy=${1}&shootingInstructor=${modificationInfo.newInfo.withInstructor}&userId=${userAccount.id}&comment=${newComment}&uuidInvoice=${modificationInfo.newInfo.uuid}`,
+        url: `${globalVariabes.apiRootURL}postCreateBooking.php?selectedLocationId=${selectedServiceId}&selectedSegment=${new Date(new Date(modificationInfo.newInfo.startTime * 1000)).toLocaleString('en-CA', { timeZone: 'CET', hour12:false,}).replace(',','')}&selectedBookingDuration=${modificationInfo.newInfo.length}&selectedOccupancy=${1}&shootingInstructor=${modificationInfo.newInfo.withInstructor}&userId=${userAccount.id}&comment=${encodeURIComponent(newComment)}&uuidInvoice=${modificationInfo.newInfo.uuid}`,
         method: "GET",
       }).then((res) => {
         setResponse(res.data);

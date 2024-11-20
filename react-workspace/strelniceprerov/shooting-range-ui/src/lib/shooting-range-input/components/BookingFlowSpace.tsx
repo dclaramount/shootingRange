@@ -127,7 +127,7 @@ export function BookingFlowSpace({closeModalFunction} : any) {
     //4 Create Reservation.
     else if(section==="PROCEED_TO_CREATE_RESERVATION"){
       axios({
-        url: `${apiURL}postCreateBooking.php?selectedLocationId=${selectedLocation}&selectedSegment=${selectedSegment}&selectedBookingDuration=${selectedBookingDuration}&selectedOccupancy=${selectedOccupancy}&shootingInstructor=${shootingInstructor}&userId=${userAccount.id}&comment=${comment}&uuidInvoice=${uniqueIdentifier}`,
+        url: `${apiURL}postCreateBooking.php?selectedLocationId=${selectedLocation}&selectedSegment=${selectedSegment}&selectedBookingDuration=${selectedBookingDuration}&selectedOccupancy=${selectedOccupancy}&shootingInstructor=${shootingInstructor}&userId=${userAccount.id}&comment=${encodeURIComponent(comment)}&uuidInvoice=${uniqueIdentifier}`,
         method: "GET",
       }).then((res) => {
         if(res.status===200){
