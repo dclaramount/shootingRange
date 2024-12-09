@@ -149,7 +149,6 @@ export function EditRowTable({inv} : any) {
     const timeStampCET = new Date(new Date().toLocaleString('sv-SE', { timeZone: 'CET'}));
     const timeStampLocal = new Date(); // Not Necessary to use "new Date(new Date().toLocaleString()"
     const offHours = timeStampCET.getHours() - timeStampLocal.getHours();
-    console.log(`Off Hours (Between Prague and Local Browser Time) : ${offHours}`);
     const offsetHours = (new Date(value*1000).getTimezoneOffset()/60) > 0 ? (new Date(value*1000).getTimezoneOffset()/60) + 1 : (new Date(value*1000).getTimezoneOffset()/60) - 1;
     const adjustedValuedt = new Date(value * 1000);
     const adjustedOriginalValuedt = new Date(originalValue * 1000);
@@ -213,15 +212,8 @@ export function EditRowTable({inv} : any) {
           fInvoicesByLocationId.forEach((inv : any) => summOfBookedCapacity=summOfBookedCapacity+ parseInt(inv.occupancy))
           const locationCapacityWOutInstructors = parseInt(locationList.find((loc:any) => parseInt(loc.id) === parseInt(relevantLocation.locationId)).capacity);
           const locationCapacity = newWithInstructor ? sumOfCapacityInstructors :locationCapacityWOutInstructors;
-          console.log(`/*-------------Information to Compare (${selectedStartTime}) -----------------*/`);
-          console.log(`Location Id: ${relevantLocation.locationId}:${relevantLocation.locationName}`);
-          console.log(`Service Id: ${relevantLocation.id}:${relevantLocation.serviceName} `);
-          console.log(`Status of Normal Occupancy: ${summOfBookedCapacity}/${relevantLocation.capacity}`);
-          console.log(`Status of Instructor Occupancy:${summOfBookedCapacity}/${sumOfCapacityInstructors}`); 
-
           const capacityNotAvailable =  (summOfBookedCapacity >= locationCapacity) || //Change is not available if (Capacity for any of the segments is not ther) 
                                         (fInvoicesByLocationIdDiffService.length>0);  //Or in the case of shared location (E.g. Streliste B and C) have blocking reservations.
-          console.log(`Capacity Not Available ${capacityNotAvailable}`);
           if(capacityNotAvailable && !(oldStartTimeValue===basedStartTime)){
             setShowError(true);
           }
@@ -230,12 +222,14 @@ export function EditRowTable({inv} : any) {
       }
     }
     //Once clicking out of the calendar (Update the newValue) (ONLY IF NO ERRORS)
-    const updateNewValue = () => {
+    const updateNewValue = (event : any) => {
       if(!showError && !showErrorGeneral){
         const tempValuedt = new Date(tempValue);
         const tempValueToLocal = new Date(tempValuedt.setHours(tempValuedt.getHours() - offHours))
         //updateFunction(Date.parse(tempValue)/1000);
-        updateFunction(Date.parse(tempValueToLocal.toLocaleString())/1000);    }
+        // updateFunction(Date.parse(tempValueToLocal.toLocaleString())/1000);    
+        updateFunction(new Date(event.target.value).getTime()/1000)
+      }
     }
     React.useEffect(() =>{    
       VerifyDate(tempValue);
@@ -249,7 +243,7 @@ export function EditRowTable({inv} : any) {
           style={editableCell} 
           type="datetime-local" 
           onChange={(e) => VerifyDate(e.target.value)}
-          onBlur={(e) => updateNewValue()}
+          onBlur={(e) => updateNewValue(e)}
           />
           {showErrorGeneral && <div style={ErrorMessageStyle}>{errorMessageGeneral}</div>}
           {showError && <div style={ErrorMessageStyle}>{errorSegmentNotAvailable}</div>}

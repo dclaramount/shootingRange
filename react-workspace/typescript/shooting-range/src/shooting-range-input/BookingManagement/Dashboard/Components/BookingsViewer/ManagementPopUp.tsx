@@ -277,7 +277,6 @@ export function ManagementPopUp({closeModalFunction} : any) {
                 </tr>
                 <tr id={'startTime'}>
                   <th style={tableCellSummary}>Start Time</th>
-
                   <th style={tableCellSummary}>{new Date(new Date(modificationInfo.oldInfo.startTime * 1000)).toLocaleString('cs-CZ', { timeZone: 'CET'})}</th>
                   <th style={tableCellSummary}>{new Date(new Date(modificationInfo.newInfo.startTime * 1000)).toLocaleString('cs-CZ', { timeZone: 'CET'})}</th>
                 </tr>
