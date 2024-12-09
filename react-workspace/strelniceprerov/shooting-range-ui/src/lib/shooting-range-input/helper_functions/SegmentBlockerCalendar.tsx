@@ -15,7 +15,8 @@ export function generateDayPilotCalendarEvents(lOfSegments: DBBlockTimeSegment [
         backColor:      segment.color ?? 'red',
         text:           `${segment.name}`,
         uuid:           segment.uuid,
-        locationId:     segment.locationId
+        locationId:     segment.locationId,
+        instructorId:   segment.instructorId
       }
       returnArray.push(newEvent);
     }

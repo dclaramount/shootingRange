@@ -1,10 +1,13 @@
 import React from 'react';
 import { generateDayPilotCalendarEvents } from '../../helper_functions/SegmentBlockerCalendar';
-import { DayPilotEvent } from '../../types/blocking-segment.types';
+import { DayPilotEvent, WeekPickerType } from '../../types/blocking-segment.types';
 import { PostPopUp } from '../../shared/PostPopUp';
 import { ManagementDashboardContext } from '../../Context/ManagementDashboardContext';
 import { InstructorCalendarContext } from '../../Context/InstructorCalendarContext';
 import { Translations } from '../../types/translations';
+import { HonestWeekPicker } from '../../components/HonnestWeekPicker';
+import Popup from 'reactjs-popup';
+import { CopyWeekInstructorsPopUp } from '../../shared/CopyWeekInstructors';
 
 const dns = require ("@daypilot/daypilot-lite-react");
 const styles = {
@@ -16,7 +19,12 @@ const styles = {
   },
   main: {
     flexGrow: "1"
-  }
+  },
+  copyButton: ()  => ({
+    marginTop:'auto',
+    marginBottom:'auto',
+    marginLeft: 'auto'
+   })
 };
 
 export const InstructorCalendarManagement = () => {
@@ -24,9 +32,47 @@ export const InstructorCalendarManagement = () => {
   const [postParameters, setPostParameters]                                   =   React.useState("");
   const [endpoint, setEndPoint]                                               =   React.useState("");
   const [refresh, setRefresh]                                                 =   React.useState(false);
+  const [events, setEvents]                         =   React.useState<DayPilotEvent[]>();
   const {globalVariabes:gVariables, instructorsList, instructorSegmentsList}  =   React.useContext(InstructorCalendarContext);
-  const {refreshManagementDashboard, setRefreshManagementDashboard}           =   React.useContext(ManagementDashboardContext);
-  const calendarRef                                                           =   React.useRef<any>()
+  const {refreshManagementDashboard, setRefreshManagementDashboard}           =   React.useContext(ManagementDashboardContext);  
+  const calendarRef                                 =   React.useRef<any>()
+  const showCopyWeekPopUp                           =   React.useRef<any>();
+  const refCheckBoxCopy                             =   React.useRef<any>();
+  const refPickCalendar                             =   React.useRef<any>();
+  const refCopyButton                               =   React.useRef<any>();
+  const refToCopyWeekUp        =   React.useRef<WeekPickerType>();
+  const currentWeek                                 =   React.useRef<any>();
+  /*-------------------------------------------------------------------------------------------------*/
+  /*                              Handler: CLOSE OF MODAL                                            */
+  /*-------------------------------------------------------------------------------------------------*/
+  const closeModal                                  =   (e : any) => {showCopyWeekPopUp.current?.close()}
+  React.useEffect(() => {
+    let events : DayPilotEvent[] = generateDayPilotCalendarEvents(instructorSegmentsList);
+    const startDate = `${new Date().toISOString()}`;
+    calendarRef.current.control.update({startDate, events});
+    setEvents(events);
+    setRefresh(true);
+  }, [refresh]);
+  /*-------------------------------------------------------------------------------------------------*/
+  /*              Handler: OF THE CHANGE FUNCTION OF THE COPY WEEK SELECTOR                          */
+  /*-------------------------------------------------------------------------------------------------*/
+  const onChangeCopyWeekSelector = (week : any) => {
+    refToCopyWeekUp.current=week;
+    console.log(week);
+    currentWeek.current.firstDay = week.firstDay;
+    currentWeek.current.lastDay = week.lastDay;
+    const arrayDaysOfWeek = []
+    const isoDaysOfWeek = []
+    for (let i=0; i<=7; i++){
+      const dt = new Date(week.firstDay);
+      dt.setDate(dt.getDate() + i);
+      isoDaysOfWeek.push(dt.toISOString().split('T')[0]);
+      if(i<7){
+        arrayDaysOfWeek.push(`${dt.getDate()}.${dt.getMonth() + 1}`);
+      }
+    }
+  };
+
   const closeModalPopUp                                                       =   () => {setRefreshManagementDashboard(refreshManagementDashboard+1);setShowPopUp(false);}
   const Legend = ({props} : any) => {
     return(
@@ -82,7 +128,6 @@ export const InstructorCalendarManagement = () => {
     },
     //Step 1. Upon clicking there should be a placeholder created for the segment being created
     onTimeRangeSelected: async (args : any) => {
-      console.log(args);
       const dp                                                      =   calendarRef.current.control;
       const uniqueGUI                                               =   dns.DayPilot.guid(); //Unique GUID to register the segment in the DB.
       dp.events.add({
@@ -289,6 +334,12 @@ export const InstructorCalendarManagement = () => {
   }, [refresh]);
   return (
     <div>
+      <div style={{display:'flex'}}>
+        <input ref={refCheckBoxCopy} style={{margin:'auto 0 auto 0'}} id={'checkbox_copy_week'} name="checkbox_copy_week"  type="checkbox" onClick={(e) => {refPickCalendar.current.hidden=!refPickCalendar.current.hidden;refCopyButton.current.hidden=!refCopyButton.current.hidden;}} />
+        <label style={{verticalAlign:'middle', margin:'auto 0 auto 10px'}} htmlFor="checkbox_copy_week">{Translations.CopyBlockSegments.LabelCopyWeek}</label>
+        <div ref={refPickCalendar} style={{margin:'0 0 0 auto'}} hidden={true}>{Translations.CopyBlockSegments.ToWeek}<HonestWeekPicker onChange={onChangeCopyWeekSelector}/> </div>
+        <input ref={refCopyButton} hidden={true} type="button" name="copyWeekPopUp" className="btn btn-secondary" value="Copy Week" style={styles.copyButton()} onClick={(e)=>{showCopyWeekPopUp.current?.open()}}/>
+      </div>
     <Legend props={instructorsList}/>
     <div style={styles.wrap}>
       <div style={styles.left}>
@@ -313,8 +364,12 @@ export const InstructorCalendarManagement = () => {
           
         />
       </div>
+      <input hidden ref={currentWeek} />
       {/*Vámi vybraný čas k vyblokování není možné zrušit z důvodu existujících rezervací. Prosím o kontrolu.*/}
       {showPopUp && postParameters!=='' && <PostPopUp postAPI={endpoint} postParameters={postParameters} closeModal={closeModalPopUp}/>}
+      <Popup ref={showCopyWeekPopUp} onClose={(e)=>closeModal(e)} closeOnDocumentClick={false} >
+          <CopyWeekInstructorsPopUp  toWeek={currentWeek.current} popUpRef={showCopyWeekPopUp} closeModal={closeModal} listOfAllEvents={events} startDateOfSelectedWeek={calendarRef.current}/>
+      </Popup>
     </div>
     </div>
   );

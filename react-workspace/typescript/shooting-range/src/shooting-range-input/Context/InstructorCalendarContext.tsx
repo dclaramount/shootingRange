@@ -1,5 +1,5 @@
 import React from 'react';
-import { DBBlockTimeSegment } from '../types/blocking-segment.types';
+import { DBBlockTimeSegment, InstructorSegmentsToCreate } from '../types/blocking-segment.types';
 
 export const InstructorCalendarContext = React.createContext<any>("");
 
@@ -22,12 +22,14 @@ export function InstructorsCalendarProvider({children, gVariables, iList, iSegme
   const [globalVariabes, setGlobalVariables]                          = React.useState(gVariables);                     //Stores the list of global variables
   const [instructorsList, setInstructorsList]                         = React.useState(iList);                          //Stores the list of Instructors
   const [instructorSegmentsList, setInstructorSegmentsList]           = React.useState(newiSegmentList);                //Stores the list of Instructor Segments
+  const [instructorSegmentsToCopy, setInstructorSegmentsToCopy]       = React.useState<InstructorSegmentsToCreate[]>([])
 
   return(
     <InstructorCalendarContext.Provider value={{
                                                   globalVariabes,         setGlobalVariables,
                                                   instructorsList,        setInstructorsList,
-                                                  instructorSegmentsList, setInstructorSegmentsList
+                                                  instructorSegmentsList, setInstructorSegmentsList,
+                                                  instructorSegmentsToCopy, setInstructorSegmentsToCopy
     }}>
       {children}
     </InstructorCalendarContext.Provider>
