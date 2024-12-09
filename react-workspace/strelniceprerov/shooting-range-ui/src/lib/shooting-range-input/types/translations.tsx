@@ -5,7 +5,7 @@ export const Translations = {
     'Title_Reservation_Management'        : 'Správa rezervací',
     'Title_Instructors_Management'        : 'Správa instruktorů',
     'Title_Blocking_Segments_Management'  : 'Správa událostí',
-    'Title_Events'                        : 'Události',
+    'Title_Events'                        : 'Nastavení',
     'Default_Select_Service'              : 'Vyberte střeliště',
     'Admin_Bookings'                      : 'TODO: MAKE RESERVATIONS'
   },
