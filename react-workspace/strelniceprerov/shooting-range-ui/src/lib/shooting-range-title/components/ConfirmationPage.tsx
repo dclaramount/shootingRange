@@ -38,15 +38,21 @@ export function ConfirmationPage( {setPage} : any) {
       </div>
     <div style={{height:'auto'}}>
       <div style={{display:'flex', marginTop:separation}}>
-        <span style={{color:colorIcons}}><i className={`fa fa-location-arrow ${sizeOfIcons}`} aria-hidden="true" ></i></span>
+        <div style={{maxWidth:'26px', maxHeight:'30px'}}>
+          <span style={{color:colorIcons}}><i className={`fa fa-location-arrow ${sizeOfIcons}`} aria-hidden="true" ></i></span>
+        </div>
         <div style={{fontFamily:fontText, fontSize:fontSize, color:colorFont, fontWeight:fontWeight, marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}}>{locationList.find((location:any) => parseInt(location.id)===parseInt(selectedLocation)).serviceName}</div>
       </div>
       <div style={{display:'flex', marginTop:separation}}>
-        <span style={{color:colorIcons}}><i className={`fa fa-calendar ${sizeOfIcons}`} aria-hidden="true" ></i></span>
+        <div style={{maxWidth:'26px', maxHeight:'30px'}}>
+          <span style={{color:colorIcons}}><i className={`fa fa-calendar ${sizeOfIcons}`} aria-hidden="true" ></i></span>
+        </div>
         <div style={{fontFamily:fontText, fontSize:fontSize, color:colorFont, fontWeight:fontWeight, marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}}>{formatedSelectedSegment}</div>
       </div>
       <div style={{display:'flex' , marginTop:separation}}>
-        <span style={{color:colorIcons}}><i className={`fa fa-clock ${sizeOfIcons}`} aria-hidden="true" ></i></span>
+        <div style={{maxWidth:'26px', maxHeight:'30px'}}>
+          <span style={{color:colorIcons}}><i className={`fa fa-clock ${sizeOfIcons}`} aria-hidden="true" ></i></span>
+        </div>
         <div style={{fontFamily:fontText, fontSize:fontSize, color:colorFont, fontWeight:fontWeight, marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}}>{selectedBookingDuration} h</div>
       </div>
       {/*
@@ -55,23 +61,33 @@ export function ConfirmationPage( {setPage} : any) {
         <div style={{fontFamily:fontText, fontSize:fontSize, color:colorFont, fontWeight:fontWeight, marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}}>{selectedOccupancy} people</div>
       </div>*/}
       { shootingPermit && <div style={{display:'flex',  marginTop:separation}}>
-        <span style={{color:colorIcons}}><i className={`fa fa-id-card ${sizeOfIcons}`} aria-hidden="true" ></i></span>
+        <div style={{maxWidth:'26px', maxHeight:'30px'}}>
+          <span style={{color:colorIcons}}><i className={`fa fa-id-card ${sizeOfIcons}`} aria-hidden="true" ></i></span>
+        </div>
         <div style={{fontFamily:fontText, fontSize:fontSize, color:colorFont, fontWeight:fontWeight, marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}}>{shootingPermitNumber}</div>
       </div>}
       {(!shootingPermit || (shootingPermit && shootingInstructor)) && <div style={{display:'flex', marginTop:separation}}>
-        <span style={{color:colorIcons}}><i className={`fa fa-graduation-cap ${sizeOfIcons}`} aria-hidden="true" ></i></span>
+        <div style={{maxWidth:'26px', maxHeight:'30px'}}>
+          <span style={{color:colorIcons}}><i className={`fa fa-graduation-cap ${sizeOfIcons}`} aria-hidden="true" ></i></span>
+        </div>
         <div style={{fontFamily:fontText, fontSize:fontSize, color:colorFont, fontWeight:fontWeight, marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}}>{shootingInstructor ? `${Translations.SumaryBooking.WithInstructor}` : `${Translations.SumaryBooking.WithoutInstructor}`}</div>
       </div>}
       <div style={{display:'flex', marginTop:separation}}>
-        <span style={{color:colorIcons}}><i className={`fa fa-id-badge ${sizeOfIcons}`} aria-hidden="true" ></i></span>
+        <div style={{width:'26px', height:'30px'}}>
+          <span style={{color:colorIcons}}><i className={`fa fa-id-badge ${sizeOfIcons}`} aria-hidden="true" ></i></span>
+        </div>
         <div style={{fontFamily:fontText, fontSize:fontSize, color:colorFont, fontWeight:fontWeight, marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}}>{name}</div>
       </div>
       <div style={{display:'flex', marginTop:separation}}>
-        <span style={{color:colorIcons}}><i className={`fa fa-envelope ${sizeOfIcons}`} aria-hidden="true" ></i></span>
+        <div style={{maxWidth:'26px', maxHeight:'30px'}}>
+          <span style={{color:colorIcons}}><i className={`fa fa-envelope ${sizeOfIcons}`} aria-hidden="true" ></i></span>
+        </div>
         <div style={{fontFamily:fontText, fontSize:fontSize, color:colorFont, fontWeight:fontWeight, marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}}>{email}</div>
       </div>
       <div style={{display:'flex', marginTop:separation}}>
-        <span style={{color:colorIcons}}><i className={`fa fa-phone ${sizeOfIcons}`} aria-hidden="true" ></i></span>
+        <div style={{maxWidth:'26px', maxHeight:'30px'}}>
+          <span style={{color:colorIcons}}><i className={`fa fa-phone ${sizeOfIcons}`} aria-hidden="true" ></i></span>
+        </div>
         <div style={{fontFamily:fontText, fontSize:fontSize, color:colorFont, fontWeight:fontWeight, marginTop:'auto', marginBottom:'auto', marginLeft:marginLeftText}}>{phone}</div>
       </div>
     </div>
