@@ -3,6 +3,11 @@ import PropTypes, { InferProps } from 'prop-types';
 import axios from 'axios';
 import TabManagement from './components/TabManagement';
 import { WrapperManagementDashboard } from './components/WrapperManagementDashboard';
+import { CustomResponse, ManagementPluginPayload } from '../shared/types';
+import { apiCallsManagementPlugIn, initializeCustomerResponseObject } from '../shared/GeneralAPIHelpers';
+import { API_REQUEST_STATUS } from '../shared/enums';
+import { TextPlaceholder } from './shared/Placeholders';
+import { Translations } from '../shared/Translations';
 
 export const ShootingRangeInputPropsTypes = {
   placeholder: PropTypes.string,
@@ -16,70 +21,43 @@ export type ShootingRangeInputProps = InferProps<
 /**
  * Same component linked to the store
  */
-export function ShootingRangeInput(props: ShootingRangeInputProps) {
-  const [globalVariables, setGlobalVariables] = React.useState({});
-    /********************************************************************************************************************************/
-    /* PART TO DEFINE LOCAL ENVIRONMENT */
-    /********************************************************************************************************************************/
-    const envVariables : string[] = process.env.NX_RELEASE_VERSION === undefined ? [] : process.env.NX_RELEASE_VERSION.split('.') ;
-    let thisEnv = envVariables[0];
-    let localURL = '';
-    if(envVariables.length>1){
-        localURL = envVariables[1];
+export function ShootingRangeInput ( props: ShootingRangeInputProps ) {
+  const [globalVariables, setGlobalVariables] = React.useState( {} );
+  /********************************************************************************************************************************/
+  /* PART TO DEFINE LOCAL ENVIRONMENT */
+  /********************************************************************************************************************************/
+  const envVariables: string[] = process.env.NX_RELEASE_VERSION === undefined ? [] : process.env.NX_RELEASE_VERSION.split( '.' );
+  let thisEnv = envVariables[0];
+  let localURL = '';
+  if ( envVariables.length > 1 ) {
+    localURL = envVariables[1];
+  }
+  let URL = "https://strelniceprerov.cz/wp-content/plugins/elementor-addon/widgets/getGlobalVariables.php";
+  if ( thisEnv === 'local' ) {
+    URL = `http://${localURL}.local/wp-content/plugins/elementor/getGlobalVariables.php`;
+  }
+  const [renderTime, SetRenderTime] = React.useState( new Date() );
+  const apiCalls: React.MutableRefObject<CustomResponse> = React.useRef<CustomResponse>( initializeCustomerResponseObject() );
+  /********************************************************************************************************************************/
+  /*                                                    MANAGEMENT DASHBOARD                                                      */
+  /********************************************************************************************************************************/
+  React.useEffect( () => {
+    async function FetchData (): Promise<void> {
+      apiCalls.current = await apiCallsManagementPlugIn();
+      if ( apiCalls.current.status === API_REQUEST_STATUS.SUCCESS ) { SetRenderTime( new Date() ) }
     }
-    let URL = "https://strelniceprerov.cz/wp-content/plugins/elementor-addon/widgets/getGlobalVariables.php";
-    if(thisEnv==='local'){
-        URL=`http://${localURL}.local/wp-content/plugins/elementor/getGlobalVariables.php`;
-    }
-    /********************************************************************************************************************************/
-    /********************************************************************************************************************************/
-    React.useEffect(() =>{
-    axios({
-      url: `${URL}`,
-      method: "GET",
-  }).then((res) => {
-      setGlobalVariables(({
-      startBusinessHours:           res.data.find((variable : any) => variable.name==="Start_Business_Hours").value,
-      endBusinessHours:             res.data.find((variable : any) => variable.name==="End_Business_Hours").value,
-      startDayHours:                res.data.find((variable : any) => variable.name==="Start_Day_Hours").value,
-      endDayHours:                  res.data.find((variable : any) => variable.name==="End_Day_Hours").value,
-      maxLengthBooking:             res.data.find((variable : any) => variable.name==="Max_Length_Booking").value,
-      apiRootURL:                   res.data.find((variable : any) => variable.name==="API_URL").value,
-      confirmationTemplateId:       res.data.find((variable : any) => variable.name==="Confirmation_email_template").value,
-      changeEmailTemplateId:        res.data.find((variable : any) => variable.name==="Change_email_template").value,
-      deleteEmailTemplate:          res.data.find((variable : any) => variable.name==="Cancelation_email_template").value,
-      sendGridEncryptedKey:         res.data.find((variable : any) => variable.name==="SendGrid_Key_Encrypted").value,
-      decryptionKey:                res.data.find((variable : any) => variable.name==="Decryption_Key").value,
-      emailFrom:                    res.data.find((variable : any) => variable.name==="Email_From").value,
-      msgErrorNonZeroHour:           res.data.find((variable : any) => variable.name==="error_time_slot_not_rounded").value,
-      msgErrorWrongConditions:       res.data.find((variable : any) => variable.name==="error_time_slot_wrong_conditions").value,
-      msgErrorEmail:                 res.data.find((variable : any) => variable.name==="error_email").value,
-      msgErrorPhoneNumber:           res.data.find((variable : any) => variable.name==="error_phone_number").value,
-      msgErrorInstructor:            res.data.find((variable : any) => variable.name==="error_instructor").value,
-      blockSegmentFormTitle:         res.data.find((variable : any) => variable.name==="title_block_segment_form").value,
-      defaultLocation:    res.data.find((variable : any) => variable.name==="Default_Location").value,
-      maxOccupancy:       res.data.find((variable : any) => variable.name==="Max_Occupancy").value,
-      maxBookingLength:   res.data.find((variable : any) => variable.name==="Max_Length_Booking").value,
-      defaultDuration:    res.data.find((variable : any) => variable.name==="Default_Booking_Length").value,
-      defaultOccupancy:   res.data.find((variable : any) => variable.name==="Default_Booking_Occupancy").value,
-      msgAlertSlotFull:   res.data.find((variable : any) => variable.name==="Alert_Message_Slot_Full").value,
-      msgAlertOccupancy:  res.data.find((variable : any) => variable.name==="Alert_Message_Occupancy").value
-    }))
-  })
-    .catch((err) => { console.log(err) });
-  },[])
-    console.log(`The actual variables retrieved from the DB are:`)
-    console.log(globalVariables);
-  return (  
-  <div className="container">
-    <div className="row">
-      <div className="col-md-12">
-        <div className="reservation">
-          {Object.keys(globalVariables).length > 0 ? <WrapperManagementDashboard gVariables={globalVariables}/> : "LOADING Management Dasboard..."}
+    FetchData();
+  }, [] )
+  return (
+    <div className="container">
+      <div className="row">
+        <div className="col-md-12">
+          <div className="reservation">
+            {apiCalls.current.status === API_REQUEST_STATUS.LOADING ? <div style={{ width: '100%', height: '800px' }}><TextPlaceholder text={Translations.Tex_Loading_Management_Dashboard} /></div> : ( apiCalls.current.status < API_REQUEST_STATUS.BAD_REQUEST ? <WrapperManagementDashboard {...apiCalls.current.payload as ManagementPluginPayload} /> : <>FAILURE</> )}
+          </div>
         </div>
       </div>
-    </div>
-  </div>);
+    </div> );
 }
 
 /**
