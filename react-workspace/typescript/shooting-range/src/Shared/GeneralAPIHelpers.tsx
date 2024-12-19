@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import { CustomResponse, globalVariableEntity, globalVariablesType, SimpleCustomResponse } from "./types";
-import { fetchGlobalVariables } from "./apiCalls";
+import { fetchGlobalVariables } from "./APICalls";
 /** 
 * Returns a base object of type CustomResponse.
 *
