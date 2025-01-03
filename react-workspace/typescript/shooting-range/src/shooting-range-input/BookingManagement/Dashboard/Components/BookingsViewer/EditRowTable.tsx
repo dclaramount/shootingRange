@@ -11,7 +11,8 @@ const editableCell: React.CSSProperties = {
   borderRadius: '5px',
   height: '20px',
   width: '-webkit-fill-available',
-  padding: '2px',
+  paddingTop: '0px',
+  paddingBottom: '0px',
   fontSize: '11px',
   appearance: 'none',
   background: 'url(data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0Ljk1IDEwIj48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6I2ZmZjt9LmNscy0ye2ZpbGw6IzQ0NDt9PC9zdHlsZT48L2RlZnM+PHRpdGxlPmFycm93czwvdGl0bGU+PHJlY3QgY2xhc3M9ImNscy0xIiB3aWR0aD0iNC45NSIgaGVpZ2h0PSIxMCIvPjxwb2x5Z29uIGNsYXNzPSJjbHMtMiIgcG9pbnRzPSIxLjQxIDQuNjcgMi40OCAzLjE4IDMuNTQgNC42NyAxLjQxIDQuNjciLz48cG9seWdvbiBjbGFzcz0iY2xzLTIiIHBvaW50cz0iMy41NCA1LjMzIDIuNDggNi44MiAxLjQxIDUuMzMgMy41NCA1LjMzIi8+PC9zdmc+) no-repeat 95% 50%'
@@ -261,16 +262,16 @@ export function EditRowTable ( props: React.PropsWithChildren<EditRowTableProps>
       const test = "VERIFIED CHECKBOX CONDITION";
     }
     return (
-      <>
+      <div style={{ display: 'flex' }}>
         {edit ?
-          <div style={{ marginTop: '5px' }}>
-            <input type="checkbox" id={id} name="scales" checked={value} onChange={() => updateFunction( !value )} onBlur={() => verifyCheckBoxCondition()} />
+          <div style={{ margin: 'auto' }}>
+            <input style={{ margin: '0px', verticalAlign: 'bottom' }} type="checkbox" id={id} name="scales" checked={value} onChange={() => updateFunction( !value )} onBlur={() => verifyCheckBoxCondition()} />
           </div> :
-          <div style={{ marginTop: '5px' }}>
-            {<input disabled={true} type="checkbox" id="scales" name="scales" checked={value} />}
+          <div style={{ margin: 'auto' }}>
+            {<input disabled={true} type="checkbox" id="scales" name="scales" checked={value} style={{ margin: '0px', verticalAlign: 'bottom' }} />}
           </div>
         }
-      </>
+      </div>
     )
   }
   /*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/

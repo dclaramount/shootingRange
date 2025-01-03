@@ -6,6 +6,8 @@ import Popup from "reactjs-popup";
 import axios from 'axios';
 import { EditBookingsPopUpType, FilteredBookingsType, UserModificationType } from '../../../../../Shared/types';
 import { initializeModificationObject } from '../../../../../Shared/GeneralAPIHelpers';
+import { Translations } from '../../../../types/translations';
+import { TextPlaceholder } from '../../../../../Shared/Components';
 
 
 const tableStyle: React.CSSProperties = { border: "1px solid black", borderCollapse: "collapse", borderRadius: '10px', marginTop: '15px', marginBottom: '15px' };
@@ -179,12 +181,10 @@ export function ManagementPopUp ( props: React.PropsWithChildren<EditBookingsPop
       } ).then( ( res ) => {
         setResponse( res.data );
         setSection( "RESERVATION_MADE" );
-        console.log( "UPDATE DASHBOARD2" );
         setTabSelector( 1 );
       } )
         .catch( ( err ) => { console.log( err ) } );
       setShowUpPopUpModification( false );
-      console.log( "UPDATE DASHBOARD" );
       closeModalFunction( "CLOSED" );
     }
   }, [section] )
@@ -231,20 +231,23 @@ export function ManagementPopUp ( props: React.PropsWithChildren<EditBookingsPop
         <div className="close" style={{ marginLeft: '98%', marginRight: 'auto', width: '24px', height: '24px', cursor: 'pointer' }} onClick={closeModalFunction}>
           <i className="fa fa-times"></i>
         </div>
+        <div style={{ display: 'flex' }}>
+          <i className="fa fa-bars" style={{ marginLeft: 'auto', marginTop: 'auto', marginBottom: 'auto', marginRight: '5px', color: '#6c757d' }}></i>
+          <caption id='Caption_Summary_Editing_Table' style={{ marginRight: 'auto', captionSide: 'top', fontSize: '20px', fontWeight: 'bolder', textAlign: 'center' }}>{Translations.EditBookingsTab.PopUpSummary.Title}</caption>
+        </div>
         <table id="outputTable" style={tableStyle}>
-          <caption style={{ captionSide: 'top', marginBottom: '15px', marginLeft: '50%', fontSize: '20px', fontWeight: 'bolder' }}>Summary</caption>
           <tr>
             {/*<th style={headerCellStyle} >Invoice Id</th> */}
             {/*<th style={headerCellStyle}>Invoice Type</th> */}
-            <th style={headerCellStyle}>Střelnice</th>
-            <th style={headerCellStyle}>Datum a čas</th>
-            <th style={headerCellStyle}>(h)</th>
-            <th style={headerCellStyle}>Zbrojní průkaz</th>
-            <th style={headerCellStyle}>Instruktor</th>
-            <th style={headerCellStyle}>Jméno a příjmení</th>
-            <th style={headerCellStyle}>E-mail</th>
-            <th style={headerCellStyle}>Telefon</th>
-            <th style={headerCellStyle}>Comment</th>
+            <th style={headerCellStyle}>{Translations.EditBookingsTab.PopUpSummary.TableHeaders.ShootingRange}</th>
+            <th style={headerCellStyle}>{Translations.EditBookingsTab.PopUpSummary.TableHeaders.DateAndTime}</th>
+            <th style={headerCellStyle}>{Translations.EditBookingsTab.PopUpSummary.TableHeaders.Hours}</th>
+            <th style={headerCellStyle}>{Translations.EditBookingsTab.PopUpSummary.TableHeaders.ShootingPermit}</th>
+            <th style={headerCellStyle}>{Translations.EditBookingsTab.PopUpSummary.TableHeaders.Instructor}</th>
+            <th style={headerCellStyle}>{Translations.EditBookingsTab.PopUpSummary.TableHeaders.Name}</th>
+            <th style={headerCellStyle}>{Translations.EditBookingsTab.PopUpSummary.TableHeaders.Email}</th>
+            <th style={headerCellStyle}>{Translations.EditBookingsTab.PopUpSummary.TableHeaders.Telephone}</th>
+            <th style={headerCellStyle}>{Translations.EditBookingsTab.PopUpSummary.TableHeaders.Comments}</th>
             <th></th>
           </tr>
           {filtered.map( ( invoiceInfo: FilteredBookingsType ) => {
@@ -263,92 +266,108 @@ export function ManagementPopUp ( props: React.PropsWithChildren<EditBookingsPop
       </div>
       <Popup open={showUpPopUpCancelation} onClose={closeModal} closeOnDocumentClick={false} >
         <div style={{ backgroundColor: 'white', padding: '25px', border: '2px solid black', borderRadius: '10px' }}>
-          {/* <h6>Do you really want to cancel invoice: <div style={{ fontWeight: 'bolder' }}>{selectedBooking.uuid}</div></h6> */}
+          <div style={{ display: 'flex', marginBottom: '10px' }}>
+            <i className="fa fa-archive" style={{ marginLeft: 'auto', marginTop: 'auto', marginBottom: 'auto', marginRight: '5px', color: '#6c757d' }}></i>
+            <caption id='Caption_Summary_Editing_Table' style={{ marginRight: 'auto', captionSide: 'top', fontSize: '20px', fontWeight: 'bolder', textAlign: 'center' }}>{Translations.EditBookingsTab.PopUpDeletion.Title}</caption>
+          </div>
+
+          <h6>{Translations.EditBookingsTab.PopUpDeletion.Text} <div style={{ fontWeight: 'bolder' }}>{selectedBooking.uuid}</div></h6>
           <div style={{ display: 'flex', marginRight: '50%', marginLeft: '35px', marginTop: '40px' }}>
-            <button style={{ marginRight: '10px' }} className="btn btn-danger" onClick={() => setDeleteBooking( deleteBooking + 1 )}>Delete</button>
-            <button className="btn" onClick={() => setShowUpPopUpCancelation( false )}>Cancel</button>
+            <button style={{ marginRight: '10px' }} className="btn btn-danger" onClick={() => setDeleteBooking( deleteBooking + 1 )}>{Translations.EditBookingsTab.PopUpDeletion.DeleteButton}</button>
+            <button className="btn" onClick={() => setShowUpPopUpCancelation( false )}>{Translations.EditBookingsTab.PopUpDeletion.CancelButton}</button>
           </div>
         </div>
       </Popup>
       <Popup open={showUpPopUpModification} onClose={closeModal} closeOnDocumentClick={false} >
-        {( Object.keys( modificationInfo ).length > 0 ) ?
-          <div style={{ backgroundColor: 'white', padding: '25px', border: '2px solid black', borderRadius: '10px', width: '535px', height: '635' }}>
-            <table id="outputTable" style={tableStyle}>
-              <caption style={{ captionSide: 'top', marginBottom: '25px', marginLeft: '42%', fontSize: '20px', fontWeight: 'bolder' }}>Summary</caption>
-              <tr>
-                <th style={headerCellStyle}>Field</th>
-                <th style={headerCellStyle}>Before</th>
-                <th style={headerCellStyle}>After</th>
-              </tr>
-              <tr id={'uuid'}>
-                <th style={tableCellSummary}>UUID-Invoice</th>
-                <th style={tableCellSummary}>{modificationInfo.oldInfo.uuid}</th>
-                <th style={tableCellSummary}>{modificationInfo.newInfo.uuid}</th>
-              </tr>
-              <tr id={'locaitonId'}>
-                <th style={tableCellSummary}>Location Id</th>
-                <th style={tableCellSummary}>{modificationInfo.oldInfo.location}</th>
-                <th style={tableCellSummary}>{modificationInfo.newInfo.location}</th>
-              </tr>
-              <tr id={'service'}>
-                <th style={tableCellSummary}>Service</th>
-                <th style={tableCellSummary}>{modificationInfo.oldInfo.service}</th>
-                <th style={tableCellSummary}>{modificationInfo.newInfo.service}</th>
-              </tr>
-              <tr id={'startTime'}>
-                <th style={tableCellSummary}>Start Time</th>
-                <th style={tableCellSummary}>{modificationInfo.oldInfo.startTime.toLocaleString( 'cs-CZ', { timeZone: 'CET' } )}</th>
-                <th style={tableCellSummary}>{modificationInfo.newInfo.startTime.toLocaleString( 'cs-CZ', { timeZone: 'CET' } )}</th>
-              </tr>
-              <tr id={'length'}>
-                <th style={tableCellSummary}>Length (h)</th>
-                <th style={tableCellSummary}>{modificationInfo.oldInfo.length} h</th>
-                <th style={tableCellSummary}>{modificationInfo.newInfo.length} h</th>
-              </tr>
-              <tr id={'withInstructor'}>
-                <th style={tableCellSummary}>Instructor</th>
-                <th style={tableCellSummary}>{modificationInfo.oldInfo.withInstructor ? "s Instruktorem" : "bez Instruktorem"}</th>
-                <th style={tableCellSummary}>{modificationInfo.newInfo.withInstructor ? "s Instruktorem" : "bez Instruktorem"}</th>
-              </tr>
-              <tr id={'shootingPermit'}>
-                <th style={tableCellSummary}>Shooting Permit</th>
-                <th style={tableCellSummary}>{modificationInfo.oldInfo.shootingPermit}</th>
-                <th style={tableCellSummary}>{modificationInfo.newInfo.shootingPermit}</th>
-              </tr>
-              <tr id={'name'}>
-                <th style={tableCellSummary}>Jmeno a Prijmeni</th>
-                <th style={tableCellSummary}>{modificationInfo.oldInfo.name}</th>
-                <th style={tableCellSummary}>{modificationInfo.newInfo.name}</th>
-              </tr>
-              <tr id={'email'}>
-                <th style={tableCellSummary}>Email</th>
-                <th style={tableCellSummary}>{modificationInfo.oldInfo.email}</th>
-                <th style={tableCellSummary}>{modificationInfo.newInfo.email}</th>
-              </tr>
-              <tr id={'phone'}>
-                <th style={tableCellSummary}>Telefon</th>
-                <th style={tableCellSummary}>{modificationInfo.oldInfo.phone}</th>
-                <th style={tableCellSummary}>{modificationInfo.newInfo.phone}</th>
-              </tr>
-            </table>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <div className="reservation-order-row" style={{ width: '100%' }}>
-                <label htmlFor="frm-reservationCalendar-orderForm-phone">
-                  Poznámky
-                </label>
-                <textarea style={{ paddingTop: '25px', paddingLeft: '10px', paddingRight: '10px', paddingBottom: '10px', width: '100%' }}
-                  onChange={( e ) => setNewComment( e.target.value )} value={newComment} maxLength={150} rows={2} cols={29} />
-              </div>
-              <div style={{ display: 'flex', marginRight: '50%', marginLeft: '35px', marginTop: '40px' }}>
-                {AreThereChanges() ? <button style={{ marginLeft: '25%', marginRight: '50%' }} className="btn btn-danger" onClick={() => ModifyReservation( modificationInfo, newComment )}>Modify</button>
-                  :
-                  <button style={{ marginLeft: '25%', marginRight: '50%', opacity: '0.3', pointerEvents: 'none' }} className="btn" onClick={() => ModifyReservation( modificationInfo, newComment )}>Modify</button>}
-                <button className="btn" onClick={() => setShowUpPopUpModification( false )}>Cancel</button>
-              </div>
-            </div>
+        {section === "LOADING" ?
+          <div id={`SummaryPopUpContainer`}>
+            {( Object.keys( modificationInfo ).length > 0 ) ?
+              <div style={{ backgroundColor: 'white', padding: '25px', border: '2px solid black', borderRadius: '10px', width: '535px', height: '635px' }}>
+                <div style={{ display: 'flex' }}>
+                  <i className="fa fa-bars" style={{ marginLeft: 'auto', marginTop: 'auto', marginBottom: 'auto', marginRight: '5px', color: '#6c757d' }}></i>
+                  <caption id='Caption_Summary_Editing_Table' style={{ marginRight: 'auto', captionSide: 'top', fontSize: '20px', fontWeight: 'bolder', textAlign: 'center' }}>{Translations.EditBookingsTab.PopUpSummary.Title}</caption>
+                </div>
+                <table id="outputTable" style={tableStyle}>
+                  <tr>
+                    <th style={headerCellStyle}>{Translations.EditBookingsTab.SumaryChangesPopUp.TableHeaders.Field}</th>
+                    <th style={headerCellStyle}>{Translations.EditBookingsTab.SumaryChangesPopUp.TableHeaders.Before}</th>
+                    <th style={headerCellStyle}>{Translations.EditBookingsTab.SumaryChangesPopUp.TableHeaders.After}</th>
+                  </tr>
+                  <tr id={'uuid'}>
+                    <th style={tableCellSummary}>{Translations.EditBookingsTab.SumaryChangesPopUp.TableRows.UUIDInvoice}</th>
+                    <th style={tableCellSummary}>{modificationInfo.oldInfo.uuid}</th>
+                    <th style={tableCellSummary}>{modificationInfo.newInfo.uuid}</th>
+                  </tr>
+                  <tr id={'locaitonId'}>
+                    <th style={tableCellSummary}>{Translations.EditBookingsTab.SumaryChangesPopUp.TableRows.LocationId}</th>
+                    <th style={tableCellSummary}>{modificationInfo.oldInfo.location}</th>
+                    <th style={tableCellSummary}>{modificationInfo.newInfo.location}</th>
+                  </tr>
+                  <tr id={'service'}>
+                    <th style={tableCellSummary}>{Translations.EditBookingsTab.SumaryChangesPopUp.TableRows.Service}</th>
+                    <th style={tableCellSummary}>{modificationInfo.oldInfo.service}</th>
+                    <th style={tableCellSummary}>{modificationInfo.newInfo.service}</th>
+                  </tr>
+                  <tr id={'startTime'}>
+                    <th style={tableCellSummary}>{Translations.EditBookingsTab.SumaryChangesPopUp.TableRows.StartTime}</th>
+                    <th style={tableCellSummary}>{modificationInfo.oldInfo.startTime.toLocaleString( 'cs-CZ', { timeZone: 'CET' } )}</th>
+                    <th style={tableCellSummary}>{modificationInfo.newInfo.startTime.toLocaleString( 'cs-CZ', { timeZone: 'CET' } )}</th>
+                  </tr>
+                  <tr id={'length'}>
+                    <th style={tableCellSummary}>{Translations.EditBookingsTab.SumaryChangesPopUp.TableRows.Duration}</th>
+                    <th style={tableCellSummary}>{modificationInfo.oldInfo.length} h</th>
+                    <th style={tableCellSummary}>{modificationInfo.newInfo.length} h</th>
+                  </tr>
+                  <tr id={'withInstructor'}>
+                    <th style={tableCellSummary}>{Translations.EditBookingsTab.SumaryChangesPopUp.TableRows.Instructor}</th>
+                    <th style={tableCellSummary}>{modificationInfo.oldInfo.withInstructor ? "s Instruktorem" : "bez Instruktorem"}</th>
+                    <th style={tableCellSummary}>{modificationInfo.newInfo.withInstructor ? "s Instruktorem" : "bez Instruktorem"}</th>
+                  </tr>
+                  <tr id={'shootingPermit'}>
+                    <th style={tableCellSummary}>{Translations.EditBookingsTab.SumaryChangesPopUp.TableRows.ShootingPermit}</th>
+                    <th style={tableCellSummary}>{modificationInfo.oldInfo.shootingPermit}</th>
+                    <th style={tableCellSummary}>{modificationInfo.newInfo.shootingPermit}</th>
+                  </tr>
+                  <tr id={'name'}>
+                    <th style={tableCellSummary}>{Translations.EditBookingsTab.SumaryChangesPopUp.TableRows.Name}</th>
+                    <th style={tableCellSummary}>{modificationInfo.oldInfo.name}</th>
+                    <th style={tableCellSummary}>{modificationInfo.newInfo.name}</th>
+                  </tr>
+                  <tr id={'email'}>
+                    <th style={tableCellSummary}>{Translations.EditBookingsTab.SumaryChangesPopUp.TableRows.Email}</th>
+                    <th style={tableCellSummary}>{modificationInfo.oldInfo.email}</th>
+                    <th style={tableCellSummary}>{modificationInfo.newInfo.email}</th>
+                  </tr>
+                  <tr id={'phone'}>
+                    <th style={tableCellSummary}>{Translations.EditBookingsTab.SumaryChangesPopUp.TableRows.Telephone}</th>
+                    <th style={tableCellSummary}>{modificationInfo.oldInfo.phone}</th>
+                    <th style={tableCellSummary}>{modificationInfo.newInfo.phone}</th>
+                  </tr>
+                </table>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <div className="reservation-order-row" style={{ width: '100%' }}>
+                    <label htmlFor="frm-reservationCalendar-orderForm-phone">
+                      {Translations.EditBookingsTab.SumaryChangesPopUp.Comments}
+                    </label>
+                    <textarea style={{ paddingTop: '25px', paddingLeft: '10px', paddingRight: '10px', paddingBottom: '10px', width: '100%' }}
+                      onChange={( e ) => setNewComment( e.target.value )} value={newComment} maxLength={150} rows={2} cols={29} />
+                  </div>
+                  <div style={{ display: 'flex', marginRight: '50%', marginLeft: '35px', marginTop: '40px' }}>
+                    {AreThereChanges() ? <button style={{ marginLeft: '25%', marginRight: '50%' }} className="btn btn-danger" onClick={() => ModifyReservation( modificationInfo, newComment )}>{Translations.EditBookingsTab.SumaryChangesPopUp.ModifyButton}</button>
+                      :
+                      <button style={{ marginLeft: '25%', marginRight: '50%', opacity: '0.3', pointerEvents: 'none' }} className="btn" onClick={() => ModifyReservation( modificationInfo, newComment )}>{Translations.EditBookingsTab.SumaryChangesPopUp.ModifyButton}</button>}
+                    <button className="btn" onClick={() => setShowUpPopUpModification( false )}>{Translations.EditBookingsTab.SumaryChangesPopUp.CancelButton}</button>
+                  </div>
+                </div>
+              </div> :
+              <>Diego</>
+            }
           </div> :
-          <>Diego</>}
-      </Popup>
-    </div>
+          <div style={{ backgroundColor: 'white', padding: '25px', border: '2px solid black', borderRadius: '10px', width: '535px', height: '635px' }}>
+            <TextPlaceholder text={Translations.EditBookingsTab.SumaryChangesPopUp.Loading} />
+          </div>
+        }
+      </Popup >
+    </div >
   )
 }

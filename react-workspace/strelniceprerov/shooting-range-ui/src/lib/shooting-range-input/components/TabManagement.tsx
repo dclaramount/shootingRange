@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import { ManagementDashboardContext } from './Context/ManagementDashboardContext';
 import { Translations } from '../types/translations';
 import WrapperBookingManagement from '../Wrappers/WrapperBookingManagement';
+import WrapperInstructorCalendar from '../Wrappers/WrapperInstructorCalendar';
 
 
 interface TabPanelProps {
@@ -64,8 +65,7 @@ export default function TabManagement ( { globalVariables }: any ) {
         <WrapperBookingManagement />
       </CustomTabPanel>
       <CustomTabPanel value={tabSelector} index={1}>
-        Diego
-        {/* <WrapperInstructorCalendar /> */}
+        <WrapperInstructorCalendar />
       </CustomTabPanel>
       {/* <CustomTabPanel value={value} index={2}>
         <WrapperSegmentBlocker />

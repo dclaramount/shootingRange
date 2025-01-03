@@ -10,6 +10,52 @@ export const Translations = {
     'Default_Select_Service': 'Vyberte střeliště',
     'Admin_Bookings': 'TODO: MAKE RESERVATIONS'
   },
+  "EditBookingsTab": {
+    "PopUpSummary": {
+      "Title": "Summary",
+      "TableHeaders": {
+        "ShootingRange": "Střelnice",
+        "DateAndTime": "Datum a čas",
+        "Hours": "(h)",
+        "ShootingPermit": "Zbrojní průkaz",
+        "Instructor": "Instruktor",
+        "Name": " Jméno a Příjmení",
+        "Email": "E - mai",
+        "Telephone": "Telefon",
+        "Comments": "Poznámky"
+      }
+    },
+    "PopUpDeletion": {
+      "Title": "Delete Reservation",
+      "Text": "Do you really want to cancel invoice: ",
+      "DeleteButton": "Delete",
+      "CancelButton": "Cancel"
+    },
+    "SumaryChangesPopUp": {
+      "Title": "Summary",
+      "TableHeaders": {
+        "Field": "Fields",
+        "Before": "Before",
+        "After": "After"
+      },
+      "TableRows": {
+        "UUIDInvoice": "Booking #",
+        "LocationId": "Location Id",
+        "Service": "Service",
+        "StartTime": "Start Time",
+        "Duration": "Duration (h)",
+        "Instructor": "Instruktor (bez/s)",
+        "ShootingPermit": "Shooting Permit",
+        "Name": "Jméno a Příjmení",
+        "Email": "E - mai",
+        "Telephone": "Telefon"
+      },
+      "Comments": "Poznámky",
+      "ModifyButton": "Modify",
+      "CancelButton": "Cancel",
+      "Loading": "Modifying..."
+    }
+  },
   "BookingManagmentTab": {
     "BlockWInstructor": 'Blok s instruktorem',
     "BlockWoutInstructor": 'Blok bez instruktora',
