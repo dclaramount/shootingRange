@@ -9,7 +9,7 @@ import { HonestWeekPicker } from '../../components/HonnestWeekPicker';
 import Popup from 'reactjs-popup';
 import { CopyWeekInstructorsPopUp } from '../../shared/CopyWeekInstructors';
 
-const dns = require ("@daypilot/daypilot-lite-react");
+const dns = require( "@daypilot/daypilot-lite-react" );
 const styles = {
   wrap: {
     display: "flex"
@@ -20,266 +20,362 @@ const styles = {
   main: {
     flexGrow: "1"
   },
-  copyButton: ()  => ({
-    marginTop:'auto',
-    marginBottom:'auto',
+  copyButton: () => ( {
+    marginTop: 'auto',
+    marginBottom: 'auto',
     marginLeft: 'auto'
-   })
+  } )
 };
 
 export const InstructorCalendarManagement = () => {
-  const [showPopUp,    setShowPopUp]                                          =   React.useState(false);
-  const [postParameters, setPostParameters]                                   =   React.useState("");
-  const [endpoint, setEndPoint]                                               =   React.useState("");
-  const [refresh, setRefresh]                                                 =   React.useState(false);
-  const [events, setEvents]                         =   React.useState<DayPilotEvent[]>();
-  const {globalVariabes:gVariables, instructorsList, instructorSegmentsList}  =   React.useContext(InstructorCalendarContext);
-  const {refreshManagementDashboard, setRefreshManagementDashboard}           =   React.useContext(ManagementDashboardContext);  
-  const calendarRef                                 =   React.useRef<any>()
-  const showCopyWeekPopUp                           =   React.useRef<any>();
-  const refCheckBoxCopy                             =   React.useRef<any>();
-  const refPickCalendar                             =   React.useRef<any>();
-  const refCopyButton                               =   React.useRef<any>();
-  const refToCopyWeekUp        =   React.useRef<WeekPickerType>();
-  const currentWeek                                 =   React.useRef<any>();
+  const [showPopUp, setShowPopUp] = React.useState( false );
+  const [postParameters, setPostParameters] = React.useState( "" );
+  const [endpoint, setEndPoint] = React.useState( "" );
+  const [refresh, setRefresh] = React.useState( false );
+  const [events, setEvents] = React.useState<DayPilotEvent[]>();
+  const { globalVariabes: gVariables, instructorsList, instructorSegmentsList } = React.useContext( InstructorCalendarContext );
+  const { refreshManagementDashboard, setRefreshManagementDashboard } = React.useContext( ManagementDashboardContext );
+  const calendarRef = React.useRef<any>()
+  const showCopyWeekPopUp = React.useRef<any>();
+  const refCheckBoxCopy = React.useRef<any>();
+  const refPickCalendar = React.useRef<any>();
+  const refCopyButton = React.useRef<any>();
+  const refToCopyWeekUp = React.useRef<WeekPickerType>();
+  const currentWeek = React.useRef<any>();
   /*-------------------------------------------------------------------------------------------------*/
   /*                              Handler: CLOSE OF MODAL                                            */
   /*-------------------------------------------------------------------------------------------------*/
-  const closeModal                                  =   (e : any) => {showCopyWeekPopUp.current?.close()}
-  React.useEffect(() => {
-    let events : DayPilotEvent[] = generateDayPilotCalendarEvents(instructorSegmentsList);
+  const closeModal = ( e: any ) => { showCopyWeekPopUp.current?.close() }
+  React.useEffect( () => {
+    const events: DayPilotEvent[] = generateDayPilotCalendarEvents( instructorSegmentsList );
     const startDate = `${new Date().toISOString()}`;
-    calendarRef.current.control.update({startDate, events});
-    setEvents(events);
-    setRefresh(true);
-  }, [refresh]);
+    calendarRef.current.control.update( { startDate, events } );
+    setEvents( events );
+    setRefresh( true );
+  }, [refresh] );
   /*-------------------------------------------------------------------------------------------------*/
   /*              Handler: OF THE CHANGE FUNCTION OF THE COPY WEEK SELECTOR                          */
   /*-------------------------------------------------------------------------------------------------*/
-  const onChangeCopyWeekSelector = (week : any) => {
-    refToCopyWeekUp.current=week;
-    console.log(week);
+  const onChangeCopyWeekSelector = ( week: any ) => {
+    refToCopyWeekUp.current = week;
+    console.log( week );
     currentWeek.current.firstDay = week.firstDay;
     currentWeek.current.lastDay = week.lastDay;
     const arrayDaysOfWeek = []
     const isoDaysOfWeek = []
-    for (let i=0; i<=7; i++){
-      const dt = new Date(week.firstDay);
-      dt.setDate(dt.getDate() + i);
-      isoDaysOfWeek.push(dt.toISOString().split('T')[0]);
-      if(i<7){
-        arrayDaysOfWeek.push(`${dt.getDate()}.${dt.getMonth() + 1}`);
+    for ( let i = 0; i <= 7; i++ ) {
+      const dt = new Date( week.firstDay );
+      dt.setDate( dt.getDate() + i );
+      isoDaysOfWeek.push( dt.toISOString().split( 'T' )[0] );
+      if ( i < 7 ) {
+        arrayDaysOfWeek.push( `${dt.getDate()}.${dt.getMonth() + 1}` );
       }
     }
   };
 
-  const closeModalPopUp                                                       =   () => {setRefreshManagementDashboard(refreshManagementDashboard+1);setShowPopUp(false);}
-  const Legend = ({props} : any) => {
-    return(
-          <div style={{display:'flex', flexDirection:'row', width:'auto',justifyContent:'space-around'}}>
-            {props.map((prop : any) => {
-              const color = prop.color;
-              const name = prop.name;
-              return(
-                <div style={{display:'flex', flexDirection:'row', margin:'10px'}}>
-                    <em style={{display: 'inline-block', width:'20px', height:'20px', border:`1px solid ${color}`, background:`${color}`, color:`${color}`, borderRadius:'50%', margin:'0 5px 0 0'}}>.</em>
-                      <div>{name}</div>
-                </div>)
-            })}
-          </div>);
+  const closeModalPopUp = () => { setRefreshManagementDashboard( new Date() ); setShowPopUp( false ); }
+  const Legend = ( { props }: any ) => {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'row', width: 'auto', justifyContent: 'space-around' }}>
+        {props.map( ( prop: any ) => {
+          const color = prop.color;
+          const name = prop.name;
+          return (
+            <div style={{ display: 'flex', flexDirection: 'row', margin: '10px' }}>
+              <em style={{ display: 'inline-block', width: '20px', height: '20px', border: `1px solid ${color}`, background: `${color}`, color: `${color}`, borderRadius: '50%', margin: '0 5px 0 0' }}>.</em>
+              <div>{name}</div>
+            </div> )
+        } )}
+      </div> );
   }
   /*-------------------------------------------------------------------------------------------------*/
   /*                    HANDLES THE CLICK ON THE CALENDAR OBJECT                                     */
   /*-------------------------------------------------------------------------------------------------*/
-  const clickEventCalendar = async (e:any) => {
-    const dp                                                        =   calendarRef.current.control;
-    const modal                                                     =   await dns.DayPilot.Modal.prompt("Update event text:", e.text());
-    if (!modal.result) { return; }
-    e.data.text                                                     =   modal.result;
-    dp.events.update(e);
+  const clickEventCalendar = async ( e: any ) => {
+    const dp = calendarRef.current.control;
+    const modal = await dns.DayPilot.Modal.prompt( "Update event text:", e.text() );
+    if ( !modal.result ) { return; }
+    e.data.text = modal.result;
+    dp.events.update( e );
   };
   /*-------------------------------------------------------------------------------------------------*/
   /*                          CONFIGURATION OF THE CALENDAR                                          */
   /*-------------------------------------------------------------------------------------------------*/
-  const style                                                       =   document.createElement('style');
-  style.innerHTML                                                   =   '.calendar_default_colheader_inner {background-color: black; font-size: small; color:white;font-weight:bold;text-wrap:wrap;}' 
-                                                                        + '.calendar_default_rowheader_inner{background-color: black; font-size: large; color:white;font-weight:bold;text-wrap:wrap;}'
-                                                                        + '.calendar_default_corner_inner{background-color: black; font-size: large; color:white;font-weight:bold;text-wrap:wrap;}';
-  document.getElementsByTagName('head')[0].appendChild(style);
-  const [calendarConfig, setCalendarConfig]                         = React.useState({
+  const style = document.createElement( 'style' );
+  style.innerHTML = '.calendar_default_colheader_inner {background-color: black; font-size: small; color:white;font-weight:bold;text-wrap:wrap;}'
+    + '.calendar_default_rowheader_inner{background-color: black; font-size: large; color:white;font-weight:bold;text-wrap:wrap;}'
+    + '.calendar_default_corner_inner{background-color: black; font-size: large; color:white;font-weight:bold;text-wrap:wrap;}';
+  document.getElementsByTagName( 'head' )[0].appendChild( style );
+  const [calendarConfig, setCalendarConfig] = React.useState( {
     /*Parsing the business hours from the global variables table*/
-    businessBeginsHour:                                             parseInt(gVariables.startBusinessHours),
-    businessEndsHour:                                               parseInt(gVariables.endBusinessHours),
+    businessBeginsHour: parseInt( gVariables.startBusinessHours ),
+    businessEndsHour: parseInt( gVariables.endBusinessHours ),
     /*Parsing the day hours from the global variables table*/
-    dayBeginsHour:                                                  parseInt(gVariables.startDayHours),
-    dayEndsHour:                                                    parseInt(gVariables.endDayHours),
+    dayBeginsHour: parseInt( gVariables.startDayHours ),
+    dayEndsHour: parseInt( gVariables.endDayHours ),
     /*Other parameters for the calendar for the blocking of the segments*/
-    viewType:                                                      "Week",
+    viewType: "Week",
     /*scrollToHour:                                                   8,*/
-    cellDuration:                                                   60,
-    timeHeaderCellDuration :                                        60,
-    durationBarVisible:                                             true,
-    timeRangeSelectedHandling:                                      "Enabled",
-    locale:                                                         'cs-cz',
+    cellDuration: 60,
+    timeHeaderCellDuration: 60,
+    durationBarVisible: true,
+    timeRangeSelectedHandling: "Enabled",
+    locale: 'cs-cz',
     //Step 0.1. The Table Headers personalization
-    onBeforeHeaderRender: (args : any) => {
-      const headerCell                                              =   new Date(Date.parse(args.column.start)).toLocaleDateString('cs-CZ', {weekday:'short', month:'2-digit', day:'2-digit'});
-      args.header.html                                              =   headerCell
+    onBeforeHeaderRender: ( args: any ) => {
+      const headerCell = new Date( Date.parse( args.column.start ) ).toLocaleDateString( 'cs-CZ', { weekday: 'short', month: '2-digit', day: '2-digit' } );
+      args.header.html = headerCell
     },
     //Step 1. Upon clicking there should be a placeholder created for the segment being created
-    onTimeRangeSelected: async (args : any) => {
-      const dp                                                      =   calendarRef.current.control;
-      const uniqueGUI                                               =   dns.DayPilot.guid(); //Unique GUID to register the segment in the DB.
-      dp.events.add({
-        start:          args.start,
-        end:            args.end,
-        id:             uniqueGUI,
-        text:           `Placeholder`,
-        backColor:      `red`
-      });
+    onTimeRangeSelected: async ( args: any ) => {
+      const dp = calendarRef.current.control;
+      const uniqueGUI = dns.DayPilot.guid(); //Unique GUID to register the segment in the DB.
+      dp.events.add( {
+        start: args.start,
+        end: args.end,
+        id: uniqueGUI,
+        text: `Placeholder`,
+        backColor: `red`
+      } );
       //Step 2. The form for creating a new instructor segment is shown (and has to be properly configured.).
       const form = [
-        {name: Translations.InstructorSegmentManagementCalendar.CreateSegmentPopUp.Title, type: "title" },
-        { 
-          name:             Translations.InstructorSegmentManagementCalendar.CreateSegmentPopUp.SubTitle_SelectInstructor,  
-          id:               "instructor",
-          options:          instructorsList,
-          type:             "select"
+        { name: Translations.InstructorSegmentManagementCalendar.CreateSegmentPopUp.Title, type: "title" },
+        {
+          name: Translations.InstructorSegmentManagementCalendar.CreateSegmentPopUp.SubTitle_SelectInstructor,
+          id: "instructor",
+          options: instructorsList,
+          type: "select"
         },
-        { name:             Translations.InstructorSegmentManagementCalendar.CreateSegmentPopUp.SubTitle_Date, 
-          id:               "date",
-          dateFormat:       "d.M.yyyy",
-          type:             "date",
-          locale:           'cs-cz'
+        {
+          name: Translations.InstructorSegmentManagementCalendar.CreateSegmentPopUp.SubTitle_Date,
+          id: "date",
+          dateFormat: "d.M.yyyy",
+          type: "date",
+          locale: 'cs-cz'
         },
-        { name:             Translations.InstructorSegmentManagementCalendar.CreateSegmentPopUp.SubTitle_SelectStartSegment, 
-          id:               "start",
+        {
+          name: Translations.InstructorSegmentManagementCalendar.CreateSegmentPopUp.SubTitle_SelectStartSegment,
+          id: "start",
           //dateFormat:       "d.M.yyyy",
-          timeFormat:       "H:mm",
-          timeInterval:     60,
-          type:             "time",
-          locale:           'cs-cz'
+          timeFormat: "H:mm",
+          timeInterval: 60,
+          type: "time",
+          locale: 'cs-cz'
         },
-        { 
-          name:             Translations.InstructorSegmentManagementCalendar.CreateSegmentPopUp.SubTitle_SelectEndSegment,  
-          id:               "end",
+        {
+          name: Translations.InstructorSegmentManagementCalendar.CreateSegmentPopUp.SubTitle_SelectEndSegment,
+          id: "end",
           //dateFormat:       "d.M.yyyy",
-          timeFormat:       "H:mm",
-          timeInterval:     60,
-          type:             "time",
-          locale:           'cs-cz'
-      },
+          timeFormat: "H:mm",
+          timeInterval: 60,
+          type: "time",
+          locale: 'cs-cz'
+        },
       ];
       //Step 3. This data will be auto-populating the modal (for creating a new segment). 
-      const tStart             = new Date(Date.parse(args.start));
-      const tEnd               = new Date(Date.parse(args.end));
-      const timeZoneOffset     =   tStart.getTimezoneOffset()/60;
-      const timeZoneOffsetEnd  =   tEnd.getTimezoneOffset()/60;
-      tStart.setHours(tStart.getHours() - timeZoneOffset);
-      tEnd.setHours(tEnd.getHours() - timeZoneOffsetEnd);
-      if(tStart.getMinutes() !== 0) { tStart.setMinutes(0); };
-      if(tEnd.getMinutes() !== 0) { tEnd.setMinutes(0); tEnd.setHours(tEnd.getHours()+1)};
-      const piecesStart = tStart.toLocaleTimeString('cz-CZ',{hour12:false}).split(' ')[0].split(':');
+      const tStart = new Date( Date.parse( args.start ) );
+      const tEnd = new Date( Date.parse( args.end ) );
+      const timeZoneOffset = tStart.getTimezoneOffset() / 60;
+      const timeZoneOffsetEnd = tEnd.getTimezoneOffset() / 60;
+      tStart.setHours( tStart.getHours() - timeZoneOffset );
+      tEnd.setHours( tEnd.getHours() - timeZoneOffsetEnd );
+      if ( tStart.getMinutes() !== 0 ) { tStart.setMinutes( 0 ); };
+      if ( tEnd.getMinutes() !== 0 ) { tEnd.setMinutes( 0 ); tEnd.setHours( tEnd.getHours() + 1 ) };
+      const piecesStart = tStart.toLocaleTimeString( 'cz-CZ', { hour12: false } ).split( ' ' )[0].split( ':' );
       const timeStart = `${piecesStart[0]}:${piecesStart[1]}`;
-      const piecesEnd = tEnd.toLocaleTimeString('cz-CZ',{hour12:false}).split(' ')[0].split(':');
+      const piecesEnd = tEnd.toLocaleTimeString( 'cz-CZ', { hour12: false } ).split( ' ' )[0].split( ':' );
       const timeEnd = `${piecesEnd[0]}:${piecesEnd[1]}`;
-      const data = { 
-        daySelected :   args.start,
-        start :         timeStart,
-        end   :         timeEnd,
-        date  :         tStart
+      const data = {
+        daySelected: args.start,
+        start: timeStart,
+        end: timeEnd,
+        date: tStart
       };
-      const modal = await dns.DayPilot.Modal.form(form, data, {okText: Translations.InstructorSegmentManagementCalendar.CreateSegmentPopUp.Create_Button, cancelText:Translations.InstructorSegmentManagementCalendar.CreateSegmentPopUp.Cancel_Button});
+      const modal = await dns.DayPilot.Modal.form( form, data, { okText: Translations.InstructorSegmentManagementCalendar.CreateSegmentPopUp.Create_Button, cancelText: Translations.InstructorSegmentManagementCalendar.CreateSegmentPopUp.Cancel_Button } );
       dp.clearSelection();
       //Step 4. The modal gets closed for 1 out 2 reasons (either it was cancelled or submitted)
-      if (!modal.result) { 
+      if ( !modal.result ) {
         //Step 4.1 If Modal is Cancelled then the placeholder event is deleted too....
-        dp.events.remove(args.source);
-        return; 
+        dp.events.remove( args.source );
+        return;
       }
-      else{
+      else {
         //Step 4.2 If Modal is submitted then the POST request will be send tot he Post End Point.
-        const guid              =   uniqueGUI;
-        const instructorId      =   modal.result.instructor;
+        const guid = uniqueGUI;
+        const instructorId = modal.result.instructor;
         //const startSegmentAPI   =   modal.result.start;
         //const endSegmentAPI     =   modal.result.end;
-        const date              =   modal.result.date.split('T');
-        const startSegmentAPI   =   `${date[0]}T${modal.result.start}:00`
-        const endSegmentAPI     =   `${date[0]}T${modal.result.end}:00`
-        setEndPoint("postCreateInstructorSegment") 
-        setPostParameters(`start=${startSegmentAPI}&end=${endSegmentAPI}&guid=${guid}&instructorId=${instructorId}`);
-        setShowPopUp(true);
+        const date = modal.result.date.split( 'T' );
+        const startSegmentAPI = `${date[0]}T${modal.result.start}:00`
+        const endSegmentAPI = `${date[0]}T${modal.result.end}:00`
+        setEndPoint( "postCreateInstructorSegment" )
+        setPostParameters( `start=${startSegmentAPI}&end=${endSegmentAPI}&guid=${guid}&instructorId=${instructorId}` );
+        setShowPopUp( true );
       }
     },
-    onEventClick: async (args:any) => {
+    onAfterCellRender: async ( args: any ) => { args.preventDefault(); },
+    // onAfterEventRender: async ( args: any ) => { args.preventDefault(); },
+    // onAfterRender: async ( args: any ) => { args.preventDefault(); },
+    onAfterUpdate: async ( args: any ) => { args.preventDefault(); },
+    onAjaxError: async ( args: any ) => { args.preventDefault(); },
+    onAutoRefresh: async ( args: any ) => { args.preventDefault(); },
+    onBeforeCellExport: async ( args: any ) => { args.preventDefault(); },
+    onBeforeCellRender: async ( args: any ) => { args.preventDefault(); },
+    onBeforeCornerExport: async ( args: any ) => { args.preventDefault(); },
+    onBeforeCornerRender: async ( args: any ) => { args.preventDefault(); },
+    onBeforeEventExport: async ( args: any ) => { args.preventDefault(); },
+    // onBeforeEventRender: async ( args: any ) => { args.preventDefault(); },
+    onBeforeGridLineRender: async ( args: any ) => { args.preventDefault(); },
+    onBeforeGroupRender: async ( args: any ) => { args.preventDefault(); },
+    onBeforeLinkRender: async ( args: any ) => { args.preventDefault(); },
+    onBeforeResHeaderRender: async ( args: any ) => { args.preventDefault(); },
+    onBeforeRowHeaderColumnRender: async ( args: any ) => { args.preventDefault(); },
+    onBeforeRowHeaderExport: async ( args: any ) => { args.preventDefault(); },
+    onBeforeRowHeaderRender: async ( args: any ) => { args.preventDefault(); },
+    onBeforeTimeHeaderExport: async ( args: any ) => { args.preventDefault(); },
+    onBeforeTimeHeaderRender: async ( args: any ) => { args.preventDefault(); },
+    onCallBackEnd: async ( args: any ) => { args.preventDefault(); },
+    onCallBackStart: async ( args: any ) => { args.preventDefault(); },
+    onDimensionsChanged: async ( args: any ) => { args.preventDefault(); },
+    // onEventClick: async ( args: any ) => { args.preventDefault(); },
+    onEventClicked: async ( args: any ) => { args.preventDefault(); },
+    onEventDelete: async ( args: any ) => { args.preventDefault(); },
+    onEventDeleted: async ( args: any ) => { args.preventDefault(); },
+    onEventDoubleClick: async ( args: any ) => { args.preventDefault(); },
+    onEventDoubleClicked: async ( args: any ) => { args.preventDefault(); },
+    onEventEdit: async ( args: any ) => { args.preventDefault(); },
+    onEventEdited: async ( args: any ) => { args.preventDefault(); },
+    onEventEditKeyDown: async ( args: any ) => { args.preventDefault(); },
+    onEventFilter: async ( args: any ) => { args.preventDefault(); },
+    onEventMouseOut: async ( args: any ) => { args.preventDefault(); },
+    onEventMouseOver: async ( args: any ) => { args.preventDefault(); },
+    onEventMove: async ( args: any ) => { args.preventDefault(); },
+    onEventMoved: async ( args: any ) => { args.preventDefault(); },
+    onEventMoving: async ( args: any ) => { args.preventDefault(); },
+    onEventResize: async ( args: any ) => { args.preventDefault(); },
+    onEventResized: async ( args: any ) => { args.preventDefault(); },
+    onEventResizing: async ( args: any ) => { args.preventDefault(); },
+    // onEventRightClick: async ( args: any ) => { args.preventDefault(); },
+    // onEventRightClicked: async ( args: any ) => { args.preventDefault(); },
+    onEventSelect: async ( args: any ) => { args.preventDefault(); },
+    onEventSelected: async ( args: any ) => { args.preventDefault(); },
+    onGridMouseDown: async ( args: any ) => { args.preventDefault(); },
+    onIncludeTimeCell: async ( args: any ) => { args.preventDefault(); },
+    onKeyboardFocusChange: async ( args: any ) => { args.preventDefault(); },
+    onKeyboardFocusChanged: async ( args: any ) => { args.preventDefault(); },
+    onKeyDown: async ( args: any ) => { args.preventDefault(); },
+    onLinkClick: async ( args: any ) => { args.preventDefault(); },
+    onLinkClicked: async ( args: any ) => { args.preventDefault(); },
+    onLinkCreate: async ( args: any ) => { args.preventDefault(); },
+    onLinkCreated: async ( args: any ) => { args.preventDefault(); },
+    onLoadNode: async ( args: any ) => { args.preventDefault(); },
+    onRectangleSelect: async ( args: any ) => { args.preventDefault(); },
+    onRectangleSelected: async ( args: any ) => { args.preventDefault(); },
+    onRectangleSelecting: async ( args: any ) => { args.preventDefault(); },
+    onResourceCollapse: async ( args: any ) => { args.preventDefault(); },
+    onResourceExpand: async ( args: any ) => { args.preventDefault(); },
+    onResourceHeaderClick: async ( args: any ) => { args.preventDefault(); },
+    onResourceHeaderClicked: async ( args: any ) => { args.preventDefault(); },
+    onRowClick: async ( args: any ) => { args.preventDefault(); },
+    onRowClicked: async ( args: any ) => { args.preventDefault(); },
+    onRowCreate: async ( args: any ) => { args.preventDefault(); },
+    onRowCreated: async ( args: any ) => { args.preventDefault(); },
+    onRowDoubleClick: async ( args: any ) => { args.preventDefault(); },
+    onRowDoubleClicked: async ( args: any ) => { args.preventDefault(); },
+    onRowEdit: async ( args: any ) => { args.preventDefault(); },
+    onRowEdited: async ( args: any ) => { args.preventDefault(); },
+    onRowFilter: async ( args: any ) => { args.preventDefault(); },
+    onRowHeaderColumnResized: async ( args: any ) => { args.preventDefault(); },
+    onRowHeaderResized: async ( args: any ) => { args.preventDefault(); },
+    onRowMove: async ( args: any ) => { args.preventDefault(); },
+    onRowMoved: async ( args: any ) => { args.preventDefault(); },
+    onRowMoving: async ( args: any ) => { args.preventDefault(); },
+    onRowRightClick: async ( args: any ) => { args.preventDefault(); },
+    onRowRightClicked: async ( args: any ) => { args.preventDefault(); },
+    onRowSelect: async ( args: any ) => { args.preventDefault(); },
+    onRowSelected: async ( args: any ) => { args.preventDefault(); },
+    onScroll: async ( args: any ) => { args.preventDefault(); },
+    onScrollEnd: async ( args: any ) => { args.preventDefault(); },
+    onTimeHeaderClick: async ( args: any ) => { args.preventDefault(); },
+    onTimeHeaderClicked: async ( args: any ) => { args.preventDefault(); },
+    onTimeHeaderRightClick: async ( args: any ) => { args.preventDefault(); },
+    onTimeHeaderRightClicked: async ( args: any ) => { args.preventDefault(); },
+    onTimeRangeClick: async ( args: any ) => { args.preventDefault(); },
+    onTimeRangeClicked: async ( args: any ) => { args.preventDefault(); },
+    onTimeRangeDoubleClick: async ( args: any ) => { args.preventDefault(); },
+    onTimeRangeDoubleClicked: async ( args: any ) => { args.preventDefault(); },
+    onTimeRangeRightClick: async ( args: any ) => { args.preventDefault(); },
+    onTimeRangeRightClicked: async ( args: any ) => { args.preventDefault(); },
+    onTimeRangeSelect: async ( args: any ) => { args.preventDefault(); },
+    // onTimeRangeSelected: async ( args: any ) => { args.preventDefault(); },
+    onTimeRangeSelecting: async ( args: any ) => { args.preventDefault(); },
+
+    onEventClick: async ( args: any ) => {
+      console.log( args );
       //await clickEventCalendar(args.e);
     },
-    contextMenu: new dns.DayPilot.Menu({
+    contextMenu: new dns.DayPilot.Menu( {
       items: [
         {
           text: Translations.InstructorSegmentManagementCalendar.SubMenuSegment.Edit,
-          onClick: async (args:any) => {
-            const segment         = instructorSegmentsList.find((seg:any) => seg.uuid===args.source.data.uuid);
-            const _guid           = segment.uuid;
-            const _guid1          = dns.DayPilot.guid();
-            const _guid2          = dns.DayPilot.guid();
-            const _instructorId   = segment.instructorId;
+          onClick: async ( args: any ) => {
+            const segment = instructorSegmentsList.find( ( seg: any ) => seg.uuid === args.source.data.uuid );
+            const _guid = segment.uuid;
+            const _guid1 = dns.DayPilot.guid();
+            const _guid2 = dns.DayPilot.guid();
+            const _instructorId = segment.instructorId;
             //Form for editing 
             //Step 2. The form for creating a new blocking segment is shown (and has to be properly configured.).
             const editform = [
-              { name:   `${Translations.InstructorSegmentManagementCalendar.EditSegmentPopUp.Title}`,  type: "title" },
-              { name:   `${Translations.InstructorSegmentManagementCalendar.EditSegmentPopUp.Start_of_the_blocking_segment}`, id: "start",  dateFormat: "d.M.yyyy", timeFormat: "H:mm", timeInterval: 60, type: "datetime"},
-              { name:   `${Translations.InstructorSegmentManagementCalendar.EditSegmentPopUp.End_of_the_blocking_segment}`,   id: "end",    dateFormat: "d.M.yyyy", timeFormat: "H:mm", timeInterval: 60, type: "datetime"},            
-              ];
+              { name: `${Translations.InstructorSegmentManagementCalendar.EditSegmentPopUp.Title}`, type: "title" },
+              { name: `${Translations.InstructorSegmentManagementCalendar.EditSegmentPopUp.Start_of_the_blocking_segment}`, id: "start", dateFormat: "d.M.yyyy", timeFormat: "H:mm", timeInterval: 60, type: "datetime" },
+              { name: `${Translations.InstructorSegmentManagementCalendar.EditSegmentPopUp.End_of_the_blocking_segment}`, id: "end", dateFormat: "d.M.yyyy", timeFormat: "H:mm", timeInterval: 60, type: "datetime" },
+            ];
             const dp = calendarRef.current.control;
             const data = {
-              start :         args.source.data.start.value,
-              end   :         args.source.data.end.value
+              start: args.source.data.start.value,
+              end: args.source.data.end.value
             };
-            const modal = await dns.DayPilot.Modal.form(editform, data, {okText: `${Translations.InstructorSegmentManagementCalendar.EditSegmentPopUp.Modify_Button}`, cancelText:`${Translations.InstructorSegmentManagementCalendar.EditSegmentPopUp.Cancel_Button}`});
-            if (!modal.result) { 
+            const modal = await dns.DayPilot.Modal.form( editform, data, { okText: `${Translations.InstructorSegmentManagementCalendar.EditSegmentPopUp.Modify_Button}`, cancelText: `${Translations.InstructorSegmentManagementCalendar.EditSegmentPopUp.Cancel_Button}` } );
+            if ( !modal.result ) {
               //IF MODAL IS CANCELLED NOTHING HAPPENS
-              return; 
+              return;
             }
-            else{
-                let startSegmentAPI;
-                let endSegmentAPI;
-                startSegmentAPI       =   modal.result.start.value;
-                endSegmentAPI         =   modal.result.end.value;
-                setEndPoint("postEditInstructorSegment") 
-                setPostParameters(`guid=${_guid}&start=${startSegmentAPI}&end=${endSegmentAPI}&instructor=${_instructorId}&originalStart=${args.source.data.start.value}&originalEnd=${args.source.data.end.value}&guid1=${_guid1}&guid2=${_guid2}`);
-                setShowPopUp(true);
+            else {
+              const startSegmentAPI = modal.result.start.value;
+              const endSegmentAPI = modal.result.end.value;
+              setEndPoint( "postEditInstructorSegment" )
+              setPostParameters( `guid=${_guid}&start=${startSegmentAPI}&end=${endSegmentAPI}&instructor=${_instructorId}&originalStart=${args.source.data.start.value}&originalEnd=${args.source.data.end.value}&guid1=${_guid1}&guid2=${_guid2}` );
+              setShowPopUp( true );
             }
-              dp.events.remove(args.source);
+            dp.events.remove( args.source );
           },
+        },
+        {
+          text: "-"
+        },
+        {
+          text: Translations.InstructorSegmentManagementCalendar.SubMenuSegment.Delete,
+          onClick: async ( args: any ) => {
+            const dp = calendarRef.current.control;
+            const modal = await dns.DayPilot.Modal.confirm( `${Translations.InstructorSegmentManagementCalendar.DeleteSegmentPopUp.Disclaimer}`, { okText: `${Translations.InstructorSegmentManagementCalendar.DeleteSegmentPopUp.Delete_Button}`, cancelText: `${Translations.InstructorSegmentManagementCalendar.DeleteSegmentPopUp.Cancel_Button}` } );
+            if ( !modal.result ) {
+              //IF MODAL IS CANCELLED NOTHING HAPPENS
+              return;
+            }
+            else {
+              const startSegmentAPI = args.source.data.start.value;
+              const endSegmentAPI = args.source.data.end.value;
+              setEndPoint( "postDeleteInstructorSegment" )
+              setPostParameters( `guid=${args.source.data.uuid}&start=${startSegmentAPI}&end=${endSegmentAPI}` );
+              setShowPopUp( true );
+              dp.events.remove( args.source );
+            }
           },
-          {
-            text: "-"
-          },
-          {
-            text: Translations.InstructorSegmentManagementCalendar.SubMenuSegment.Delete,
-            onClick: async (args:any) => {
-              const dp = calendarRef.current.control;
-              const modal = await dns.DayPilot.Modal.confirm(`${Translations.InstructorSegmentManagementCalendar.DeleteSegmentPopUp.Disclaimer}`, {okText: `${Translations.InstructorSegmentManagementCalendar.DeleteSegmentPopUp.Delete_Button}`, cancelText:`${Translations.InstructorSegmentManagementCalendar.DeleteSegmentPopUp.Cancel_Button}`});
-              if (!modal.result) { 
-                //IF MODAL IS CANCELLED NOTHING HAPPENS
-                return; 
-              }
-              else{
-                let startSegmentAPI;
-                let endSegmentAPI;
-                startSegmentAPI       =   args.source.data.start.value;
-                endSegmentAPI         =   args.source.data.end.value;
-                setEndPoint("postDeleteInstructorSegment") 
-                setPostParameters(`guid=${args.source.data.uuid}&start=${startSegmentAPI}&end=${endSegmentAPI}`);
-                setShowPopUp(true);
-                dp.events.remove(args.source);
-              }
-            },
-          }
+        }
       ]
-    }),
-    onBeforeEventRender: (args:any) => {
+    } ),
+    onBeforeEventRender: ( args: any ) => {
       args.data.areas = [
         {
           top: 3,
@@ -300,19 +396,19 @@ export const InstructorCalendarManagement = () => {
           fontColor: "#fff",
           action: "None",
           toolTip: "Delete event",
-          onClick: async (args : any) => {
+          onClick: async ( args: any ) => {
             const dp = calendarRef.current.control;
-            dp.events.remove(args.source);
+            dp.events.remove( args.source );
           }
         }
       ];
 
 
       const participants = args.data.participants;
-      if (participants > 0) {
+      if ( participants > 0 ) {
         // show one icon for each participant
-        for (let i = 0; i < participants; i++) {
-          args.data.areas.push({
+        for ( let i = 0; i < participants; i++ ) {
+          args.data.areas.push( {
             bottom: 5,
             right: 5 + i * 30,
             width: 24,
@@ -320,57 +416,57 @@ export const InstructorCalendarManagement = () => {
             action: "None",
             image: `https://picsum.photos/24/24?random=${i}`,
             style: "border-radius: 50%; border: 2px solid #fff; overflow: hidden;",
-          });
+          } );
         }
       }
     }
-  });
+  } );
 
-  React.useEffect(() => {
-    let events : DayPilotEvent[] = generateDayPilotCalendarEvents(instructorSegmentsList);
+  React.useEffect( () => {
+    const events: DayPilotEvent[] = generateDayPilotCalendarEvents( instructorSegmentsList );
     const startDate = `${new Date().toISOString()}`;
-    calendarRef.current.control.update({startDate, events});
-    setRefresh(true);
-  }, [refresh]);
+    calendarRef.current.control.update( { startDate, events } );
+    setRefresh( true );
+  }, [refresh] );
   return (
     <div>
-      <div style={{display:'flex'}}>
-        <input ref={refCheckBoxCopy} style={{margin:'auto 0 auto 0'}} id={'checkbox_copy_week'} name="checkbox_copy_week"  type="checkbox" onClick={(e) => {refPickCalendar.current.hidden=!refPickCalendar.current.hidden;refCopyButton.current.hidden=!refCopyButton.current.hidden;}} />
-        <label style={{verticalAlign:'middle', margin:'auto 0 auto 10px'}} htmlFor="checkbox_copy_week">{Translations.CopyBlockSegments.LabelCopyWeek}</label>
-        <div ref={refPickCalendar} style={{margin:'0 0 0 auto'}} hidden={true}>{Translations.CopyBlockSegments.ToWeek}<HonestWeekPicker onChange={onChangeCopyWeekSelector}/> </div>
-        <input ref={refCopyButton} hidden={true} type="button" name="copyWeekPopUp" className="btn btn-secondary" value="Copy Week" style={styles.copyButton()} onClick={(e)=>{showCopyWeekPopUp.current?.open()}}/>
+      <div style={{ display: 'flex' }}>
+        <input ref={refCheckBoxCopy} style={{ margin: 'auto 0 auto 0' }} id={'checkbox_copy_week'} name="checkbox_copy_week" type="checkbox" onClick={( e ) => { refPickCalendar.current.hidden = !refPickCalendar.current.hidden; refCopyButton.current.hidden = !refCopyButton.current.hidden; }} />
+        <label style={{ verticalAlign: 'middle', margin: 'auto 0 auto 10px' }} htmlFor="checkbox_copy_week">{Translations.CopyBlockSegments.LabelCopyWeek}</label>
+        <div ref={refPickCalendar} style={{ margin: '0 0 0 auto' }} hidden={true}>{Translations.CopyBlockSegments.ToWeek}<HonestWeekPicker onChange={onChangeCopyWeekSelector} /> </div>
+        <input ref={refCopyButton} hidden={true} type="button" name="copyWeekPopUp" className="btn btn-secondary" value={Translations.CopyBlockSegments.LabelCopyWeek} style={styles.copyButton()} onClick={( e ) => { showCopyWeekPopUp.current?.open() }} />
       </div>
-    <Legend props={instructorsList}/>
-    <div style={styles.wrap}>
-      <div style={styles.left}>
-        <dns.DayPilotNavigator
-          locale='cs-cz'
-          selectMode={"Week"}
-          showMonths={2}
-          skipMonths={2}
-          startDate={`${new Date().toISOString()}`}
-          selectionDay={`${new Date().toISOString()}`}
-          onTimeRangeSelected={ (args : any) => {
-            calendarRef.current.control.update({
-              startDate: args.day
-            });
-          }}
-        />
+      <Legend props={instructorsList} />
+      <div style={styles.wrap}>
+        <div style={styles.left}>
+          <dns.DayPilotNavigator
+            locale='cs-cz'
+            selectMode={"Week"}
+            showMonths={2}
+            skipMonths={2}
+            startDate={`${new Date().toISOString()}`}
+            selectionDay={`${new Date().toISOString()}`}
+            onTimeRangeSelected={( args: any ) => {
+              calendarRef.current.control.update( {
+                startDate: args.day
+              } );
+            }}
+          />
+        </div>
+        <div style={styles.main}>
+          <dns.DayPilotCalendar
+            {...calendarConfig}
+            ref={calendarRef}
+
+          />
+        </div>
+        <input hidden ref={currentWeek} />
+        {/*Vámi vybraný čas k vyblokování není možné zrušit z důvodu existujících rezervací. Prosím o kontrolu.*/}
+        {showPopUp && postParameters !== '' && <PostPopUp postAPI={endpoint} postParameters={postParameters} closeModal={closeModalPopUp} />}
+        <Popup ref={showCopyWeekPopUp} onClose={( e ) => closeModal( e )} closeOnDocumentClick={false} >
+          <CopyWeekInstructorsPopUp toWeek={currentWeek.current} popUpRef={showCopyWeekPopUp} closeModal={closeModal} listOfAllEvents={events} startDateOfSelectedWeek={calendarRef.current} />
+        </Popup>
       </div>
-      <div style={styles.main}>
-        <dns.DayPilotCalendar
-          {...calendarConfig}
-          ref={calendarRef}
-          
-        />
-      </div>
-      <input hidden ref={currentWeek} />
-      {/*Vámi vybraný čas k vyblokování není možné zrušit z důvodu existujících rezervací. Prosím o kontrolu.*/}
-      {showPopUp && postParameters!=='' && <PostPopUp postAPI={endpoint} postParameters={postParameters} closeModal={closeModalPopUp}/>}
-      <Popup ref={showCopyWeekPopUp} onClose={(e)=>closeModal(e)} closeOnDocumentClick={false} >
-          <CopyWeekInstructorsPopUp  toWeek={currentWeek.current} popUpRef={showCopyWeekPopUp} closeModal={closeModal} listOfAllEvents={events} startDateOfSelectedWeek={calendarRef.current}/>
-      </Popup>
-    </div>
     </div>
   );
 };
