@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes, { InferProps } from 'prop-types';
-import axios from 'axios';
-import TabManagement from './components/TabManagement';
 import { WrapperManagementDashboard } from './components/WrapperManagementDashboard';
 import { CustomResponse, ManagementPluginPayload } from '../shared/types';
-import { apiCallsManagementPlugIn, initializeCustomerResponseObject } from '../shared/GeneralAPIHelpers';
+import { initializeCustomerResponseObject } from '../shared/GeneralAPIHelpers';
 import { API_REQUEST_STATUS } from '../shared/enums';
 import { TextPlaceholder } from './shared/Placeholders';
 import { Translations } from '../shared/Translations';
+import { apiCallsManagementPlugIn } from '../shared/MultiAPICalls';
 
 export const ShootingRangeInputPropsTypes = {
   placeholder: PropTypes.string,
@@ -17,7 +16,6 @@ export const ShootingRangeInputPropsTypes = {
 export type ShootingRangeInputProps = InferProps<
   typeof ShootingRangeInputPropsTypes
 >;
-
 /**
  * Same component linked to the store
  */

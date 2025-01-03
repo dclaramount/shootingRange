@@ -1,3 +1,7 @@
+import { Typography } from "@mui/material";
+import { API_REQUEST_STATUS } from "./enums";
+import { PlaceHolderTabProps } from "./types";
+
 export function TextPlaceholder ( { text }: any ) {
 
   const addStylesheetRules = ( style: any ) => {
@@ -54,5 +58,16 @@ export function TextPlaceholder ( { text }: any ) {
       {cText.map( ( c: string, index: number ) => <span style={container.spanStyle( index )} key={index}>{c}</span> )}
     </div>
   )
+}
 
+export function PlaceHolderTabComponent ( props: PlaceHolderTabProps ) {
+  return (
+    <div className={`containerPlaceHolderTab`} style={{ width: '100%', height: '100%', marginTop: '25%' }} >
+      {props.status === API_REQUEST_STATUS.FAILURE && < i className="fa fa-exclamation-circle fa-8x" style={{ color: 'orange', marginLeft: 'auto', marginRight: 'auto', marginTop: '15px', marginBottom: '15px' }} aria-hidden="true"></i>}
+      {props.status === API_REQUEST_STATUS.FAILURE && <Typography sx={{ p: 2 }} style={{
+        height: '100%', marginTop: 'auto', marginBottom: 'auto', fontSize: '40px', fontWeight: 'bold', color: 'orange', textAlign: 'center'
+      }}>{props.errorMessage}</Typography>}
+      {props.status === API_REQUEST_STATUS.LOADING && < TextPlaceholder text={props.loadingMessage} />}
+    </ div >
+  )
 }

@@ -4,11 +4,8 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Translations } from './types/translations';
-import WrapperSegmentBlocker from './Wrappers/WrapperSegmentBlocker';
-import WrapperInstructorCalendar from './Wrappers/WrapperInstructorCalendar';
 import WrapperBookingManagement from './Wrappers/WrapperBookingManagement';
-import WrapperGlobalVariables from './Wrappers/WrapperGlobalVariables';
-import WrapperAdminBookings from "./Wrappers/WrapperAdminBookings";
+import { ManagementDashboardContext } from './Context/ManagementDashboardContext';
 
 
 interface TabPanelProps {
@@ -17,7 +14,7 @@ interface TabPanelProps {
   value: number;
 }
 
-function CustomTabPanel(props: TabPanelProps) {
+function CustomTabPanel ( props: TabPanelProps ) {
   const { children, value, index, ...other } = props;
 
   return (
@@ -37,45 +34,48 @@ function CustomTabPanel(props: TabPanelProps) {
   );
 }
 
-function a11yProps(index: number) {
+function a11yProps ( index: number ) {
   return {
     id: `simple-tab-${index}`,
     'aria-controls': `simple-tabpanel-${index}`,
   };
 }
 
-export default function TabManagement({globalVariables} : any) {
-  const [value, setValue]                     = React.useState(0);
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+export default function TabManagement ( { globalVariables }: any ) {
+  const { tabSelector, setTabSelector } = React.useContext( ManagementDashboardContext );
+
+  const [value, setValue] = React.useState( 0 );
+  const handleChange = ( event: React.SyntheticEvent, newValue: number ) => {
+    setTabSelector( newValue );
   };
 
   return (
-      <Box sx={{ width: '100%' }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-            <Tab label={Translations.ManagementDashboard.Title_Reservation_Management} {...a11yProps(0)} />
-            <Tab label={Translations.ManagementDashboard.Title_Instructors_Management} {...a11yProps(1)} />
-            <Tab label={Translations.ManagementDashboard.Title_Blocking_Segments_Management} {...a11yProps(1)} />
-            <Tab label={Translations.ManagementDashboard.Title_Events} {...a11yProps(2)} />
-            <Tab label={Translations.ManagementDashboard.Admin_Bookings} {...a11yProps(2)} />
-          </Tabs>
-        </Box>
-        <CustomTabPanel value={value} index={0}>
-            <WrapperBookingManagement/>
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={1}>
-            <WrapperInstructorCalendar />
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={2}>
-            <WrapperSegmentBlocker/>
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={3}>
-            <WrapperGlobalVariables/>
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={4}>
-            <WrapperAdminBookings/>
-        </CustomTabPanel>
+    <Box sx={{ width: '100%' }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs value={tabSelector} onChange={handleChange} aria-label="basic tabs example">
+          <Tab label={Translations.ManagementDashboard.Title_Reservation_Management} {...a11yProps( 0 )} />
+          <Tab label={Translations.ManagementDashboard.Title_Instructors_Management} {...a11yProps( 1 )} />
+          <Tab label={Translations.ManagementDashboard.Title_Blocking_Segments_Management} {...a11yProps( 1 )} />
+          <Tab label={Translations.ManagementDashboard.Title_Events} {...a11yProps( 2 )} />
+          <Tab label={Translations.ManagementDashboard.Admin_Bookings} {...a11yProps( 2 )} />
+        </Tabs>
       </Box>
+      <CustomTabPanel value={tabSelector} index={0}>
+        <WrapperBookingManagement />
+      </CustomTabPanel>
+      <CustomTabPanel value={tabSelector} index={1}>
+        Diego
+        {/* <WrapperInstructorCalendar /> */}
+      </CustomTabPanel>
+      {/* <CustomTabPanel value={value} index={2}>
+        <WrapperSegmentBlocker />
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={3}>
+        <WrapperGlobalVariables />
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={4}>
+        <WrapperAdminBookings />
+      </CustomTabPanel> */}
+    </Box>
   );
 }

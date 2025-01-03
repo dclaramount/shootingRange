@@ -2,11 +2,11 @@ import React from 'react';
 import './App.css';
 import { WrapperManagementDashboard } from './shooting-range-input/WrapperManagementDashboard';
 import { TextPlaceholder } from './shooting-range-title/PlaceHolderBookingSection';
-import { Translations } from './shooting-range-title/types/translations';
 import * as trs from "./Shared/Translations";
 import { CustomResponse, ManagementPluginPayload } from './Shared/types';
-import { apiCallsManagementPlugIn, initializeCustomerResponseObject } from './Shared/GeneralAPIHelpers';
+import { initializeCustomerResponseObject } from './Shared/GeneralAPIHelpers';
 import { API_REQUEST_STATUS } from './Shared/enums';
+import { apiCallsManagementPlugIn } from './Shared/MultiAPICalls';
 
 function App () {
   const [renderTime, SetRenderTime] = React.useState( new Date() );
