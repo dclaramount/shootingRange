@@ -5,26 +5,28 @@ import { ManagementDashboardContext } from '../Context/ManagementDashboardContex
 import { SegmentBlockerProvider } from '../Context/SegmentBlockerContext';
 import { SegmentBlockerCalendar } from '../Spaces/SegmentBlockerSpace/SegmentBlockerCalendar';
 import { Spinner } from '../shared/Placeholders';
+import { TextPlaceholder } from '../../Shared/Components';
+import { Translations } from '../types/translations';
 
 const WrapperSegmentBlocker = () => {
-  let dataFetched                           =   false;
-  const   {globalVariabes}                  =   React.useContext(ManagementDashboardContext);
-  const fetchListOfLocations                =   useGetEndPoint(globalVariabes.apiRootURL, 'getAllLocations');
-  const fetchBlockingSegments               =   useGetEndPoint(globalVariabes.apiRootURL, 'getAllBlockingSegments');
-  dataFetched                               =   fetchListOfLocations.requestStatus  === REQUEST_STATUS.SUCCESS &&
-                                                fetchBlockingSegments.requestStatus === REQUEST_STATUS.SUCCESS
-  return(
-  <>
-    {dataFetched ? 
-      <SegmentBlockerProvider gVariables={globalVariabes} blockedSegmentList={fetchBlockingSegments.payload} locationsList={fetchListOfLocations.payload}>
-        <SegmentBlockerCalendar/>
-      </SegmentBlockerProvider>
-      :
-      <div style={{width:'100%', height:'800px'}}>
-        <Spinner/>
-      </div>
-    }
-  </>
- )
+  let dataFetched = false;
+  const { globalVariabes } = React.useContext( ManagementDashboardContext );
+  const fetchListOfLocations = useGetEndPoint( globalVariabes.apiRootURL, 'getAllLocations' );
+  const fetchBlockingSegments = useGetEndPoint( globalVariabes.apiRootURL, 'getAllBlockingSegments' );
+  dataFetched = fetchListOfLocations.requestStatus === REQUEST_STATUS.SUCCESS &&
+    fetchBlockingSegments.requestStatus === REQUEST_STATUS.SUCCESS
+  return (
+    <>
+      {dataFetched ?
+        <SegmentBlockerProvider gVariables={globalVariabes} blockedSegmentList={fetchBlockingSegments.payload} locationsList={fetchListOfLocations.payload}>
+          <SegmentBlockerCalendar />
+        </SegmentBlockerProvider>
+        :
+        <div style={{ width: '100%', height: '800px' }}>
+          <TextPlaceholder text={Translations.Loading} />
+        </div>
+      }
+    </>
+  )
 }
 export default WrapperSegmentBlocker;

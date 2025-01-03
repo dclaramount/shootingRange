@@ -7,6 +7,7 @@ import { ManagementDashboardContext } from './Context/ManagementDashboardContext
 import { Translations } from '../types/translations';
 import WrapperBookingManagement from '../Wrappers/WrapperBookingManagement';
 import WrapperInstructorCalendar from '../Wrappers/WrapperInstructorCalendar';
+import WrapperSegmentBlocker from '../Wrappers/WrapperSegmentBlocker';
 
 
 interface TabPanelProps {
@@ -67,10 +68,10 @@ export default function TabManagement ( { globalVariables }: any ) {
       <CustomTabPanel value={tabSelector} index={1}>
         <WrapperInstructorCalendar />
       </CustomTabPanel>
-      {/* <CustomTabPanel value={value} index={2}>
+      <CustomTabPanel value={tabSelector} index={2}>
         <WrapperSegmentBlocker />
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={3}>
+      {/* <CustomTabPanel value={value} index={3}>
         <WrapperGlobalVariables />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={4}>
