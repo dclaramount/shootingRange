@@ -8,6 +8,7 @@ import { Translations } from '../types/translations';
 import WrapperBookingManagement from '../Wrappers/WrapperBookingManagement';
 import WrapperInstructorCalendar from '../Wrappers/WrapperInstructorCalendar';
 import WrapperSegmentBlocker from '../Wrappers/WrapperSegmentBlocker';
+import WrapperGlobalVariables from '../Wrappers/WrapperGlobalVariables';
 
 
 interface TabPanelProps {
@@ -71,10 +72,10 @@ export default function TabManagement ( { globalVariables }: any ) {
       <CustomTabPanel value={tabSelector} index={2}>
         <WrapperSegmentBlocker />
       </CustomTabPanel>
-      {/* <CustomTabPanel value={value} index={3}>
+      <CustomTabPanel value={tabSelector} index={3}>
         <WrapperGlobalVariables />
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={4}>
+      {/* <CustomTabPanel value={value} index={4}>
         <WrapperAdminBookings />
       </CustomTabPanel> */}
     </Box>
