@@ -222,6 +222,7 @@ export function ManagementPopUp ( props: React.PropsWithChildren<EditBookingsPop
     } ).then( ( res ) => {
       setResponse( res.data );
       setShowUpPopUpCancelation( false );
+      setTabSelector( 1 );
     } )
       .catch( ( err ) => { console.log( err ) } );
   }, [deleteBooking] )

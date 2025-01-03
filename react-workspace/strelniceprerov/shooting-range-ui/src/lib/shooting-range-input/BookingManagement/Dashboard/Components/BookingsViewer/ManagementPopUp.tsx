@@ -208,6 +208,7 @@ export function ManagementPopUp ( props: React.PropsWithChildren<EditBookingsPop
     } ).then( ( res ) => {
       setSelectedBooking( {} as FilteredBookingsType );
       setRefreshTab( new Date() );
+      setTabSelector( 1 );
       setShowUpPopUpCancelation( false );
     } )
       .catch( ( err ) => { console.log( err ) } );
