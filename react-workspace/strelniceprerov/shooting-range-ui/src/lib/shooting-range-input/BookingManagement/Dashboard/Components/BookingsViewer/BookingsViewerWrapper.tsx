@@ -31,8 +31,8 @@ export function BookingsViewerWrapper ( props: React.PropsWithChildren<BookingEd
   }, [props.selectedLocation] )
 
   return (
-    <div className="reservation-cal" style={{ width: '100%', marginLeft: '0.01vw' }}>
-      <div style={{ width: '100%', marginLeft: 'auto', marginRight: 'auto' }}>
+    <div className="reservation-cal" style={{ width: '100%', marginLeft: '2vw' }}>
+      <div style={{ width: '100%', marginLeft: '-2vw', marginRight: 'auto' }}>
         <FormWrapper {...props} />
         <div style={{ color: 'gray', fontWeight: 'lighter', fontSize: '12px', textAlign: 'center' }}>
           {`Table last updated on: ${lastRefreshTime}`}
