@@ -208,7 +208,6 @@ export function ManagementPopUp ( props: React.PropsWithChildren<EditBookingsPop
     } ).then( ( res ) => {
       setSelectedBooking( {} as FilteredBookingsType );
       setRefreshTab( new Date() );
-      setTabSelector( 1 );
       setShowUpPopUpCancelation( false );
     } )
       .catch( ( err ) => { console.log( err ) } );
@@ -221,8 +220,11 @@ export function ManagementPopUp ( props: React.PropsWithChildren<EditBookingsPop
       url: `${globalVariabes.apiRootURL} postSendDeleteEmail.php ? sendGridKey = ${sendGridKeyAPI}& emailTo=${selectedBooking.email}&emailFrom=${globalVariabes.emailFrom}& templateId=${globalVariabes.deleteEmailTemplate}&segmentBooked=${formatedSelectedSegment}& nameOnReservation=${selectedBooking.name}& shootingRangeName=${selectedBooking.serviceName}& phoneNumber=+${selectedBooking.phoneNumber}& comment=${'PLACEHOLDER'}& uuidInvoice=${selectedBooking.uuid} `,
       method: "GET",
     } ).then( ( res ) => {
-      setResponse( res.data );
-      setShowUpPopUpCancelation( false );
+      if ( res.status === 200 ) {
+        setResponse( res.data );
+        setTabSelector( 1 );
+        setShowUpPopUpCancelation( false );
+      }
     } )
       .catch( ( err ) => { console.log( err ) } );
   }, [deleteBooking] )

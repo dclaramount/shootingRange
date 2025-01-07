@@ -6,13 +6,28 @@ import { API_REQUEST_STATUS } from 'shooting-range-ui/src/lib/shared/enums';
 import { initializeCustomerResponseObject } from 'shooting-range-ui/src/lib/shared/GeneralAPIHelpers';
 import { CustomResponse, FilteredBookingsType, HonestWeekType, WeekSelectorProps, WeekSelectorUpdatedCallBackType } from 'shooting-range-ui/src/lib/shared/types';
 export function WeekSelector ( props: React.PropsWithChildren<WeekSelectorProps> ) {
+
+  const getStartDaysOfWeek = ( week: HonestWeekType ) => {
+    const arrayDaysOfWeek = []
+    const isoDaysOfWeek = []
+    for ( let i = 0; i <= 7; i++ ) {
+      const dt = new Date( week.firstDay );
+      dt.setDate( dt.getDate() + i );
+      isoDaysOfWeek.push( dt.toISOString().split( 'T' )[0] );
+      if ( i < 7 ) {
+        arrayDaysOfWeek.push( `${dt.getDate()}.${dt.getMonth() + 1}` );
+      }
+    }
+    return [isoDaysOfWeek, arrayDaysOfWeek]
+  }
   /*-----------------------------------------------------------------------------------------------------------*/
   /*                                  USESTATE(), USEREF() AREA                                                */
   /*-----------------------------------------------------------------------------------------------------------*/
   const apiCalls: React.MutableRefObject<CustomResponse> = React.useRef<CustomResponse>( initializeCustomerResponseObject() );
-  const [daysOfWeek, setDaysOfWeek] = React.useState<string[]>( [] as string[] );
+  const [daysOfWeek, setDaysOfWeek] = React.useState<string[]>( getStartDaysOfWeek( getFirstAndLastDayOfThisWeek() )[1] );
   const [selectedWeek, setSelectedWeek] = React.useState<HonestWeekType>( getFirstAndLastDayOfThisWeek() );
-  const [isoDaysOfWeek, setISODaysOfWeek] = React.useState<string[]>( [] as string[] );
+  const [isoDaysOfWeek, setISODaysOfWeek] = React.useState<string[]>( getStartDaysOfWeek( getFirstAndLastDayOfThisWeek() )[0] );
+
   /*-----------------------------------------------------------------------------------------------------------*/
   /*                              ON CHANGE () FOR THE WEEK SELECTOR                                           */
   /*-----------------------------------------------------------------------------------------------------------*/

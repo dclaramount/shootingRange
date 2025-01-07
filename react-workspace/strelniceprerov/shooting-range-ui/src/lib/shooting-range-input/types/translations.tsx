@@ -8,11 +8,11 @@ export const Translations = {
     'Title_Blocking_Segments_Management': 'Správa událostí',
     'Title_Events': 'Nastavení',
     'Default_Select_Service': 'Vyberte střeliště',
-    'Admin_Bookings': 'TODO: MAKE RESERVATIONS'
+    'Admin_Bookings': 'Tvorba rezervací (admin)'
   },
   "EditBookingsTab": {
     "PopUpSummary": {
-      "Title": "Summary",
+      "Title": "Shrnutí",
       "TableHeaders": {
         "ShootingRange": "Střelnice",
         "DateAndTime": "Datum a čas",
@@ -27,33 +27,33 @@ export const Translations = {
     },
     "PopUpDeletion": {
       "Title": "Delete Reservation",
-      "Text": "Do you really want to cancel invoice: ",
-      "DeleteButton": "Delete",
-      "CancelButton": "Cancel"
+      "Text": "Opravdu si přejete zrušit rezervaci:",
+      "DeleteButton": "Smazat",
+      "CancelButton": "Zrušit"
     },
     "SumaryChangesPopUp": {
       "Title": "Summary",
       "TableHeaders": {
-        "Field": "Fields",
-        "Before": "Before",
-        "After": "After"
+        "Field": "Nadpis",
+        "Before": "Před úpravou",
+        "After": "Po úpravě"
       },
       "TableRows": {
-        "UUIDInvoice": "Booking #",
-        "LocationId": "Location Id",
-        "Service": "Service",
-        "StartTime": "Start Time",
-        "Duration": "Duration (h)",
+        "UUIDInvoice": "Číslo rezervace#",
+        "LocationId": "ID lokace",
+        "Service": "Služba",
+        "StartTime": "Počáteční čas",
+        "Duration": "Trvání (h)",
         "Instructor": "Instruktor (bez/s)",
-        "ShootingPermit": "Shooting Permit",
+        "ShootingPermit": "Zbrojní průkaz",
         "Name": "Jméno a Příjmení",
         "Email": "E - mai",
-        "Telephone": "Telefon"
+        "Telephone": "Mobilní číslo"
       },
       "Comments": "Poznámky",
-      "ModifyButton": "Modify",
-      "CancelButton": "Cancel",
-      "Loading": "Modifying..."
+      "ModifyButton": "Upravit",
+      "CancelButton": "Zrušit",
+      "Loading": "Upravuji..."
     }
   },
   "BookingManagmentTab": {
@@ -115,24 +115,24 @@ export const Translations = {
     "CloseButton": "Zrušit"
   },
   "CopyInstructorSegments": {
-    "Title": "Copying Instructor Segments",
-    "MainFromHeader": 'Current Week:',
-    "MainToHeader": 'To Week:',
-    "Headers": ['Select', 'UUID', 'Name', 'Time Segment', 'Name', 'TimeSegment'],
-    "CopyButton": "Copy",
-    "CloseButton": "Close",
+    "Title": "Zkopírovat rozvrh instruktora",
+    "MainFromHeader": 'Aktuální týden:',
+    "MainToHeader": 'Do týdne:',
+    "Headers": ['Vybrat', 'UUID', 'Název', 'Časový úsek', 'Název', 'Časový úsek'],
+    "CopyButton": "Kopírovat",
+    "CloseButton": "Zrušit",
     "LabelCopyWeek": "Copy Week",
     "ToWeek": "To Week:"
   },
   "CopyBlockSegments": {
-    "Title": "Copying Blocking Segments",
-    "MainFromHeader": 'Current Week:',
-    "MainToHeader": 'To Week:',
-    "Headers": ['Select', 'UUID', 'Name', 'Time Segment', 'Name', 'TimeSegment'],
-    "CopyButton": "Copy",
-    "CloseButton": "Close",
-    "LabelCopyWeek": "Copy Week",
-    "ToWeek": "To Week:"
+    "Title": "CZkopírovat blokovací segment",
+    "MainFromHeader": 'Aktuální týden:',
+    "MainToHeader": 'Do týdne:',
+    "Headers": ['Vybrat', 'UUID', 'Název', 'Časový úsek', 'Název', 'Časový úsek'],
+    "CopyButton": "Kopírovat",
+    "CloseButton": "Zrušit",
+    "LabelCopyWeek": "Zkopírovat týden",
+    "ToWeek": "Do týdne:"
   },
   "ConfirmedPassword": 'Napište heslo',
   "BookingDashboard": {

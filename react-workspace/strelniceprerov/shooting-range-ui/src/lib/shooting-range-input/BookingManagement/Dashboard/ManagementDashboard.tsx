@@ -17,8 +17,6 @@ export function ManagementDashboard () {
     EditBookingsCtx.setWeekSelector( parameters );
     setShowCalendar( true );
   }, [] );
-  console.log( `Re Render the ManagementDashboard ${new Date()}` );
-  console.log( EditBookingsCtx.selectedSegment );
   return (
     <div className="wrapperPopUp" style={{ opacity: `${showUpPopUp ? '0.5' : '1'}`, pointerEvents: `${showUpPopUp ? 'none' : 'auto'}` }}>
       <WeekSelector CallBackFc={WeekSelectorUpdated} {...EditBookingsCtx} />
