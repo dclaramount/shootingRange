@@ -17,11 +17,12 @@ export function BookingsViewerWrapper ( props: React.PropsWithChildren<BookingEd
           const name = prop.name;
           return (
             <div style={{ display: 'flex', flexDirection: 'row', margin: '10px' }}>
-              <em style={{ display: 'inline-block', width: '20px', height: '20px', border: `1px solid ${color}`, background: `${color}`, color: `${color}`, borderRadius: '50%', margin: '0 5px 0 0' }}>.</em>
+              <em style={{ display: 'inline-block', width: '20px', height: '20px', border: `1px solid ${color === 'white' ? 'black' : `${color}`}`, background: `${color}`, color: `${color}`, borderRadius: '50%', margin: '0 5px 0 0' }}>.</em>
               <div>{name}</div>
             </div> )
-        } )}
-      </div> );
+        } )
+        }
+      </div > );
   }
 
   const [lastRefreshTime, setLastRefreshTime] = React.useState( new Date().toLocaleString() );
@@ -40,7 +41,7 @@ export function BookingsViewerWrapper ( props: React.PropsWithChildren<BookingEd
         <div style={{ color: 'gray', fontWeight: 'lighter', fontSize: '12px', textAlign: 'center', marginTop: '5px' }}>
           {`* ${Translations.BookingManagmentTab.LegendWithComments}`}
         </div>
-        <Legend props={[{ color: 'black', name: `${Translations.BookingManagmentTab.BlockWoutInstructor}` }, { color: '#f2b51b', name: `${Translations.BookingManagmentTab.BlockWInstructor}` }]} />
+        <Legend props={[{ color: 'white', name: `${Translations.BookingManagmentTab.BlockWoutInstructor}` }, { color: '#f2b51b', name: `${Translations.BookingManagmentTab.BlockWInstructor}` }]} />
       </div>
       <div className="reservation-cal-table" >
         <BookCalendarTable timeToShow={props.timesToShow} />

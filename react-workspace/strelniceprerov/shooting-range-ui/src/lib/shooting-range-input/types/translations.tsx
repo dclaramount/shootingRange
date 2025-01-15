@@ -26,7 +26,7 @@ export const Translations = {
       }
     },
     "PopUpDeletion": {
-      "Title": "Delete Reservation",
+      "Title": "Smazat Rezervace",
       "Text": "Opravdu si přejete zrušit rezervaci:",
       "DeleteButton": "Smazat",
       "CancelButton": "Zrušit"

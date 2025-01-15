@@ -217,7 +217,7 @@ export function ManagementPopUp ( props: React.PropsWithChildren<EditBookingsPop
     // const hours = new Date( formatedDateTimeZone ).getHours() + modificationInfo.newInfo.length
     const formatedSelectedSegment = '';
     axios( {
-      url: `${globalVariabes.apiRootURL} postSendDeleteEmail.php ? sendGridKey = ${sendGridKeyAPI}& emailTo=${selectedBooking.email}&emailFrom=${globalVariabes.emailFrom}& templateId=${globalVariabes.deleteEmailTemplate}&segmentBooked=${formatedSelectedSegment}& nameOnReservation=${selectedBooking.name}& shootingRangeName=${selectedBooking.serviceName}& phoneNumber=+${selectedBooking.phoneNumber}& comment=${'PLACEHOLDER'}& uuidInvoice=${selectedBooking.uuid} `,
+      url: `${globalVariabes.apiRootURL}postSendDeleteEmail.php?sendGridKey=${sendGridKeyAPI}&emailTo=${selectedBooking.email}&emailFrom=${globalVariabes.emailFrom}&templateId=${globalVariabes.deleteEmailTemplate}&segmentBooked=${formatedSelectedSegment}&nameOnReservation=${selectedBooking.name}&shootingRangeName=${selectedBooking.serviceName}&phoneNumber=+${selectedBooking.phoneNumber}&comment=${'PLACEHOLDER'}&uuidInvoice=${selectedBooking.uuid} `,
       method: "GET",
     } ).then( ( res ) => {
       if ( res.status === 200 ) {

@@ -7,7 +7,7 @@ function bookedOccupancy ( sBookings: SummaryBookingsType[], sFilteredBookings: 
   const currentDayToAnalyze = new Date( `${isoDaysOfWeek[idx + 1]} ${time}` );
   const formatedCurrentSegmentToAnalyze = format( currentDayToAnalyze, 'yyyy-MM-dd HH:mm:ss' );
   const bookingsForTheSegment = sFilteredBookings.length > 0 ? sFilteredBookings.filter( ( sb: FilteredBookingsType ) => ( format( sb.start, 'yyyy-MM-dd HH:mm:ss' ) === formatedCurrentSegmentToAnalyze ) && ( sb.serviceId ) === parseInt( selectedServiceId ) ) : [];
-  const color = 'black';
+  const color = 'white';
   const names: string[] = [];
   bookingsForTheSegment.forEach( ( bfts: FilteredBookingsType, idx: number ) => { if ( idx < 2 ) { names.push( `${bfts.name} ${bfts.withComments ? '*' : ''}` ) } else if ( idx === 2 ) { names.push( `${bfts.name}...` ) } } )
   if ( bookingsForTheSegment.length > 0 ) {
@@ -16,9 +16,9 @@ function bookedOccupancy ( sBookings: SummaryBookingsType[], sFilteredBookings: 
         {bookingsForTheSegment.map( ( bfts: FilteredBookingsType ) =>
           <span style={{ width: '100%', height: '100%', textAlign: 'left', display: 'flex' }} id={`${isoDaysOfWeek[idx + 1]} ${time}`}>
             <div style={{ fontSize: '8px', margin: '0px', padding: '0px', fontWeight: 'lighter', pointerEvents: 'none' }}>
-              {bfts.name}
+              {`${bfts.name} ${bfts.comments.some( ( c: string ) => c ) ? '*' : ''}`}
             </div>
-            <em style={{ marginBottom: 'auto', marginTop: '5px', display: 'inline-block', width: '10px', height: '10px', border: `1px solid ${color}`, background: `${color}`, color: `${color}`, borderRadius: '50%', margin: '0 5px 0 auto', pointerEvents: 'none' }}></em>
+            <em style={{ marginBottom: 'auto', marginTop: '5px', display: 'inline-block', width: '10px', height: '10px', border: `1px solid ${color === 'white' ? 'black' : `${color}`}`, background: `${color}`, color: `${color}`, borderRadius: '50%', margin: '0 5px 0 auto', pointerEvents: 'none' }}></em>
           </span>
         )
         }
