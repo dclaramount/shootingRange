@@ -7,6 +7,7 @@ import { CustomResponse, ManagementPluginPayload } from './Shared/types';
 import { initializeCustomerResponseObject } from './Shared/GeneralAPIHelpers';
 import { API_REQUEST_STATUS } from './Shared/enums';
 import { apiCallsManagementPlugIn } from './Shared/MultiAPICalls';
+import { WrapperBooking } from './shooting-range-title/components/WrapperBooking';
 
 function App () {
   const [renderTime, SetRenderTime] = React.useState( new Date() );
@@ -44,7 +45,7 @@ function App () {
       </header>
       {/*<WrapperReservationManagement/>*/}
       <hr></hr>
-      {/* {(Object.keys(globalVariables).length > 0 && waitDone) ? <WrapperBooking gVariables={globalVariables}/> : <div style={{width:'100%', height:'882px'}}><TextPlaceholder text={Translations.LoadingPlaceholder}/></div>} */}
+      {apiCalls.current.status === API_REQUEST_STATUS.LOADING ? <div style={{ width: '100%', height: '800px' }}><TextPlaceholder text={trs.Translations.Tex_Loading_Management_Dashboard} /></div> : ( apiCalls.current.status < API_REQUEST_STATUS.BAD_REQUEST ? <WrapperBooking {...apiCalls.current.payload as ManagementPluginPayload} /> : <>FAILURE</> )}
       <hr />
       {apiCalls.current.status === API_REQUEST_STATUS.LOADING ? <div style={{ width: '100%', height: '800px' }}><TextPlaceholder text={trs.Translations.Tex_Loading_Management_Dashboard} /></div> : ( apiCalls.current.status < API_REQUEST_STATUS.BAD_REQUEST ? <WrapperManagementDashboard {...apiCalls.current.payload as ManagementPluginPayload} /> : <>FAILURE</> )}
     </div>
