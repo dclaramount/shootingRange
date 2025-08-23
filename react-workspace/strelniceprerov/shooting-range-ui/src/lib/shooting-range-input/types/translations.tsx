@@ -150,7 +150,7 @@ export const Translations = {
   },
   "BookingCreated": {
     "Title": 'Rezervace byla úspěšně vytvořena.',
-    "Disclaimer1": 'Na mail Vám během pár okamžiků přijde potvrzující e-mail. V případě jeho nenalezení zkontrolujte složku se spamem.',
+    "Disclaimer1": '',
     "Disclaimer2": 'Pokud problém přetrvá, kontaktujte prosím správce střelnice.',
     "Button_Close": 'Zavřít',
     "TitleError": 'Proces vytváření selhal',
