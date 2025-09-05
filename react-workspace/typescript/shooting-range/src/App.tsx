@@ -40,7 +40,7 @@ function App () {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Creating Shooting Range Plugins
+          Creating Shooting Range Pluginss
         </a>
       </header>
       {/*<WrapperReservationManagement/>*/}

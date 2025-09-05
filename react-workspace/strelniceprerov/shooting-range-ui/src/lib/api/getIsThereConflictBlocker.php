@@ -50,6 +50,11 @@ try {
   } else {
     $selectedBookingDuration = "";
   }
+  if (isset($_GET['selectedLocation']) && $_GET['selectedLocation'] != "") {
+    $selectedLocation = $_GET['selectedLocation'];
+  } else {
+    $selectedLocation = "";
+  }
   $selectedSegments                                   =   explode(',', $selectedSegment);
   $start                                              =   strtotime($selectedSegments[0]);
   $startTime                                          =   date("Y-m-d H:i:s", $start);
@@ -57,7 +62,7 @@ try {
   $endTime                                            =   date("Y-m-d H:i:s", $end);
   /* Iterating over the for loop to create the individual 1 hour segments */
   for ($x = 1; $x <= $selectedBookingDuration; $x++) {
-    $queryCount                                       =   "SELECT count(*) as total from blocking_segments WHERE start_time='$startTime' AND end_time='$endTime';";
+    $queryCount                                       =   "SELECT count(*) as total from blocking_segments WHERE start_time='$startTime' AND end_time='$endTime' AND location_id='$selectedLocation';";
     $result                                           =   mysqli_query($mysqli, $queryCount, MYSQLI_USE_RESULT) or die(mysqli_error($mysqli));
     $data                                             =   $result->fetch_assoc();
     $countBlockers                                    =   $data['total'];

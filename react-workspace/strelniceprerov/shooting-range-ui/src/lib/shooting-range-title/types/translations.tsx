@@ -16,7 +16,7 @@ export const Translations = {
   "BookingCreated":{
     "Title":                                  'Rezervace byla úspěšně vytvořena.',
     "Disclaimer1":                            '',
-    "Disclaimer2":                            'Pokud problém přetrvá, kontaktujte prosím správce střelnice.',
+    "Disclaimer2":                            '',
     "TitleError":                             'Proces vytváření selhal',
     "ErrorDisclaimer":                        'Proces vytváření Vaší rezervace selhal, prosím zkuste ji vytvořit znovu. Pokud bude problém přetrvávat kontaktujte podporu na info@strelniceprerov.cz, děkujeme.',
     "Button_Close":                           'Zavřít'

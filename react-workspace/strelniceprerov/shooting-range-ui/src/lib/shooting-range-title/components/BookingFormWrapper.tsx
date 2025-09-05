@@ -35,7 +35,8 @@ export function BookingFormWrapper () {
     isNormalComputer,
     apiURL,
     selectedSegment,
-    selectedBookingDuration
+    selectedBookingDuration,
+    selectedLocation
   } = React.useContext( BookingContext );
 
   let factor = 1;
@@ -48,7 +49,7 @@ export function BookingFormWrapper () {
   const submitHandler = ( e: any ) => {
     e.preventDefault();
     axios( {
-      url: `${apiURL}getIsThereConflictBlocker.php?selectedSegment=${selectedSegment}&selectedBookingDuration=${selectedBookingDuration}`,
+      url: `${apiURL}getIsThereConflictBlocker.php?selectedSegment=${selectedSegment}&selectedBookingDuration=${selectedBookingDuration}&selectedLocation=${selectedLocation}`,
       method: "GET",
     } ).then( ( res ) => {
       if ( res.status === 200 ) {

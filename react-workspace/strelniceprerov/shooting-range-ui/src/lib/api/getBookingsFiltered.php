@@ -81,7 +81,7 @@ try {
   ul.id as 'userId'
   FROM  invoice_item as bookings
   INNER JOIN location as location ON bookings.location_id=location.id
-  INNER JOIN services as svc ON svc.location_id=location.id
+  INNER JOIN services as svc ON svc.id=location.id
   INNER JOIN invoice as inv  ON inv.id = bookings.invoice_id
   INNER JOIN user_list as ul  ON ul.id = inv.user_id
   WHERE bookings.start_time >= '$firstDay'  AND bookings.end_time <= '$lastDay' AND bookings.location_id='$locationId' AND inv.is_deleted=false;";

@@ -77,8 +77,10 @@ export function ManagementPopUp ( props: React.PropsWithChildren<EditBookingsPop
   /*          USE EFFECT FOR THE PROCESS OF MODIFY A BOOKING            */
   /*----------------------------------------------------------------------*/
   React.useEffect( () => {
+    const isAReservationSelected = modificationInfo.newInfo.uuid !== undefined && modificationInfo.newInfo.uuid !== null && modificationInfo.newInfo.uuid !== "";
+    console.log(`Booking Selected (upon modify a Booking) ${modificationInfo.newInfo.uuid} and isBookingSelected ${isAReservationSelected}`);
     //1 Step delete the previous reservation
-    if ( section === "DELETE_OLD_RESERVATION" ) {
+    if ( section === "DELETE_OLD_RESERVATION" && isAReservationSelected) {
       axios( {
         url: `${globalVariabes.apiRootURL}postDeleteBooking.php?uuidInvoice=${modificationInfo.newInfo.uuid}`,
         method: "GET",
@@ -96,67 +98,92 @@ export function ManagementPopUp ( props: React.PropsWithChildren<EditBookingsPop
     }
     //2 Step get the User Account by Email
     if ( section === "GETTING_USER_BY_EMAIL" ) {
+      setSection( "CREATE_NEW_USER" );
+      // axios( {
+      //   url: `${globalVariabes.apiRootURL}getUserRecordByEmail.php?userEmail=${modificationInfo.newInfo.email}`,
+      //   method: "GET",
+      // } ).then( ( res ) => {
+      //   if ( res.status === 200 ) {
+      //     const userData: UserEntry[] = res.data.payload;
+      //     setUserAccount( userData[0] );
+      //     setSection( "VERIFY_DATA_USER" )
+      //   }
+      //   else {
+      //     setSection( "ERROR_ON_API_CALL" );
+      //   }
+      // } )
+      //   .catch( ( err ) => {
+      //     if ( err.response.status === 404 ) {
+      //       setSection( "CREATE_NEW_USER" );
+      //     }
+      //     else {
+      //       setSection( "ERROR_ON_API_CALL" );
+      //     }
+      //   } );
+    }
+    //2.1 Step get the User Account by PhoneNumber
+    else if ( section === "GETTING_USER_BY_PHONE_NUMBER" ) {
+      setSection( "CREATE_NEW_USER" );
+      // axios( {
+      //   url: `${globalVariabes.apiRootURL}getUserRecordByPhoneNumber.php?phoneNumber=${modificationInfo.newInfo.phone}`,
+      //   method: "GET",
+      // } ).then( ( res ) => {
+      //   if ( res.status === 200 ) {
+      //     const userData: UserEntry[] = res.data;
+      //     if ( userData.length > 0 ) {
+      //       setUserAccount( userData[0] );
+      //       setSection( "VERIFY_DATA_USER" )
+      //     }
+      //     else {
+      //       setSection( "VERIFY_DATA_USER" );
+      //     }
+      //   }
+      //   else {
+      //     setSection( "ERROR_ON_API_CALL" );
+      //   }
+      // } )
+      //   .catch( ( err ) => {
+      //     setSection( "CREATING_RESERVATION_VERIFYING_USER" )
+      //   } );
+    }
+    //3 Verify User Entry.
+    else if ( section === "VERIFY_DATA_USER" ) {
+      setSection( "CREATE_NEW_USER" );
+      // console.log( "Verifing User Data" )
+      // if ( hasUserDataChanged( userAccount ) ) {
+      //   axios( {
+      //     url: `${globalVariabes.apiRootURL}postUpdateUserEntry.php?id=${userAccount.id}&shootingPermit=${false}&shootingPermitNumber=${modificationInfo.newInfo.shootingPermit}&name=${modificationInfo.newInfo.name}&email=${modificationInfo.newInfo.email}&phone=${modificationInfo.newInfo.phone}`,
+      //     method: "GET",
+      //   } ).then( ( res ) => {
+      //     setSection( "PROCEED_TO_CREATE_RESERVATION" );
+      //   } )
+      //     .catch( ( err ) => { console.log( err ) } );
+      // }
+      // else {
+      //   setSection( "PROCEED_TO_CREATE_RESERVATION" );
+      // }
+    }
+    else if ( section === "CREATE_NEW_USER" ) {
       axios( {
-        url: `${globalVariabes.apiRootURL}getUserRecordByEmail.php?userEmail=${modificationInfo.newInfo.email}`,
+        url: `${globalVariabes.apiRootURL}postCreateNewUser.php?id=${userAccount.id}&shootingPermit=${modificationInfo.newInfo.shootingPermit.length > 0}&shootingPermitNumber=${modificationInfo.newInfo.shootingPermit}&name=${modificationInfo.newInfo.name}&email=${modificationInfo.newInfo.email}&phone=${modificationInfo.newInfo.phone}`,
         method: "GET",
       } ).then( ( res ) => {
         if ( res.status === 200 ) {
-          const userData: UserEntry[] = res.data.payload;
-          setUserAccount( userData[0] );
-          setSection( "VERIFY_DATA_USER" )
+          setUserAccount( res.data.payload[0] );
+          setSection( "PROCEED_TO_CREATE_RESERVATION" );
         }
         else {
           setSection( "ERROR_ON_API_CALL" );
         }
       } )
         .catch( ( err ) => {
-          if ( err.response.status === 404 ) {
-            setSection( "CREATE_NEW_USER" );
+          if ( err.response.status === 409 ) {
+            setSection( "ERROR_ON_API_CALL" );
           }
           else {
             setSection( "ERROR_ON_API_CALL" );
           }
-        } );
-    }
-    //2.1 Step get the User Account by PhoneNumber
-    else if ( section === "GETTING_USER_BY_PHONE_NUMBER" ) {
-      axios( {
-        url: `${globalVariabes.apiRootURL}getUserRecordByPhoneNumber.php?phoneNumber=${modificationInfo.newInfo.phone}`,
-        method: "GET",
-      } ).then( ( res ) => {
-        if ( res.status === 200 ) {
-          const userData: UserEntry[] = res.data;
-          if ( userData.length > 0 ) {
-            setUserAccount( userData[0] );
-            setSection( "VERIFY_DATA_USER" )
-          }
-          else {
-            setSection( "VERIFY_DATA_USER" );
-          }
-        }
-        else {
-          setSection( "ERROR_ON_API_CALL" );
-        }
-      } )
-        .catch( ( err ) => {
-          setSection( "CREATING_RESERVATION_VERIFYING_USER" )
-        } );
-    }
-    //3 Verify User Entry.
-    else if ( section === "VERIFY_DATA_USER" ) {
-      console.log( "Verifing User Data" )
-      if ( hasUserDataChanged( userAccount ) ) {
-        axios( {
-          url: `${globalVariabes.apiRootURL}postUpdateUserEntry.php?id=${userAccount.id}&shootingPermit=${false}&shootingPermitNumber=${modificationInfo.newInfo.shootingPermit}&name=${modificationInfo.newInfo.name}&email=${modificationInfo.newInfo.email}&phone=${modificationInfo.newInfo.phone}`,
-          method: "GET",
-        } ).then( ( res ) => {
-          setSection( "PROCEED_TO_CREATE_RESERVATION" );
         } )
-          .catch( ( err ) => { console.log( err ) } );
-      }
-      else {
-        setSection( "PROCEED_TO_CREATE_RESERVATION" );
-      }
     }
     //4 Create Reservation.
     else if ( section === "PROCEED_TO_CREATE_RESERVATION" ) {
@@ -202,29 +229,33 @@ export function ManagementPopUp ( props: React.PropsWithChildren<EditBookingsPop
     setShowUpPopUpModification( false );
   }
   React.useEffect( () => {
-    axios( {
-      url: `${globalVariabes.apiRootURL}postDeleteBooking.php?uuidInvoice=${selectedBooking.uuid} `,
-      method: "GET",
-    } ).then( ( res ) => {
-      setSelectedBooking( {} as FilteredBookingsType );
-      setRefreshTab( new Date() );
-      setShowUpPopUpCancelation( false );
-    } )
-      .catch( ( err ) => { console.log( err ) } );
+    const isBookingSelected = selectedBooking.uuid !== undefined && selectedBooking.uuid !== null && selectedBooking.uuid !== "";
+    console.log(`Booking Selected (upon delete Booking) ${selectedBooking.uuid} and isBookingSelected ${isBookingSelected}`);
+    if(isBookingSelected){
+      axios( {
+        url: `${globalVariabes.apiRootURL}postDeleteBooking.php?uuidInvoice=${selectedBooking.uuid} `,
+        method: "GET",
+      } ).then( ( res ) => {
+        setSelectedBooking( {} as FilteredBookingsType );
+        setRefreshTab( new Date() );
+        setShowUpPopUpCancelation( false );
+      } )
+        .catch( ( err ) => { console.log( err ) } );
 
-    // const formatedDate = `${selectedBooking.start.toLocaleDateString( 'de-DE' )} ${selectedSegment[0].split( ' ' )[1]} `;
-    // const formatedDateTimeZone = modificationInfo.newInfo.startTime.toLocaleString( 'cs-CZ', { timeZone: 'CET', hour12: false, } )
-    // const hours = new Date( formatedDateTimeZone ).getHours() + modificationInfo.newInfo.length
-    const formatedSelectedSegment = '';
-    axios( {
-      url: `${globalVariabes.apiRootURL} postSendDeleteEmail.php ? sendGridKey = ${sendGridKeyAPI}& emailTo=${selectedBooking.email}&emailFrom=${globalVariabes.emailFrom}& templateId=${globalVariabes.deleteEmailTemplate}&segmentBooked=${formatedSelectedSegment}& nameOnReservation=${selectedBooking.name}& shootingRangeName=${selectedBooking.serviceName}& phoneNumber=+${selectedBooking.phoneNumber}& comment=${'PLACEHOLDER'}& uuidInvoice=${selectedBooking.uuid} `,
-      method: "GET",
-    } ).then( ( res ) => {
-      setResponse( res.data );
-      setShowUpPopUpCancelation( false );
-      setTabSelector( 1 );
-    } )
-      .catch( ( err ) => { console.log( err ) } );
+      // const formatedDate = `${selectedBooking.start.toLocaleDateString( 'de-DE' )} ${selectedSegment[0].split( ' ' )[1]} `;
+      // const formatedDateTimeZone = modificationInfo.newInfo.startTime.toLocaleString( 'cs-CZ', { timeZone: 'CET', hour12: false, } )
+      // const hours = new Date( formatedDateTimeZone ).getHours() + modificationInfo.newInfo.length
+      const formatedSelectedSegment = '';
+      axios( {
+        url: `${globalVariabes.apiRootURL}postSendDeleteEmail.php?sendGridKey=${sendGridKeyAPI}&emailTo=${selectedBooking.email}&emailFrom=${globalVariabes.emailFrom}&templateId=${globalVariabes.deleteEmailTemplate}&segmentBooked=${formatedSelectedSegment}&nameOnReservation=${selectedBooking.name}&shootingRangeName=${selectedBooking.serviceName}&phoneNumber=+${selectedBooking.phoneNumber}&comment=${'PLACEHOLDER'}& uuidInvoice=${selectedBooking.uuid}`,
+        method: "GET",
+      } ).then( ( res ) => {
+        setResponse( res.data );
+        setShowUpPopUpCancelation( false );
+        setTabSelector( 1 );
+      } )
+        .catch( ( err ) => { console.log( err ) } );
+    }
   }, [deleteBooking] )
   return (
     <div>

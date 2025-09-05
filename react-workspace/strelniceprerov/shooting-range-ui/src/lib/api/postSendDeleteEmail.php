@@ -137,6 +137,11 @@ try {
         $response                                             =   "Email Sent";
         send_remote_curl("Sending Email to Customer returned $http_code from SEND GRID.", (basename($_SERVER['PHP_SELF'], '.php')));
         break;
+      case 401:  
+        $requestResponse                                      =   $GOOD_REQUEST;
+        $response                                             =   "Email Wasnt Sent (bypassing as per customer)";
+        send_remote_curl("Sending Email to Customer returned $http_code from SEND GRID.",(basename($_SERVER['PHP_SELF'], '.php')));
+        break;
       default:
         $requestResponse                                      =   $INTERNAL_SERVER_ERROR;
         $response                                             =   "Unexpected HTTP Code $http_code from SEND GRID.";

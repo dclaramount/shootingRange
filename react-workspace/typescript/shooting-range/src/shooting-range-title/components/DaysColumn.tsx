@@ -100,8 +100,10 @@ function calculateOccupancy ( summaryBookings: any, summaryBookingInstructor: an
   const segmentLocationStatus = summaryBookings.find( ( sum: any ) => sum.segmentStarts.includes( formatedCurrentSegmentToAnalyze ) && parseInt( sum.serviceId ) === parseInt( selectedServiceId ) );
   const filteredValue = shootingInstructorSelected ? summaryBookingInstructor.find( ( sum: any ) => sum.segmentStarts.includes( formatedCurrentSegmentToAnalyze ) ) :
     summaryBookings.find( ( sum: any ) => sum.segmentStarts.includes( formatedCurrentSegmentToAnalyze ) && parseInt( sum.serviceId ) === parseInt( selectedServiceId ) );
-
   if ( filteredValue ) {
+    console.log( filteredValue.maxOccupancy )
+    console.log( currentDayToAnalyze )
+    console.log( segmentLocationStatus );
     if ( segmentLocationStatus && segmentLocationStatus.segmentLocationFullyBooked ) {
       //For the case that the location is full (we will show the occupancy (for the given configuration (Instructors or NOT instructors) accordingly.))
       return (
