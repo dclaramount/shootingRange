@@ -1,43 +1,41 @@
 import React from 'react';
-import { REQUEST_STATUS } from '../ApiCalls/enums';
-import { useGetEndPoint } from '../ApiCalls/useGetEndPoint';
-import {Spinner } from '../shared/Placeholders';
 import { BookingManagementSpace } from '../Spaces/BookingManagementSpace/BookingManagementSpace';
+import { Translations } from '../types/translations';
 import { ManagementDashboardContext } from '../components/Context/ManagementDashboardContext';
-import { BookingManagementProvider } from '../components/Context/BookingManagementContext';
+import { API_REQUEST_STATUS } from '../../shared/enums';
+import { PlaceHolderTabComponent } from '../../shared/Components';
+import { apiCallsEditBookingsTab } from '../../shared/MultiAPICalls';
+import { initializeCustomerResponseObject } from '../../shared/GeneralAPIHelpers';
+import { CustomResponse, EditBookingsTabType } from '../../shared/types';
+import { EditBookingsProvider } from '../components/Context/EditBookingsContext';
 
 const WrapperBookingManagement = () => {
-  
-  let dataFetched                           =   false;
-  const   {globalVariabes}                  =   React.useContext(ManagementDashboardContext);
-  const fetchAllInstructorsFromDB           =   useGetEndPoint(globalVariabes.apiRootURL, 'getAllInstructors');
-  const fetchInstructorSegmentsFromDB       =   useGetEndPoint(globalVariabes.apiRootURL, 'getAllInstructorSegments');
-  const fetchInfoInstructorsFromDB          =   useGetEndPoint(globalVariabes.apiRootURL, 'getInfoInstructors');
-  const fetchSummaryBookingsFromDB          =   useGetEndPoint(globalVariabes.apiRootURL, 'getSummaryBookings');
-  const fetchAllInvoicesFromDB              =   useGetEndPoint(globalVariabes.apiRootURL, 'getAllInvoices');
-  const fetchAllShootingRangesFromDB        =   useGetEndPoint(globalVariabes.apiRootURL, 'getListShootingRange');
-
-
-  dataFetched                               =   fetchAllInstructorsFromDB.requestStatus       === REQUEST_STATUS.SUCCESS &&
-                                                fetchInstructorSegmentsFromDB.requestStatus   === REQUEST_STATUS.SUCCESS  &&
-                                                fetchInfoInstructorsFromDB.requestStatus      === REQUEST_STATUS.SUCCESS  &&
-                                                fetchSummaryBookingsFromDB.requestStatus      === REQUEST_STATUS.SUCCESS  &&
-                                                fetchAllInvoicesFromDB.requestStatus          === REQUEST_STATUS.SUCCESS  &&
-                                                fetchAllShootingRangesFromDB.requestStatus    === REQUEST_STATUS.SUCCESS
-  return(
-  <div>
-    {dataFetched ? 
-      <BookingManagementProvider  gVariables={globalVariabes}                                 iList={fetchAllInstructorsFromDB.payload}                   iSegmentList={fetchInstructorSegmentsFromDB.payload}
-                                  infoInstructorsFromDB={fetchInfoInstructorsFromDB.payload}  summaryBookingsFromDB={fetchSummaryBookingsFromDB.payload}  allInvoicesFromDB={fetchAllInvoicesFromDB.payload}
-                                  serviceListFromDB={fetchAllShootingRangesFromDB.payload}>
-        <BookingManagementSpace/>
-      </BookingManagementProvider>
-      :
-      <div style={{width:'100%', height:'800px'}}>
-        <Spinner/>
-      </div>
+  const apiCalls: React.MutableRefObject<CustomResponse> = React.useRef<CustomResponse>( initializeCustomerResponseObject() );
+  const [editBookingRenderTime, SetEditBookingRenderTime] = React.useState( new Date() );
+  const { globalVariabes } = React.useContext( ManagementDashboardContext );
+  /*-----------------------------------------------------------------------------------------------------------*/
+  /*                          CALL OF APIS UPON RENDENRING THE TAB FOR EDITING RESERVATIONS                    */
+  /*-----------------------------------------------------------------------------------------------------------*/
+  React.useEffect( () => {
+    async function FetchData (): Promise<void> {
+      apiCalls.current = await apiCallsEditBookingsTab();
+      if ( apiCalls.current.status === API_REQUEST_STATUS.SUCCESS ) { SetEditBookingRenderTime( new Date() ) }
     }
-  </div>
- )
+    FetchData();
+  }, [] )
+  return (
+    <div className={`editBookingContainerTab`}>
+      {
+        apiCalls.current.status === API_REQUEST_STATUS.SUCCESS ?
+          <EditBookingsProvider {...{ InputProps: apiCalls.current.payload as EditBookingsTabType, GlobalVariables: globalVariabes }} >
+            <BookingManagementSpace />
+          </EditBookingsProvider>
+          :
+          <div style={{ width: '100%', height: '800px' }}>
+            <PlaceHolderTabComponent {...{ status: apiCalls.current.status, errorMessage: Translations.ErrorPlaceHolderTab, loadingMessage: Translations.Loading }} />
+          </div>
+      }
+    </div >
+  )
 }
 export default WrapperBookingManagement;

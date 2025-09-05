@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button } from '@mui/material';
 import { Translations } from '../types/translations';
 
@@ -13,6 +12,5 @@ export function ReservationMade( {closeModal} : any) {
       <span style={{textAlign:'center', color:'white', fontWeight:'bold'}}>{Translations.BookingCreated.Disclaimer1}</span>
       <span style={{textAlign:'center', color:'white', fontWeight:'bold', marginTop:'15px'}}>{Translations.BookingCreated.Disclaimer2}</span>
       <Button style={{ width:'150px', marginRight:'auto', marginLeft: 'auto', marginTop:'15%', backgroundColor:'red', fontWeight:'bolder', color:'white', border:'1px solid red' }} variant="contained" color="success" onClick={()=>closeModal("BOOKING_COMPLETE")}>{Translations.BookingCreated.Button_Close}</Button>
-
     </div>
 )}

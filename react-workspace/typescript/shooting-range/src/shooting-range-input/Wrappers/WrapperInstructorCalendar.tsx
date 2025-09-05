@@ -4,7 +4,8 @@ import { useGetEndPoint } from '../ApiCalls/useGetEndPoint';
 import { ManagementDashboardContext } from '../Context/ManagementDashboardContext';
 import { InstructorsCalendarProvider } from '../Context/InstructorCalendarContext';
 import { InstructorCalendarManagement } from '../Spaces/InstructorCalendarSpace/InstructorCalendarManagement';
-import {Spinner } from '../shared/Placeholders';
+import {Spinner, TextPlaceholder} from '../shared/Placeholders';
+import {Translations} from "../types/translations";
 
 const WrapperInstructorCalendar = () => {
   let dataFetched                           =   false;
@@ -21,7 +22,7 @@ const WrapperInstructorCalendar = () => {
       </InstructorsCalendarProvider>
       :
       <div style={{width:'100%', height:'800px'}}>
-        <Spinner/>
+        <TextPlaceholder text={Translations.Loading}/>
       </div>
     }
   </>

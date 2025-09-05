@@ -22,111 +22,127 @@ export function ThemeProviders(props: ProvidersProps) {
  */
 export function WebComponentWrapper(
   NAME: string,
-  Component: (props) => JSX.Element,
-  CustomProviders: (props) => React.ReactElement<typeof ThemeProviders>
+  Component: (props : any) => JSX.Element,
+  CustomProviders: (props : any) => React.ReactElement<typeof ThemeProviders>
 ): void {
   class WebComponent extends reactToWebComponent(Component, React, ReactDOM) {
     props = {};
 
     //https://codesandbox.io/s/shadow-dom-rki9k5?from-embed=&file=/index.tsx:1159-1188
     connectedCallback() {
+      /********************************************************************************************************************************/
+      /* PART TO DEFINE LOCAL ENVIRONMENT */
+      /********************************************************************************************************************************/
+      let envVariables : string[] = process.env.NX_RELEASE_VERSION === undefined ? [] : process.env.NX_RELEASE_VERSION.split('.') ;
+      let thisEnv = envVariables[0];
+      let localURL = '';
+      if(envVariables.length>1){
+        localURL = envVariables[1];
+      }
+      let URL = "https://strelniceprerov.cz";
+      if(thisEnv==='local'){
+        URL=`http://${localURL}.local`;
+      }
+      /********************************************************************************************************************************/
+      /********************************************************************************************************************************/
+
       const shadowRoot = super.attachShadow({ mode: 'open' });
       const mountPoint = document.createElement('span');
       const emotionRoot = document.createElement('style');
-
+      const disableCaching = false;
       const linkElem = document.createElement('link');
       linkElem.setAttribute('rel', 'stylesheet');
-      linkElem.setAttribute('href', `https://strelniceprerov.cz/wp-admin/css/bw-bootstrap-strelnice.css?dummy=${new Date()}`);
+      linkElem.setAttribute('href', `${URL}/wp-admin/css/bw-bootstrap-strelnice.css${disableCaching? `?dummy=${new Date()}` : ``}`);
 
       const linkElem2 = document.createElement('link');
       linkElem2.setAttribute('rel', 'stylesheet');
-      linkElem2.setAttribute('href', `https://strelniceprerov.cz/wp-admin/css/bw-calendar.css?dummy=${new Date()}`);
+      linkElem2.setAttribute('href', `${URL}/wp-admin/css/bw-calendar.css${disableCaching? `?dummy=${new Date()}` : ``}`);
 
       const linkElem3 = document.createElement('link');
       linkElem3.setAttribute('rel', 'stylesheet');
-      linkElem3.setAttribute('href', `https://strelniceprerov.cz/wp-admin/css/bw-front-strelnice.css?dummy=${new Date()}`);
+      linkElem3.setAttribute('href', `${URL}/wp-admin/css/bw-front-strelnice.css${disableCaching? `?dummy=${new Date()}` : ``}`);
 
       const linkElem4 = document.createElement('link');
       linkElem4.setAttribute('rel', 'stylesheet');
-      linkElem4.setAttribute('href', `https://strelniceprerov.cz/wp-admin/css/bw-print-strelnice.css?dummy=${new Date()}`);
+      linkElem4.setAttribute('href', `${URL}/wp-admin/css/bw-print-strelnice.css${disableCaching? `?dummy=${new Date()}` : ``}`);
 
       const linkElem5 = document.createElement('link');
       linkElem5.setAttribute('rel', 'stylesheet');
-      linkElem5.setAttribute('href', `https://strelniceprerov.cz/wp-admin/css/bw-reboot-strelnice.css?dummy=${new Date()}`);
+      linkElem5.setAttribute('href', `${URL}/wp-admin/css/bw-reboot-strelnice.css${disableCaching? `?dummy=${new Date()}` : ``}`);
 
       const linkElem6 = document.createElement('link');
       linkElem6.setAttribute('rel', 'stylesheet');
-      linkElem6.setAttribute('href', `https://strelniceprerov.cz/wp-admin/css/bw-reservation-strelnice.css?dummy=${new Date()}`);
+      linkElem6.setAttribute('href', `${URL}/wp-admin/css/bw-reservation-strelnice.css${disableCaching? `?dummy=${new Date()}` : ``}`);
 
       const linkElem7 = document.createElement('link');
       linkElem7.setAttribute('rel', 'stylesheet');
-      linkElem7.setAttribute('href', `https://strelniceprerov.cz/wp-admin/css/bw-honest-week-picker.css?dummy=${new Date()}`);
+      linkElem7.setAttribute('href', `${URL}/wp-admin/css/bw-honest-week-picker.css${disableCaching? `?dummy=${new Date()}` : ``}`);
 
       const linkElem8 = document.createElement('link');
       linkElem8.setAttribute('rel', 'stylesheet');
-      linkElem8.setAttribute('href', `//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css?dummy=${new Date()}`);
+      linkElem8.setAttribute('href', `//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css${disableCaching? `?dummy=${new Date()}` : ``}`);
       
       //DEV EXTREME
       const linkElem9 = document.createElement('link');
       linkElem9.setAttribute('rel', 'stylesheet');
-      linkElem9.setAttribute('href', `https://strelniceprerov.cz/wp-admin/css/bw-dx-demo-template.css?dummy=${new Date()}`);
+      linkElem9.setAttribute('href', `${URL}/wp-admin/css/bw-dx-demo-template.css${disableCaching? `?dummy=${new Date()}` : ``}`);
 
       const linkElem10 = document.createElement('link');
       linkElem10.setAttribute('rel', 'stylesheet');
-      linkElem10.setAttribute('href', `https://strelniceprerov.cz/wp-admin/css/bw-dx-light.css?dummy=${new Date()}`);
+      linkElem10.setAttribute('href', `${URL}/wp-admin/css/bw-dx-light.css${disableCaching? `?dummy=${new Date()}` : ``}`);
 
       const linkElem11 = document.createElement('link');
       linkElem11.setAttribute('rel', 'stylesheet');
-      linkElem11.setAttribute('href', `https://strelniceprerov.cz/wp-admin/css/bw-dx-material-blue-light.css?dummy=${new Date()}`);
+      linkElem11.setAttribute('href', `${URL}/wp-admin/css/bw-dx-material-blue-light.css${disableCaching? `?dummy=${new Date()}` : ``}`);
 
       const linkElem12 = document.createElement('link');
       linkElem12.setAttribute('rel', 'stylesheet');
-      linkElem12.setAttribute('href', `https://strelniceprerov.cz/wp-admin/css/bw-calendar-instructors.css?dummy=${new Date()}`);
+      linkElem12.setAttribute('href', `${URL}/wp-admin/css/bw-calendar-instructors.css${disableCaching? `?dummy=${new Date()}` : ``}`);
 
       //CSS files for the plugin of calendar
       const linkElem13 = document.createElement('link');
       linkElem13.setAttribute('rel', 'stylesheet');
-      linkElem13.setAttribute('href', `https://strelniceprerov.cz/wp-admin/css/ej2_react_schedule_material.css?dummy=${new Date()}`);
+      linkElem13.setAttribute('href', `${URL}/wp-admin/css/ej2_react_schedule_material.css${disableCaching? `?dummy=${new Date()}` : ``}`);
 
       const linkElem14 = document.createElement('link');
       linkElem14.setAttribute('rel', 'stylesheet');
-      linkElem14.setAttribute('href', `https://strelniceprerov.cz/wp-admin/css/ej2_splitbuttons_material.css?dummy=${new Date()}`);
+      linkElem14.setAttribute('href', `${URL}/wp-admin/css/ej2_splitbuttons_material.css${disableCaching? `?dummy=${new Date()}` : ``}`);
   
       const linkElem15 = document.createElement('link');
       linkElem15.setAttribute('rel', 'stylesheet');
-      linkElem15.setAttribute('href', `https://strelniceprerov.cz/wp-admin/css/ej2_popups_material.css?dummy=${new Date()}`);
+      linkElem15.setAttribute('href', `${URL}/wp-admin/css/ej2_popups_material.css${disableCaching? `?dummy=${new Date()}` : ``}`);
 
       const linkElem16 = document.createElement('link');
       linkElem16.setAttribute('rel', 'stylesheet');
-      linkElem16.setAttribute('href', `https://strelniceprerov.cz/wp-admin/css/ej2_navigations_material.css?dummy=${new Date()}`);
+      linkElem16.setAttribute('href', `${URL}/wp-admin/css/ej2_navigations_material.css${disableCaching? `?dummy=${new Date()}` : ``}`);
 
       const linkElem17 = document.createElement('link');
       linkElem17.setAttribute('rel', 'stylesheet');
-      linkElem17.setAttribute('href', `https://strelniceprerov.cz/wp-admin/css/ej2_lists_material.css?dummy=${new Date()}`);
+      linkElem17.setAttribute('href', `${URL}/wp-admin/css/ej2_lists_material.css${disableCaching? `?dummy=${new Date()}` : ``}`);
 
       const linkElem18 = document.createElement('link');
       linkElem18.setAttribute('rel', 'stylesheet');
-      linkElem18.setAttribute('href', `https://strelniceprerov.cz/wp-admin/css/ej2_inputs_material.css?dummy=${new Date()}`);
+      linkElem18.setAttribute('href', `${URL}/wp-admin/css/ej2_inputs_material.css${disableCaching? `?dummy=${new Date()}` : ``}`);
 
       const linkElem19 = document.createElement('link');
       linkElem19.setAttribute('rel', 'stylesheet');
-      linkElem19.setAttribute('href', `https://strelniceprerov.cz/wp-admin/css/ej2_dropdowns_material.css?dummy=${new Date()}`);
+      linkElem19.setAttribute('href', `${URL}/wp-admin/css/ej2_dropdowns_material.css${disableCaching? `?dummy=${new Date()}` : ``}`);
 
       const linkElem20 = document.createElement('link');
       linkElem20.setAttribute('rel', 'stylesheet');
-      linkElem20.setAttribute('href', `https://strelniceprerov.cz/wp-admin/css/ej2_calendars_material.css?dummy=${new Date()}`);
+      linkElem20.setAttribute('href', `${URL}/wp-admin/css/ej2_calendars_material.css${disableCaching? `?dummy=${new Date()}` : ``}`);
 
       const linkElem21 = document.createElement('link');
       linkElem21.setAttribute('rel', 'stylesheet');
-      linkElem21.setAttribute('href', `https://strelniceprerov.cz/wp-admin/css/ej2_buttons_material.css?dummy=${new Date()}`);
+      linkElem21.setAttribute('href', `${URL}/wp-admin/css/ej2_buttons_material.css${disableCaching? `?dummy=${new Date()}` : ``}`);
 
       const linkElem22 = document.createElement('link');
       linkElem22.setAttribute('rel', 'stylesheet');
-      linkElem22.setAttribute('href', `https://strelniceprerov.cz/wp-admin/css/ej2_base_material.css?dummy=${new Date()}`);
+      linkElem22.setAttribute('href', `${URL}/wp-admin/css/ej2_base_material.css${disableCaching? `?dummy=${new Date()}` : ``}`);
 
       const linkElem23 = document.createElement('link');
       linkElem23.setAttribute('rel', 'stylesheet');
-      linkElem23.setAttribute('href', `https://strelniceprerov.cz/wp-admin/css/smart.default.css?dummy=${new Date()}`);
+      linkElem23.setAttribute('href', `${URL}/wp-admin/css/smart.default.css${disableCaching? `?dummy=${new Date()}` : ``}`);
 
       mountPoint.id = NAME;
       shadowRoot.appendChild(mountPoint);
@@ -154,6 +170,30 @@ export function WebComponentWrapper(
       shadowRoot.appendChild(linkElem21);
       shadowRoot.appendChild(linkElem22);
       shadowRoot.appendChild(linkElem23);
+
+
+      const addStylesheetRules = (style : any) => {
+        const styleElement = document.createElement('style');
+        styleElement.setAttribute('id', 'Animation_Style_ShadowDom');
+        let styleSheet = null;
+
+        shadowRoot.appendChild(styleElement);
+
+        styleSheet = styleElement.sheet;
+
+        styleSheet?.insertRule(style, styleSheet.cssRules.length);
+      }
+      const keyframesStyle = `
+      @-webkit-keyframes pulse {
+          0% {
+            opacity: 1;
+          }
+          100% {
+            opacity: 0;
+          }
+      }
+    `;
+      addStylesheetRules(keyframesStyle);
 
       const cache = createCache({
         key: 'css',

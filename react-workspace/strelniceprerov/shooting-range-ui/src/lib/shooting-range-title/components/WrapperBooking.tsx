@@ -18,7 +18,7 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
     }
     return Array;
   }
-  const sendGridKey  = CryptoJS.AES.decrypt(gVariables.sendGridEncryptedKey, gVariables.decryptionKey).toString(CryptoJS.enc.Utf8);
+  const sendGridKey                                             = CryptoJS.AES.decrypt(gVariables.sendGridEncryptedKey, gVariables.decryptionKey).toString(CryptoJS.enc.Utf8);
   const [globalVariables, setGlobalVariables]                   = React.useState(gVariables);
   const [timesToShow, setTimesToShow]                           = React.useState(buildArrayOfBusinessHours(gVariables.startBusinessHours, gVariables.endBusinessHours)); 
   const [daysOfWeek, setDaysOfWeek]                             = React.useState([]); 
@@ -61,7 +61,7 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
   const [showWarningChooseAnotherSegment, setShowWarningChooseAnotherSegment] = React.useState(false);
   const [isNormalComputer, setIsNormalComputer]                                                 = React.useState(true);
 
-  const delayInMilliseconds = 5000; //1 second
+  const delayInMilliseconds = 500; //1 second
 
   setTimeout(function() {
     setShowCalendar(true)

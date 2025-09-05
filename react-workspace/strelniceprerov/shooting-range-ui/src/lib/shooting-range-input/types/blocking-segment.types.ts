@@ -20,6 +20,14 @@ export type BlockSegmentToCreate = {
   locationId:   number, 
   url:          string
 }
+export type InstructorSegmentsToCreate = {
+  start:        string, 
+  end:          string, 
+  uuid:         string, 
+  name:         string, 
+  instructorId:  number, 
+  url:          string
+}
 export type DayPilotEvent = {
   id:           number;
   text:         string;
@@ -35,5 +43,5 @@ export type DayPilotEvent = {
   end:          string;
   backColor:    string;
   uuid:         string;
-  locationId?:   number;
+  instructorId?:   number;
 }

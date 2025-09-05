@@ -5,7 +5,7 @@ import { useGetEndPoint } from "../ApiCalls/useGetEndPoint";
 import React from "react";
 import { ManagementDashboardContext } from "../Context/ManagementDashboardContext";
 import { REQUEST_STATUS } from "../ApiCalls/enums";
-import { Spinner } from "./Placeholders";
+import { TextPlaceholder } from "./Placeholders";
 import { Translations } from "../types/translations";
 //Icons -> https://fontawesome.com/v4/icons/
 const Banner = (props :any) => {
@@ -46,7 +46,7 @@ export const PostPopUp = ({postAPI, postParameters, closeModal} : any) => {
   postDone                                  =   postCreationOfSegment.requestStatus  === REQUEST_STATUS.SUCCESS 
   return( <Popup open={true} onClose={()=>closeModal()} closeOnDocumentClick={false} >
             <div style={{backgroundColor:'white', width:'500px', height:'250px', paddingTop:'5px', paddingRight:'15px', paddingLeft:'15px', paddingBottom:'15px', border:'2px solid black', borderRadius:'10px', outline:'10px solid transparent', display:'flex', flexDirection:'column'}}>
-            {postDone ? <Banner payload={postCreationOfSegment.payload} status={postCreationOfSegment.status} closeModal={closeModal}/> : <Spinner/>}
+            {postDone ? <Banner payload={postCreationOfSegment.payload} status={postCreationOfSegment.status} closeModal={closeModal}/> : <TextPlaceholder text={Translations.Loading}/>}
             </div>
           </Popup>
     )

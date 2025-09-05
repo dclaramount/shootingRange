@@ -1,0 +1,6 @@
+export enum API_REQUEST_STATUS {
+  LOADING = -1,
+  SUCCESS = 200,
+  BAD_REQUEST = 400,
+  FAILURE = 500
+}
