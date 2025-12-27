@@ -23,6 +23,6 @@ export function SelectedShootingRange(){
 }
 const styles = {
   container: (isNormalComputer: boolean)  => ({
-   width: isNormalComputer ? 'unset' : '100%'
+   width: isNormalComputer ? '100%' : '100%'
   })
 };
