@@ -159,9 +159,9 @@ export const Translations = {
   "BookingForm": {
     "ShootingPermit": {
       "Subtitle": 'Zbrojní průkaz',
-      "Label": 'Čislo Zbrojní průkaz',
+      "Label": 'Čislo OP/PAS',
       "onError": 'Vyplňte prosím jako format ZP123456',
-      "RegExValidation": '^[A-Z]{2}[0-9]{6}$'
+      "RegExValidation": '^.*$'
     },
     "Instructor": {
       "Label": 'Instruktor'

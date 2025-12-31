@@ -16,7 +16,7 @@ export const ShootingPermit = React.forwardRef<HTMLInputElement, TextFormProps>(
 
   return (
       <>
-        <div className="reservation-order-row" style={styles.checkBoxWrapper(isNormalComputer)}>
+        {/* <div className="reservation-order-row" style={styles.checkBoxWrapper(isNormalComputer)}>
           <label htmlFor="select-box-location">{Translations.BookingForm.ShootingPermit.Subtitle}</label>
           <div className="reservation-order-row-radios" style={styles.checkBox(isNormalComputer)}>
             <input checked={shootingPermit} onClick={(e) => {
@@ -40,7 +40,7 @@ export const ShootingPermit = React.forwardRef<HTMLInputElement, TextFormProps>(
               Ne
             </label>
           </div>
-        </div>
+        </div> */}
         {shootingPermit &&
             <div  className="reservation-order-row" style={styles.shootingInput(isComputerLayout)}>
               <label htmlFor={'input_field_shooting_permit'}>{label}</label>

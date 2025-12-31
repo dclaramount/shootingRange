@@ -69,12 +69,12 @@ export function BookingFormWrapper () {
     <div className="reservation-order" style={styles.container( isNormalComputer )}>
       <form onSubmit={( e ) => submitHandler( e )}>
         <h3>Rezervace</h3>
-        <SelectedShootingRange />
+        {/* <SelectedShootingRange /> */}
         <BookingDateTime />
         <DurationOfBooking />
         {/*<NumberOfPeople/>*/}
-        <ShootingPermit ref={shootingPermitRef} isComputerLayout={isNormalComputer} size={50} maxLength={50} required={true} type={'text'} name={'shootingPermit'} label={Translations.BookingForm.ShootingPermit.Label} onInvalid={e => ( e.target as HTMLInputElement ).setCustomValidity( Translations.BookingForm.ShootingPermit.onError )} onInput={e => ( e.target as HTMLInputElement ).setCustomValidity( '' )} pattern={Translations.BookingForm.ShootingPermit.RegExValidation} />
-        <Instructor />
+        <ShootingPermit ref={shootingPermitRef} isComputerLayout={isNormalComputer} size={50} maxLength={50} required={false} type={'text'} name={'shootingPermit'} label={Translations.BookingForm.ShootingPermit.Label} onInvalid={e => ( e.target as HTMLInputElement ).setCustomValidity( Translations.BookingForm.ShootingPermit.onError )} onInput={e => ( e.target as HTMLInputElement ).setCustomValidity( '' )}  />
+        {/* <Instructor /> */}
         <h3>{Translations.BookingForm.Personal_Information}</h3>
         <BookingName ref={nameRef} isComputerLayout={isNormalComputer} required={true} type={'text'} name={'name'} maxLength={255} size={50} label={Translations.BookingForm.Name.Label} onInvalid={e => ( e.target as HTMLInputElement ).setCustomValidity( Translations.BookingForm.Name.onError )} onInput={e => ( e.target as HTMLInputElement ).setCustomValidity( '' )} />
         <BookingEmail ref={emailRef} isComputerLayout={isNormalComputer} required={true} type={'email'} name={'email'} maxLength={100} size={50} label={Translations.BookingForm.Email.Label} onInvalid={e => ( e.target as HTMLInputElement ).setCustomValidity( Translations.BookingForm.Email.onError )} onInput={e => ( e.target as HTMLInputElement ).setCustomValidity( '' )} pattern={Translations.BookingForm.Email.RegExValidation} />
