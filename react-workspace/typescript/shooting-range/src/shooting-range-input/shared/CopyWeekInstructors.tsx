@@ -16,14 +16,14 @@ export const CopyWeekInstructorsPopUp = ({listOfAllEvents, startDateOfSelectedWe
 
   let startDate : Date                                                    =   new Date();
   let endDate   : Date                                                    =   new Date();
-  let weekNumber : number                                                 =   0;
+  let weekNumber                                                  =   0;
   let oneJanSelectedDate : Date;
   let numberOfDays  : number;
 
   let startDateTo : Date                                                  =   new Date();
-  let toWeekNumber: number                                                =   0;
-  let oneJanSelectedDateTo : Date;
-  let numberOfDaysTo  : number;
+  let toWeekNumber                                                =   0;
+  // let oneJanSelectedDateTo : Date;
+  // let numberOfDaysTo  : number;
 
   if(startDateOfSelectedWeek){
     startDate   = new Date(startDateOfSelectedWeek.control.ta[0].start);
@@ -71,8 +71,8 @@ export const CopyWeekInstructorsPopUp = ({listOfAllEvents, startDateOfSelectedWe
   }
   //startDateTo         = new Date(selectedWeek.firstDay);
   startDateTo         = new Date(toWeek.firstDay);
-  oneJanSelectedDateTo = new Date(startDateTo.getFullYear(),0,1);
-  numberOfDaysTo =  Math.floor((startDate.getTime() - oneJanSelectedDateTo.getTime()) / (24 * 60 * 60 * 1000));   
+  const oneJanSelectedDateTo : Date = new Date(startDateTo.getFullYear(),0,1);
+  const numberOfDaysTo : number =  Math.floor((startDate.getTime() - oneJanSelectedDateTo.getTime()) / (24 * 60 * 60 * 1000));   
   toWeekNumber =  Math.ceil(( startDate.getDay() + 1 + numberOfDaysTo) / 7);
 
   const onChange = (week : any) => {

@@ -2,7 +2,7 @@ import { DBBlockTimeSegment, DayPilotEvent } from "../types/blocking-segment.typ
 /* Function in charge of arranging the segments coming from the DB in order */
 /*    match the require structure that the daypilot calendar requires       */
 export function generateDayPilotCalendarEvents(lOfSegments: DBBlockTimeSegment []):DayPilotEvent[]{
-  let returnArray : DayPilotEvent[] = [];
+  const returnArray : DayPilotEvent[] = [];
   lOfSegments.forEach((segment: DBBlockTimeSegment, idx: number) => {
     if(!returnArray.some((event:DayPilotEvent) => event.uuid === segment.uuid)){
       const lengthOfSegment = lOfSegments.filter((seg:DBBlockTimeSegment) => seg.uuid===segment.uuid).length;
