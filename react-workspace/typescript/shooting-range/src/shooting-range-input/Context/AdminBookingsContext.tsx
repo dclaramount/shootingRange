@@ -21,6 +21,8 @@ const buildArrayOfBusinessHours = (startHour : any, endHour : any) => {
 export function AdminBookingsProvider({children, gVariables, startLocationList, startBookingsList, startInstructorsSegmentList, startSummaryBookingsList, startSumInstBookingSegments, startBlockingSegmentList, thisWeek} : any)
 {
     const CryptoJS = require("crypto-js"); 
+    console.log("gVariables.sendGridEncryptedKey");
+    console.log(gVariables.sendGridEncryptedKey);
     const sendGridKey  = CryptoJS.AES.decrypt(gVariables.sendGridEncryptedKey, gVariables.decryptionKey).toString(CryptoJS.enc.Utf8);
     /*-------------------------------------------------------------------------------------------------------------*/
     /*                                     HOOKS IN CONTEXT PROVIDER                                               */
