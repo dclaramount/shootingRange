@@ -2,15 +2,13 @@
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST");
 header('Content-Type: application/json; charset=utf-8');
-
-require_once('./papertraillogs.php');
-
+require_once('./apertraillogs.php');
 /*------------------------------------------------------------------------------------------------------------*/
 /*                                                    Starting Variables                                      */
 /*------------------------------------------------------------------------------------------------------------*/
 $databaseHost              = 'localhost';
 $databaseUsername          = 'www-strelnic';
-$databasePassword          = 'CHANGE_ME_ROTATE_THIS'; // <-- rotate credentials
+$databasePassword          = 'bQASvDoM9K4g';
 $databaseName              = 'www-strelnic';
 
 $mysqli = mysqli_connect($databaseHost, $databaseUsername, $databasePassword, $databaseName);
@@ -41,8 +39,7 @@ while ($row = mysqli_fetch_row($res)) { $resultMessage[$INTERNAL_SERVER_ERROR] =
 try {
   // NOTE: In production, do NOT accept API keys from GET params.
   // Prefer: $smtp2goApiKey = getenv('SMTP2GO_API_KEY');
-  $smtp2goApiKey = isset($_GET['smtp2goKey']) && $_GET['smtp2goKey'] !== "" ? $_GET['smtp2goKey'] : false;
-
+  $smtp2goApiKey        = isset($_GET['smtp2goKey']) && $_GET['smtp2goKey'] !== "" ? $_GET['smtp2goKey'] : false;
   $emailTo              = isset($_GET['emailTo']) ? trim($_GET['emailTo']) : "";
   $emailFrom            = isset($_GET['emailFrom']) ? trim($_GET['emailFrom']) : "";
   $templateId           = isset($_GET['templateId']) ? trim($_GET['templateId']) : ""; // SMTP2GO template_id
@@ -130,6 +127,7 @@ try {
 
   mysqli_close($mysqli);
 }
+// php -r 'parse_str("testMode=1&emailTo=diegoaclaramount@gmail.com&emailFrom=dac@revolgy.com&templateId=YOUR_TEMPLATE_ID&uuidInvoice=INV-12345&nameOnReservation=John Doe&shootingRangeName=My Range&segmentBooked=Segment A&phoneNumber=5551234567", $_GET); include "postSendEmail.php";'
 catch(Exception $e){
   $requestResponse = $INTERNAL_SERVER_ERROR;
 
