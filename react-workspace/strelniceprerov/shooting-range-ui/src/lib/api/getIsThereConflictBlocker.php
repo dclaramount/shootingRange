@@ -61,25 +61,45 @@ try {
   $end                                                =   strtotime($selectedSegments[0]) + 60 * 60;
   $endTime                                            =   date("Y-m-d H:i:s", $end);
   /* Iterating over the for loop to create the individual 1 hour segments */
-  for ($x = 1; $x <= $selectedBookingDuration; $x++) {
-    $queryCount                                       =   "SELECT count(*) as total from blocking_segments WHERE start_time='$startTime' AND end_time='$endTime' AND location_id='$selectedLocation';";
-    $result                                           =   mysqli_query($mysqli, $queryCount, MYSQLI_USE_RESULT) or die(mysqli_error($mysqli));
-    $data                                             =   $result->fetch_assoc();
-    $countBlockers                                    =   $data['total'];
-    send_remote_curl("For the start Segment $startTime -> $endTime returned counter of $countBlockers .", (basename($_SERVER['PHP_SELF'], '.php')));
+  for ($x = 0; $x < intval($selectedBookingDuration); $x++) {
+    $segmentStart = date("Y-m-d H:i:s", $start + 3600 * $x);
+    $segmentEnd   = date("Y-m-d H:i:s", $start + 3600 * ($x + 1));
+    $queryCount = "
+      SELECT COUNT(*) AS total
+      FROM blocking_segments
+      WHERE start_time = '$segmentStart'
+        AND end_time   = '$segmentEnd'
+        AND location_id = '$selectedLocation'
+    ";
+  
+    $result = mysqli_query($mysqli, $queryCount);
+    if (!$result) {
+      throw new Exception(mysqli_error($mysqli));
+    }
+  
+    $data = mysqli_fetch_assoc($result);
+    mysqli_free_result($result);
+  
+    $countBlockers = intval($data['total']);
+  
+    send_remote_curl(
+      "For the start Segment $segmentStart -> $segmentEnd returned counter of $countBlockers.",
+      basename($_SERVER['PHP_SELF'], '.php')
+    );
+  
     if ($countBlockers > 0) {
-      $requestResponse                                =   $CONFLICT;
-      $responseMessage                                =   $resultMessage[$CONFLICT];
-      $isThereABlocker                                =   true;
+      $requestResponse = $CONFLICT;
+      $responseMessage = $resultMessage[$CONFLICT];
+      $isThereABlocker = true;
       break;
-    };
-    $startTime                                        =   date("Y-m-d H:i:s", $start + 60 * 60 * intval($x));
-    $endTime                                          =   date("Y-m-d H:i:s", $end + 60 * 60 * intval($x));
+    }
   }
+  
   if (!$isThereABlocker) {
-    $requestResponse                                  =   $GOOD_REQUEST;
-    $responseMessage                                  =   $resultMessage[$GOOD_REQUEST];
+    $requestResponse = $GOOD_REQUEST;
+    $responseMessage = $resultMessage[$GOOD_REQUEST];
   }
+  
   mysqli_close($mysqli);
 } catch (Exception $e) {
   /*------------------------------------------------------------------------------------------------------------*/
