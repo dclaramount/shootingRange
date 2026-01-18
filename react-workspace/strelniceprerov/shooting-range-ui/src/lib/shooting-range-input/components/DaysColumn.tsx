@@ -1,422 +1,526 @@
 import React from 'react';
-import {format } from 'date-fns';
+import { format } from 'date-fns';
 import { Translations } from '../types/translations';
-import {AdminBookingsContext} from "./Context/AdminBookingsContext";
-/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-/*                                                              CONSTANTS                                                                                                      */
-/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-const BLOCKED_CELL = 'occupied';
-const EMPTY_OCCUPANCY = '';
-/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-/*                                                            HELPER FUNCTIONS                                                                                                 */
-/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-/*                                                        Function the reason for blocked segment                                                                              */
-/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-function getBlockedReason(day : any, daysOfWeek: any, isoDaysOfWeek: any, hour:any, blockedSegments:any, selectedServiceId: any, locationList:any){
-    const idx = daysOfWeek.indexOf(day);
-    if(idx >= 0){
-        //const currentDayToAnalyze = new Date(isoDaysOfWeek[idx]);
-        const dateObject = new Date(isoDaysOfWeek[idx]);
-        const factorHours = dateObject.getTimezoneOffset()/60;
-        const currentDayToAnalyze = new Date(Date.UTC(dateObject.getFullYear(), dateObject.getMonth(), dateObject.getDate(), hour,0,0,0))
-        currentDayToAnalyze.setHours(currentDayToAnalyze.getHours()+ factorHours);
-        const locationOfSelectedService = locationList.find((ll:any) => parseInt(ll.id)===parseInt(selectedServiceId));
-        const _locationId = parseInt(locationOfSelectedService.locationId);
-        const fBlockedSegment = blockedSegments.find((seg:any) => new Date(seg.startTime).toISOString()===new Date(currentDayToAnalyze).toISOString() && (seg.locationId===_locationId || seg.locationId===3));
-        return (
-            <div style={{margin:'auto'}}>
-                {fBlockedSegment.name.substring(0,7)}
-            </div>
-        );
-    }
-    return EMPTY_OCCUPANCY;
-}
-/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-/*                                                        Function to Check if segment is Blocked                                                                               */
-/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-function isSegmentBlocked(day : any, daysOfWeek: any, isoDaysOfWeek: any, hour:any, blockedSegments:any, selectedServiceId: any, locationList:any){
-    const idx = daysOfWeek.indexOf(day);
-    if(idx >= 0){
-        //const currentDayToAnalyze = new Date(isoDaysOfWeek[idx]);
-        const dateObject = new Date(isoDaysOfWeek[idx]);
-        const factorHours = dateObject.getTimezoneOffset()/60;
-        const currentDayToAnalyze = new Date(Date.UTC(dateObject.getFullYear(), dateObject.getMonth(), dateObject.getDate(), hour,0,0,0))
-        currentDayToAnalyze.setHours(currentDayToAnalyze.getHours()+ factorHours);
-        const locationOfSelectedService = locationList.find((ll:any) => parseInt(ll.id)===parseInt(selectedServiceId));
-        const _locationId = parseInt(locationOfSelectedService.locationId);
-        const fBlockedSegment = blockedSegments.filter((seg:any) => new Date(seg.startTime).toISOString()===new Date(currentDayToAnalyze).toISOString() && (seg.locationId===_locationId || seg.locationId===3));
-        return fBlockedSegment.length >0;
-    }
-    return false;
-}
-/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-/*                                         Function to check if the current day being examined is in the past                                                                  */
-/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-function isDayInThePast(day : any, daysOfWeek: any, isoDaysOfWeek: any, hour:any){
-    const idx = daysOfWeek.indexOf(day);
-    if(idx >= 0){
-        const dateObject = new Date(isoDaysOfWeek[idx]);
-        const currentDayToAnalyze = new Date(Date.UTC(dateObject.getFullYear(), dateObject.getMonth(), dateObject.getDate(), hour-2,0,0,0))
-        //const currentDayToAnalyze = new Date(isoDaysOfWeek[idx]);
-        //currentDayToAnalyze.setHours(hour);
-        const todayDateObject = new Date();
-        const today = new Date(Date.UTC(todayDateObject.getFullYear(), todayDateObject.getMonth(), todayDateObject.getDate(), todayDateObject.getHours()+todayDateObject.getTimezoneOffset()/60,0,0,0))
-        //today.setMinutes(0);
-        //today.setSeconds(0);
-        //today.setMilliseconds(0);
-        //console.log(`Current day to analyze ${currentDayToAnalyze}`);
-        return today>currentDayToAnalyze;
-    }
-    return false;
-}
-/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-/*      Function to check if the location of the service selected (for the given segment) is already occupied for the segment in question (E.g. Streliste B and C)             */
-/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-function isLocationBookedInDifferentService(summaryBookings : any, day : any, daysOfWeek:any, isoDaysOfWeek : any, time : any, selectedServiceId: any, locationList:any, shootingInstructorSelected : boolean){
-    const idx = daysOfWeek.indexOf(day);
-    const instructor = shootingInstructorSelected ? 1 : 0;
-    const currentDayToAnalyze = new Date(`${isoDaysOfWeek[idx]} ${time}`);
-    const formatedCurrentSegmentToAnalyze = format(currentDayToAnalyze, 'yyyy-MM-dd HH:mm:ss');
-    const locationOfSelectedService = locationList.find((ll:any) => parseInt(ll.id)===parseInt(selectedServiceId));
-    const bookingsForTheSegment = summaryBookings.filter((sb : any) => sb.segmentStarts===formatedCurrentSegmentToAnalyze && parseInt(sb.locationId)===parseInt(locationOfSelectedService.locationId) && (parseInt(sb.instructoresBooked) >= instructor));
-    if(bookingsForTheSegment.length===0){
-        //There are no bookings in ANY service for this segment (hence false).
-        return false;
-    }
-    else{
-        //Verifies if there is any booking for the given segment from ANOTHER service (this will block this segment for the current service.)
-        const atLeastOneForSameLocation = bookingsForTheSegment.filter((bfts : any) => parseInt(bfts.locationId)===parseInt(locationOfSelectedService.locationId) && parseInt(bfts.serviceId)!==parseInt(locationOfSelectedService.id));
-        return atLeastOneForSameLocation.length>0;
-    }
-}
-/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-/*                              Based on Occupancy (for the given service) determine if is Occupied, Partly Occupied or Available                                              */
-/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-function calculateOccupancy(summaryBookings : any, summaryBookingInstructor: any, shootingInstructorSelected : boolean, day : any, daysOfWeek:any, isoDaysOfWeek : any, time : any, selectedServiceId: any, selectedOccupancy:any, locationList:any){
-    const idx = daysOfWeek.indexOf(day);
-    const currentDayToAnalyze = new Date(`${isoDaysOfWeek[idx]} ${time}`);
-    const formatedCurrentSegmentToAnalyze = format(currentDayToAnalyze, 'yyyy-MM-dd HH:mm:ss');
-    const segmentLocationStatus = summaryBookings.find((sum:any) => sum.segmentStarts.includes(formatedCurrentSegmentToAnalyze) && parseInt(sum.serviceId)===parseInt(selectedServiceId));
-    const filteredValue = shootingInstructorSelected ? summaryBookingInstructor.find((sum:any) => sum.segmentStarts.includes(formatedCurrentSegmentToAnalyze)) :
-        summaryBookings.find((sum:any) => sum.segmentStarts.includes(formatedCurrentSegmentToAnalyze) && parseInt(sum.serviceId)===parseInt(selectedServiceId));
+import { AdminBookingsContext } from './Context/AdminBookingsContext';
 
-    if (filteredValue){
-        if(segmentLocationStatus && segmentLocationStatus.segmentLocationFullyBooked){
-            //For the case that the location is full (we will show the occupancy (for the given configuration (Instructors or NOT instructors) accordingly.))
-            return (
-                <div style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', pointerEvents:'none'}}>
-                    <div style={{fontSize:'xx-small', marginLeft:'auto', marginRight:'auto', pointerEvents:'none'}}>
-                        {Translations.BookingDashboard.FullyOccupied}
-                    </div>
-                    <div style={{fontSize:'xx-small', fontWeight:'lighter', paddingRight:'5px', pointerEvents:'none'}}>
-                        {`${filteredValue.maxOccupancy}/${filteredValue.maxOccupancy}`}
-                    </div>
-                </div>
-            );
-        }
-        if(segmentLocationStatus && shootingInstructorSelected){
-            const normalOccupancyBookedLocation = parseInt(segmentLocationStatus.occupancyBooked) - parseInt(segmentLocationStatus.instructoresBooked);
-            const occupancyLeftForInstructors   = parseInt(segmentLocationStatus.maxOccupancy) - normalOccupancyBookedLocation;
-            /* We will check how many slots for instructors are left, and if are greater or equal to the real available instructos slots we will show ALL otherwise we will adjust accordingly*/
-            const maxOccupancyInstructors       = occupancyLeftForInstructors >= parseInt(filteredValue.maxOccupancy) ?  filteredValue.maxOccupancy : occupancyLeftForInstructors;
-            /*There are other types of bookings in this segment (E.g.) and we have to decide whether to handle as fully free or partially free*/
-            if (parseInt(filteredValue.occupancyBooked) >= maxOccupancyInstructors){ //FULLY OCCUPIED INSTRUCTOR
-                return (
-                    <div style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', pointerEvents:'none'}}>
-                        <div style={{fontSize:'xx-small', marginLeft:'auto', marginRight:'auto', pointerEvents:'none'}}>
-                            {Translations.BookingDashboard.FullyOccupied}
-                        </div>
-                        <div style={{fontSize:'xx-small', fontWeight:'lighter', paddingRight:'5px', pointerEvents:'none'}}>
-                            {`${filteredValue.occupancyBooked}/${maxOccupancyInstructors}`}
-                        </div>
-                    </div>
-                );
-            }
-            else if(parseInt(filteredValue.occupancyBooked) > 0){
-                return (
-                    <div style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', pointerEvents:'none'}}>
-                        <div style={{fontSize:'xx-small', marginLeft:'auto', marginRight:'auto', pointerEvents:'none'}}>
-                            {Translations.BookingDashboard.Partially_Occupied}
-                        </div>
-                        <div style={{fontSize:'xx-small', fontWeight:'lighter', paddingRight:'5px', pointerEvents:'none'}}>
-                            {`${filteredValue.occupancyBooked}/${maxOccupancyInstructors}`}
-                        </div>
-                    </div>
-                );
-            }
-            else{
-                return (
-                    <div style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', pointerEvents:'none'}}>
-                        <div style={{fontSize:'xx-small', marginLeft:'auto', marginRight:'auto', pointerEvents:'none'}}>
-                            {Translations.BookingDashboard.Free_Segment}
-                        </div>
-                        <div style={{fontSize:'xx-small', fontWeight:'lighter', paddingRight:'5px', pointerEvents:'none'}}>
-                            {`${filteredValue.occupancyBooked}/${maxOccupancyInstructors}`}
-                        </div>
-                    </div>
-                );
-            }
-        }
-        else if(!segmentLocationStatus && shootingInstructorSelected){
-            /* This is the case where there are no normal bookings for the segmentLocation (which means instructor capacity (if there is) is fully available)*/
-            return (<div style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', pointerEvents:'none'}}>
-                <div style={{fontSize:'xx-small', marginLeft:'auto', marginRight:'auto', pointerEvents:'none'}}>
-                    {Translations.BookingDashboard.Free_Segment}
-                </div>
-                <div style={{fontSize:'xx-small', fontWeight:'lighter', paddingRight:'5px', pointerEvents:'none'}}>
-                    {`${filteredValue.occupancyBooked}/${filteredValue.maxOccupancy}`}
-                </div>
-            </div>)
-        }
-        /*  Normal Bookings (W/out instructors) */
-        return (
-            <div style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', pointerEvents:'none'}}>
-                <div style={{fontSize:'xx-small', marginLeft:'auto', marginRight:'auto', pointerEvents:'none'}}>
-                    {Translations.BookingDashboard.Partially_Occupied}
-                </div>
-                <div style={{fontSize:'xx-small', fontWeight:'lighter', paddingRight:'5px', pointerEvents:'none'}}>
-                    {`${filteredValue.occupancyBooked}/${filteredValue.maxOccupancy}`}
-                </div>
-            </div>
-        );
-    }
-    else{
-        /* This is for the cases that dont return results */
-        /* For the case of normal bookings this means 0 occupancy booked */
-        /* For the case of Instructors this means that needs to be calculated */
-        if (shootingInstructorSelected){
-            const filteredValue = summaryBookingInstructor.find((sum:any) => sum.segmentStarts.includes(formatedCurrentSegmentToAnalyze));
-            if (filteredValue){
-                return (
-                    <div style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', pointerEvents:'none'}}>
-                        <div style={{fontSize:'xx-small', marginLeft:'auto', marginRight:'auto', pointerEvents:'none'}}>
-                            {Translations.BookingDashboard.Free_Segment}
-                        </div>
-                        <div style={{fontSize:'xx-small', fontWeight:'lighter', paddingRight:'5px', pointerEvents:'none'}}>
-                            {`${filteredValue.occupancyBooked}/${filteredValue.maxOccupancy}`}
-                        </div>
-                    </div>
-                )
-            }
-        } else{
-            return (<div style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', pointerEvents:'none'}}>
-                <div style={{fontSize:'xx-small', marginLeft:'auto', marginRight:'auto', pointerEvents:'none'}}>
-                    {Translations.BookingDashboard.Free_Segment}
-                </div>
-                <div style={{fontSize:'xx-small', fontWeight:'lighter', paddingRight:'5px', pointerEvents:'none'}}>
-                    {`0/${locationList.find((ll:any) => parseInt(ll.id)===parseInt(selectedServiceId)).capacity}`}
-                </div>
-            </div>)
-        }
+const BLOCKED_CELL = "occupied";
+const EMPTY_OCCUPANCY = "";
 
-    }
-}
-/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-/*                              Based on Occupancy (for the given service) determine if is Occupied, Partly Occupied or Available                                              */
-/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-function getOccupancyStatus(summaryBookings : any, summaryBookingInstructor: any, shootingInstructorSelected : boolean, day : any, daysOfWeek:any, isoDaysOfWeek : any, time : any, selectedServiceId: any, selectedOccupancy:any){
-    const idx = daysOfWeek.indexOf(day);
-    const currentDayToAnalyze = new Date(`${isoDaysOfWeek[idx]} ${time}`);
-    const formatedCurrentSegmentToAnalyze = format(currentDayToAnalyze, 'yyyy-MM-dd HH:mm:ss');
-    const segmentLocationStatus = summaryBookings.find((sum:any) => sum.segmentStarts.includes(formatedCurrentSegmentToAnalyze) && parseInt(sum.serviceId)===parseInt(selectedServiceId));
-    const filteredValue = shootingInstructorSelected ? summaryBookingInstructor.find((sum:any) => sum.segmentStarts.includes(formatedCurrentSegmentToAnalyze)) :
-        summaryBookings.find((sum:any) => sum.segmentStarts.includes(formatedCurrentSegmentToAnalyze) && parseInt(sum.serviceId)===parseInt(selectedServiceId));
-    if (filteredValue){
-        //First Check is if the control column for the given segment of time and location is fully booked.
-        if(segmentLocationStatus && segmentLocationStatus.segmentLocationFullyBooked){
-            return 'occupied';
-        }
-        //If there is a filtered value it means there are bookings done for this time segment for this service.
-        const left = parseInt(filteredValue.maxOccupancy) - parseInt(filteredValue.occupancyBooked);
-        if(shootingInstructorSelected && parseInt(filteredValue.occupancyBooked)===0){return ''} //Special case to color the segment for the instructor booking calendar
-        else {return (left >= parseInt(selectedOccupancy)) ? 'partlyOccupied' : 'occupied'}
-    }
-    else{
-        //If there is no filtered value it means there are not bookings done for this time segment hence the css class is empty.
-        return shootingInstructorSelected ? `occupied` : ``;
-    }
+type CellModel = {
+  id: string; // `${isoDay} ${time}:00`
+  dayIdx: number;
+  time: string; // "HH:mm"
+  statusClass: string; // '', 'partlyOccupied', 'occupied'
+  blockedLabel?: string; // segment name prefix
+  occupancyTopLabel?: string; // Free / Partially / Fully
+  occupancyBottomLabel?: string; // "x/y"
+  clickable: boolean;
+};
+
+type DayCellProps = {
+  id: string;
+  statusClass: string;
+  selectedClass: string;
+  blockedLabel?: string;
+  occupancyTopLabel?: string;
+  occupancyBottomLabel?: string;
+  onClick: (id: string) => void;
+  clickable: boolean;
+};
+
+const normalizeSegmentKey = (s: string) => {
+  const str = String(s).trim();
+
+  if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/.test(str)) return `${str}:00`;
+  if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(str)) return str;
+
+  const d = new Date(str);
+  if (!Number.isNaN(d.getTime())) return format(d, "yyyy-MM-dd HH:mm:ss");
+
+  return str;
+};
+
+const DayCell = React.memo(function DayCell({
+  id,
+  statusClass,
+  selectedClass,
+  blockedLabel,
+  occupancyTopLabel,
+  occupancyBottomLabel,
+  onClick,
+  clickable,
+}: DayCellProps) {
+  const handleClick = React.useCallback(() => {
+    if (clickable) onClick(id);
+  }, [clickable, id, onClick]);
+
+  return (
+    <div
+      className={`reservation-cal-table-day-block ${statusClass} ${selectedClass}`}
+      id={id}
+      style={{ margin: "0px", padding: "0px" }}
+      onClick={handleClick}
+    >
+      {blockedLabel ? (
+        <div style={{ margin: "auto", pointerEvents: "none" }}>{blockedLabel}</div>
+      ) : occupancyTopLabel ? (
+        <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", pointerEvents: "none" }}>
+          <div style={{ fontSize: "xx-small", marginLeft: "auto", marginRight: "auto", pointerEvents: "none" }}>
+            {occupancyTopLabel}
+          </div>
+          <div style={{ fontSize: "xx-small", fontWeight: "lighter", paddingRight: "5px", pointerEvents: "none" }}>
+            {occupancyBottomLabel ?? ""}
+          </div>
+        </div>
+      ) : (
+        EMPTY_OCCUPANCY
+      )}
+    </div>
+  );
+});
+
+function makeId(isoDay: string, timeHHmm: string) {
+  return `${isoDay} ${timeHHmm}:00`;
 }
 
-export function DaysColumn(){
+function toYmdHmsFromIsoAndTime(isoDay: string, timeHHmm: string) {
+  const d = new Date(`${isoDay} ${timeHHmm}:00`);
+  return format(d, "yyyy-MM-dd HH:mm:ss");
+}
 
-    const { locationList,
-        timesToShow,
-        daysOfWeek,
-        selectedSegment,
-        setSelectedSegment,
-        isoDaysOfWeek,
-        selectedOccupancy,
-        setAvailableSegments,
-        setSelectedBookingDuration,
-        setNotAvailableSegments,
-        defaultDuration,
-        summaryBookingSegments,
-        selectedLocation,
-        sumInstBookingSegments,
-        shootingInstructor,
-        refreshManagementDashboard: refreshEntirePlugin,
-        selectedWeek,
-        allBlockingSegments: blockingSegments,
-        isNormalComputer  } = React.useContext(AdminBookingsContext);
-    const daysOftheWeek = ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle'];
-    function padWithLeadingZeros(num : any, totalLength: any) {
-        return String(num).padStart(totalLength, '0');
-    }
-    /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-    /*                                                  Function Display the Occupancy Accordingly                                                                                 */
-    /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-    function getOccupancy(day : any, time : any){
-        const ltime = `${time}:00`
-        const lday = padWithLeadingZeros(parseInt(day.split(".")[0]),2);
-        const lmonth = padWithLeadingZeros(parseInt(day.split(".")[1]),2);
-        const ldate = `${lmonth}-${lday}`;
-        const partialDate = `${ldate} ${ltime}`;
-        //0 is Segment Blocked
-        if (isSegmentBlocked(day, daysOfWeek, isoDaysOfWeek, time, blockingSegments, selectedLocation, locationList)){
-            return getBlockedReason(day, daysOfWeek, isoDaysOfWeek, time, blockingSegments, selectedLocation, locationList);
-        }
-        //1st Verification Check if the day is in the past and disable the cell
-        if (isDayInThePast(day, daysOfWeek, isoDaysOfWeek, time)){
-            return EMPTY_OCCUPANCY;
-        }
-        //2nd Verification if there is another booking for the same segment that is already using the same location
-        else if (isLocationBookedInDifferentService(summaryBookingSegments, day, daysOfWeek, isoDaysOfWeek, ltime, selectedLocation, locationList, shootingInstructor)){
-            return EMPTY_OCCUPANCY;
-        }
-        else {
-            return (calculateOccupancy(summaryBookingSegments, sumInstBookingSegments, shootingInstructor, day, daysOfWeek, isoDaysOfWeek, ltime, selectedLocation, selectedOccupancy, locationList))
-        }
-    }
-    /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-    /*                                   Function that helps catalog a segment as available or unavailable (based on bookings done)                                                */
-    /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-    function isTimeSegmentAvailable(timeSegment : string){
-        const segmentLocationStatus = summaryBookingSegments.find((sum:any) => sum.segmentStarts.includes(timeSegment) && parseInt(sum.serviceId)===parseInt(selectedLocation));
-        const normalBookings = summaryBookingSegments.find((sum:any) => sum.segmentStarts.includes(timeSegment) && parseInt(sum.serviceId)===parseInt(selectedLocation));
-        const filteredValue = shootingInstructor ? sumInstBookingSegments.find((sum:any) => sum.segmentStarts.includes(timeSegment)) :
-            summaryBookingSegments.find((sum:any) => sum.segmentStarts.includes(timeSegment) && parseInt(sum.serviceId)===parseInt(selectedLocation));
-        if(filteredValue){
-            if(!shootingInstructor){
-                return (parseInt(filteredValue.occupancyBooked) < parseInt(filteredValue.maxOccupancy))
-            }
-            else{
-                //For the case of Shooting Instructor (FALSE means is not Available)
-                if(segmentLocationStatus){
-                    const shouldBeBlocked = parseInt(segmentLocationStatus.occupancyBooked) >= parseInt(segmentLocationStatus.maxOccupancy) && //Evaluate if the Location has Capacity
-                        parseInt(filteredValue.occupancyBooked) >= parseInt(filteredValue.maxOccupancy)                    //Evaluate if Instructors have Capacity
-                    return shouldBeBlocked;
-                }
-                else if(typeof filteredValue === 'undefined' && shootingInstructor){
-                    return false
-                }
-                else{
-                    return true
-                }
-            }
-        }
-        else if(typeof filteredValue === 'undefined' && shootingInstructor){
-            return false
-        }
-        else{
-            return true;
-        }
-    }
-    /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-    /*                                   Function to Color the Cells of the booking calendar and activate/deactivate them                                                          */
-    /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-    function status(day : any, time : any){
-        const ltime = `${time}:00`
-        //0 is Segment Blocked
-        if (isSegmentBlocked(day, daysOfWeek, isoDaysOfWeek, time, blockingSegments, selectedLocation, locationList)){
-            return BLOCKED_CELL;
-        }
-        //1st Verification Check if the day is in the past and disable the cell
-        if (isDayInThePast(day, daysOfWeek, isoDaysOfWeek, time)){
-            return BLOCKED_CELL;
-        }
-        //2nd Verification if there is another booking for the same segment that is already using the same location
-        else if (isLocationBookedInDifferentService(summaryBookingSegments, day, daysOfWeek, isoDaysOfWeek, ltime, selectedLocation, locationList, shootingInstructor)){
-            return BLOCKED_CELL;
-        }
-        else{
-            return getOccupancyStatus(summaryBookingSegments, sumInstBookingSegments, shootingInstructor, day, daysOfWeek, isoDaysOfWeek, ltime, selectedLocation, selectedOccupancy);
-        }
-    }
-    const handlerClick = (e : any) => {
-        if(!e.target.className.includes('occupied')){
-            const array = [];
-            array.push(e.target.id)
-            setSelectedSegment(array);
-            setSelectedBookingDuration(defaultDuration);
-        }
-    }
-    const selected = (clickedCell : string) => {
-        if(selectedSegment.includes(clickedCell)){
-            if(selectedSegment.length===1){
-                return 'active first active last'
-            }
-            if(selectedSegment.indexOf(clickedCell)===0){
-                return 'active first'
-            }
-            else if(selectedSegment.indexOf(clickedCell)===selectedSegment.length-1){
-                return 'active last'
-            }
-            else{
-                return 'active'
-            }
-        }
-    }
-    /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-    /*                                   Use Effect Function that renders our arrays of available and NOT available times                                                          */
-    /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-    React.useEffect(() =>{
-        const available : any[]    = []
-        const notAvailable : any[] = []
-        daysOfWeek.map((day : any, idx : number)=>{
-            timesToShow.map((time:any) => {
-                const segmentToAnalyze = new Date(`${isoDaysOfWeek[idx]} ${time}:00`);
-                if(isTimeSegmentAvailable(format(segmentToAnalyze, 'yyyy-MM-dd HH:mm:ss'))){
-                    available.push(`${isoDaysOfWeek[idx]} ${time}:00`);
-                }
-                else{
-                    notAvailable.push(`${isoDaysOfWeek[idx]} ${time}:00`);
-                }
-            })
-        })
-        setAvailableSegments(available);
-        setNotAvailableSegments(notAvailable);
-    },[selectedLocation, selectedWeek, shootingInstructor, refreshEntirePlugin])
-
-    return(
-        <>
-            {daysOfWeek.map((day : string, idx : number) => {
-                return(
-                    <div className="reservation-cal-table-day">
-                        <div className="reservation-cal-table-day-head" style={styles_header_cell.container(isNormalComputer)}>
-                            <span>
-                                {daysOftheWeek[idx]}
-                            </span>
-                            <br/>
-                            <strong>
-                                {day}
-                            </strong>
-                        </div>
-                        {timesToShow.map((timeToShow : string) => {
-                            return(
-                                <div className={`reservation-cal-table-day-block ${status(day,timeToShow)} ${selected(`${isoDaysOfWeek[idx]} ${timeToShow}:00`)}`} id={`${isoDaysOfWeek[idx]} ${timeToShow}:00`} style={{margin:'0px', padding:'0px'}} onClick={(e) => handlerClick(e)}>
-                                    {getOccupancy(day,timeToShow)}
-                                </div>)
-                        })}
-                    </div>
-                )
-            })}
-        </>
+function buildTodayUtcComparable() {
+  const now = new Date();
+  return new Date(
+    Date.UTC(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      now.getHours() + now.getTimezoneOffset() / 60,
+      0,
+      0,
+      0
     )
+  ).getTime();
 }
+
+export function DaysColumn() {
+  const {
+    locationList,
+    timesToShow,
+    daysOfWeek,
+    selectedSegment,
+    setSelectedSegment,
+    isoDaysOfWeek,
+    selectedOccupancy,
+    setAvailableSegments,
+    setSelectedBookingDuration,
+    setNotAvailableSegments,
+    defaultDuration,
+    summaryBookingSegments,
+    selectedLocation,
+    sumInstBookingSegments,
+    shootingInstructor,
+    refreshManagementDashboard: refreshEntirePlugin,
+    selectedWeek,
+    allBlockingSegments: blockingSegments,
+    isNormalComputer,
+  } = React.useContext(AdminBookingsContext) as any;
+
+  const daysOftheWeek = React.useMemo(
+    () => ["Pondělí", "Úterý", "Středa", "Čtvrtek", "Pátek", "Sobota", "Neděle"],
+    []
+  );
+
+  // --- selection classes (supports range selection if you re-add it later)
+  const selectedClassById = React.useMemo(() => {
+    const map = new Map<string, string>();
+    if (!selectedSegment || selectedSegment.length === 0) return map;
+    console.log(selectedSegment);
+    const len = selectedSegment.length;
+    for (let i = 0; i < len; i++) {
+      const id = selectedSegment[i];
+      if (len === 1) map.set(id, "active first active last");
+      else if (i === 0) map.set(id, "active first");
+      else if (i === len - 1) map.set(id, "active last");
+      else map.set(id, "active");
+    }
+    return map;
+  }, [selectedSegment]);
+
+  const onCellClick = React.useCallback(
+    (id: string) => {
+      setSelectedSegment([id]);
+      setSelectedBookingDuration(defaultDuration);
+    },
+    [defaultDuration, setSelectedBookingDuration, setSelectedSegment]
+  );
+
+  // --- selected service locationId
+  const selectedServiceLocationId = React.useMemo(() => {
+    const svc = locationList?.find((ll: any) => parseInt(ll.id) === parseInt(selectedLocation));
+    return svc ? parseInt(svc.locationId) : null;
+  }, [locationList, selectedLocation]);
+
+  // --- bookings lookup for selected service
+  const summaryBySegmentForService = React.useMemo(() => {
+    const map = new Map<string, any>();
+    if (!summaryBookingSegments) return map;
+
+    const serviceId = parseInt(selectedLocation);
+
+    for (const row of summaryBookingSegments) {
+      if (parseInt(row.serviceId) !== serviceId) continue;
+      map.set(normalizeSegmentKey(row.segmentStarts), row);
+    }
+    return map;
+  }, [summaryBookingSegments, selectedLocation]);
+
+  // --- instructors lookup
+  const summaryBySegmentForInstructors = React.useMemo(() => {
+    const map = new Map<string, any>();
+    if (!sumInstBookingSegments) return map;
+
+    for (const row of sumInstBookingSegments) {
+      map.set(normalizeSegmentKey(row.segmentStarts), row);
+    }
+    return map;
+  }, [sumInstBookingSegments]);
+
+  // --- key: `${segmentStarts}|${locationId}` => rows (across services)
+  const bookingsBySegmentAndLocation = React.useMemo(() => {
+    const map = new Map<string, any[]>();
+    if (!summaryBookingSegments) return map;
+
+    for (const row of summaryBookingSegments) {
+      const key = `${normalizeSegmentKey(row.segmentStarts)}|${row.locationId}`;
+      const arr = map.get(key);
+      if (arr) arr.push(row);
+      else map.set(key, [row]);
+    }
+    return map;
+  }, [summaryBookingSegments]);
+
+  // --- blocked lookup: `${isoDay}|${time}` => seg
+  const blockedByIsoAndTime = React.useMemo(() => {
+    const map = new Map<string, any>();
+    if (!blockingSegments || !isoDaysOfWeek || selectedServiceLocationId == null) return map;
+
+    // index segments by start ISO
+    const byStartIso = new Map<string, any[]>();
+    for (const seg of blockingSegments) {
+      const k = new Date(seg.startTime).toISOString();
+      const arr = byStartIso.get(k);
+      if (arr) arr.push(seg);
+      else byStartIso.set(k, [seg]);
+    }
+
+    for (let dayIdx = 0; dayIdx < isoDaysOfWeek.length; dayIdx++) {
+      const dateObject = new Date(isoDaysOfWeek[dayIdx]);
+      const factorHours = dateObject.getTimezoneOffset() / 60;
+
+      for (const time of timesToShow) {
+        const hour = parseInt(time, 10);
+
+        const currentDayToAnalyze = new Date(
+          Date.UTC(dateObject.getFullYear(), dateObject.getMonth(), dateObject.getDate(), hour, 0, 0, 0)
+        );
+        currentDayToAnalyze.setHours(currentDayToAnalyze.getHours() + factorHours);
+
+        const startIso = currentDayToAnalyze.toISOString();
+        const candidates = byStartIso.get(startIso);
+        if (!candidates) continue;
+
+        const match = candidates.find(
+          (seg: any) => seg.locationId === selectedServiceLocationId || seg.locationId === 3
+        );
+        if (match) map.set(`${isoDaysOfWeek[dayIdx]}|${time}`, match);
+      }
+    }
+
+    return map;
+  }, [blockingSegments, isoDaysOfWeek, selectedServiceLocationId, timesToShow]);
+
+  // --- past lookup: `${isoDay}|${time}` => boolean
+  const isPastByIsoAndTime = React.useMemo(() => {
+    const map = new Map<string, boolean>();
+    if (!isoDaysOfWeek) return map;
+
+    const todayUtc = buildTodayUtcComparable();
+
+    for (let dayIdx = 0; dayIdx < isoDaysOfWeek.length; dayIdx++) {
+      const dateObject = new Date(isoDaysOfWeek[dayIdx]);
+      for (const time of timesToShow) {
+        const hour = parseInt(time, 10);
+
+        const currentDayToAnalyze = new Date(
+          Date.UTC(dateObject.getFullYear(), dateObject.getMonth(), dateObject.getDate(), hour - 2, 0, 0, 0)
+        ).getTime();
+
+        map.set(`${isoDaysOfWeek[dayIdx]}|${time}`, todayUtc > currentDayToAnalyze);
+      }
+    }
+
+    return map;
+  }, [isoDaysOfWeek, timesToShow]);
+
+  // --- helper: “is booked by other service” (O(1))
+  const isBookedDifferentService = React.useCallback(
+    (segmentStartsYmdHms: string) => {
+      if (selectedServiceLocationId == null) return false;
+
+      const key = `${normalizeSegmentKey(segmentStartsYmdHms)}|${selectedServiceLocationId}`;
+      const rows = bookingsBySegmentAndLocation.get(key);
+      if (!rows || rows.length === 0) return false;
+
+      const instructorRequired = shootingInstructor ? 1 : 0;
+      return rows.some(
+        (r: any) =>
+          parseInt(r.serviceId) !== parseInt(selectedLocation) &&
+          parseInt(r.instructoresBooked) >= instructorRequired
+      );
+    },
+    [bookingsBySegmentAndLocation, selectedLocation, selectedServiceLocationId, shootingInstructor]
+  );
+
+  // --- capacity fallback (for "0/capacity")
+  const capacityForSelected = React.useMemo(() => {
+    const svc = locationList?.find((ll: any) => parseInt(ll.id) === parseInt(selectedLocation));
+    return svc ? parseInt(svc.capacity) : 0;
+  }, [locationList, selectedLocation]);
+
+  // --- build all cell models once
+  const cellModelsByDayIdx = React.useMemo(() => {
+    const models: CellModel[][] = [];
+
+    for (let dayIdx = 0; dayIdx < daysOfWeek.length; dayIdx++) {
+      const isoDay = isoDaysOfWeek[dayIdx];
+      const dayCells: CellModel[] = [];
+
+      for (const time of timesToShow) {
+        const id = makeId(isoDay, time);
+        const timeKey = `${isoDay}|${time}`;
+        const segStarts = toYmdHmsFromIsoAndTime(isoDay, time);
+
+        // 0) blocked
+        const blockedSeg = blockedByIsoAndTime.get(timeKey);
+        if (blockedSeg) {
+          dayCells.push({
+            id,
+            dayIdx,
+            time,
+            statusClass: BLOCKED_CELL,
+            blockedLabel: String(blockedSeg?.name ?? "").substring(0, 7),
+            clickable: false,
+          });
+          continue;
+        }
+
+        // 1) past
+        if (isPastByIsoAndTime.get(timeKey)) {
+          dayCells.push({ id, dayIdx, time, statusClass: BLOCKED_CELL, clickable: false });
+          continue;
+        }
+
+        // 2) other service uses same location
+        if (isBookedDifferentService(segStarts)) {
+          dayCells.push({ id, dayIdx, time, statusClass: BLOCKED_CELL, clickable: false });
+          continue;
+        }
+
+        // 3) occupancy (pick row for view + row for location status)
+        const segmentLocationStatus = summaryBySegmentForService.get(normalizeSegmentKey(segStarts));
+        const filtered = shootingInstructor
+          ? summaryBySegmentForInstructors.get(normalizeSegmentKey(segStarts))
+          : segmentLocationStatus;
+
+        // No row case
+        if (!filtered) {
+          if (shootingInstructor) {
+            // match your old behavior: instructor calendar w/out row => occupied
+            dayCells.push({ id, dayIdx, time, statusClass: "occupied", clickable: false });
+          } else {
+            dayCells.push({
+              id,
+              dayIdx,
+              time,
+              statusClass: "",
+              occupancyTopLabel: Translations.BookingDashboard.Free_Segment,
+              occupancyBottomLabel: `0/${capacityForSelected}`,
+              clickable: true,
+            });
+          }
+          continue;
+        }
+
+        // Fully booked location wins
+        if (segmentLocationStatus?.segmentLocationFullyBooked) {
+          dayCells.push({
+            id,
+            dayIdx,
+            time,
+            statusClass: "occupied",
+            occupancyTopLabel: Translations.BookingDashboard.FullyOccupied,
+            occupancyBottomLabel: `${filtered.maxOccupancy}/${filtered.maxOccupancy}`,
+            clickable: false,
+          });
+          continue;
+        }
+
+        // Instructor path where we must adjust capacity
+        if (segmentLocationStatus && shootingInstructor) {
+          const normalBooked =
+            parseInt(segmentLocationStatus.occupancyBooked) - parseInt(segmentLocationStatus.instructoresBooked);
+          const leftForInstructors = parseInt(segmentLocationStatus.maxOccupancy) - normalBooked;
+
+          const maxInstr =
+            leftForInstructors >= parseInt(filtered.maxOccupancy) ? parseInt(filtered.maxOccupancy) : leftForInstructors;
+
+          const booked = parseInt(filtered.occupancyBooked);
+
+          if (booked >= maxInstr) {
+            dayCells.push({
+              id,
+              dayIdx,
+              time,
+              statusClass: "occupied",
+              occupancyTopLabel: Translations.BookingDashboard.FullyOccupied,
+              occupancyBottomLabel: `${booked}/${maxInstr}`,
+              clickable: false,
+            });
+          } else if (booked > 0) {
+            dayCells.push({
+              id,
+              dayIdx,
+              time,
+              statusClass: "partlyOccupied",
+              occupancyTopLabel: Translations.BookingDashboard.Partially_Occupied,
+              occupancyBottomLabel: `${booked}/${maxInstr}`,
+              clickable: true,
+            });
+          } else {
+            // NOTE: your old getOccupancyStatus returned '' when instructor booked==0
+            // We keep statusClass '' here (clickable).
+            dayCells.push({
+              id,
+              dayIdx,
+              time,
+              statusClass: "",
+              occupancyTopLabel: Translations.BookingDashboard.Free_Segment,
+              occupancyBottomLabel: `${booked}/${maxInstr}`,
+              clickable: true,
+            });
+          }
+          continue;
+        }
+
+        // Instructor selected but no segmentLocationStatus => show instructor row as free/partial
+        if (!segmentLocationStatus && shootingInstructor) {
+          const booked = parseInt(filtered.occupancyBooked);
+          dayCells.push({
+            id,
+            dayIdx,
+            time,
+            statusClass: booked === 0 ? "" : "partlyOccupied",
+            occupancyTopLabel:
+              booked === 0 ? Translations.BookingDashboard.Free_Segment : Translations.BookingDashboard.Partially_Occupied,
+            occupancyBottomLabel: `${filtered.occupancyBooked}/${filtered.maxOccupancy}`,
+            clickable: true,
+          });
+          continue;
+        }
+
+        // Normal bookings view
+        const left = parseInt(filtered.maxOccupancy) - parseInt(filtered.occupancyBooked);
+        const statusClass = left >= parseInt(selectedOccupancy) ? "partlyOccupied" : "occupied";
+
+        dayCells.push({
+          id,
+          dayIdx,
+          time,
+          statusClass,
+          occupancyTopLabel:
+            parseInt(filtered.occupancyBooked) === 0
+              ? Translations.BookingDashboard.Free_Segment
+              : Translations.BookingDashboard.Partially_Occupied,
+          occupancyBottomLabel: `${filtered.occupancyBooked}/${filtered.maxOccupancy}`,
+          clickable: statusClass !== "occupied",
+        });
+      }
+
+      models.push(dayCells);
+    }
+
+    return models;
+  }, [
+    daysOfWeek.length,
+    isoDaysOfWeek,
+    timesToShow,
+    blockedByIsoAndTime,
+    isPastByIsoAndTime,
+    isBookedDifferentService,
+    summaryBySegmentForService,
+    summaryBySegmentForInstructors,
+    selectedOccupancy,
+    shootingInstructor,
+    capacityForSelected,
+  ]);
+
+  // --- set available / notAvailable from cell models (consistent + cheap)
+  React.useEffect(() => {
+    const available: string[] = [];
+    const notAvailable: string[] = [];
+
+    for (const dayCells of cellModelsByDayIdx) {
+      for (const c of dayCells) {
+        if (c.clickable) available.push(c.id);
+        else notAvailable.push(c.id);
+      }
+    }
+
+    setAvailableSegments(available);
+    setNotAvailableSegments(notAvailable);
+  }, [
+    cellModelsByDayIdx,
+    setAvailableSegments,
+    setNotAvailableSegments,
+    selectedLocation,
+    selectedWeek,
+    shootingInstructor,
+    refreshEntirePlugin,
+  ]);
+
+  return (
+    <>
+      {daysOfWeek.map((day: string, dayIdx: number) => (
+        <div key={`day-${dayIdx}`} className="reservation-cal-table-day">
+          <div className="reservation-cal-table-day-head" style={styles_header_cell.container(isNormalComputer)}>
+            <span>{daysOftheWeek[dayIdx]}</span>
+            <br />
+            <strong>{day}</strong>
+          </div>
+
+          {cellModelsByDayIdx[dayIdx]?.map((cell) => (
+            <DayCell
+              key={cell.id}
+              id={cell.id}
+              statusClass={cell.statusClass}
+              selectedClass={selectedClassById.get(cell.id) ?? ""}
+              blockedLabel={cell.blockedLabel}
+              occupancyTopLabel={cell.occupancyTopLabel}
+              occupancyBottomLabel={cell.occupancyBottomLabel}
+              onClick={onCellClick}
+              clickable={cell.clickable}
+            />
+          ))}
+        </div>
+      ))}
+    </>
+  );
+}
+
 const styles_header_cell = {
-    container: (isNormalComputer: boolean)  => ({
-        display: isNormalComputer ? '' : 'block',
-        fontSize: isNormalComputer ? 'small' : 'x-small'
-    })
+  container: (isNormalComputer: boolean) => ({
+    display: isNormalComputer ? "" : "block",
+    fontSize: isNormalComputer ? "small" : "x-small",
+  }),
 };
