@@ -18,7 +18,8 @@ export function WrapperBooking({gVariables, arrayOfHours} : any) {
     }
     return Array;
   }
-  const sendGridKey                                             = CryptoJS.AES.decrypt(gVariables.sendGridEncryptedKey, gVariables.decryptionKey).toString(CryptoJS.enc.Utf8);
+  // const sendGridKey                                             = CryptoJS.AES.decrypt(gVariables.sendGridEncryptedKey, gVariables.decryptionKey).toString(CryptoJS.enc.Utf8);
+  const sendGridKey                                             = gVariables.sendGridEncryptedKey;
   const [globalVariables, setGlobalVariables]                   = React.useState(gVariables);
   const [timesToShow, setTimesToShow]                           = React.useState(buildArrayOfBusinessHours(gVariables.startBusinessHours, gVariables.endBusinessHours)); 
   const [daysOfWeek, setDaysOfWeek]                             = React.useState([]); 
