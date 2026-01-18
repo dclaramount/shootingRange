@@ -23,6 +23,8 @@ export function WrapperBooking ( apiPayload: ManagementPluginPayload ) {
   const testEncryptKey = CryptoJS.AES.encrypt(`PLACEHOLDER`, `test-key`);
   console.log(`encrypted value`);
   console.log(testEncryptKey.toString());*/
+  console.log("gVariables.sendGridEncryptedKey");
+  console.log(gVariables.sendGridEncryptedKey);
   const sendGridKey = CryptoJS.AES.decrypt( gVariables.sendGridEncryptedKey.toString(), gVariables.decryptionKey ).toString( CryptoJS.enc.Utf8 );
   const [globalVariables, setGlobalVariables] = React.useState( gVariables );
   const [timesToShow, setTimesToShow] = React.useState( buildArrayOfBusinessHours( gVariables.startBusinessHours, gVariables.endBusinessHours ) );

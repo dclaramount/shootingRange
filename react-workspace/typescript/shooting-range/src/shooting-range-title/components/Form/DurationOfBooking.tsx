@@ -7,43 +7,44 @@ export function DurationOfBooking(){
           setSelectedSegment,       notAvailableSegments, isNormalComputer
         } = React.useContext(BookingContext);
 
-  /*--------------Handler for Reduction of Length of Reservation----------------*/
-  const onReduceSegmentDuration = (e : any) => {
-    if(selectedBookingDuration>1 && selectedSegment.length>0){
-      setSelectedBookingDuration(selectedBookingDuration-1);
-      const last = selectedSegment.pop();
-      const tempArray : any[] = [];
-      selectedSegment.map((seg : any, idx: number) => {
-        if(last !== seg){
-          tempArray.push(seg);
-        }
-      })
-      setSelectedSegment(tempArray);
-    }
+ /*--------------Handler for Reduction of Length of Reservation----------------*/
+  const onReduceSegmentDuration = (e: any) => {
+    setSelectedSegment((prev: any) => {
+      if (selectedBookingDuration > 1 && prev.length > 0) {
+        // Reduce duration first
+        setSelectedBookingDuration((d: any) => parseInt(d) - 1);
+
+        // Remove last segment WITHOUT mutating prev
+        return prev.slice(0, -1);
+      }
+      return prev;
+    });
   };
+
   /*--------------Handler for Increase of Length of Reservation----------------*/
-  const onIncreaseSegmentDuration = (e : any) => {
-    //TODO MAX HOURS
-    if(selectedBookingDuration<3 && selectedSegment.length>0){
-      const date = new Date(selectedSegment[0]);
-      const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
-      const month = date.getMonth() < 9 ? `0${date.getMonth()+1}` : date.getMonth()+1;
-
-      const newBaseDate = `${date.getFullYear()}-${month}-${day} ${date.getHours()}:00`
-      const newToCheckDate = `${date.getFullYear()}-${month}-${day} ${date.getHours()+(parseInt(selectedBookingDuration))}:00`
-
-      console.log(`NOT AVAILABLE SEGMENTS ARE`);
-      console.log(notAvailableSegments);
-      if(notAvailableSegments.includes(newToCheckDate)){
+  const onIncreaseSegmentDuration = (e: any) => {
+    if (selectedBookingDuration >= 3) return;
+  
+    setSelectedSegment((prev: any) => {
+      if (prev.length === 0) return prev;
+  
+      const base = new Date(prev[0]);
+      const day = base.getDate() < 10 ? `0${base.getDate()}` : String(base.getDate());
+      const month = base.getMonth() < 9 ? `0${base.getMonth() + 1}` : String(base.getMonth() + 1);
+  
+      const nextHour = base.getHours() + parseInt(selectedBookingDuration);
+      const newToCheckDate = `${base.getFullYear()}-${month}-${day} ${nextHour}:00`;
+  
+      // If not available, show warning and do not change selection
+      if (notAvailableSegments.includes(newToCheckDate)) {
         setShowWarningChooseAnotherSegment(true);
+        return prev;
       }
-      else{
-        setSelectedBookingDuration(parseInt(selectedBookingDuration)+1);
-        const tempArray = selectedSegment;
-        selectedSegment.push(newToCheckDate);
-        setSelectedSegment(selectedSegment);
-      }
-    }
+  
+      // Otherwise extend duration and add the new segment (new array ref)
+      setSelectedBookingDuration((d: any) => parseInt(d) + 1);
+      return [...prev, newToCheckDate];
+    });
   };
   return(
     <>
