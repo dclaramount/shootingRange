@@ -2,7 +2,7 @@
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST");
 header('Content-Type: application/json; charset=utf-8');
-require_once('./apertraillogs.php');
+require_once('./papertraillogs.php');
 /*------------------------------------------------------------------------------------------------------------*/
 /*                                                    Starting Variables                                      */
 /*------------------------------------------------------------------------------------------------------------*/
@@ -66,9 +66,9 @@ try {
   // Build template_data (these names must match your SMTP2GO template variables: {{ invoiceId }}, etc.)
   $templateData = [
     "invoiceId"            => $uuidInvoice,
-    "name"                 => $nameOnReservation,
-    "shootingRange"        => $shootingRangeName,
-    "segmentBooked"        => $segmentBooked,
+    "nameOnReservation"    => $nameOnReservation,
+    "shootingRangeName"    => $shootingRangeName,
+    "dateTime"             => $segmentBooked,
     "nameOnTheReservation" => $nameOnReservation,
     "phoneNumber"          => $phoneNumber,
     "comment"              => $comment
